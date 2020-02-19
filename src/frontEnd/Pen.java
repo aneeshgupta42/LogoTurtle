@@ -1,8 +1,10 @@
 package frontEnd;
 
-import slogo.Update;
 public class Pen implements Update {
 
+  private Pen(String Imagefile){
+
+  }
   @Override
   public int locationXUpdate(int changeInXPos) {
     return 0;
