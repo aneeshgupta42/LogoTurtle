@@ -4,6 +4,7 @@ import java.awt.TextArea;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
@@ -12,9 +13,9 @@ public class View {
   private Turtle myTurtle;
   private Pen myPen;
 
-
   public View() {
-   View view = new View();
+   // myTurtle =
+   // myPen = new Pen("red");
   }
 
   /**
@@ -30,7 +31,7 @@ public class View {
 
   private Node makeDisplayWindow(){
     GridPane gridPane = new GridPane();
-   // gridPane.getChildren().add(myPen);
+   // gridPane.getChildren().add();
     return gridPane;
   }
   private Node makeCommandWindow(){
