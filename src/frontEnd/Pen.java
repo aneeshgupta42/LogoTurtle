@@ -2,7 +2,7 @@ package frontEnd;
 
 public class Pen implements Update {
 
-  private Pen(String Imagefile){
+  public Pen(String color){
 
   }
   @Override
