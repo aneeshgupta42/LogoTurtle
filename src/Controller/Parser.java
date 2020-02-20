@@ -1,5 +1,6 @@
 package Controller;
 
+import backEnd.ErrorHandler;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,7 +45,8 @@ public class Parser {
       }
     }
     // FIXME: perhaps throw an exception instead
-    return ERROR;
+    ErrorHandler.handle();
+    return null;
   }
 
 

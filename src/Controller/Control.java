@@ -32,14 +32,10 @@ public class Control {
 
   public void parseCommand() {
     Control m = new Control(view.display());
-    parser.addPatterns("English");
+    //parser.addPatterns("Chinese");
     //parser.addPatterns(language);
     parser.addPatterns("Syntax");
-
-    // try against different kinds of inputs
     m.parseText(parser, view.display());
-    String userInput = "fd 50 rt 90 BACK :distance Left :angle";
-    // note, this simple "algorithm" will not handle SLogo comments
   }
 
 
@@ -50,26 +46,25 @@ public class Control {
     for (String line : lines.split(NEWLINE)) {
       if (line.contains("#")) {
         comment = line;
-      //  System.out.println(String.format("%s : %s", line, "Comment"));
       } else {
         for (String word : line.split(WHITESPACE)) {
           if (word.trim().length() > 0) {
               organizeText(word,parser.getSymbol(word));
-          //  System.out.println(String.format("%s : %s", word, parser.getSymbol(word)));
+             // System.out.println(String.format("%s : %s",word,parser.getSymbol(word)));
           }
         }
       }
-      System.out.println();
     }
   }
 
   private void organizeText(String word, String symbol){
+    if(symbol!=null){
     if(!symbol.equals("Constant")){
       command.add(word);
     }
     else{
       argument.add(word);
-    }
+    }}
     System.out.println(command);
     System.out.println(argument);
   }
