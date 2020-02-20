@@ -40,4 +40,8 @@ public class View {
     return inputArea;
   }
 
+  public String display(){
+    return "hi";
+  }
+
 }
