@@ -1,7 +1,8 @@
 package Controller;
 
 public class Forward extends Command {
-  Forward(){
+  public Forward(int a){
+    super();
 
   }
 }

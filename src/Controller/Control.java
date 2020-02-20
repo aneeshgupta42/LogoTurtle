@@ -4,13 +4,16 @@ import backEnd.ErrorHandler;
 import backEnd.PenUpdate;
 import backEnd.TurtleUpdate;
 import frontEnd.View;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Stack;
-import java.util.regex.Pattern;
 
 public class Control {
 
   private static final String WHITESPACE = " ";
   private static final String NEWLINE = "\n";
+  private static final String ARGUMENT = "Constant";
   private View view;
   private PenUpdate pen;
   private TurtleUpdate turtle;
@@ -20,6 +23,8 @@ public class Control {
   private String comment;
   private Stack<String> command;
   private Stack<String> argument;
+  private String arg;
+  private String com;
 
   public Control(String command) {
     view = new View();
@@ -32,7 +37,6 @@ public class Control {
 
   public void parseCommand() {
     Control m = new Control(view.display());
-    //parser.addPatterns("Chinese");
     //parser.addPatterns(language);
     parser.addPatterns("Syntax");
     m.parseText(parser, view.display());
@@ -59,16 +63,49 @@ public class Control {
 
   private void organizeText(String word, String symbol){
     if(symbol!=null){
-    if(!symbol.equals("Constant")){
+    if(!symbol.equals(ARGUMENT)){
       command.add(word);
     }
     else{
       argument.add(word);
     }}
+    coordinateCommands();
     System.out.println(command);
     System.out.println(argument);
   }
 
+//exact path of the command class
+
+  //this is throwinf an error
+  
+    Class<?> cls;
+  {
+    try {
+      cls = Class.forName(com);
+    } catch (ClassNotFoundException e) {
+      error.handle("error");
+    }
+  }
+
+  private void coordinateCommands(){
+
+    if(!argument.isEmpty()){
+      arg = argument.pop();
+      if(!command.isEmpty()){
+        com = command.pop();
+        Object objectCommand;
+        try {
+          Constructor constructor = cls.getConstructor(int.class);
+          objectCommand = constructor.newInstance((Object) new int [Integer.parseInt(arg)]);
+          Command commandGiven = (Command) objectCommand;
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+          error.handle("error");
+        }
+
+      }
+    }
+
+  }
 
 
 }

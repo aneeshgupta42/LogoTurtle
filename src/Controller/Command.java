@@ -11,9 +11,14 @@ public abstract class Command {
   private int penColor;
   private int turtleColor;
   private String language;
+  private String myCommand;
 
 
-  public Command(){
+  public Command(String command){
+    myCommand=command;
+  }
+
+  public Command() {
 
   }
 
