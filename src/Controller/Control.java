@@ -11,13 +11,15 @@ import slogo.Main;
 public class Control {
 
   private static final String WHITESPACE = " ";
+  private static final String NEWLINE = "\n";
   private View view;
   private PenUpdate pen;
   private TurtleUpdate turtle;
   private ErrorHandler error;
   private Parser parser;
+  private String language;
 
-  public Control(String command){
+  public Control(String command) {
     view = new View();
     pen = new PenUpdate();
     turtle = new TurtleUpdate();
@@ -26,11 +28,10 @@ public class Control {
   }
 
 
-  public void parseCommand(){
+  public void parseCommand() {
     Control m = new Control(view.display());
-    // these are more specific, so add them first to ensure they are checked first
     parser.addPatterns("English");
-    // general checks, added last
+    //parser.addPatterns(language);
     parser.addPatterns("Syntax");
 
     // try against different kinds of inputs
@@ -41,14 +42,20 @@ public class Control {
 
 
   // given some text, prints results of parsing it using the given language
-  private void parseText (Parser parser, String lines) {
-    for (String line : lines.split(WHITESPACE)) {
-      if (line.trim().length() > 0) {
-        System.out.println(String.format("%s : %s", line, parser.getSymbol(line)));
+  private void parseText(Parser parser, String lines) {
+    for (String line : lines.split(NEWLINE)) {
+      if (line.contains("#")) {
+        System.out.println(String.format("%s : %s", line, "Comment"));
+      } else {
+        for (String word : line.split(WHITESPACE)) {
+          if (word.trim().length() > 0) {
+            System.out.println(String.format("%s : %s", word, parser.getSymbol(word)));
+          }
+        }
       }
+      System.out.println();
     }
-    System.out.println();
   }
-
-
 }
+
+//need to add in capabilities for # comments to be ignored
