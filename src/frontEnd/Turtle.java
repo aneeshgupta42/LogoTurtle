@@ -1,6 +1,6 @@
 package frontEnd;
 
-public class Turtle implements Update {
+public class Turtle implements Update{
 
   public Turtle(){
   }
