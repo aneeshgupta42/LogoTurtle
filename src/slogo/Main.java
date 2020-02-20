@@ -1,4 +1,4 @@
-package slogo;
+package slogo;/*package slogo;
 
 import frontEnd.View;
 import java.awt.Dimension;
@@ -19,9 +19,9 @@ import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-/**
+*//**
  * Feel free to completely change this code or delete it entirely. 
- */
+ *//*
 
 
     public class Main extends Application {
@@ -70,10 +70,25 @@ import javafx.util.Duration;
             return new SequentialTransition(agent, pt, rt);
         }
 
-        /**
+        *//**
          * Start of the program --- hand control off to JavaFX.
-         */
+         *//*
         public static void main (String[] args) {
             Application.launch(args);
         }
+    }*/
+
+
+import frontEnd.UserInterface;
+import javafx.application.Application;
+
+/**
+ * Main class which is run to start the program by launching the user interface
+ */
+public class Main {
+    public static void main (String[] args) {
+        Application.launch(UserInterface.class, args);
+
     }
+}
+
