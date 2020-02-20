@@ -41,7 +41,10 @@ public class View {
   }
 
   public String display(){
-    return "hi";
+    return "# make a circle \n"
+        + "repeat 180 [ \n"
+        + "  fd 1 rt 2 \n"
+        + "]";
   }
 
 }
