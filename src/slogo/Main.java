@@ -1,5 +1,6 @@
 package slogo;/*package slogo;
 
+import Controller.Control;
 import frontEnd.View;
 import java.awt.Dimension;
 import javafx.animation.Animation;
@@ -28,6 +29,7 @@ import javafx.util.Duration;
         public static final String TITLE = "JavaFX Animation Example";
         public static final Dimension DEFAULT_SIZE = new Dimension(400, 100);
         private Node myActor;
+        private View view = new View();
 
         @Override
         public void start (Stage primaryStage) {
@@ -35,7 +37,8 @@ import javafx.util.Duration;
             View view = new View();
             primaryStage.setScene(makeScene(DEFAULT_SIZE.width, DEFAULT_SIZE.height));
             primaryStage.show();
-
+            Control control = new Control(view.display());
+            control.parseCommand();
             // create and start animation, could be used in separate contexts
             Animation animation = makeAnimation(myActor);
             animation.play();
