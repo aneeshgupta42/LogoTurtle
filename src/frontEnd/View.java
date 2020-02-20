@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -54,6 +55,7 @@ public class View extends Application {
   public static final String TITLE = "JavaFX Animation Example";
   public static final Dimension DEFAULT_SIZE = new Dimension(1600, 1600);
   private Node myActor;
+  private static final String COURT = "";
 
   public View() {
    // myTurtle =
@@ -102,10 +104,12 @@ public class View extends Application {
     //Group root = new Group();
     BorderPane root = new BorderPane();
     root.setTop(makeDisplayWindow());
-    //root.setLeft(makeDisplayWindow());
-    //root.setRight(makeDisplayWindow());
-    //root.setCenter(makeDisplayWindow());
+    root.setLeft(makeDisplayWindow());
+    root.setRight(makeDisplayWindow());
+    root.setCenter(makeDisplayWindow());
     root.setBottom(makeCommandWindow());
+    Image court= new Image(this.getClass().getClassLoader().getResourceAsStream(TURTLE));
+    ImageView myTurtle = new ImageView(court);
     myActor = makeActor();
     root.getChildren().add(myActor);
 
@@ -140,12 +144,18 @@ public class View extends Application {
   }
   private Node makeCommandWindow(){
     TextField inputArea = new TextField();
+    inputArea.setPromptText("Enter Command");
+    inputArea.setPrefColumnCount(10);
+    inputArea.getText();
+    GridPane.setConstraints(inputArea, 0, 0);
+    //inputArea.getText();
+    //inputArea.clear();
     inputArea.setMinSize(1600, 200);
-    inputArea.
+    inputArea.setStyle("-fx-border-color: red;");
     return inputArea;
   }
 
-  private void stopEverything(){ 
+  private void stopEverything(){
     System.exit(1);
   }
 
