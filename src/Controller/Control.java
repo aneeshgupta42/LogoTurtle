@@ -4,9 +4,8 @@ import backEnd.ErrorHandler;
 import backEnd.PenUpdate;
 import backEnd.TurtleUpdate;
 import frontEnd.View;
-import java.util.Arrays;
-import java.util.List;
-import slogo.Main;
+import java.util.Stack;
+import java.util.regex.Pattern;
 
 public class Control {
 
@@ -18,6 +17,9 @@ public class Control {
   private ErrorHandler error;
   private Parser parser;
   private String language;
+  private String comment;
+  private Stack<String> command;
+  private Stack<String> argument;
 
   public Control(String command) {
     view = new View();
@@ -41,21 +43,37 @@ public class Control {
   }
 
 
-  // given some text, prints results of parsing it using the given language
+  // Given commands, calls organization of commands
   private void parseText(Parser parser, String lines) {
+    command = new Stack<>();
+    argument= new Stack<>();
     for (String line : lines.split(NEWLINE)) {
       if (line.contains("#")) {
-        System.out.println(String.format("%s : %s", line, "Comment"));
+        comment = line;
+      //  System.out.println(String.format("%s : %s", line, "Comment"));
       } else {
         for (String word : line.split(WHITESPACE)) {
           if (word.trim().length() > 0) {
-            System.out.println(String.format("%s : %s", word, parser.getSymbol(word)));
+              organizeText(word,parser.getSymbol(word));
+          //  System.out.println(String.format("%s : %s", word, parser.getSymbol(word)));
           }
         }
       }
       System.out.println();
     }
   }
-}
 
-//need to add in capabilities for # comments to be ignored
+  private void organizeText(String word, String symbol){
+    if(!symbol.equals("Constant")){
+      command.add(word);
+    }
+    else{
+      argument.add(word);
+    }
+    System.out.println(command);
+    System.out.println(argument);
+  }
+
+
+
+}
