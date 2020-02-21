@@ -78,6 +78,7 @@ import javafx.util.Duration;
 //
 
 import frontEnd.UserInterface;
+import frontEnd.View;
 import javafx.application.Application;
 
 /**
@@ -85,7 +86,7 @@ import javafx.application.Application;
  */
 public class Main {
     public static void main (String[] args) {
-        Application.launch(UserInterface.class, args);
+        Application.launch(View.class, args);
 
     }
 }

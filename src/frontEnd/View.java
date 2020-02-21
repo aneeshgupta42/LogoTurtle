@@ -3,38 +3,35 @@ package frontEnd;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import frontEnd.View;
 import java.awt.Dimension;
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;
-import javafx.application.Application;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.HLineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 
@@ -42,16 +39,6 @@ public class View extends Application {
   private Scene myScene;
   private GridPane grid;
   private Stage myStage;
-  private double xPos;
-  private double yPos;
-  private int col;
-  private int row;
-  private double width;
-  private double height;
-  private ResourceBundle styleResources;
-  private Map<Integer, Color> colorMap;
-  private double caWidth;
-  private double caHeight;
 
   private Turtle myTurtle;
   private Pen myPen;
@@ -66,19 +53,10 @@ public class View extends Application {
   public View() {
    // myTurtle =
    // myPen = new Pen("red");
-    //styleResources = ResourceBundle.getBundle(STYLE_PROPERTIES_FILENAME);
-    //caHeight = Integer.parseInt(styleResources.getString("ScreenHeight"));
-    //caWidth = Integer.parseInt(styleResources.getString("ScreenWidth"));
     makeDisplayWindow();
     makeScene(400, 400);
     makeCommandWindow();
     //initHashmap(rulesClass, totalNumStates);
-    xPos = 0;
-    yPos = 0;
-    row = 0;
-    col = 0;
-    width = 0;
-    height = 0;
     myStage = new Stage();
   }
 
@@ -224,8 +202,40 @@ public class View extends Application {
 
     Button buttonProjected = new Button("Projected");
     buttonProjected.setPrefSize(100, 20);
+    TilePane r = new TilePane();
+    // Create a label
+    Label description_label =
+        new Label("Select File");
 
-    hbox.getChildren().addAll(buttonCurrent, buttonProjected);
+    // Weekdays
+    String week_days[] =
+        { "Monday", "Tuesday", "Wednesday",
+            "Thrusday", "Friday" };
+
+    // Create a combo box
+    ComboBox combo_box =
+        new ComboBox(FXCollections
+            .observableArrayList(week_days));
+
+    // Label to display the selected menuitem
+    Label selected = new Label("default item selected");
+
+    // Create action event
+    EventHandler<ActionEvent> event =
+        new EventHandler<ActionEvent>() {
+          public void handle(ActionEvent e)
+          {
+            selected.setText(combo_box.getValue() + " selected");
+          }
+        };
+
+    // Set on action
+    combo_box.setOnAction(event);
+
+    // Create a tile pane
+    TilePane tile_pane = new TilePane(combo_box, selected);
+
+    hbox.getChildren().addAll(buttonCurrent, buttonProjected, tile_pane);
 
     return hbox;
   }
