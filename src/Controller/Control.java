@@ -3,7 +3,6 @@ package Controller;
 import backEnd.ErrorHandler;
 import backEnd.PenUpdate;
 import backEnd.TurtleUpdate;
-import frontEnd.View;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Stack;
@@ -14,7 +13,6 @@ public class Control {
   private static final String NEWLINE = "\n";
   private static final String ARGUMENT = "Constant";
   private static final String CLASS_PATH = "Controller.";
-  private View view;
   private PenUpdate pen;
   private TurtleUpdate turtle;
   private ErrorHandler error;
@@ -24,11 +22,11 @@ public class Control {
   private Stack<String> command;
   private Stack<String> argument;
   private String arg;
+  private String arg2;
   private String com;
   private String input;
 
   public Control() {
-   // view = new View();
     pen = new PenUpdate();
     turtle = new TurtleUpdate();
     error = new ErrorHandler();
@@ -37,11 +35,9 @@ public class Control {
 
   public void takeCommand(String command){
     input=command;
-    System.out.println(input);
   }
   public void passLanguage(String lang){
     language=lang;
-    System.out.println(language);
   }
 
   public void parseCommand() {
@@ -49,7 +45,7 @@ public class Control {
     m.takeCommand(input);
     parser.addPatterns(language);
     parser.addPatterns("Syntax");
-    System.out.println(input);
+    parser.addPatterns("Functions");
     m.parseText(parser, input);
   }
 
@@ -64,44 +60,46 @@ public class Control {
       } else {
         for (String word : line.split(WHITESPACE)) {
           if (word.trim().length() > 0) {
-              organizeText(word,parser.getSymbol(word));
-             //System.out.println(String.format("%s : %s",word,parser.getSymbol(word)));
+            String symbol = parser.getSymbol(word);
+            if(symbol!=null){
+              if(!symbol.equals(ARGUMENT)){
+                command.push(symbol);
+              }
+              else{
+                argument.push(word);
+              }}
+             // System.out.println(String.format("%s : %s",word,parser.getSymbol(word)));
           }
         }
       }
+      coordinateCommands();
     }
+    //System.out.println(command);
+    //System.out.println(argument);
   }
-
-  private void organizeText(String word, String symbol){
-    if(symbol!=null){
-    if(!symbol.equals(ARGUMENT)){
-      command.add(symbol);
-    }
-    else{
-      argument.add(word);
-    }}
-    coordinateCommands();
-   // System.out.println(command);
-   // System.out.println(argument);
-  }
-
-
 
   private void coordinateCommands(){
-
+   // System.out.println(command);
+  //  System.out.println(argument);
     if(!argument.isEmpty()){
       arg = argument.pop();
       if(!command.isEmpty()){
         com = CLASS_PATH + command.pop();
-        passCommand();
-        if(!command.isEmpty()){
-          com = CLASS_PATH + command.pop();
-          passCommand();
+        if(command.isEmpty() && !argument.isEmpty()){
+          arg2 = argument.pop();
         }
-
+        passCommand();
       }
-     // System.out.println(command);
-     // System.out.println(argument);
+      if(!command.isEmpty()){
+        com = CLASS_PATH + command.pop();
+        passCommand();
+      }
+    }
+    else{
+      if(!command.isEmpty()){
+        com = CLASS_PATH + command.pop();
+        passCommand();
+      }
     }
 
   }
@@ -119,7 +117,7 @@ public class Control {
     Object objectCommand;
         try {
           Constructor constructor = cls.getConstructor(String[].class);
-          objectCommand = constructor.newInstance((Object) new String[] {arg});
+          objectCommand = constructor.newInstance((Object) new String[] {arg,arg2});
           Command commandGiven = (Command) objectCommand;
           createCommand(commandGiven);
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
@@ -128,7 +126,10 @@ public class Control {
   }
 
   public void createCommand(Command command){
-    System.out.println(command);
+    //can call stuff like this
+    command.getPenCurrentX();
+
+    coordinateCommands();
   }
 }
 
