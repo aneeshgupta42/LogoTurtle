@@ -167,7 +167,7 @@ public class View extends Application {
                              control = new Control(getText());
                              control.parseCommand();
 
-      System.out.println(myText);
+      //System.out.println(myText);
       inputArea.setText("Running!");
     });
     Button clearButton = new Button("Clear");

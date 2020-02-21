@@ -18,7 +18,7 @@ public abstract class Command {
     myCommand=command;
   }
 
-  public Command() {
+  public Command(String[] varargs) {
 
   }
 

@@ -1,8 +1,9 @@
 package Controller;
 
 public class Forward extends Command {
-  public Forward(int a){
-    super();
 
+  public Forward(String... varargs){
+    super(varargs);
+    System.out.println(varargs[0]);
   }
 }
