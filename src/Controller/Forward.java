@@ -6,4 +6,5 @@ public class Forward extends Command {
     super(varargs);
     System.out.println(varargs[0]);
   }
+
 }
