@@ -36,10 +36,10 @@ public class Control {
 
 
   public void parseCommand() {
-    Control m = new Control(view.display());
+    Control m = new Control(view.getText());
     //parser.addPatterns(language);
     parser.addPatterns("Syntax");
-    m.parseText(parser, view.display());
+    m.parseText(parser, view.getText());
   }
 
 
@@ -76,8 +76,8 @@ public class Control {
 
 //exact path of the command class
 
-  //this is throwinf an error
-  
+  //this is throwing an error -> the class path needs to be input like src/.resources etc.
+
     Class<?> cls;
   {
     try {
