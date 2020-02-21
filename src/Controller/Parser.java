@@ -38,13 +38,11 @@ public class Parser {
    * Returns language's type associated with the given text if one exists
    */
   public String getSymbol (String text) {
-    final String ERROR = "NO MATCH";
     for (Entry<String, Pattern> e : mySymbols) {
       if (match(text, e.getValue())) {
         return e.getKey();
       }
     }
-    // FIXME: perhaps throw an exception instead
     ErrorHandler.handle();
     return null;
   }
