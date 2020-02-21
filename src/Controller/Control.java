@@ -24,6 +24,7 @@ public class Control {
   private String arg;
   private String arg2;
   private String com;
+  private String userCom;
   private String input;
 
   public Control() {
@@ -33,11 +34,12 @@ public class Control {
     parser = new Parser();
   }
 
-  public void takeCommand(String command){
-    input=command;
+  public void takeCommand(String command) {
+    input = command;
   }
-  public void passLanguage(String lang){
-    language=lang;
+
+  public void passLanguage(String lang) {
+    language = lang;
   }
 
   public void parseCommand() {
@@ -53,7 +55,7 @@ public class Control {
   // Given commands, calls organization of commands
   private void parseText(Parser parser, String lines) {
     command = new Stack<>();
-    argument= new Stack<>();
+    argument = new Stack<>();
     for (String line : lines.split(NEWLINE)) {
       if (line.contains("#")) {
         comment = line;
@@ -61,52 +63,47 @@ public class Control {
         for (String word : line.split(WHITESPACE)) {
           if (word.trim().length() > 0) {
             String symbol = parser.getSymbol(word);
-            if(symbol!=null){
-              if(!symbol.equals(ARGUMENT)){
-                command.push(symbol);
-              }
-              else{
+            if (symbol != null) {
+              if (!symbol.equals(ARGUMENT)) {
+                command.push(word);
+              } else {
                 argument.push(word);
-              }}
-             // System.out.println(String.format("%s : %s",word,parser.getSymbol(word)));
+              }
+            }
           }
         }
       }
-      coordinateCommands();
+      coordinateCommands(parser);
     }
-    //System.out.println(command);
-    //System.out.println(argument);
   }
 
-  private void coordinateCommands(){
-   // System.out.println(command);
-  //  System.out.println(argument);
-    if(!argument.isEmpty()){
+  private void coordinateCommands(Parser parser) {
+    if (!argument.isEmpty()) {
       arg = argument.pop();
-      if(!command.isEmpty()){
-        com = CLASS_PATH + command.pop();
-        if(command.isEmpty() && !argument.isEmpty()){
+      if (!command.isEmpty()) {
+        userCom = command.pop();
+        com = CLASS_PATH + parser.getSymbol(userCom);
+        if (command.isEmpty() && !argument.isEmpty()) {
           arg2 = argument.pop();
         }
         passCommand();
       }
-      if(!command.isEmpty()){
-        com = CLASS_PATH + command.pop();
+      if (!command.isEmpty()) {
+        userCom = command.pop();
+        com = CLASS_PATH + parser.getSymbol(userCom);
         passCommand();
       }
-    }
-    else{
-      if(!command.isEmpty()){
-        com = CLASS_PATH + command.pop();
+    } else {
+      if (!command.isEmpty()) {
+        userCom = command.pop();
+        com = CLASS_PATH + parser.getSymbol(userCom);
         passCommand();
       }
     }
 
   }
 
-
-
-  public void passCommand(){
+  public void passCommand() {
     Class cls = null;
     try {
       cls = Class.forName(com);
@@ -115,21 +112,20 @@ public class Control {
     }
 
     Object objectCommand;
-        try {
-          Constructor constructor = cls.getConstructor(String[].class);
-          objectCommand = constructor.newInstance((Object) new String[] {arg,arg2});
-          Command commandGiven = (Command) objectCommand;
-          createCommand(commandGiven);
-        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-          error.handleCommandClassNotFound();
-        }
+    try {
+      Constructor constructor = cls.getConstructor(String[].class);
+      objectCommand = constructor.newInstance((Object) new String[]{arg, arg2, userCom});
+      Command commandGiven = (Command) objectCommand;
+      createCommand(commandGiven);
+    } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+      error.handleCommandClassNotFound();
+    }
   }
 
-  public void createCommand(Command command){
+  public void createCommand(Command command) {
     //can call stuff like this
     command.getPenCurrentX();
-
-    coordinateCommands();
+    coordinateCommands(parser);
   }
 }
 
