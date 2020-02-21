@@ -86,6 +86,10 @@ public class Control {
       if(!command.isEmpty()){
         com = CLASS_PATH + command.pop();
         passCommand();
+        if(!command.isEmpty()){
+          com = CLASS_PATH + command.pop();
+          passCommand();
+        }
 
       }
      // System.out.println(command);
@@ -101,7 +105,7 @@ public class Control {
     try {
       cls = Class.forName(com);
     } catch (ClassNotFoundException e) {
-      error.handle("error");
+      error.handleCommandClassNotFound();
     }
 
     Object objectCommand;
@@ -111,7 +115,7 @@ public class Control {
           Command commandGiven = (Command) objectCommand;
           createCommand(commandGiven);
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-          error.handle("error");
+          error.handleCommandClassNotFound();
         }
   }
 
