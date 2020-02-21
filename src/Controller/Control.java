@@ -22,6 +22,7 @@ public class Control {
   private Stack<String> command;
   private Stack<String> argument;
   private String arg;
+  private String arg2;
   private String com;
   private String input;
 
@@ -62,28 +63,31 @@ public class Control {
             String symbol = parser.getSymbol(word);
             if(symbol!=null){
               if(!symbol.equals(ARGUMENT)){
-                command.add(symbol);
+                command.push(symbol);
               }
               else{
-                argument.add(word);
+                argument.push(word);
               }}
              // System.out.println(String.format("%s : %s",word,parser.getSymbol(word)));
           }
         }
       }
+      coordinateCommands();
     }
     //System.out.println(command);
     //System.out.println(argument);
-     coordinateCommands();
   }
 
   private void coordinateCommands(){
-    System.out.println(command);
-    System.out.println(argument);
+   // System.out.println(command);
+  //  System.out.println(argument);
     if(!argument.isEmpty()){
       arg = argument.pop();
       if(!command.isEmpty()){
         com = CLASS_PATH + command.pop();
+        if(command.isEmpty() && !argument.isEmpty()){
+          arg2 = argument.pop();
+        }
         passCommand();
       }
       if(!command.isEmpty()){
@@ -113,7 +117,7 @@ public class Control {
     Object objectCommand;
         try {
           Constructor constructor = cls.getConstructor(String[].class);
-          objectCommand = constructor.newInstance((Object) new String[] {arg});
+          objectCommand = constructor.newInstance((Object) new String[] {arg,arg2});
           Command commandGiven = (Command) objectCommand;
           createCommand(commandGiven);
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
@@ -122,7 +126,9 @@ public class Control {
   }
 
   public void createCommand(Command command){
-    System.out.println(command);
+    //can call stuff like this
+    command.getPenCurrentX();
+
     coordinateCommands();
   }
 }
