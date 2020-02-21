@@ -27,8 +27,7 @@ public class Control {
   private String com;
   private String input;
 
-  public Control(String command) {
-    input = command;
+  public Control() {
    // view = new View();
     pen = new PenUpdate();
     turtle = new TurtleUpdate();
@@ -36,10 +35,19 @@ public class Control {
     parser = new Parser();
   }
 
+  public void takeCommand(String command){
+    input=command;
+    System.out.println(input);
+  }
+  public void passLanguage(String lang){
+    language=lang;
+    System.out.println(language);
+  }
 
   public void parseCommand() {
-    Control m = new Control(input);
-    parser.addPatterns("English");
+    Control m = new Control();
+    m.takeCommand(input);
+    parser.addPatterns(language);
     parser.addPatterns("Syntax");
     System.out.println(input);
     m.parseText(parser, input);
