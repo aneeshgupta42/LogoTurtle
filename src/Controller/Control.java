@@ -1,4 +1,3 @@
-/*
 package Controller;
 
 import backEnd.ErrorHandler;
@@ -7,7 +6,6 @@ import backEnd.TurtleUpdate;
 import frontEnd.View;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Stack;
 
 public class Control {
@@ -26,9 +24,11 @@ public class Control {
   private Stack<String> argument;
   private String arg;
   private String com;
+  private String input;
 
   public Control(String command) {
-    view = new View();
+    input = command;
+   // view = new View();
     pen = new PenUpdate();
     turtle = new TurtleUpdate();
     error = new ErrorHandler();
@@ -37,10 +37,11 @@ public class Control {
 
 
   public void parseCommand() {
-    Control m = new Control(view.getText());
+    Control m = new Control(input);
     //parser.addPatterns(language);
     parser.addPatterns("Syntax");
-    m.parseText(parser, view.getText());
+    System.out.println(input);
+    m.parseText(parser, input);
   }
 
 
@@ -55,7 +56,7 @@ public class Control {
         for (String word : line.split(WHITESPACE)) {
           if (word.trim().length() > 0) {
               organizeText(word,parser.getSymbol(word));
-             // System.out.println(String.format("%s : %s",word,parser.getSymbol(word)));
+              System.out.println(String.format("%s : %s",word,parser.getSymbol(word)));
           }
         }
       }
@@ -75,18 +76,18 @@ public class Control {
     System.out.println(argument);
   }
 
-//exact path of the command class
+   //exact path of the command class
 
   //this is throwing an error -> the class path needs to be input like src/.resources etc.
 
-    Class<?> cls;
-  {
-    try {
-      cls = Class.forName(com);
-    } catch (ClassNotFoundException e) {
-      error.handle("error");
-    }
-  }
+//    Class<?> cls;
+//  {
+//    try {
+//      cls = Class.forName(com);
+//    } catch (ClassNotFoundException e) {
+//      error.handle("error");
+//    }
+//  }
 
   private void coordinateCommands(){
 
@@ -94,20 +95,23 @@ public class Control {
       arg = argument.pop();
       if(!command.isEmpty()){
         com = command.pop();
-        Object objectCommand;
-        try {
-          Constructor constructor = cls.getConstructor(int.class);
-          objectCommand = constructor.newInstance((Object) new int [Integer.parseInt(arg)]);
-          Command commandGiven = (Command) objectCommand;
-        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-          error.handle("error");
-        }
+
+//        Object objectCommand;
+//        try {
+//          Constructor constructor = cls.getConstructor(int.class);
+//          objectCommand = constructor.newInstance((Object) new int [Integer.parseInt(arg)]);
+//          Command commandGiven = (Command) objectCommand;
+//        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+//          error.handle("error");
+//        }
 
       }
+      System.out.println(command);
+      System.out.println(argument);
     }
 
   }
 
 
 }
-*/
+

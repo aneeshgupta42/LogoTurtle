@@ -1,5 +1,6 @@
 package frontEnd;
 
+import Controller.Control;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.application.Application;
@@ -42,6 +43,7 @@ public class View extends Application {
 
   private Turtle myTurtle;
   private Pen myPen;
+  private Control control;
 
   public static final String TITLE = "JavaFX Animation Example";
   public static final Dimension DEFAULT_SIZE = new Dimension(1600, 1600);
@@ -158,6 +160,13 @@ public class View extends Application {
 
     runButton.setOnAction(action -> {
       myText = inputArea.getText();
+
+      //Libba added in
+
+                             getText();
+                             control = new Control(getText());
+                             control.parseCommand();
+
       System.out.println(myText);
       inputArea.setText("Running!");
     });
