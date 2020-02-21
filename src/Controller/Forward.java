@@ -1,5 +1,7 @@
 package Controller;
 
+import Controller.Command;
+
 public class Forward extends Command {
 
   public Forward(String... varargs){
