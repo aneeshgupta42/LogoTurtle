@@ -53,6 +53,7 @@ public class View extends Application {
   private String myText;
 
   public View() {
+    control = new Control();
    // myTurtle =
    // myPen = new Pen("red");
     makeDisplayWindow();
@@ -164,11 +165,12 @@ public class View extends Application {
       //Libba added in
 
                              getText();
-                             control = new Control(getText());
-                             control.parseCommand();
+                             control.takeCommand(getText());
+
 
       //System.out.println(myText);
       inputArea.setText("Running!");
+      control.parseCommand();
     });
     Button clearButton = new Button("Clear");
     clearButton.setPrefSize(100, 20);
@@ -218,8 +220,8 @@ public class View extends Application {
 
     // Weekdays
     String week_days[] =
-        { "Monday", "Tuesday", "Wednesday",
-            "Thrusday", "Friday" };
+        { "English", "Chinese", "French",
+            "German", "Italian","Portuguese","Russian","Spanish","Urdu" };
 
     // Create a combo box
     ComboBox combo_box =
@@ -235,12 +237,12 @@ public class View extends Application {
           public void handle(ActionEvent e)
           {
             selected.setText(combo_box.getValue() + " selected");
+            control.passLanguage(combo_box.getValue().toString());
           }
         };
 
     // Set on action
     combo_box.setOnAction(event);
-
     // Create a tile pane
     TilePane tile_pane = new TilePane(combo_box, selected);
 
