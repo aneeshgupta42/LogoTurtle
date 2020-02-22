@@ -15,10 +15,6 @@ public abstract class Command {
   private String commandReturn;
 
 
-  public Command(String command) {
-    myCommand = command;
-  }
-
   public Command(String[] varargs) {
 
   }
