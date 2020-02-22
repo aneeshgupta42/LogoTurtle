@@ -36,7 +36,7 @@ public class Control {
   private String input;
 
   public Control() {
-    COMMANDSWITHTWO = new String[]{"SetTowards", "SetPosition", "MakeVariable", "Repeat", "DoTimes",
+    COMMANDSWITHTWO = new String[]{"SetTowards", "SetPosition", "MakeVariable","Repeat", "DoTimes",
         "Sum",
         "Difference", "Product", "Quotient"};
 
@@ -89,9 +89,8 @@ public class Control {
               }
             }
           }
-          System.out.println(command);
-          System.out.println(argument);
-          System.out.println(variable);
+        //  System.out.println(command);
+        //  System.out.println(argument);
           coordinateCommands(parser1);
         }
 
@@ -104,17 +103,24 @@ public class Control {
 
   private void coordinateCommands(Parser parser1) {
     //check for an arg and when their is an arg,pop off a command for that arg
+
     if(!argument.isEmpty()){
       arg = argument.pop();
       userCom = command.pop();
       for (String key : COMMANDSWITHTWO) {
         if (key.equals(parser1.getSymbol(userCom))) {
-          arg2= argument.pop();
+          if(key.equals("MakeVariable") && !variable.isEmpty()){
+            var = variable.pop();
+          }
+          if(!argument.isEmpty()) {
+            arg2 = argument.pop();
+          }
         }}
       makeClassPathToCommand(parser1);
       passCommand();
-
     }
+
+
    /* if (!argument.isEmpty()) {
       arg = argument.pop();
       if (!command.isEmpty()) {
@@ -141,11 +147,11 @@ public class Control {
   }
 
   public void passCommand() {
-    System.out.println(com);
+   System.out.println(com);
     System.out.println(arg);
     System.out.println(arg2);
     System.out.println(var);
-    System.out.println(userCom);
+//    System.out.println(userCom);
     Class cls = null;
     try {
       cls = Class.forName(com);
@@ -160,7 +166,9 @@ public class Control {
   }
 
   public void createCommand(Command command) {
-    argument.push(command.commandValueReturn());
+    if(command.commandValueReturn()!=null){
+      argument.push(command.commandValueReturn());
+    }
   }
 }
 
