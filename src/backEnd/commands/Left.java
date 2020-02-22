@@ -1,6 +1,6 @@
-package Controller;
+package backEnd.commands;
 
-import Controller.Command;
+import backEnd.commands.Command;
 
 public class Left extends Command {
 

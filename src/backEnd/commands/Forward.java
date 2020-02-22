@@ -1,6 +1,4 @@
-package backEnd;
-
-import Controller.Command;
+package backEnd.commands;
 
 public class Forward extends Command {
 

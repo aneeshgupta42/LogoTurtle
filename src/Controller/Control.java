@@ -3,11 +3,12 @@ package Controller;
 import backEnd.ErrorHandler;
 import backEnd.PenUpdate;
 import backEnd.TurtleUpdate;
+import backEnd.commands.Command;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Deque;
 import java.util.LinkedList;
-import java.util.Stack;
 
 public class Control {
 
@@ -15,7 +16,7 @@ public class Control {
   private static final String NEWLINE = "\n";
   private static final String ARGUMENT = "Constant";
   private static final String VARIABLE = "Variable";
-  private static final String CLASS_PATH = "backEnd.";
+  private static final String CLASS_PATH = "backEnd.commands.";
   private static final String LIST_END ="ListEnd";
   private static final String LIST_START ="ListStart";
   private String COMMANDSWITHTWO[];

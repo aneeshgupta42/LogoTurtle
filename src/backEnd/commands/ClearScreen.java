@@ -1,6 +1,4 @@
-package Controller;
-
-import Controller.Command;
+package backEnd.commands;
 
 public class ClearScreen extends Command {
 
