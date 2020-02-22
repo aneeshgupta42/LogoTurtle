@@ -244,8 +244,8 @@ public class View extends Application {
     FileChooser fileChooser = new FileChooser();
     Button button = new Button("Select File");
     button.setOnAction(e -> {
+      fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
       File selectedFile = fileChooser.showOpenDialog(myStage);
-      fileChooser.setInitialDirectory(new File("parsar_parsar_team17"));
       fileChooser.getExtensionFilters().addAll(
           new FileChooser.ExtensionFilter("Text Files", "*.txt")
           ,new FileChooser.ExtensionFilter("HTML Files", "*.htm")
