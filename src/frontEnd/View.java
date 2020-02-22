@@ -1,13 +1,17 @@
 package frontEnd;
 
 import Controller.Control;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -22,6 +26,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import java.awt.Dimension;
 import javafx.animation.Animation;
@@ -41,24 +46,33 @@ public class View extends Application {
   private GridPane grid;
   private Stage myStage;
 
-  private Turtle myTurtle;
+  private Node myTurtle;
   private Pen myPen;
   private Control control;
 
   public static final String TITLE = "JavaFX Animation Example";
-  public static final Dimension DEFAULT_SIZE = new Dimension(1600, 1600);
+  public static final Dimension DEFAULT_SIZE = new Dimension(1200, 1200);
   private Node myActor;
   private TextArea myCommander;
   private static final String TURTLE = "turtle.png";
   private String myText;
+  private static final String RESOURCES = "resources.languages";
+  public static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
+  private static final String DEFAULT_RESOURCE_FOLDER = "" + RESOURCES + "/";
+  public static final String STYLE_PROPERTIES_FILENAME = DEFAULT_RESOURCE_PACKAGE + "StyleComponents";
+  private static final String XML_PROPERTIES_FILENAME = DEFAULT_RESOURCE_PACKAGE + "XMLTagNames";
+  private static final String STYLESHEET = "default.css";
+  private ResourceBundle styleResources;
+  private Node display_window;
+  private double display_height;
+  private double display_width;
 
   public View() {
     control = new Control();
+    //styleResources = ResourceBundle.getBundle(STYLE_PROPERTIES_FILENAME);
    // myTurtle =
    // myPen = new Pen("red");
-    makeDisplayWindow();
-    makeScene(400, 400);
-    makeCommandWindow();
+
     //initHashmap(rulesClass, totalNumStates);
     myStage = new Stage();
   }
@@ -68,9 +82,14 @@ public class View extends Application {
     myStage.setTitle(TITLE);
     View view = new View();
     myStage.setX(0);
+    makeDisplayWindow();
+    //makeScene();
+    makeCommandWindow();
    // myScene.setFill(Color.BLACK);
-    //myStage.setScene(myScene);
-    myStage.setScene(makeScene(DEFAULT_SIZE.width, DEFAULT_SIZE.height));
+    myScene = makeScene(DEFAULT_SIZE.width, DEFAULT_SIZE.height);
+    //myScene.getStylesheets().add(DEFAULT_RESOURCE_FOLDER + STYLESHEET);
+    //myScene.getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
+    myStage.setScene(myScene);
     myStage.show();
     myStage.setOnCloseRequest(t->stopEverything());
     Animation animation = makeAnimation(myActor);
@@ -85,15 +104,16 @@ public class View extends Application {
     BorderPane root = new BorderPane();
     HBox hbox = addHBox();
     root.setTop(hbox);
-    root.setCenter(makeDisplayWindow());
+    display_window = makeDisplayWindow();
+    root.setCenter(display_window);
     root.setRight(makeSideWindow());
+
     //root.setCenter(makeDisplayWindow());
     //myCommander = makeCommandWindow();
     root.setBottom(makeCommandWindow());
     //root.getChildren().add(myTurtle);
     myActor = makeActor();
-    //root.getChildren().add(myActor);
-    return new Scene(root, width,  height);
+    return new Scene(root);
   }
 
   // create something to animate
@@ -103,23 +123,38 @@ public class View extends Application {
     return result;
   }
 
+  private Node makeTurtle() {
+    Image turtle= new Image(getClass().getClassLoader().getResourceAsStream(TURTLE));
+    ImageView myTurtle = new ImageView(turtle);
+    return myTurtle;
+  }
+
+
+
+
   public void closeWindow(){
     myStage.close();
   }
 
   private Node makeDisplayWindow(){
     GridPane gridPane = new GridPane();
+    gridPane.setHgap(10);
+    gridPane.setVgap(10);
+    gridPane.setPadding(new Insets(0, 10, 0, 10));
     //gridPane.setMaxSize(1200, 400);
+    gridPane.setMinHeight(700);
+    gridPane.setMinWidth(1000);
+    gridPane.setAlignment(Pos.CENTER);
     gridPane.setStyle("-fx-padding: 10;" +
         "-fx-border-style: solid inside;" +
         "-fx-border-width: 2;" +
         "-fx-border-insets: 5;" +
         "-fx-border-radius: 5;" +
         "-fx-border-color: grey;");
-    Image turtle= new Image(getClass().getClassLoader().getResourceAsStream(TURTLE));
-    ImageView myTurtle = new ImageView(turtle);
-    myTurtle.setY(gridPane.getBoundsInLocal().getHeight()/2);
-    myTurtle.setX(gridPane.getBoundsInLocal().getWidth()/2);
+    display_height = gridPane.getHeight();
+    myTurtle = makeTurtle();
+    Button button2 = new Button("Clear");
+    GridPane.setConstraints(myTurtle, 50, 6);
     gridPane.getChildren().add(myTurtle);
     return gridPane;
   }
@@ -127,7 +162,7 @@ public class View extends Application {
 
   private Node makeSideWindow() {
     GridPane gridPane = new GridPane();
-    gridPane.setMinHeight(800);
+   // gridPane.setMinHeight(800);
     gridPane.setMinWidth(400);
     gridPane.setStyle("-fx-padding: 10;" +
         "-fx-border-style: solid inside;" +
@@ -141,14 +176,13 @@ public class View extends Application {
   private Node makeCommandWindow(){
     HBox hbox = new HBox();
     TextArea inputArea = new TextArea();
+    myCommander = inputArea;
     inputArea.setPromptText("Enter Command");
     inputArea.setPrefColumnCount(10);
     inputArea.getText();
     GridPane.setConstraints(inputArea, 0, 0);
-    //inputArea.getText();
-    //inputArea.clear();
-    inputArea.setMinHeight(200);
-    inputArea.setMinWidth(1500);
+    inputArea.setMinWidth(1100);
+    inputArea.setMaxHeight(200);
     inputArea.setStyle("-fx-padding: 10;" +
         "-fx-border-style: solid inside;" +
         "-fx-border-width: 2;" +
@@ -161,15 +195,9 @@ public class View extends Application {
 
     runButton.setOnAction(action -> {
       myText = inputArea.getText();
-
-      //Libba added in
-
-                             getText();
-                             control.takeCommand(getText());
-
-
-      //System.out.println(myText);
-      inputArea.setText("Running!");
+      getText();
+      control.takeCommand(getText());
+      GridPane.setConstraints(myTurtle, 10, 10);
       control.parseCommand();
     });
     Button clearButton = new Button("Clear");
@@ -213,25 +241,40 @@ public class View extends Application {
 
     Button buttonProjected = new Button("Projected");
     buttonProjected.setPrefSize(100, 20);
-    TilePane r = new TilePane();
-    // Create a label
-    Label description_label =
-        new Label("Select File");
+    FileChooser fileChooser = new FileChooser();
+    Button button = new Button("Select File");
+    button.setOnAction(e -> {
+      File selectedFile = fileChooser.showOpenDialog(myStage);
+      fileChooser.setInitialDirectory(new File("parsar_parsar_team17"));
+      fileChooser.getExtensionFilters().addAll(
+          new FileChooser.ExtensionFilter("Text Files", "*.txt")
+          ,new FileChooser.ExtensionFilter("HTML Files", "*.htm")
+      );
+      if(selectedFile!= null){
+        try {
+          scanFile(selectedFile);
+        } catch (FileNotFoundException ex) {
+          ex.printStackTrace();
+        }
+      }
+    });
 
     // Weekdays
-    String week_days[] =
+    String languages[] =
         { "English", "Chinese", "French",
             "German", "Italian","Portuguese","Russian","Spanish","Urdu" };
 
     // Create a combo box
     ComboBox combo_box =
         new ComboBox(FXCollections
-            .observableArrayList(week_days));
+            .observableArrayList(languages));
+    combo_box.setPromptText("Language");
 
     // Label to display the selected menuitem
+
     Label selected = new Label("default item selected");
 
-    // Create action event
+    //Create action event
     EventHandler<ActionEvent> event =
         new EventHandler<ActionEvent>() {
           public void handle(ActionEvent e)
@@ -244,15 +287,29 @@ public class View extends Application {
     // Set on action
     combo_box.setOnAction(event);
     // Create a tile pane
-    TilePane tile_pane = new TilePane(combo_box, selected);
 
-    hbox.getChildren().addAll(buttonCurrent, buttonProjected, tile_pane);
+    hbox.getChildren().addAll(buttonCurrent, buttonProjected, button, combo_box);
 
     return hbox;
   }
 
+  private void scanFile(File file) throws FileNotFoundException {
+    Scanner scnr = new Scanner(file);
+    //Reading each line of file using Scanner class
+    int lineNumber = 0;
+    while(scnr.hasNextLine()){
+      String line = scnr.nextLine();
+      myCommander.setText(myCommander.getText()+line+"\n");
+      lineNumber++;
+    }
+  }
+
   public String getText(){
     return myText;
+  }
+
+  public void changeTurtlePosition(int col, int row){
+    GridPane.setConstraints(myTurtle, col, row);
   }
 
   public static void main(String[] args) {
