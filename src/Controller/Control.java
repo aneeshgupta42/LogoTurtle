@@ -36,7 +36,7 @@ public class Control {
   private String input;
 
   public Control() {
-    COMMANDSWITHTWO = new String[]{"SetTowards", "SetPosition", "MakeVariable", "Repeat", "DoTimes",
+    COMMANDSWITHTWO = new String[]{"SetTowards", "SetPosition", "MakeVariable","Repeat", "DoTimes",
         "Sum",
         "Difference", "Product", "Quotient"};
 
@@ -89,12 +89,10 @@ public class Control {
               }
             }
           }
-          System.out.println(command);
-          System.out.println(argument);
-          System.out.println(variable);
-          coordinateCommands(parser1);
+         // System.out.println(command);
+         // System.out.println(argument);
         }
-
+        coordinateCommands(parser1);
 
 
       }
@@ -104,17 +102,31 @@ public class Control {
 
   private void coordinateCommands(Parser parser1) {
     //check for an arg and when their is an arg,pop off a command for that arg
+
     if(!argument.isEmpty()){
       arg = argument.pop();
       userCom = command.pop();
       for (String key : COMMANDSWITHTWO) {
         if (key.equals(parser1.getSymbol(userCom))) {
-          arg2= argument.pop();
-        }}
+          if(key.equals("MakeVariable") && !variable.isEmpty()){
+            var = variable.pop();
+          }
+          if(!argument.isEmpty()) {
+            arg2 = argument.pop();
+          }
+        }
+      }
       makeClassPathToCommand(parser1);
-      passCommand();
-
+      passCommand(parser1);
     }
+    if(!command.isEmpty() && argument.isEmpty()){
+      userCom = command.pop();
+      makeClassPathToCommand(parser1);
+      passCommand(parser1);
+    }
+
+
+
    /* if (!argument.isEmpty()) {
       arg = argument.pop();
       if (!command.isEmpty()) {
@@ -140,12 +152,12 @@ public class Control {
     com = CLASS_PATH + parser1.getSymbol(userCom);
   }
 
-  public void passCommand() {
-    System.out.println(com);
+  public void passCommand(Parser parser1) {
+   System.out.println(com);
     System.out.println(arg);
     System.out.println(arg2);
     System.out.println(var);
-    System.out.println(userCom);
+//    System.out.println(userCom);
     Class cls = null;
     try {
       cls = Class.forName(com);
@@ -153,14 +165,17 @@ public class Control {
       Constructor constructor = cls.getConstructor(String[].class);
       objectCommand = constructor.newInstance((Object) new String[]{arg, arg2,var, userCom});
       Command commandGiven = (Command) objectCommand;
-      createCommand(commandGiven);
+      createCommand(commandGiven, parser1);
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
       error.handleCommandClassNotFound();
     }
   }
 
-  public void createCommand(Command command) {
-    argument.push(command.commandValueReturn());
+  public void createCommand(Command command, Parser parser1) {
+    if(command.commandValueReturn()!=null){
+      argument.push(command.commandValueReturn());
+    }
+    coordinateCommands(parser1);
   }
 }
 
