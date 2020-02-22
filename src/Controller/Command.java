@@ -14,39 +14,47 @@ public abstract class Command {
   private String myCommand;
 
 
-  public Command(String command){
-    myCommand=command;
+  public Command(String command) {
+    myCommand = command;
   }
 
   public Command(String[] varargs) {
 
   }
 
-  public int getTurtleCurrentX(){
+  public int getTurtleCurrentX() {
     return turtleXVal;
   }
-  public int getTurtleCurrentY(){
+
+  public int getTurtleCurrentY() {
     return turtleYVal;
   }
-  public int getPenCurrentX(){
+
+  public int getPenCurrentX() {
     return penXVal;
   }
-  public int getPenCurrentY(){
+
+  public int getPenCurrentY() {
     return penYVal;
   }
-  public int getTurtleAngle(){
+
+  public int getTurtleAngle() {
     return turtleAngle;
   }
-  public int getPenAngle(){
+
+  public int getPenAngle() {
     return penAngle;
   }
-  public int getPenColor(){
+
+  public int getPenColor() {
     return penColor;
   }
-  public int getTurtleColor(){
+
+  public int getTurtleColor() {
     return turtleColor;
   }
-  public String getLanguage(){
+
+  public String getLanguage() {
     return language;
   }
 
