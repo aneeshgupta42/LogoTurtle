@@ -101,7 +101,7 @@ public class Control {
 
   private void coordinateCommands(Parser parser1) {
     //check for an arg and when their is an arg,pop off a command for that arg
-    if(!argument.isEmpty()){
+    if(!argument.isEmpty() && !command.isEmpty()){
       arg = argument.pop();
       userCom = command.pop();
       for (String key : COMMANDSWITHTWO) {
@@ -150,6 +150,7 @@ public class Control {
   public void createCommand(Command command, Parser parser1) {
     if(command.commandValueReturn()!=null){
       argument.push(command.commandValueReturn());
+      System.out.println(command.commandValueReturn());
     }
     coordinateCommands(parser1);
   }
