@@ -5,6 +5,8 @@ import backEnd.PenUpdate;
 import backEnd.TurtleUpdate;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.Stack;
 
 public class Control {
@@ -14,15 +16,18 @@ public class Control {
   private static final String ARGUMENT = "Constant";
   private static final String VARIABLE = "Variable";
   private static final String CLASS_PATH = "Controller.";
+  private static final String LIST_END ="ListEnd";
+  private static final String LIST_START ="ListStart";
+  private String COMMANDSWITHTWO[];
   private PenUpdate pen;
   private TurtleUpdate turtle;
   private ErrorHandler error;
   private Parser parser;
   private String language;
   private String comment;
-  private Stack<String> command;
-  private Stack<String> argument;
-  private Stack<String> variable;
+  private Deque<String> command;
+  private Deque<String> argument;
+  private Deque<String> variable;
   private String arg;
   private String arg2;
   private String com;
@@ -31,6 +36,10 @@ public class Control {
   private String input;
 
   public Control() {
+    COMMANDSWITHTWO = new String[]{"SetTowards", "SetPosition", "MakeVariable", "Repeat", "DoTimes",
+        "Sum",
+        "Difference", "Product", "Quotient"};
+
     // pen = new PenUpdate();
     //  turtle = new TurtleUpdate();
     error = new ErrorHandler();
@@ -58,45 +67,58 @@ public class Control {
 
   //check the difference between constant variable command list comment
   private void parseText(Parser parser1, String lines) {
-    command = new Stack<>();
-    argument = new Stack<>();
-    variable = new Stack<>();
+    command = new LinkedList<>();
+    argument = new LinkedList<>();
+    variable = new LinkedList<>();
     for (String line : lines.split(NEWLINE)) {
-      if (line.contains("#")) {
+     /* if (line.contains("#")) {
         comment = line;
-      } else {
+      } else */{
         for (String word : line.split(WHITESPACE)) {
           if (word.trim().length() > 0) {
             String symbol = parser1.getSymbol(word);
-
-            if (!symbol.equals(null)) {
-
+          //  System.out.print(symbol);
+          //  System.out.println (" "+ word);
+            if (!symbol.equals(null) && !symbol.equals(LIST_END) && !symbol.equals(LIST_START)) {
               if (parser1.getSymbol(word).equals(VARIABLE)) {
                 variable.push(word);
               } else if (parser1.getSymbol(word).equals(ARGUMENT)) {
-                argument.add(word);
+                argument.push(word);
               } else {
                 command.push(word);
               }
             }
           }
-
+          System.out.println(command);
+          System.out.println(argument);
+          System.out.println(variable);
+          coordinateCommands(parser1);
         }
-        System.out.println(command);
-        System.out.println(argument);
-        System.out.println(variable);
-        coordinateCommands(parser1);
+
+
+
       }
     }
 
   }
 
   private void coordinateCommands(Parser parser1) {
-    if (!argument.isEmpty()) {
+    //check for an arg and when their is an arg,pop off a command for that arg
+    if(!argument.isEmpty()){
+      arg = argument.pop();
+      userCom = command.pop();
+      for (String key : COMMANDSWITHTWO) {
+        if (key.equals(parser1.getSymbol(userCom))) {
+          arg2= argument.pop();
+        }}
+      makeClassPathToCommand(parser1);
+      passCommand();
+
+    }
+   /* if (!argument.isEmpty()) {
       arg = argument.pop();
       if (!command.isEmpty()) {
-        userCom = command.pop();
-        com = CLASS_PATH + parser1.getSymbol(userCom);
+        makeClassPathToCommand(parser1);
         if(!variable.isEmpty()){
           var = variable.pop();
         }
@@ -107,16 +129,23 @@ public class Control {
       }
     } else {
       if (!command.isEmpty()) {
-        userCom = command.pop();
-
-        com = CLASS_PATH + parser1.getSymbol(userCom);
+        makeClassPathToCommand(parser1);
         passCommand();
       }
-    }
+    }*/
 
   }
 
+  private void makeClassPathToCommand(Parser parser1) {
+    com = CLASS_PATH + parser1.getSymbol(userCom);
+  }
+
   public void passCommand() {
+    System.out.println(com);
+    System.out.println(arg);
+    System.out.println(arg2);
+    System.out.println(var);
+    System.out.println(userCom);
     Class cls = null;
     try {
       cls = Class.forName(com);
@@ -131,7 +160,7 @@ public class Control {
   }
 
   public void createCommand(Command command) {
-    //coordinateCommands(parser);
+    argument.push(command.commandValueReturn());
   }
 }
 

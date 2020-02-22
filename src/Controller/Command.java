@@ -12,6 +12,7 @@ public abstract class Command {
   private int turtleColor;
   private String language;
   private String myCommand;
+  private String commandReturn;
 
 
   public Command(String command) {
@@ -57,5 +58,10 @@ public abstract class Command {
   public String getLanguage() {
     return language;
   }
+  public String commandValueReturn(){
+    return commandReturn;
+  }
+
+
 
 }
