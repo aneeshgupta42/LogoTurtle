@@ -89,11 +89,10 @@ public class Control {
               }
             }
           }
-        //  System.out.println(command);
-        //  System.out.println(argument);
-          coordinateCommands(parser1);
+         // System.out.println(command);
+         // System.out.println(argument);
         }
-
+        coordinateCommands(parser1);
 
 
       }
@@ -115,10 +114,17 @@ public class Control {
           if(!argument.isEmpty()) {
             arg2 = argument.pop();
           }
-        }}
+        }
+      }
       makeClassPathToCommand(parser1);
-      passCommand();
+      passCommand(parser1);
     }
+    if(!command.isEmpty() && argument.isEmpty()){
+      userCom = command.pop();
+      makeClassPathToCommand(parser1);
+      passCommand(parser1);
+    }
+
 
 
    /* if (!argument.isEmpty()) {
@@ -146,7 +152,7 @@ public class Control {
     com = CLASS_PATH + parser1.getSymbol(userCom);
   }
 
-  public void passCommand() {
+  public void passCommand(Parser parser1) {
    System.out.println(com);
     System.out.println(arg);
     System.out.println(arg2);
@@ -159,16 +165,17 @@ public class Control {
       Constructor constructor = cls.getConstructor(String[].class);
       objectCommand = constructor.newInstance((Object) new String[]{arg, arg2,var, userCom});
       Command commandGiven = (Command) objectCommand;
-      createCommand(commandGiven);
+      createCommand(commandGiven, parser1);
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
       error.handleCommandClassNotFound();
     }
   }
 
-  public void createCommand(Command command) {
+  public void createCommand(Command command, Parser parser1) {
     if(command.commandValueReturn()!=null){
       argument.push(command.commandValueReturn());
     }
+    coordinateCommands(parser1);
   }
 }
 
