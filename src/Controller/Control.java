@@ -5,6 +5,8 @@ import backEnd.PenUpdate;
 import backEnd.TurtleUpdate;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.Stack;
 
 public class Control {
@@ -16,15 +18,16 @@ public class Control {
   private static final String CLASS_PATH = "Controller.";
   private static final String LIST_END ="ListEnd";
   private static final String LIST_START ="ListStart";
+  private String COMMANDSWITHTWO[];
   private PenUpdate pen;
   private TurtleUpdate turtle;
   private ErrorHandler error;
   private Parser parser;
   private String language;
   private String comment;
-  private Stack<String> command;
-  private Stack<String> argument;
-  private Stack<String> variable;
+  private Deque<String> command;
+  private Deque<String> argument;
+  private Deque<String> variable;
   private String arg;
   private String arg2;
   private String com;
@@ -33,6 +36,10 @@ public class Control {
   private String input;
 
   public Control() {
+    COMMANDSWITHTWO = new String[]{"SetTowards", "SetPosition", "MakeVariable", "Repeat", "DoTimes",
+        "Sum",
+        "Difference", "Product", "Quotient"};
+
     // pen = new PenUpdate();
     //  turtle = new TurtleUpdate();
     error = new ErrorHandler();
@@ -60,9 +67,9 @@ public class Control {
 
   //check the difference between constant variable command list comment
   private void parseText(Parser parser1, String lines) {
-    command = new Stack<>();
-    argument = new Stack<>();
-    variable = new Stack<>();
+    command = new LinkedList<>();
+    argument = new LinkedList<>();
+    variable = new LinkedList<>();
     for (String line : lines.split(NEWLINE)) {
      /* if (line.contains("#")) {
         comment = line;
@@ -85,7 +92,6 @@ public class Control {
           System.out.println(command);
           System.out.println(argument);
           System.out.println(variable);
-          checkCommandForArgumentsNeeded();
           coordinateCommands(parser1);
         }
 
@@ -96,15 +102,20 @@ public class Control {
 
   }
 
-  private void checkCommandForArgumentsNeeded() {
-    if (argument.isEmpty()) {
-      makeClassPathToCommand(parser);
+  private void coordinateCommands(Parser parser1) {
+    //check for an arg and when their is an arg,pop off a command for that arg
+    if(!argument.isEmpty()){
+      arg = argument.pop();
+      userCom = command.pop();
+      for (String key : COMMANDSWITHTWO) {
+        if (key.equals(parser1.getSymbol(userCom))) {
+          arg2= argument.pop();
+        }}
+      makeClassPathToCommand(parser1);
+      passCommand();
 
     }
-  }
-
-  private void coordinateCommands(Parser parser1) {
-    if (!argument.isEmpty()) {
+   /* if (!argument.isEmpty()) {
       arg = argument.pop();
       if (!command.isEmpty()) {
         makeClassPathToCommand(parser1);
@@ -121,12 +132,11 @@ public class Control {
         makeClassPathToCommand(parser1);
         passCommand();
       }
-    }
+    }*/
 
   }
 
   private void makeClassPathToCommand(Parser parser1) {
-    userCom = command.pop();
     com = CLASS_PATH + parser1.getSymbol(userCom);
   }
 
@@ -141,15 +151,16 @@ public class Control {
       cls = Class.forName(com);
       Object objectCommand;
       Constructor constructor = cls.getConstructor(String[].class);
-     // objectCommand = constructor.newInstance((Object) new String[]{arg, arg2,var, userCom});
-    //  Command commandGiven = (Command) objectCommand;
-     // createCommand(commandGiven);
-    } catch (NoSuchMethodException | ClassNotFoundException e){  //InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
+      objectCommand = constructor.newInstance((Object) new String[]{arg, arg2,var, userCom});
+      Command commandGiven = (Command) objectCommand;
+      createCommand(commandGiven);
+    } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
       error.handleCommandClassNotFound();
     }
   }
 
   public void createCommand(Command command) {
+    argument.push(command.commandValueReturn());
   }
 }
 
