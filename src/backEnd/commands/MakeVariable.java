@@ -1,4 +1,6 @@
-package Controller;
+package backEnd.commands;
+
+import backEnd.commands.Command;
 
 public class MakeVariable extends Command {
 
