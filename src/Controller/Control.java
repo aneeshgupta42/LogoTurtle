@@ -15,7 +15,7 @@ public class Control {
   private static final String NEWLINE = "\n";
   private static final String ARGUMENT = "Constant";
   private static final String VARIABLE = "Variable";
-  private static final String CLASS_PATH = "Controller.";
+  private static final String CLASS_PATH = "backEnd.";
   private static final String LIST_END ="ListEnd";
   private static final String LIST_START ="ListStart";
   private String COMMANDSWITHTWO[];
@@ -46,7 +46,7 @@ public class Control {
     parser = new Parser();
   }
 
-  public void takeCommand(String command) {
+  public void passCommand(String command) {
     input = command;
   }
 
@@ -56,7 +56,7 @@ public class Control {
 
   public void parseCommand() {
     Control m = new Control();
-    m.takeCommand(input);
+    m.passCommand(input);
     parser.addPatterns(language);
     parser.addPatterns("Syntax");
     parser.addPatterns("Functions");
@@ -89,8 +89,6 @@ public class Control {
               }
             }
           }
-         // System.out.println(command);
-         // System.out.println(argument);
         }
         coordinateCommands(parser1);
 
@@ -102,7 +100,6 @@ public class Control {
 
   private void coordinateCommands(Parser parser1) {
     //check for an arg and when their is an arg,pop off a command for that arg
-
     if(!argument.isEmpty()){
       arg = argument.pop();
       userCom = command.pop();
@@ -124,28 +121,6 @@ public class Control {
       makeClassPathToCommand(parser1);
       passCommand(parser1);
     }
-
-
-
-   /* if (!argument.isEmpty()) {
-      arg = argument.pop();
-      if (!command.isEmpty()) {
-        makeClassPathToCommand(parser1);
-        if(!variable.isEmpty()){
-          var = variable.pop();
-        }
-        if (command.isEmpty() && !argument.isEmpty()) {
-          arg2 = argument.pop();
-        }
-        passCommand();
-      }
-    } else {
-      if (!command.isEmpty()) {
-        makeClassPathToCommand(parser1);
-        passCommand();
-      }
-    }*/
-
   }
 
   private void makeClassPathToCommand(Parser parser1) {
