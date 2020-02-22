@@ -26,12 +26,13 @@ public class Control {
   private String arg;
   private String arg2;
   private String com;
+  private String var;
   private String userCom;
   private String input;
 
   public Control() {
-   // pen = new PenUpdate();
-  //  turtle = new TurtleUpdate();
+    // pen = new PenUpdate();
+    //  turtle = new TurtleUpdate();
     error = new ErrorHandler();
     parser = new Parser();
   }
@@ -53,54 +54,52 @@ public class Control {
     m.parseText(parser, input);
   }
 
-
   // Given commands, calls organization of commands
 
   //check the difference between constant variable command list comment
-  private void parseText(Parser parser, String lines) {
+  private void parseText(Parser parser1, String lines) {
     command = new Stack<>();
     argument = new Stack<>();
     variable = new Stack<>();
     for (String line : lines.split(NEWLINE)) {
       if (line.contains("#")) {
         comment = line;
-      }
-      else {
+      } else {
         for (String word : line.split(WHITESPACE)) {
           if (word.trim().length() > 0) {
-            String symbol = parser.getSymbol(word);
-            System.out.println(word);
-            System.out.println(symbol);
+            String symbol = parser1.getSymbol(word);
+
             if (!symbol.equals(null)) {
 
-              if (symbol.equals(VARIABLE)) {
+              if (parser1.getSymbol(word).equals(VARIABLE)) {
                 variable.push(word);
-              }
-              if (symbol.equals("Constant")) {
+              } else if (parser1.getSymbol(word).equals(ARGUMENT)) {
                 argument.add(word);
-              }
-              else{
-                  command.push(word);
+              } else {
+                command.push(word);
               }
             }
           }
 
         }
-        coordinateCommands(parser);
+        System.out.println(command);
+        System.out.println(argument);
+        System.out.println(variable);
+        coordinateCommands(parser1);
       }
     }
-   //System.out.println(command);
-   // System.out.println(argument);
-   // System.out.println(variable);
+
   }
 
-  private void coordinateCommands(Parser parser) {
+  private void coordinateCommands(Parser parser1) {
     if (!argument.isEmpty()) {
       arg = argument.pop();
       if (!command.isEmpty()) {
         userCom = command.pop();
-        com = CLASS_PATH + parser.getSymbol(userCom);
-
+        com = CLASS_PATH + parser1.getSymbol(userCom);
+        if(!variable.isEmpty()){
+          var = variable.pop();
+        }
         if (command.isEmpty() && !argument.isEmpty()) {
           arg2 = argument.pop();
         }
@@ -109,7 +108,8 @@ public class Control {
     } else {
       if (!command.isEmpty()) {
         userCom = command.pop();
-        com = CLASS_PATH + parser.getSymbol(userCom);
+
+        com = CLASS_PATH + parser1.getSymbol(userCom);
         passCommand();
       }
     }
@@ -122,7 +122,7 @@ public class Control {
       cls = Class.forName(com);
       Object objectCommand;
       Constructor constructor = cls.getConstructor(String[].class);
-      objectCommand = constructor.newInstance((Object) new String[]{arg, arg2, userCom});
+      objectCommand = constructor.newInstance((Object) new String[]{arg, arg2,var, userCom});
       Command commandGiven = (Command) objectCommand;
       createCommand(commandGiven);
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
@@ -131,7 +131,7 @@ public class Control {
   }
 
   public void createCommand(Command command) {
-    coordinateCommands(parser);
+    //coordinateCommands(parser);
   }
 }
 
