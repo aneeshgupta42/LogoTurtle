@@ -196,7 +196,7 @@ public class View extends Application {
     runButton.setOnAction(action -> {
       myText = inputArea.getText();
       getText();
-      control.takeCommand(getText());
+      control.passCommand(getText());
       GridPane.setConstraints(myTurtle, 10, 10);
       control.parseCommand();
     });
