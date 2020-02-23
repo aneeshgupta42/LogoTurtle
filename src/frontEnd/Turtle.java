@@ -30,6 +30,7 @@ public class Turtle implements Update{
     myTurtle.setRotate(angle);
   }
 
+  //get turtle position
   public int getTurtleCol(){
     return turtleCol;
   }
