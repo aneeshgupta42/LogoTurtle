@@ -172,12 +172,9 @@ public class View extends Application {
 
     runButton.setOnAction(action -> {
       myText = inputArea.getText();
-<<<<<<< HEAD
-      getText();
-      control.passCommand(getText());
-=======
+
       control.passCommand(myText);
->>>>>>> 465b7f6151df78685a419987ea06bbe170a5568f
+      control.passTurtle(myTurtle);
       control.parseCommand();
     });
     Button clearButton = new Button("Clear");

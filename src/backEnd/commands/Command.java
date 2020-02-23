@@ -1,5 +1,6 @@
 package backEnd.commands;
 
+import Controller.Control;
 import java.util.Collection;
 import java.util.Map;
 
@@ -18,10 +19,25 @@ public abstract class Command {
   private String commandReturn;
   private Map c;
   protected int numberOfArgs;
+  private Control myControl;
 
 
-  public Command(String[] varargs) {
+  public Command(String[] varargs, Control control) {
+    myControl = control;
+    System.out.println("Hit this");
+  }
 
+  public Command(String [] varargs){
+
+  }
+
+  public void setControl(Control control){
+      myControl = control;
+      System.out.println("Got Control: command");
+  }
+
+  public Control getMyControl() {
+    return myControl;
   }
 
   public int getTurtleCurrentX() {

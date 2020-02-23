@@ -30,8 +30,6 @@ public class Control {
   private final String RESOURCES = "resources";
   public final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
   private static final String FILE = "commands";
-  private String[] COMMANDSWITHTWO;
-  private String[] COMMANDSWITHNONE;
   private ErrorHandler error;
   private Parser parser;
   private String language;
@@ -46,23 +44,23 @@ public class Control {
   private Map<String, String> variablesUsed = new HashMap<>();
   private List<String> words;
   private ResourceBundle myResources;
-  private  List<String> argz;
   private Turtle turtle;
+  private int turtleCol;
+  private int turtleRow;
+  private int turtleAngle;
 
   public Control() {
-    myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE+FILE);
-  //  COMMANDSWITHTWO = new String[]{"SetTowards","SetPosition","MakeVariable","Repeat","DoTimes","Sum","Difference","Product","Quotient"};
-  //  COMMANDSWITHNONE = new String[]{"Pi"};
+    myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + FILE);
     error = new ErrorHandler();
     parser = new Parser();
     turtle = new Turtle();
   }
 
-  public Map getVariables(){
+  public Map getVariables() {
     return variablesUsed;
   }
 
-  public void setVariables(Map saved){
+  public void setVariables(Map saved) {
     variablesUsed = saved;
   }
 
@@ -86,23 +84,15 @@ public class Control {
     argument = new LinkedList<>();
     words = new LinkedList<>();
     for (String line : lines.split(NEWLINE)) {
-      for (String word : line.split(WHITESPACE)) { words.add(word);}
-     /* if (line.contains("#")) {
+      for (String word : line.split(WHITESPACE)) {
+        words.add(word);
+      }
+      if (line.contains("#")) {
         comment = line;
-      } else */
- //     System.out.println(variablesUsed);
-      organizeInStacks(parser1, line);
-    }
-  }
-
-  private String nextArg(String word){
-    for (int i=0;i<words.size();i++)
-    {
-      if(words.get(i).equals(word)){
-        return words.get(i+1);  //this needs to be fixed TODO: fix this
+      } else {
+        organizeInStacks(parser1, line);
       }
     }
-    return null;
   }
 
   private void organizeInStacks(Parser parser1, String line) {
@@ -110,18 +100,17 @@ public class Control {
       if (word.trim().length() > 0) {
         String symbol = parser1.getSymbol(word);
         if (!symbol.equals(null) && !symbol.equals(LIST_END) && !symbol.equals(LIST_START)) {
-          if (!parser1.getSymbol(word).equals(ARGUMENT) && !parser1.getSymbol(word).equals(VARIABLE)) {
+          if (!parser1.getSymbol(word).equals(ARGUMENT) && !parser1.getSymbol(word)
+              .equals(VARIABLE)) {
             command.push(word);
           } else {
             if (parser1.getSymbol(word).equals(VARIABLE)) {
-             if(variablesUsed.containsKey(word)){
-                  argument.push(variablesUsed.get(word));
+              if (variablesUsed.containsKey(word)) {
+                argument.push(variablesUsed.get(word));
+              } else {
+                argument.push(word);
               }
-             else{
-               argument.push(word);
-             }
-            }
-            else{
+            } else {
               argument.push(word);
             }
           }
@@ -132,9 +121,7 @@ public class Control {
   }
 
   private void coordinateCommands(Parser parser1) {
- //   System.out.println(argument);
- //   System.out.println(command);
-    int args=0;
+    int args = 0;
     if (!argument.isEmpty() && !command.isEmpty()) {
       userCom = command.pop();
       arg = argument.pollLast();
@@ -143,13 +130,14 @@ public class Control {
         Class cls = Class.forName(com);
         Object objectCommand;
         Constructor constructor = cls.getConstructor(String[].class);
-        objectCommand = constructor.newInstance((Object) new String[]{"1","1"});
+        objectCommand = constructor.newInstance((Object) new String[]{"1", "1"});
         Command commandGiven = (Command) objectCommand;
+        commandGiven.setControl(this);
         args = commandGiven.getNumberOfArgs();
       } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
         error.handleCommandClassNotFound();
       }
-      if(args == 2){
+      if (args == 2) {
         arg2 = argument.pollLast();
       }
  /*     for (String key : COMMANDSWITHTWO) {
@@ -163,7 +151,7 @@ public class Control {
         }
       }*/
       passCommand(parser1);
-      if (!command.isEmpty() && argument.isEmpty() ) {
+      if (!command.isEmpty() && argument.isEmpty()) {
         userCom = command.pop();
         makeClassPathToCommand(parser1);
         passCommand(parser1);
@@ -183,8 +171,9 @@ public class Control {
       Class cls = Class.forName(com);
       Object objectCommand;
       Constructor constructor = cls.getConstructor(String[].class);
-      objectCommand = constructor.newInstance((Object) new String[]{arg,arg2});
+      objectCommand = constructor.newInstance((Object) new String[]{arg, arg2});
       Command commandGiven = (Command) objectCommand;
+      commandGiven.setControl(this);
       createCommand(commandGiven, parser1);
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
       error.handleCommandClassNotFound();
@@ -200,14 +189,36 @@ public class Control {
       variablesUsed = command.getVariablesCreated();
       System.out.print(variablesUsed);
     }
+    command.setControl(this);
     coordinateCommands(parser1);
   }
 
 
-  public Turtle passTurtle(Turtle turtle){
-    int row = turtle.getTurtleRow();
+  public void passTurtle(Turtle myTurtle){
+    turtle = myTurtle;
+    turtleRow = turtle.getTurtleRow();
+    turtleCol = turtle.getTurtleCol();
+    turtleAngle = turtle.getTurtleAngle();
+    System.out.println("Got turtle: Control:"+turtleCol+turtleRow+turtleAngle);
+  }
 
-    return turtle;
+  public int getTurtleCol(){
+    return turtleCol;
+  }
+
+  public int getTurtleRow(){
+    return turtleRow;
+  }
+
+  public int getTurtleAngle(){
+    return turtleAngle;
+  }
+
+  public void updateTurtle(int col, int row, double angle){
+    turtleRow = turtle.getTurtleRow();
+    turtleCol = turtle.getTurtleCol();
+    turtleAngle = turtle.getTurtleAngle();
+    turtle.move(col, row, angle);
   }
 
 }

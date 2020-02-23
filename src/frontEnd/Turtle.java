@@ -12,6 +12,7 @@ public class Turtle implements Update{
   ImageView myTurtle;
   private int turtleCol = 0;
   private int turtleRow = 0;
+  private int turtleAngle = 0;
 
   public Turtle(){
 
@@ -24,11 +25,12 @@ public class Turtle implements Update{
     return myTurtle;
   }
 
-  public void move(int x, int y, int angle){
+  public void move(int x, int y, double angle){
     GridPane.setConstraints(myTurtle, x, y);
     turtleCol = x;
     turtleRow = y;
     myTurtle.setRotate(angle);
+    System.out.println("Moved");
   }
 
   //get turtle position
@@ -38,6 +40,10 @@ public class Turtle implements Update{
 
   public int getTurtleRow(){
     return turtleRow;
+  }
+
+  public int getTurtleAngle(){
+    return turtleAngle;
   }
 
   @Override
