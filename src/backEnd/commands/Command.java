@@ -1,5 +1,8 @@
 package backEnd.commands;
 
+import java.util.Collection;
+import java.util.Map;
+
 public abstract class Command {
 
   private int turtleXVal;
@@ -13,6 +16,7 @@ public abstract class Command {
   private String language;
   private String myCommand;
   private String commandReturn;
+  private Map c;
 
 
   public Command(String[] varargs) {
@@ -57,6 +61,7 @@ public abstract class Command {
   public String commandValueReturn(){
     return commandReturn;
   }
+  public Map getVariablesCreated(){return c;}
 
 
 
