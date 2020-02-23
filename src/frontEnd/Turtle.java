@@ -11,6 +11,7 @@ public class Turtle implements Update{
   ImageView myTurtle;
   private int turtleCol =0;
   private int turtleRow = 0;
+  private int turtleAngle = 0;
 
   public Turtle(){
 
@@ -37,6 +38,10 @@ public class Turtle implements Update{
 
   public int getTurtleRow(){
     return turtleRow;
+  }
+
+  public int getTurtleAngle(){
+    return turtleAngle;
   }
 
   @Override
