@@ -118,7 +118,7 @@ public class View extends Application {
     gridPane.setVgap(10);
     gridPane.setPadding(new Insets(0, 10, 0, 10));
     //gridPane.setMaxSize(1200, 400);
-    gridPane.setMinHeight(700);
+    gridPane.setMinHeight(400);
     gridPane.setMinWidth(1000);
     gridPane.setAlignment(Pos.CENTER);
     gridPane.setStyle("-fx-padding: 10;" +
