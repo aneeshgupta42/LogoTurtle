@@ -1,10 +1,15 @@
 package backEnd.commands;
 
-import backEnd.commands.Command;
+import java.util.LinkedList;
 
 public class Repeat extends Command {
 
-  public Repeat(String[] varargs) {
+  private static final int number =  2;
+  public Repeat(LinkedList<String> varargs) {
     super(varargs);
+  }
+  @Override
+  public int getNumberOfArgs(){
+    return number;
   }
 }

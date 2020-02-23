@@ -1,11 +1,15 @@
 package backEnd.commands;
 
+import java.util.LinkedList;
+
 public class Quotient extends Command {
   private double a,b,quotient;
-  public Quotient(String[] varargs) {
+  private static final int number =2;
+  public Quotient(LinkedList<String> varargs) {
     super(varargs);
-    a = Double.parseDouble(varargs[0]);
-    b = Double.parseDouble(varargs[1]);
+    super.numberOfArgs=number;
+    a = Double.parseDouble(varargs.get(0));
+    b = Double.parseDouble(varargs.get(1));
     quotient = b/a;
   }
 
