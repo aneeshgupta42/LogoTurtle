@@ -28,7 +28,6 @@ public class Turtle implements Update{
     GridPane.setConstraints(myTurtle, x, y);
     turtleCol = x;
     turtleRow = y;
-
     myTurtle.setRotate(angle);
   }
 
