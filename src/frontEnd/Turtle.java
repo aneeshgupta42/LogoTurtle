@@ -24,10 +24,19 @@ public class Turtle implements Update{
   }
 
   public void move(int x, int y, int angle){
-    GridPane.setConstraints(myTurtle, 0, 0);
+    GridPane.setConstraints(myTurtle, x, y);
     turtleCol = x;
     turtleRow = y;
     myTurtle.setRotate(angle);
+  }
+
+  //get turtle position
+  public int getTurtleCol(){
+    return turtleCol;
+  }
+
+  public int getTurtleRow(){
+    return turtleRow;
   }
 
   @Override

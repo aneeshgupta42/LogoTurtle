@@ -3,10 +3,6 @@ package frontEnd;
 import Controller.Control;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import javafx.application.Application;
@@ -21,12 +17,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
@@ -73,7 +66,7 @@ public class View extends Application {
   public View() {
     control = new Control();
     myStage = new Stage();
-    Turtle myTurtle = new Turtle();
+    myTurtle = new Turtle();
   }
 
   @Override
