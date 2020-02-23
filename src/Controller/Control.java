@@ -147,6 +147,7 @@ public class Control {
   public void createCommand(Command command, Parser parser1) {
     if(command.commandValueReturn()!=null){
       argument.push(command.commandValueReturn());
+      System.out.println(command.commandValueReturn());
     }
     coordinateCommands(parser1);
   }
