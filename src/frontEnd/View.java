@@ -126,6 +126,7 @@ public class View extends Application {
   private Node makeTurtle() {
     Image turtle= new Image(getClass().getClassLoader().getResourceAsStream(TURTLE));
     ImageView myTurtle = new ImageView(turtle);
+    myTurtle.setRotate(45.0);
     return myTurtle;
   }
 
