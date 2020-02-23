@@ -1,7 +1,5 @@
 package backEnd.commands;
 
-import backEnd.commands.Command;
-
 public class Quotient extends Command {
   private int a,b,quotient;
   public Quotient(String[] varargs) {
