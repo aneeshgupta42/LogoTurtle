@@ -1,13 +1,13 @@
 package backEnd.commands;
 
-import java.util.LinkedList;
+import backEnd.commands.Command;
 
 public class SetTowards extends Command {
 
-  public SetTowards(LinkedList<String> varargs) {
+  public SetTowards(String[] varargs) {
     super(varargs);
-    System.out.println(varargs.get(0));
-    System.out.print(varargs.get(1));
+    System.out.println(varargs[0]);
+    System.out.print(varargs[1]);
 
     // x and y are in reverse order
   }

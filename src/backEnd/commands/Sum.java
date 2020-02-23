@@ -1,20 +1,16 @@
 package backEnd.commands;
 
-
-import java.util.LinkedList;
+import backEnd.commands.Command;
 
 public class Sum extends Command {
   double a, b, sum;
-  private int number = 2;
+  private int number=2;
 
-  public Sum(){
-    super.numberOfArgs=number;
-  }
-
-  public Sum(LinkedList<String> varargs) {
+  public Sum(String[] varargs) {
     super(varargs);
-    a = Double.parseDouble(varargs.get(0));
-    b = Double.parseDouble(varargs.get(1));
+    super.numberOfArgs=number;
+    a = Double.parseDouble(varargs[0]);
+    b = Double.parseDouble(varargs[1]);
     sum = a + b;
   }
 
