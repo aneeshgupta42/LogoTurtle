@@ -1,15 +1,15 @@
 package backEnd.commands;
 
-import backEnd.commands.Command;
+import java.util.LinkedList;
 
 public class Sine extends Command {
   private double myAngle;
   private double myResult;
 
-  public Sine(String[] varargs)
+  public Sine(LinkedList<String> varargs)
   {
     super(varargs);
-    myAngle = Double.parseDouble(varargs[0]);
+    myAngle = Double.parseDouble(varargs.get(0));
     myResult = Math.sin((Math.toRadians(myAngle)));
   }
 

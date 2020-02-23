@@ -1,10 +1,10 @@
 package backEnd.commands;
 
-import backEnd.commands.Command;
+import java.util.LinkedList;
 
 public class PenDown extends Command {
 
-  public PenDown(String[] varargs) {
+  public PenDown(LinkedList<String> varargs) {
     super(varargs);
   }
 }

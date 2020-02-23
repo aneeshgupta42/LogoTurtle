@@ -169,10 +169,10 @@ public class View extends Application {
     Button runButton = new Button("Run");
     runButton.setPrefSize(100, 20);
 
+
     runButton.setOnAction(action -> {
       myText = inputArea.getText();
-      getText();
-      control.passCommand(getText());
+      control.passCommand(myText);
       control.parseCommand();
     });
     Button clearButton = new Button("Clear");
@@ -180,6 +180,7 @@ public class View extends Application {
 
     clearButton.setOnAction(action -> {
       inputArea.setText("");
+
     });
     vbox.getChildren().addAll(runButton, clearButton);
     hbox.getChildren().addAll(inputArea, vbox);
