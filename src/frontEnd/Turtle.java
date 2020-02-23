@@ -32,6 +32,15 @@ public class Turtle implements Update{
     myTurtle.setRotate(angle);
   }
 
+  //get turtle position
+  public int getTurtleCol(){
+    return turtleCol;
+  }
+
+  public int getTurtleRow(){
+    return turtleRow;
+  }
+
   @Override
   public int locationXUpdate(int changeInXPos) {
     return 0;
