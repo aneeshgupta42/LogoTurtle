@@ -1,5 +1,6 @@
 package backEnd.commands;
 
+import Controller.Control;
 import java.util.Collection;
 import java.util.Map;
 
@@ -18,12 +19,15 @@ public abstract class Command {
   private String commandReturn;
   private Map c;
   protected int numberOfArgs;
+  private Control myControl;
 
 
   public Command(String[] varargs) {
-
   }
 
+  public void setControl(Control control){
+      myControl = control;
+  }
   public int getTurtleCurrentX() {
     return turtleXVal;
   }
