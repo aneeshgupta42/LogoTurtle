@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public class Control {
@@ -33,7 +34,7 @@ public class Control {
   private String userCom;
   private String input;
   private Map<String, String> variablesUsed = new HashMap<>();
-  ;
+  private List<String> words;
 
   public Control() {
     COMMANDSWITHTWO = new String[]{"SetTowards", "SetPosition", "MakeVariable", "Repeat", "DoTimes",
@@ -65,39 +66,55 @@ public class Control {
   private void parseText(Parser parser1, String lines) {
     command = new LinkedList<>();
     argument = new LinkedList<>();
+    words = new LinkedList<>();
     for (String line : lines.split(NEWLINE)) {
+      for (String word : line.split(WHITESPACE)) { words.add(word);}
      /* if (line.contains("#")) {
         comment = line;
       } else */
       System.out.println(variablesUsed);
-      for (String word : line.split(WHITESPACE)) {
-        if (word.trim().length() > 0) {
-          String symbol = parser1.getSymbol(word);
-          if (!symbol.equals(null) && !symbol.equals(LIST_END) && !symbol.equals(LIST_START)) {
+      organizeInStacks(parser1, line);
+    }
+  }
 
-            if (!parser1.getSymbol(word).equals(ARGUMENT) && !parser1.getSymbol(word).equals(VARIABLE)) {
-              command.push(word);
-
-            } else {
-
-              if (parser1.getSymbol(word).equals(VARIABLE)) {
-               if(variablesUsed.containsKey(word)){
-                 System.out.println(variablesUsed.get(word));
-                    argument.push(variablesUsed.get(word));
-                }
-               else{
-                 argument.push(word);
-               }
-              }
-              else{
-                argument.push(word);
-              }
-            }
-
-          }
-        }
-        coordinateCommands(parser1);
+  private String nextArg(String word){
+    for (int i=0;i<words.size();i++)
+    {
+      if(words.get(i).equals(word)){
+        return words.get(i+1);
       }
+    }
+    return null;
+  }
+
+  private void organizeInStacks(Parser parser1, String line) {
+    for (String word : line.split(WHITESPACE)) {
+      if (word.trim().length() > 0) {
+        String symbol = parser1.getSymbol(word);
+        if (!symbol.equals(null) && !symbol.equals(LIST_END) && !symbol.equals(LIST_START)) {
+
+          if (!parser1.getSymbol(word).equals(ARGUMENT) && !parser1.getSymbol(word).equals(VARIABLE)) {
+            command.push(word);
+
+          } else {
+
+            if (parser1.getSymbol(word).equals(VARIABLE)) {
+             if(variablesUsed.containsKey(word)){
+               System.out.println(variablesUsed.get(word));
+                  argument.push(variablesUsed.get(word));
+              }
+             else{
+               argument.push(word);
+             }
+            }
+            else{
+              argument.push(word);
+            }
+          }
+
+        }
+      }
+      coordinateCommands(parser1);
     }
   }
 
@@ -111,6 +128,9 @@ public class Control {
         if (key.equals(parser1.getSymbol(userCom))) {
           if (!argument.isEmpty()) {
             arg2 = argument.pop();
+          }
+          else{
+            arg2 = nextArg(arg);
           }
         }
       }
@@ -153,7 +173,6 @@ public class Control {
       variablesUsed = command.getVariablesCreated();
       System.out.print(variablesUsed);
     }
-    coordinateCommands(parser1);
   }
 }
 
