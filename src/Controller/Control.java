@@ -152,10 +152,6 @@ public class Control {
       if(args == 2){
         arg2 = argument.pollLast();
       }
-       argz = new LinkedList<>();
-        for(int i=0;i<args;i++){
-            argz.add(argument.pop());
-        }
  /*     for (String key : COMMANDSWITHTWO) {
         if (key.equals(parser1.getSymbol(userCom))) {
           if (!argument.isEmpty()) {
@@ -204,13 +200,9 @@ public class Control {
       variablesUsed = command.getVariablesCreated();
       System.out.print(variablesUsed);
     }
-    getVariableStatus(parser1);
     coordinateCommands(parser1);
   }
 
-  public boolean getVariableStatus(Parser parser1){
-    return parser1.getSymbol(userCom).equals("MakeVariable");
-  }
 
   public Turtle passTurtle(Turtle turtle){
     int row = turtle.getTurtleRow();

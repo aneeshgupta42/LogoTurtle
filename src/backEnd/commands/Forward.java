@@ -1,15 +1,17 @@
 package backEnd.commands;
 
-import java.util.LinkedList;
+import Controller.Control;
 
 public class Forward extends Command {
-  int initX, initY;
-  double angle;
+  private int initX, initY;
+  private int distance;
+  private final int number = 1;
+  private double angle;
   public Forward(String... varargs){
     super(varargs);
-    System.out.println(varargs[0]);
-    System.out.println(varargs[2]);
-    
+    super.numberOfArgs=number;
+    distance = Integer.parseInt(varargs[0]);
+    initX =
   }
 
 }

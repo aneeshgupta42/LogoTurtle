@@ -1,6 +1,6 @@
 package backEnd.commands;
 
-import java.util.LinkedList;
+import java.util.Collection;
 import java.util.Map;
 
 public abstract class Command {
@@ -20,10 +20,7 @@ public abstract class Command {
   protected int numberOfArgs;
 
 
-  public Command(){
-
-  }
-  public Command(LinkedList<String> varargs) {
+  public Command(String[] varargs) {
 
   }
 

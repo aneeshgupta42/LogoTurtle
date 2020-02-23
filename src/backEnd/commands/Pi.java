@@ -1,10 +1,8 @@
 package backEnd.commands;
 
-import java.util.LinkedList;
-
 public class Pi extends Command {
 
-  public Pi(LinkedList<String> varargs) {
+  public Pi(String[] varargs) {
     super(varargs);
   }
 
