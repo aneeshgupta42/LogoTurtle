@@ -1,7 +1,7 @@
 package backEnd.commands;
 
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class MakeVariable extends Command {
@@ -11,10 +11,10 @@ public class MakeVariable extends Command {
   private String var;
 
 
-  public MakeVariable(String[] varargs) {
+  public MakeVariable(LinkedList<String> varargs) {
     super(varargs);
-    key = varargs[0];
-    var = varargs[1];
+    key = varargs.get(0);
+    var = varargs.get(1);
   }
 
   @Override

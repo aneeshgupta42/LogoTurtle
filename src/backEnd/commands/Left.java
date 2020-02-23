@@ -1,10 +1,10 @@
 package backEnd.commands;
 
-import backEnd.commands.Command;
+import java.util.LinkedList;
 
 public class Left extends Command {
 
-  public Left(String[] varargs) {
+  public Left(LinkedList<String> varargs) {
     super(varargs);
   }
 }

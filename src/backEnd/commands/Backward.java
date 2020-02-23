@@ -1,8 +1,14 @@
 package backEnd.commands;
 
+import java.util.LinkedList;
+
 public class Backward extends Command {
 
-  public Backward(String[] varargs) {
+  private static final int number = 1;
+
+  public Backward(LinkedList varargs) {
     super(varargs);
+    super.numberOfArgs=number;
   }
+
 }
