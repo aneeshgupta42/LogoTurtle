@@ -6,3 +6,11 @@
   -fx-border-radius: 5;
   -fx-border-color: grey;
 }
+
+.button {
+  -fx-text-fill: #006464;
+  -fx-background-color: #3FB0C9;
+  -fx-border-radius: 15;
+  -fx-background-radius: 10;
+  -fx-padding: 8;
+}
