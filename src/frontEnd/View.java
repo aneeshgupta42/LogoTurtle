@@ -3,7 +3,6 @@ package frontEnd;
 import Controller.Control;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import javafx.application.Application;
@@ -18,12 +17,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
@@ -46,7 +42,7 @@ public class View extends Application {
   private GridPane grid;
   private Stage myStage;
 
-  private Node myTurtle;
+  private Turtle myTurtle;
   private Pen myPen;
   private Control control;
 
@@ -56,7 +52,7 @@ public class View extends Application {
   private TextArea myCommander;
   private static final String TURTLE = "turtle.png";
   private String myText;
-  private static final String RESOURCES = "resources.languages";
+  private static final String RESOURCES = "resources.languages.";
   public static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
   private static final String DEFAULT_RESOURCE_FOLDER = "" + RESOURCES + "/";
   public static final String STYLE_PROPERTIES_FILENAME = DEFAULT_RESOURCE_PACKAGE + "StyleComponents";
@@ -69,12 +65,8 @@ public class View extends Application {
 
   public View() {
     control = new Control();
-    //styleResources = ResourceBundle.getBundle(STYLE_PROPERTIES_FILENAME);
-   // myTurtle =
-   // myPen = new Pen("red");
-
-    //initHashmap(rulesClass, totalNumStates);
     myStage = new Stage();
+    myTurtle = new Turtle();
   }
 
   @Override
@@ -83,12 +75,9 @@ public class View extends Application {
     View view = new View();
     myStage.setX(0);
     makeDisplayWindow();
-    //makeScene();
     makeCommandWindow();
-   // myScene.setFill(Color.BLACK);
     myScene = makeScene(DEFAULT_SIZE.width, DEFAULT_SIZE.height);
-    //myScene.getStylesheets().add(DEFAULT_RESOURCE_FOLDER + STYLESHEET);
-    //myScene.getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
+    myScene.getStylesheets().add("default.css");
     myStage.setScene(myScene);
     myStage.show();
     myStage.setOnCloseRequest(t->stopEverything());
@@ -107,12 +96,7 @@ public class View extends Application {
     display_window = makeDisplayWindow();
     root.setCenter(display_window);
     root.setRight(makeSideWindow());
-
-    //root.setCenter(makeDisplayWindow());
-    //myCommander = makeCommandWindow();
     root.setBottom(makeCommandWindow());
-    //root.getChildren().add(myTurtle);
-    myActor = makeActor();
     return new Scene(root);
   }
 
@@ -122,14 +106,6 @@ public class View extends Application {
     result.setFill(Color.PLUM);
     return result;
   }
-
-  private Node makeTurtle() {
-    Image turtle= new Image(getClass().getClassLoader().getResourceAsStream(TURTLE));
-    ImageView myTurtle = new ImageView(turtle);
-    return myTurtle;
-  }
-
-
 
 
   public void closeWindow(){
@@ -152,10 +128,10 @@ public class View extends Application {
         "-fx-border-radius: 5;" +
         "-fx-border-color: grey;");
     display_height = gridPane.getHeight();
-    myTurtle = makeTurtle();
+    Node turtleimage = myTurtle.displayTurtle();
     Button button2 = new Button("Clear");
-    GridPane.setConstraints(myTurtle, 50, 6);
-    gridPane.getChildren().add(myTurtle);
+    GridPane.setConstraints(turtleimage, 50, 6);
+    gridPane.getChildren().add(turtleimage);
     return gridPane;
   }
 
@@ -197,7 +173,6 @@ public class View extends Application {
     runButton.setOnAction(action -> {
       myText = inputArea.getText();
       control.passCommand(myText);
-      GridPane.setConstraints(myTurtle, 10, 10);
       control.parseCommand();
     });
     Button clearButton = new Button("Clear");
@@ -284,13 +259,11 @@ public class View extends Application {
             control.passLanguage(combo_box.getValue().toString());
           }
         };
-
     // Set on action
     combo_box.setOnAction(event);
     // Create a tile pane
 
     hbox.getChildren().addAll(buttonCurrent, buttonProjected, button, combo_box);
-
     return hbox;
   }
 
@@ -307,10 +280,6 @@ public class View extends Application {
 
   public String getText(){
     return myText;
-  }
-
-  public void changeTurtlePosition(int col, int row){
-    GridPane.setConstraints(myTurtle, col, row);
   }
 
   public static void main(String[] args) {

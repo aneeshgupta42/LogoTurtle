@@ -137,27 +137,25 @@ public class Control {
     int args=0;
     if (!argument.isEmpty() && !command.isEmpty()) {
       userCom = command.pop();
-    //  arg = argument.pollLast();
+      arg = argument.pollLast();
       makeClassPathToCommand(parser1);
       try {
         Class cls = Class.forName(com);
         Object objectCommand;
         Constructor constructor = cls.getConstructor(String[].class);
-        objectCommand = constructor.newInstance();
+        objectCommand = constructor.newInstance((Object) new String[]{"1","1"});
         Command commandGiven = (Command) objectCommand;
         args = commandGiven.getNumberOfArgs();
       } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
         error.handleCommandClassNotFound();
       }
-    //  if(args == 2){
-    //    arg2 = argument.pollLast();
-    //  }
-
-      argz = new LinkedList<>();
+      if(args == 2){
+        arg2 = argument.pollLast();
+      }
+       argz = new LinkedList<>();
         for(int i=0;i<args;i++){
-            argz.add(argument.pollLast());
+            argz.add(argument.pop());
         }
-      System.out.println(argz);
  /*     for (String key : COMMANDSWITHTWO) {
         if (key.equals(parser1.getSymbol(userCom))) {
           if (!argument.isEmpty()) {
@@ -189,7 +187,7 @@ public class Control {
       Class cls = Class.forName(com);
       Object objectCommand;
       Constructor constructor = cls.getConstructor(String[].class);
-      objectCommand = constructor.newInstance((Object) new LinkedList<String>(argz));
+      objectCommand = constructor.newInstance((Object) new String[]{arg,arg2});
       Command commandGiven = (Command) objectCommand;
       createCommand(commandGiven, parser1);
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
@@ -206,10 +204,17 @@ public class Control {
       variablesUsed = command.getVariablesCreated();
       System.out.print(variablesUsed);
     }
+    getVariableStatus(parser1);
     coordinateCommands(parser1);
   }
 
+  public boolean getVariableStatus(Parser parser1){
+    return parser1.getSymbol(userCom).equals("MakeVariable");
+  }
+
   public Turtle passTurtle(Turtle turtle){
+    int row = turtle.getTurtleRow();
+
     return turtle;
   }
 
