@@ -1,4 +1,7 @@
-package Controller;
+package backEnd.commands;
+
+import java.util.Collection;
+import java.util.Map;
 
 public abstract class Command {
 
@@ -12,42 +15,54 @@ public abstract class Command {
   private int turtleColor;
   private String language;
   private String myCommand;
+  private String commandReturn;
+  private Map c;
 
-
-  public Command(String command){
-    myCommand=command;
-  }
 
   public Command(String[] varargs) {
 
   }
 
-  public int getTurtleCurrentX(){
+  public int getTurtleCurrentX() {
     return turtleXVal;
   }
-  public int getTurtleCurrentY(){
+
+  public int getTurtleCurrentY() {
     return turtleYVal;
   }
-  public int getPenCurrentX(){
+
+  public int getPenCurrentX() {
     return penXVal;
   }
-  public int getPenCurrentY(){
+
+  public int getPenCurrentY() {
     return penYVal;
   }
-  public int getTurtleAngle(){
+
+  public int getTurtleAngle() {
     return turtleAngle;
   }
-  public int getPenAngle(){
+
+  public int getPenAngle() {
     return penAngle;
   }
-  public int getPenColor(){
+
+  public int getPenColor() {
     return penColor;
   }
-  public int getTurtleColor(){
+
+  public int getTurtleColor() {
     return turtleColor;
   }
-  public String getLanguage(){
+
+  public String getLanguage() {
     return language;
   }
+  public String commandValueReturn(){
+    return commandReturn;
+  }
+  public Map getVariablesCreated(){return c;}
+
+
 
 }
