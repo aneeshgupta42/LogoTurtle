@@ -73,7 +73,7 @@ public class View extends Application {
   public View() {
     control = new Control();
     myStage = new Stage();
-    Turtle myTurtle = new Turtle();
+    myTurtle = new Turtle();
   }
 
   @Override
@@ -179,7 +179,7 @@ public class View extends Application {
     runButton.setOnAction(action -> {
       myText = inputArea.getText();
       getText();
-      control.takeCommand(getText());
+      control.passCommand(getText());
       control.parseCommand();
     });
     Button clearButton = new Button("Clear");
