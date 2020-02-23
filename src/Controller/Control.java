@@ -22,6 +22,7 @@ public class Control {
   private static final String LIST_END = "ListEnd";
   private static final String LIST_START = "ListStart";
   private String[] COMMANDSWITHTWO;
+  private String[] COMMANDSWITHNONE;
   private ErrorHandler error;
   private Parser parser;
   private String language;
@@ -39,6 +40,7 @@ public class Control {
   public Control() {
     COMMANDSWITHTWO = new String[]{"SetTowards", "SetPosition", "MakeVariable", "Repeat", "DoTimes",
         "Sum", "Difference", "Product", "Quotient"};
+    COMMANDSWITHNONE = new String[]{"Pi"};
     error = new ErrorHandler();
     parser = new Parser();
   }
@@ -122,12 +124,12 @@ public class Control {
     System.out.println(argument);
     System.out.println(command);
     if (!argument.isEmpty() && !command.isEmpty()) {
-      arg = argument.pollLast();
       userCom = command.pop();
+      arg = argument.pollLast();
       for (String key : COMMANDSWITHTWO) {
         if (key.equals(parser1.getSymbol(userCom))) {
           if (!argument.isEmpty()) {
-            arg2 = argument.pop();
+            arg2 = argument.pollLast();
           }
           else{
             arg2 = nextArg(arg);

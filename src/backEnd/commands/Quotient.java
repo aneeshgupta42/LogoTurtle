@@ -1,11 +1,11 @@
 package backEnd.commands;
 
 public class Quotient extends Command {
-  private int a,b,quotient;
+  private double a,b,quotient;
   public Quotient(String[] varargs) {
     super(varargs);
-    a = Integer.parseInt(varargs[0]);
-    b = Integer.parseInt(varargs[1]);
+    a = Double.parseDouble(varargs[0]);
+    b = Double.parseDouble(varargs[1]);
     quotient = b/a;
   }
 
