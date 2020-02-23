@@ -3,6 +3,7 @@ package Controller;
 import backEnd.ErrorHandler;
 import backEnd.commands.Command;
 import backEnd.commands.MakeVariable;
+import frontEnd.Turtle;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -45,13 +46,16 @@ public class Control {
   private Map<String, String> variablesUsed = new HashMap<>();
   private List<String> words;
   private ResourceBundle myResources;
+  private  List<String> argz;
+  private Turtle turtle;
 
   public Control() {
     myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE+FILE);
   //  COMMANDSWITHTWO = new String[]{"SetTowards","SetPosition","MakeVariable","Repeat","DoTimes","Sum","Difference","Product","Quotient"};
-    COMMANDSWITHNONE = new String[]{"Pi"};
+  //  COMMANDSWITHNONE = new String[]{"Pi"};
     error = new ErrorHandler();
     parser = new Parser();
+    turtle = new Turtle();
   }
 
   public Map getVariables(){
@@ -86,7 +90,7 @@ public class Control {
      /* if (line.contains("#")) {
         comment = line;
       } else */
-      System.out.println(variablesUsed);
+ //     System.out.println(variablesUsed);
       organizeInStacks(parser1, line);
     }
   }
@@ -128,27 +132,32 @@ public class Control {
   }
 
   private void coordinateCommands(Parser parser1) {
-    System.out.println(argument);
-    System.out.println(command);
+ //   System.out.println(argument);
+ //   System.out.println(command);
     int args=0;
     if (!argument.isEmpty() && !command.isEmpty()) {
       userCom = command.pop();
-      arg = argument.pollLast();
+    //  arg = argument.pollLast();
       makeClassPathToCommand(parser1);
       try {
         Class cls = Class.forName(com);
         Object objectCommand;
         Constructor constructor = cls.getConstructor(String[].class);
-        objectCommand = constructor.newInstance((Object) new String[]{"1", "1"});
+        objectCommand = constructor.newInstance();
         Command commandGiven = (Command) objectCommand;
         args = commandGiven.getNumberOfArgs();
       } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
         error.handleCommandClassNotFound();
       }
-      if(args == 2){
-        arg2 = argument.pollLast();
-      }
+    //  if(args == 2){
+    //    arg2 = argument.pollLast();
+    //  }
 
+      argz = new LinkedList<>();
+        for(int i=0;i<args;i++){
+            argz.add(argument.pollLast());
+        }
+      System.out.println(argz);
  /*     for (String key : COMMANDSWITHTWO) {
         if (key.equals(parser1.getSymbol(userCom))) {
           if (!argument.isEmpty()) {
@@ -180,7 +189,7 @@ public class Control {
       Class cls = Class.forName(com);
       Object objectCommand;
       Constructor constructor = cls.getConstructor(String[].class);
-      objectCommand = constructor.newInstance((Object) new String[]{arg, arg2, userCom});
+      objectCommand = constructor.newInstance((Object) new LinkedList<String>(argz));
       Command commandGiven = (Command) objectCommand;
       createCommand(commandGiven, parser1);
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
@@ -197,12 +206,11 @@ public class Control {
       variablesUsed = command.getVariablesCreated();
       System.out.print(variablesUsed);
     }
-    getVariableStatus(parser1);
     coordinateCommands(parser1);
   }
 
-  public boolean getVariableStatus(Parser parser1){
-    return parser1.getSymbol(userCom).equals("MakeVariable");
+  public Turtle passTurtle(Turtle turtle){
+    return turtle;
   }
 
 }

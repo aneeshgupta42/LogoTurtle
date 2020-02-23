@@ -1,10 +1,10 @@
 package backEnd.commands;
 
-import backEnd.commands.Command;
+import java.util.LinkedList;
 
 public class DoTimes extends Command {
 
-  public DoTimes(String[] varargs) {
+  public DoTimes(LinkedList<String> varargs) {
     super(varargs);
   }
 }
