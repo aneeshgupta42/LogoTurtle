@@ -17,6 +17,7 @@ public abstract class Command {
   private String myCommand;
   private String commandReturn;
   private Map c;
+  protected int numberOfArgs;
 
 
   public Command(String[] varargs) {
@@ -62,6 +63,7 @@ public abstract class Command {
     return commandReturn;
   }
   public Map getVariablesCreated(){return c;}
+  public int getNumberOfArgs(){return numberOfArgs;}
 
 
 

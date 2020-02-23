@@ -193,10 +193,10 @@ public class View extends Application {
     Button runButton = new Button("Run");
     runButton.setPrefSize(100, 20);
 
+
     runButton.setOnAction(action -> {
       myText = inputArea.getText();
-      getText();
-      control.passCommand(getText());
+      control.passCommand(myText);
       GridPane.setConstraints(myTurtle, 10, 10);
       control.parseCommand();
     });
@@ -205,6 +205,7 @@ public class View extends Application {
 
     clearButton.setOnAction(action -> {
       inputArea.setText("");
+
     });
     vbox.getChildren().addAll(runButton, clearButton);
     hbox.getChildren().addAll(inputArea, vbox);

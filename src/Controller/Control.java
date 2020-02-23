@@ -3,6 +3,9 @@ package Controller;
 import backEnd.ErrorHandler;
 import backEnd.commands.Command;
 import backEnd.commands.MakeVariable;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
@@ -11,6 +14,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.ResourceBundle;
 
 public class Control {
 
@@ -21,6 +26,9 @@ public class Control {
   private static final String CLASS_PATH = "backEnd.commands.";
   private static final String LIST_END = "ListEnd";
   private static final String LIST_START = "ListStart";
+  private final String RESOURCES = "resources";
+  public final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
+  private static final String FILE = "commands";
   private String[] COMMANDSWITHTWO;
   private String[] COMMANDSWITHNONE;
   private ErrorHandler error;
@@ -36,13 +44,22 @@ public class Control {
   private String input;
   private Map<String, String> variablesUsed = new HashMap<>();
   private List<String> words;
+  private ResourceBundle myResources;
 
   public Control() {
-    COMMANDSWITHTWO = new String[]{"SetTowards", "SetPosition", "MakeVariable", "Repeat", "DoTimes",
-        "Sum", "Difference", "Product", "Quotient"};
+    myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE+FILE);
+  //  COMMANDSWITHTWO = new String[]{"SetTowards","SetPosition","MakeVariable","Repeat","DoTimes","Sum","Difference","Product","Quotient"};
     COMMANDSWITHNONE = new String[]{"Pi"};
     error = new ErrorHandler();
     parser = new Parser();
+  }
+
+  public Map getVariables(){
+    return variablesUsed;
+  }
+
+  public void setVariables(Map saved){
+    variablesUsed = saved;
   }
 
   public void passCommand(String command) {
@@ -54,17 +71,12 @@ public class Control {
   }
 
   public void parseCommand() {
-    Control m = new Control();
-    m.passCommand(input);
+    passCommand(input);
     parser.addPatterns(language);
     parser.addPatterns("Syntax");
-    parser.addPatterns("Functions");
-    m.parseText(parser, input);
+    parseText(parser, input);
   }
 
-  // Given commands, calls organization of commands
-
-  //check the difference between constant variable command list comment
   private void parseText(Parser parser1, String lines) {
     command = new LinkedList<>();
     argument = new LinkedList<>();
@@ -83,7 +95,7 @@ public class Control {
     for (int i=0;i<words.size();i++)
     {
       if(words.get(i).equals(word)){
-        return words.get(i+1);
+        return words.get(i+1);  //this needs to be fixed TODO: fix this
       }
     }
     return null;
@@ -94,15 +106,11 @@ public class Control {
       if (word.trim().length() > 0) {
         String symbol = parser1.getSymbol(word);
         if (!symbol.equals(null) && !symbol.equals(LIST_END) && !symbol.equals(LIST_START)) {
-
           if (!parser1.getSymbol(word).equals(ARGUMENT) && !parser1.getSymbol(word).equals(VARIABLE)) {
             command.push(word);
-
           } else {
-
             if (parser1.getSymbol(word).equals(VARIABLE)) {
              if(variablesUsed.containsKey(word)){
-               System.out.println(variablesUsed.get(word));
                   argument.push(variablesUsed.get(word));
               }
              else{
@@ -113,30 +121,44 @@ public class Control {
               argument.push(word);
             }
           }
-
         }
       }
-      coordinateCommands(parser1);
     }
+    coordinateCommands(parser1);
   }
 
   private void coordinateCommands(Parser parser1) {
     System.out.println(argument);
     System.out.println(command);
+    int args=0;
     if (!argument.isEmpty() && !command.isEmpty()) {
       userCom = command.pop();
       arg = argument.pollLast();
-      for (String key : COMMANDSWITHTWO) {
+      makeClassPathToCommand(parser1);
+      try {
+        Class cls = Class.forName(com);
+        Object objectCommand;
+        Constructor constructor = cls.getConstructor(String[].class);
+        objectCommand = constructor.newInstance((Object) new String[]{"1", "1"});
+        Command commandGiven = (Command) objectCommand;
+        args = commandGiven.getNumberOfArgs();
+      } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
+        error.handleCommandClassNotFound();
+      }
+      if(args == 2){
+        arg2 = argument.pollLast();
+      }
+
+ /*     for (String key : COMMANDSWITHTWO) {
         if (key.equals(parser1.getSymbol(userCom))) {
           if (!argument.isEmpty()) {
             arg2 = argument.pollLast();
           }
           else{
-            arg2 = nextArg(arg);
+          //  arg2 = nextArg(arg);
           }
         }
-      }
-      makeClassPathToCommand(parser1);
+      }*/
       passCommand(parser1);
       if (!command.isEmpty() && argument.isEmpty() ) {
         userCom = command.pop();
@@ -175,6 +197,13 @@ public class Control {
       variablesUsed = command.getVariablesCreated();
       System.out.print(variablesUsed);
     }
+    getVariableStatus(parser1);
+    coordinateCommands(parser1);
   }
+
+  public boolean getVariableStatus(Parser parser1){
+    return parser1.getSymbol(userCom).equals("MakeVariable");
+  }
+
 }
 
