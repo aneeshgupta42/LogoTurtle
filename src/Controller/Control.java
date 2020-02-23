@@ -139,16 +139,6 @@ public class Control {
       if (args == 2) {
         arg2 = argument.pollLast();
       }
- /*     for (String key : COMMANDSWITHTWO) {
-        if (key.equals(parser1.getSymbol(userCom))) {
-          if (!argument.isEmpty()) {
-            arg2 = argument.pollLast();
-          }
-          else{
-          //  arg2 = nextArg(arg);
-          }
-        }
-      }*/
       passCommand(parser1);
       if (!command.isEmpty() && argument.isEmpty()) {
         userCom = command.pop();

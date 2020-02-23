@@ -5,6 +5,7 @@ import backEnd.commands.Command;
 public class Product extends Command {
     double a, b, prod;
 
+
     public Product(String[] varargs) {
         super(varargs);
         a = Double.parseDouble(varargs[0]);
