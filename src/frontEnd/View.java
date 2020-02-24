@@ -77,11 +77,12 @@ public class View extends Application {
   private static final String[] colorNames = {"red", "yellow", "blue"};
   public static final Color[] colors = {Color.RED, Color.YELLOW, Color.BLUE};
   private static final HashMap<String, Color> map= new HashMap<>();
+  private BorderPane root;
 
 
   public View() {
     myStage = new Stage();
-    myTurtle = new Turtle();
+    myTurtle = new Turtle(this);
     //control = new Control(myTurtle);
     control = new Control();
     myLine = new Line();
@@ -113,7 +114,7 @@ public class View extends Application {
    */
 
   private Scene makeScene (int width, int height) {
-    BorderPane root = new BorderPane();
+    root = new BorderPane();
     HBox hbox = addHBox();
     root.setTop(hbox);
     display_window = makeDisplayWindow();
@@ -161,6 +162,10 @@ public class View extends Application {
    // gridPane.setMinHeight(800);
     gridPane.setMinWidth(400);
     return gridPane;
+  }
+
+  public void addLineToRoot(Line line){
+    root.getChildren().add(line);
   }
 
   private Node makeCommandWindow(){
