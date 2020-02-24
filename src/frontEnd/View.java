@@ -79,10 +79,10 @@ public class View extends Application {
 
 
   public View() {
-    control = new Control();
     myStage = new Stage();
     myTurtle = new Turtle();
-    myLine = new Line();
+    control = new Control(myTurtle);
+    //pass in turtle to control (THis was changed, change also in control)
     for (int i=0; i< colors.length; i++){
       map.put(colorNames[i], colors[i]);
     }
@@ -189,7 +189,9 @@ public class View extends Application {
 
     runButton.setOnAction(action -> {
       myText = inputArea.getText();
+
       control.passCommand(myText);
+      control.passTurtle(myTurtle);
       control.parseCommand();
       myTurtle.move(50.5,50.666,0);
     });
@@ -267,6 +269,8 @@ public class View extends Application {
     language_box.setOnAction(event);
     // Create a tile pane
 
+    Label selected = new Label("default item selected");
+    control.passLanguage("English");
     ComboBox background_box =
         new ComboBox(FXCollections
             .observableArrayList(colorNames));
