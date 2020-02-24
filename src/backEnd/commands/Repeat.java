@@ -19,6 +19,7 @@ public class Repeat extends Command {
     super.setControl(control);
     for(int i=0;i<repetition;i++){
       control.coordinateCommands();
+     // control.runUserInputCommands();
       System.out.println(i);
     }
   }

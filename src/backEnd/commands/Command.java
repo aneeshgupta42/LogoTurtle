@@ -21,6 +21,8 @@ public abstract class Command {
   protected int numberOfArgs;
   private Control myControl;
 
+  public Command(){
+  }
 
   public Command(String[] varargs) {
   }

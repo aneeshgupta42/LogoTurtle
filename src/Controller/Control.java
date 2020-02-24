@@ -30,10 +30,9 @@ public class Control {
   private final String RESOURCES = "resources";
   public final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
   private static final String FILE = "commands";
-  private ErrorHandler error;
-  private Parser parser;
+  private final ErrorHandler error;
+  private final Parser parser;
   private String language;
-  private String comment;
   private Deque<String> command;
   private Deque<String> argument;
   private String arg;
@@ -42,15 +41,12 @@ public class Control {
   private String userCom;
   private String input;
   private Map<String, String> variablesUsed = new HashMap<>();
-  private List<String> words;
-  private ResourceBundle myResources;
-  private Turtle turtle;
+  private final Turtle turtle;
   private int turtleCol;
   private int turtleRow;
   private int turtleAngle;
 
   public Control() {
-    myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + FILE);
     error = new ErrorHandler();
     parser = new Parser();
     turtle = new Turtle();
@@ -82,11 +78,10 @@ public class Control {
   private void parseText(String lines) {
     command = new LinkedList<>();
     argument = new LinkedList<>();
-    words = new LinkedList<>();
     for (String line : lines.split(NEWLINE)) {
-      /*if (line.contains("#")) {
-        comment = line;
-      } else */{
+      if (line.contains("#")) {
+        String comment = line;
+      } else {
         organizeInStacks(line);
       }
     }
@@ -95,8 +90,7 @@ public class Control {
   private void organizeInStacks(String line) {
     for (String word : line.split(WHITESPACE)) {
       if (word.trim().length() > 0) {
-        String symbol = parser.getSymbol(word);
-        if (!symbol.equals(null) && !symbol.equals(LIST_END) && !symbol.equals(LIST_START)) {
+        System.out.println(parser.getSymbol(word));
           if (!parser.getSymbol(word).equals(ARGUMENT) && !parser.getSymbol(word).equals(VARIABLE)) {
             command.push(word);
           } else {
@@ -108,7 +102,6 @@ public class Control {
               }
             } else {
               argument.push(word);
-            }
           }
         }
       }
@@ -118,30 +111,49 @@ public class Control {
 
   public void coordinateCommands() {
     int args = 0;
+    StoreLists lists = new StoreLists();
     if (!argument.isEmpty() && !command.isEmpty()) {
       userCom = command.pop();
       arg = argument.pollLast();
-      makeClassPathToCommand(parser);
-      try {
-        Class cls = Class.forName(com);
-        Object objectCommand;
-        Constructor constructor = cls.getConstructor(String[].class);
-        objectCommand = constructor.newInstance((Object) new String[]{"1", "1"});
-        Command commandGiven = (Command) objectCommand;
-        args = commandGiven.getNumberOfArgs();
-      } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
-        error.handleCommandClassNotFound();
-      }
-      if (args == 2) {
-        arg2 = argument.pollLast();
-      }
-      passCommand(parser);
-      if (!command.isEmpty() && argument.isEmpty()) {
-        userCom = command.pop();
+
+     // if(parser.getSymbol(userCom).equals(LIST_START)){
+    //    System.out.println("hi");
+    //    userCom = command.pop();
+   //     while(!parser.getSymbol(userCom).equals(LIST_END)){
+  //        lists.store(userCom,arg);
+  //      }
+  //      System.out.println("bye");
+ //     }
+      //check if word is list start
+      //if it is list start keep storing those commands until it reaches a list end
+
         makeClassPathToCommand(parser);
+        try {
+          Class cls = Class.forName(com);
+          Object objectCommand;
+          Constructor constructor1 = cls.getConstructor(String[].class);
+          objectCommand = constructor1.newInstance((Object) new String[]{"1", "1"});
+          Command commandGiven = (Command) objectCommand;
+          args = commandGiven.getNumberOfArgs();
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
+          error.handleCommandClassNotFound();
+        }
+        if (args == 2) {
+          arg2 = argument.pollLast();
+        }
+
+
         passCommand(parser);
+        if (!command.isEmpty() && argument.isEmpty()) {
+          userCom = command.pop();
+          makeClassPathToCommand(parser);
+          passCommand(parser);
+        }
       }
     }
+
+  public void runUserInputCommands(){
+    coordinateCommands();
   }
 
   private void makeClassPathToCommand(Parser parser1) {
