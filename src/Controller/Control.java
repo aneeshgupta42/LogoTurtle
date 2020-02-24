@@ -45,9 +45,9 @@ public class Control {
   private List<String> words;
   private ResourceBundle myResources;
   private Turtle turtle;
-  private int turtleCol;
-  private int turtleRow;
-  private int turtleAngle;
+  private double turtleRow;
+  private double turtleCol;
+  private double turtleAngle;
 
   public Control() {
     myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + FILE);
@@ -184,15 +184,15 @@ public class Control {
     turtleAngle = turtle.getTurtleAngle();
   }
 
-  public int getTurtleCol(){
+  public double getTurtleCol(){
     return turtleCol;
   }
 
-  public int getTurtleRow(){
+  public double getTurtleRow(){
     return turtleRow;
   }
 
-  public int getTurtleAngle(){
+  public double getTurtleAngle(){
     return turtleAngle;
   }
 
