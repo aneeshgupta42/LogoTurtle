@@ -4,15 +4,19 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.shape.Line;
 
 
 public class Turtle implements Update{
   private static final String TURTLE = "turtle_25.png";
   ImageView myTurtle;
   private double turtleAngle = 0;
+  private boolean penDown = true;
+  private double lineStartXPosition;
+  private double lineStartYPosition;
+  Line myLine;
 
   public Turtle(){
-
 
   }
 
@@ -22,11 +26,26 @@ public class Turtle implements Update{
     return myTurtle;
   }
 
+  public void initializeLinePosition(double x, double y){
+    lineStartXPosition = x;
+    lineStartYPosition = y;
+  }
+
   public void move(double x, double y, double angle){
     myTurtle.setX(myTurtle.getX()+x);
     myTurtle.setY(myTurtle.getY()+y);
     myTurtle.setRotate(turtleAngle + angle);
     turtleAngle = turtleAngle + angle;
+    if(penDown==true){
+      drawPen();
+    }
+  }
+
+  private void drawPen() {
+    myLine.setStartX(lineStartXPosition);
+    myLine.setStartY(lineStartYPosition);
+    myLine.setEndX(myTurtle.getX());
+    myLine.setEndY(myTurtle.getY());
   }
 
   //get turtle position
@@ -42,6 +61,14 @@ public class Turtle implements Update{
     return turtleAngle;
   }
 
+  public void putPenDown(){
+    penDown=true;
+  }
+
+  public void pickPenUp(){
+    penDown= false;
+  }
+
   @Override
   public int locationXUpdate(int changeInXPos) {
     return 0;
@@ -55,5 +82,9 @@ public class Turtle implements Update{
   @Override
   public int orientationUpdate(int changeInAngle) {
     return 0;
+  }
+
+  public void setLine(Line line) {
+    myLine = line;
   }
 }
