@@ -1,5 +1,4 @@
 package backEnd.commands;
-
 import backEnd.commands.Command;
 
 public class Difference extends Command {

@@ -10,8 +10,7 @@ public class Pi extends Command {
 
   @Override
   public String commandValueReturn(){
-
-    return "3.14";
+    return Double.toString(Math.PI);
   }
 
 }

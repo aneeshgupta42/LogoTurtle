@@ -25,12 +25,24 @@ public abstract class Command {
   public Command(){
   }
 
-  public Command(String[] varargs) {
+  public Command(String[] varargs, Control control) {
+    myControl = control;
+    System.out.println("HIT COMMAND CONSTRUCT");
+  }
+
+  public Command(String [] varargs){
+
   }
 
   public void setControl(Control control){
       myControl = control;
+      System.out.println("Got Control: command");
   }
+
+  public Control getMyControl() {
+    return myControl;
+  }
+
   public int getTurtleCurrentX() {
     return turtleXVal;
   }
