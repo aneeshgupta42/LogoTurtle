@@ -76,35 +76,31 @@ public class Control {
     passCommand(input);
     parser.addPatterns(language);
     parser.addPatterns("Syntax");
-    parseText(parser, input);
+    parseText(input);
   }
 
-  private void parseText(Parser parser1, String lines) {
+  private void parseText(String lines) {
     command = new LinkedList<>();
     argument = new LinkedList<>();
     words = new LinkedList<>();
     for (String line : lines.split(NEWLINE)) {
-      for (String word : line.split(WHITESPACE)) {
-        words.add(word);
-      }
-      if (line.contains("#")) {
+      /*if (line.contains("#")) {
         comment = line;
-      } else {
-        organizeInStacks(parser1, line);
+      } else */{
+        organizeInStacks(line);
       }
     }
   }
 
-  private void organizeInStacks(Parser parser1, String line) {
+  private void organizeInStacks(String line) {
     for (String word : line.split(WHITESPACE)) {
       if (word.trim().length() > 0) {
-        String symbol = parser1.getSymbol(word);
+        String symbol = parser.getSymbol(word);
         if (!symbol.equals(null) && !symbol.equals(LIST_END) && !symbol.equals(LIST_START)) {
-          if (!parser1.getSymbol(word).equals(ARGUMENT) && !parser1.getSymbol(word)
-              .equals(VARIABLE)) {
+          if (!parser.getSymbol(word).equals(ARGUMENT) && !parser.getSymbol(word).equals(VARIABLE)) {
             command.push(word);
           } else {
-            if (parser1.getSymbol(word).equals(VARIABLE)) {
+            if (parser.getSymbol(word).equals(VARIABLE)) {
               if (variablesUsed.containsKey(word)) {
                 argument.push(variablesUsed.get(word));
               } else {
@@ -117,15 +113,15 @@ public class Control {
         }
       }
     }
-    coordinateCommands(parser1);
+    coordinateCommands();
   }
 
-  private void coordinateCommands(Parser parser1) {
+  public void coordinateCommands() {
     int args = 0;
     if (!argument.isEmpty() && !command.isEmpty()) {
       userCom = command.pop();
       arg = argument.pollLast();
-      makeClassPathToCommand(parser1);
+      makeClassPathToCommand(parser);
       try {
         Class cls = Class.forName(com);
         Object objectCommand;
@@ -139,11 +135,11 @@ public class Control {
       if (args == 2) {
         arg2 = argument.pollLast();
       }
-      passCommand(parser1);
+      passCommand(parser);
       if (!command.isEmpty() && argument.isEmpty()) {
         userCom = command.pop();
-        makeClassPathToCommand(parser1);
-        passCommand(parser1);
+        makeClassPathToCommand(parser);
+        passCommand(parser);
       }
     }
   }
@@ -178,7 +174,7 @@ public class Control {
       System.out.print(variablesUsed);
     }
     command.setControl(this);
-    coordinateCommands(parser1);
+    coordinateCommands();
   }
 
 
@@ -206,6 +202,7 @@ public class Control {
     turtleAngle = turtle.getTurtleAngle();
     turtle.move(col, row, angle);
   }
+
 
 }
 
