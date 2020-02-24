@@ -10,7 +10,7 @@ import javafx.scene.shape.Line;
 public class Turtle implements Update{
   private static final String TURTLE = "turtle_25.png";
   ImageView myTurtle;
-  private double turtleAngle = 0;
+  private double turtleAngle;
   private boolean penDown = true;
   private double lineStartXPosition;
   private double lineStartYPosition;
@@ -26,9 +26,10 @@ public class Turtle implements Update{
     return myTurtle;
   }
 
-  public void initializeLinePosition(double x, double y){
+  public void initializeLinePosition(double x, double y, double angle){
     lineStartXPosition = x;
     lineStartYPosition = y;
+    turtleAngle = angle;
   }
 
   public void move(double x, double y, double angle){

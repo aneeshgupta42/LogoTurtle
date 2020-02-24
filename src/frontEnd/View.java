@@ -136,20 +136,6 @@ public class View extends Application {
   }
 
   private Node makeDisplayWindow(){
-    /*Group gridPane = new Group();
-    gridPane.setHgap(10);
-    gridPane.setVgap(10);
-    gridPane.setPadding(new Insets(0, 10, 0, 10));
-    //gridPane.setMaxSize(1200, 400);
-    gridPane.setMinHeight(400);
-    gridPane.setMinWidth(1000);
-    gridPane.setAlignment(Pos.CENTER);
-    display_height = gridPane.getHeight();
-    Node turtleimage = myTurtle.displayTurtle();
-    Button button2 = new Button("Clear");
-    GridPane.setConstraints(turtleimage, 50, 6);
-    gridPane.getChildren().add(turtleimage);
-    return gridPane;*/
     Group gridPane = new Group();
     rectangle = new Rectangle(DISPLAY_WIDTH, DISPLAY_HEIGHT);
     //rectangle = new Rectangle();
@@ -166,7 +152,7 @@ public class View extends Application {
     image.setX(DISPLAY_WIDTH/2-image.getBoundsInLocal().getWidth()/2);
     image.setY(DISPLAY_HEIGHT/2-image.getBoundsInLocal().getHeight()/2);
     image.setRotate(-90);
-    myTurtle.initializeLinePosition(image.getX(), image.getY());
+    myTurtle.initializeLinePosition(image.getX(), image.getY(), image.getRotate());
   }
 
 
