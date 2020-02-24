@@ -27,9 +27,6 @@ public class Control {
   private static final String CLASS_PATH = "backEnd.commands.";
   private static final String LIST_END = "ListEnd";
   private static final String LIST_START = "ListStart";
-  private final String RESOURCES = "resources";
-  public final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
-  private static final String FILE = "commands";
   private final ErrorHandler error;
   private final Parser parser;
   private String language;
@@ -93,10 +90,7 @@ public class Control {
 
   private void organizeInStacks(String line) {
     for (String word : line.split(WHITESPACE)) {
-      if(parser.getSymbol(word).equals(LIST_START)){
-          commandArguments = true;
-      }
-      if (word.trim().length() > 0 && !parser.getSymbol(word).equals(LIST_END) && !parser.getSymbol(word).equals(LIST_START)) {
+      if (word.trim().length() > 0) {
         System.out.println(parser.getSymbol(word));
           if (!parser.getSymbol(word).equals(ARGUMENT) && !parser.getSymbol(word).equals(VARIABLE)) {
             command.push(word);
@@ -118,10 +112,19 @@ public class Control {
 
   public void coordinateCommands() {
     int args = 0;
+
     if (!argument.isEmpty() && !command.isEmpty()) {
-      userCom = command.pop();
       arg = argument.pollLast();
-        makeClassPathToCommand(parser);
+      userCom = command.pollLast();
+      if(parser.getSymbol(userCom).equals(LIST_START)){
+        commandArguments = true;
+   //     userCom = command.pollLast();
+      }
+      if(parser.getSymbol(userCom).equals(LIST_END)){
+        commandArguments = false;
+     //   userCom = command.pollLast();
+      }
+      makeClassPathToCommand(parser);
         try {
           Class cls = Class.forName(com);
           Object objectCommand;
@@ -137,7 +140,15 @@ public class Control {
         }
         passCommand();
         if (!command.isEmpty() && argument.isEmpty()) {
-          userCom = command.pop();
+          userCom = command.pollLast();
+          if(parser.getSymbol(userCom).equals(LIST_START)){
+            commandArguments = true;
+          //  userCom = command.pollLast();
+          }
+          if(parser.getSymbol(userCom).equals(LIST_END)){
+            commandArguments = false;
+          //  userCom = command.pollLast();
+          }
           makeClassPathToCommand(parser);
           passCommand();
         }
@@ -164,23 +175,37 @@ public class Control {
     }
   }
 
-  public void createCommand(Command command, Parser parser1) {
-    commandObj = command;
+  public void createCommand(Command comm, Parser parser1) {
+    commandObj = comm;
     if(commandArguments){
       lists.storeCom(commandObj);
-    }
-    if (command.commandValueReturn() != null) {
-      argument.push(command.commandValueReturn());
-      System.out.println(command.commandValueReturn());
+      commandObj.setControl(this);
+    if(command.isEmpty() && argument.isEmpty()){
+      commandObj.repeatCom();
+      repeat();
+    }}
+    if (comm.commandValueReturn() != null) {
+      argument.push(comm.commandValueReturn());
+      System.out.println(comm.commandValueReturn());
     }
     if (parser1.getSymbol(userCom).equals("MakeVariable")) {
-      variablesUsed = command.getVariablesCreated();
+      variablesUsed = comm.getVariablesCreated();
     }
     coordinateCommands();
-    commandObj.setControl(this);
-    commandObj.repeatCom();
-    lists.runCom();
   }
+
+  public void repeat(){
+    Command c = lists.runCom();
+    System.out.println(c);
+    System.out.println(c.getNumberOfArgs());
+    System.out.println("hi");
+  }
+
+
+
+
+
+
 
 
 

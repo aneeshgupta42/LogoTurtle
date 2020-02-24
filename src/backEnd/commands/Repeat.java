@@ -25,6 +25,7 @@ public class Repeat extends Command {
   public void repeatCom(){
     for(int i=0;i<repetition;i++){
       c.coordinateCommands();
+      c.repeat();
   }
   }
 

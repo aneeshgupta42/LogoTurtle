@@ -22,12 +22,14 @@ public class StoreLists {
     coms.push(command);
   }
 
-  public void runCom(){
+  public Command runCom(){
     for (Command c: coms) {
       coms.pop();
       System.out.println(c.getNumberOfArgs());
       System.out.println(c);
+      return c;
     }
+    return null;
   }
 
 }
