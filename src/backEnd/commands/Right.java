@@ -1,11 +1,13 @@
 package backEnd.commands;
 
-import backEnd.commands.Command;
+import Controller.Control;
 
 public class Right extends Command {
-
-
-  public Right(String[] varargs) {
-    super(varargs);
+  public Right(String[] varargs, Control myControl)
+  {
+    super(varargs, myControl);
+    double angle = Double.parseDouble(varargs[0]);
+    myControl.updateTurtle(0,0, angle);
   }
+
 }
