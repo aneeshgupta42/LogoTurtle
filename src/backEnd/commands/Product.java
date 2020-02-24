@@ -6,6 +6,7 @@ public class Product extends Command {
     double a, b, prod;
     private int numArgs = 2;
 
+
     public Product(String[] varargs) {
         super(varargs);
         super.numberOfArgs = numArgs;
