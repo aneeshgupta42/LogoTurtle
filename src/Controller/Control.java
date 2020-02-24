@@ -45,6 +45,8 @@ public class Control {
   private StoreLists lists;
   private boolean commandArguments = false;
   private Command userfunction;
+  private boolean once = false;
+  private boolean inList =false;
 
   public Control() {
     error = new ErrorHandler();
@@ -110,18 +112,9 @@ public class Control {
 
   public void coordinateCommands() {
     int args = 0;
-    System.out.println(argument);
-    System.out.println(command);
     if (!argument.isEmpty()) {
-      userCom = command.pollLast();
-    //  System.out.println(userCom);
-      if (parser.getSymbol(userCom).equals(LIST_START)) {
-        commandArguments = true;
-      }
-      if (parser.getSymbol(userCom).equals(LIST_END)) {
-        commandArguments = false;
-      }
-      makeClassPathToCommand(parser);
+      arg = argument.pollLast();
+      checkIfList();
       try {
         Class cls = Class.forName(com);
         Object objectCommand;
@@ -133,29 +126,31 @@ public class Control {
         error.handleCommandClassNotFound();
       }
 
-      arg = argument.pollLast();
-
       if (args == 2) {
         arg2 = argument.pollLast();
-      }
-      if (commandArguments && !parser.getSymbol(userCom).equals(LIST_START) && !parser.getSymbol(userCom).equals(LIST_END)) {
-        lists.store(userCom, arg);
       }
       passCommand();
     }
     if (!command.isEmpty() && argument.isEmpty()) {
-      userCom = command.pollLast();
-      if (parser.getSymbol(userCom).equals(LIST_START)) {
-        commandArguments = true;
-      }
-      if (parser.getSymbol(userCom).equals(LIST_END)) {
-        commandArguments = false;
-      }
-      if (commandArguments && !parser.getSymbol(userCom).equals(LIST_START) && !parser.getSymbol(userCom).equals(LIST_END)) {
-        lists.store(userCom, arg);
-      }
-      makeClassPathToCommand(parser);
+      checkIfList();
       passCommand();
+    }
+  }
+
+  private void checkIfList() {
+    userCom = command.pollLast();
+    if(inList){
+      lists.store(userCom,arg);
+    }
+    makeClassPathToCommand(parser);
+    if (parser.getSymbol(userCom).equals(LIST_START)) {
+      commandArguments = true;
+    }
+    if (parser.getSymbol(userCom).equals(LIST_END)) {
+      commandArguments = false;
+    }
+    if (commandArguments && !parser.getSymbol(userCom).equals(LIST_START) && !parser.getSymbol(userCom).equals(LIST_END)) {
+      lists.store(userCom, arg);
     }
   }
 
@@ -173,8 +168,9 @@ public class Control {
       Constructor constructor = cls.getConstructor(String[].class, Control.class);
       objectCommand = constructor.newInstance((Object) new String[]{arg, arg2}, (Object) this);
       Command commandGiven = (Command) objectCommand;
-      if(commandArguments==false && !parser.getSymbol(userCom).equals(LIST_END)) {
+      if(commandArguments==false && userfunction==null && !parser.getSymbol(userCom).equals(LIST_END) && once==false) {
         userfunction = commandGiven;
+        once = true;
       }
       createCommand(commandGiven, parser);
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
@@ -191,30 +187,44 @@ public class Control {
     if (parser1.getSymbol(userCom).equals("MakeVariable")) {
       variablesUsed = comm.getVariablesCreated();
     }
-    if (!command.isEmpty()) {
-      coordinateCommands();
-    }
 
-    System.out.println(userfunction);
-    System.out.println(commandArguments);
-    if(commandArguments ==false && userfunction !=null) userfunction.repeatCom();
+    if(commandArguments == false && userfunction !=null && !comm.equals(userfunction) && parser.getSymbol(userCom).equals(LIST_END)){
+      int b = userfunction.repeatCom();
+      System.out.println(b);
+      userInputCom(b);
+    }
+    //coordinateCommands();
+
     /// it stores the commands that are in the [ ], but now they have to be acted upon
   }
 
-  public void userInputCom(){
-    command = lists.print();
-    argument = lists.print2();
-    System.out.println("1");
-    System.out.println("2");
-    coordinateCommands();
+  public void userInputCom(int b){
+    System.out.println("entered");
+    System.out.println(commandArguments);
+    if(b==1){
+      System.out.println("done");
+      hold();
+    }
+    else {
+      command = lists.print();
+      argument = lists.print2();
+      inList = true;
+      b-=1;
+      System.out.println(command);
+      System.out.println(argument);
+      coordinateCommands();
+      userInputCom(b);
+    }
   }
+
+  private void hold(){}
 
   public void passTurtle(Turtle turtle) {
     myTurtle = turtle;
     turtleRow = myTurtle.getTurtleRow();
     turtleCol = myTurtle.getTurtleCol();
     turtleAngle = myTurtle.getTurtleAngle();
-    System.out.println("Got turtle: Control:" + turtleCol + turtleRow + turtleAngle);
+    //System.out.println("Got turtle: Control:" + turtleCol + turtleRow + turtleAngle);
   }
 
   public double getTurtleCol() {

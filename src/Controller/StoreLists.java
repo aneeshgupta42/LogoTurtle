@@ -16,8 +16,8 @@ public class StoreLists {
   }
 
   public void store(String line, String arg) {
-      lines.push(line);
-      args.push(arg);
+    lines.push(line);
+    args.push(arg);
     System.out.println(lines);
     System.out.println(args);
   }

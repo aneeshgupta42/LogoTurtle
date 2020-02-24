@@ -1,7 +1,6 @@
 package backEnd.commands;
 
 import Controller.Control;
-import java.util.Collection;
 import java.util.Map;
 
 public abstract class Command {
@@ -21,6 +20,7 @@ public abstract class Command {
   protected int numberOfArgs;
   private Control myControl;
   protected Boolean repeat;
+  private int b;
 
   public Command(){
   }
@@ -83,7 +83,7 @@ public abstract class Command {
   }
   public Map getVariablesCreated(){return c;}
   public int getNumberOfArgs(){return numberOfArgs;}
-  public void repeatCom(){};
+  public int repeatCom(){return b;}
 
 
 
