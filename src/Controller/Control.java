@@ -107,51 +107,59 @@ public class Control {
         }
       }
     }
+    System.out.println(argument);
+    System.out.println(command);
     coordinateCommands();
   }
 
   public void coordinateCommands() {
     int args = 0;
-
-    if (!argument.isEmpty() && !command.isEmpty()) {
-      arg = argument.pollLast();
-      userCom = command.pollLast();
-      if(parser.getSymbol(userCom).equals(LIST_START)){
+    boolean repeat = false;
+   // if (!argument.isEmpty() && !command.isEmpty()) {
+    if(!argument.isEmpty()) {
+      userCom = command.pop();
+     /* if(parser.getSymbol(userCom).equals(LIST_START)){
         commandArguments = true;
    //     userCom = command.pollLast();
       }
       if(parser.getSymbol(userCom).equals(LIST_END)){
         commandArguments = false;
      //   userCom = command.pollLast();
-      }
+      }*/
       makeClassPathToCommand(parser);
-        try {
-          Class cls = Class.forName(com);
-          Object objectCommand;
-          Constructor constructor1 = cls.getConstructor(String[].class);
-          objectCommand = constructor1.newInstance((Object) new String[]{"1", "1"});
-          Command commandGiven = (Command) objectCommand;
-          args = commandGiven.getNumberOfArgs();
-        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
-          error.handleCommandClassNotFound();
-        }
-        if (args == 2) {
-          arg2 = argument.pollLast();
-        }
-        passCommand();
-        if (!command.isEmpty() && argument.isEmpty()) {
-          userCom = command.pollLast();
-          if(parser.getSymbol(userCom).equals(LIST_START)){
+      try {
+        Class cls = Class.forName(com);
+        Object objectCommand;
+        Constructor constructor1 = cls.getConstructor(String[].class);
+        objectCommand = constructor1.newInstance((Object) new String[]{"1", "1"});
+        Command commandGiven = (Command) objectCommand;
+        args = commandGiven.getNumberOfArgs();
+      } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
+        error.handleCommandClassNotFound();
+      }
+
+      arg = argument.pollLast();
+
+      if (args == 2) {
+        arg2 = argument.pollLast();
+      }
+      passCommand();
+    }
+    if (!command.isEmpty() && argument.isEmpty()) {
+          userCom = command.pop();
+         /* if(parser.getSymbol(userCom).equals(LIST_START)){
             commandArguments = true;
+            System.out.println("hi");
           //  userCom = command.pollLast();
           }
           if(parser.getSymbol(userCom).equals(LIST_END)){
             commandArguments = false;
+            System.out.println("hi");
           //  userCom = command.pollLast();
-          }
+          }*/
           makeClassPathToCommand(parser);
           passCommand();
-        }
+    //    }
       }
     }
 
@@ -176,14 +184,19 @@ public class Control {
   }
 
   public void createCommand(Command comm, Parser parser1) {
-    commandObj = comm;
-    if(commandArguments){
+   // commandObj = comm;
+
+   /* if(commandArguments){
+      System.out.println("okay");
       lists.storeCom(commandObj);
       commandObj.setControl(this);
-    if(command.isEmpty() && argument.isEmpty()){
       commandObj.repeatCom();
-      repeat();
-    }}
+    if(command.isEmpty() && argument.isEmpty()){
+      System.out.println("rer");
+
+   //   repeat();
+    }*/
+
     if (comm.commandValueReturn() != null) {
       argument.push(comm.commandValueReturn());
       System.out.println(comm.commandValueReturn());
@@ -191,17 +204,19 @@ public class Control {
     if (parser1.getSymbol(userCom).equals("MakeVariable")) {
       variablesUsed = comm.getVariablesCreated();
     }
-    coordinateCommands();
+    if(!command.isEmpty()) {
+      coordinateCommands();
+    }
   }
 
-  public void repeat(){
+  /*public void repeat(){
+    System.out.println("repeating");
     Command c = lists.runCom();
     System.out.println(c);
     System.out.println(c.getNumberOfArgs());
-    System.out.println("hi");
   }
 
-
+*/
 
 
 

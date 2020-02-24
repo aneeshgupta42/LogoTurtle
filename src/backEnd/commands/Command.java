@@ -20,6 +20,7 @@ public abstract class Command {
   private Map c;
   protected int numberOfArgs;
   private Control myControl;
+  protected Boolean repeat;
 
   public Command(){
   }
@@ -27,7 +28,6 @@ public abstract class Command {
   public Command(String[] varargs) {
   }
 
-  public void repeatCom(){};
   public void setControl(Control control){
       myControl = control;
   }

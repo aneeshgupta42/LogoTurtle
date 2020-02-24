@@ -21,11 +21,11 @@ public class Repeat extends Command {
     c = control;
   }
 
-  @Override
+ // @Override
   public void repeatCom(){
     for(int i=0;i<repetition;i++){
-      c.coordinateCommands();
-      c.repeat();
+    //  c.coordinateCommands();
+    //  c.repeat();
   }
   }
 
