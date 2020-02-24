@@ -7,7 +7,7 @@ import javafx.scene.layout.GridPane;
 
 
 public class Turtle implements Update{
-  private static final String TURTLE = "turtle.png";
+  private static final String TURTLE = "turtle_25.png";
   ImageView myTurtle;
   private int turtleCol =0;
   private int turtleRow = 0;

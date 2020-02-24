@@ -1,8 +1,10 @@
 package frontEnd;
 
 import Controller.Control;
+import java.awt.Image;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Collections;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import javafx.application.Application;
@@ -11,12 +13,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -48,6 +51,8 @@ public class View extends Application {
 
   public static final String TITLE = "JavaFX Animation Example";
   public static final Dimension DEFAULT_SIZE = new Dimension(1200, 1200);
+  private static final int DISPLAY_WIDTH = 1000;
+  private static final int DISPLAY_HEIGHT = 500;
   private Node myActor;
   private TextArea myCommander;
   private static final String TURTLE = "turtle.png";
@@ -62,6 +67,14 @@ public class View extends Application {
   private Node display_window;
   private double display_height;
   private double display_width;
+  private static final String LANGUAGE_PROMPT  = "Language";
+  private static final String[] languages = { "English", "Chinese", "French",
+          "German", "Italian","Portuguese","Russian","Spanish","Urdu" };
+  private static final String BACKGROUND_PROMPT  = "Background Color";
+  private static final String[] backgroundColor = {"red", "yellow"};
+  private static final String PEN_PROMPT  = "Pen Color";
+  private static final String[] penColor = {"red", "yellow", "blue"};
+
 
   public View() {
     control = new Control();
@@ -94,7 +107,7 @@ public class View extends Application {
     HBox hbox = addHBox();
     root.setTop(hbox);
     display_window = makeDisplayWindow();
-    root.setCenter(display_window);
+    root.setLeft(display_window);
     root.setRight(makeSideWindow());
     root.setBottom(makeCommandWindow());
     return new Scene(root);
@@ -113,7 +126,7 @@ public class View extends Application {
   }
 
   private Node makeDisplayWindow(){
-    GridPane gridPane = new GridPane();
+    /*Group gridPane = new Group();
     gridPane.setHgap(10);
     gridPane.setVgap(10);
     gridPane.setPadding(new Insets(0, 10, 0, 10));
@@ -121,31 +134,32 @@ public class View extends Application {
     gridPane.setMinHeight(400);
     gridPane.setMinWidth(1000);
     gridPane.setAlignment(Pos.CENTER);
-    gridPane.setStyle("-fx-padding: 10;" +
-        "-fx-border-style: solid inside;" +
-        "-fx-border-width: 2;" +
-        "-fx-border-insets: 5;" +
-        "-fx-border-radius: 5;" +
-        "-fx-border-color: grey;");
     display_height = gridPane.getHeight();
     Node turtleimage = myTurtle.displayTurtle();
     Button button2 = new Button("Clear");
     GridPane.setConstraints(turtleimage, 50, 6);
     gridPane.getChildren().add(turtleimage);
+    return gridPane;*/
+    Group gridPane = new Group();
+    Rectangle rect = new Rectangle(DISPLAY_WIDTH, DISPLAY_HEIGHT);
+    rect.getStyleClass().add("group");
+    ImageView turtleimage = (ImageView) myTurtle.displayTurtle();
+    setTurtlePosition(turtleimage);
+    //turtleimage.setX(750);
+    gridPane.getChildren().addAll(rect, turtleimage);
     return gridPane;
+  }
+
+  private void setTurtlePosition(ImageView image) {
+    image.setX(DISPLAY_WIDTH/2-image.getBoundsInLocal().getWidth()/2);
+    image.setY(DISPLAY_HEIGHT/2-image.getBoundsInLocal().getHeight()/2);
   }
 
 
   private Node makeSideWindow() {
-    GridPane gridPane = new GridPane();
+    GridPane gridPane = createGridPane();
    // gridPane.setMinHeight(800);
     gridPane.setMinWidth(400);
-    gridPane.setStyle("-fx-padding: 10;" +
-        "-fx-border-style: solid inside;" +
-        "-fx-border-width: 2;" +
-        "-fx-border-insets: 5;" +
-        "-fx-border-radius: 5;" +
-        "-fx-border-color: grey;");
     return gridPane;
   }
 
@@ -159,12 +173,6 @@ public class View extends Application {
     GridPane.setConstraints(inputArea, 0, 0);
     inputArea.setMinWidth(1100);
     inputArea.setMaxHeight(200);
-    inputArea.setStyle("-fx-padding: 10;" +
-        "-fx-border-style: solid inside;" +
-        "-fx-border-width: 2;" +
-        "-fx-border-insets: 5;" +
-        "-fx-border-radius: 5;" +
-        "-fx-border-color: #336699;");
     VBox vbox = new VBox();
     Button runButton = new Button("Run");
     runButton.setPrefSize(100, 20);
@@ -210,7 +218,7 @@ public class View extends Application {
     HBox hbox = new HBox();
     hbox.setPadding(new Insets(15, 12, 15, 12));
     hbox.setSpacing(10);
-    hbox.setStyle("-fx-background-color: #336699");
+//    hbox.setStyle("-fx-background-color: #336699");
 
     Button buttonCurrent = new Button("Current");
     buttonCurrent.setPrefSize(100, 20);
@@ -222,48 +230,67 @@ public class View extends Application {
     button.setOnAction(e -> {
       fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
       File selectedFile = fileChooser.showOpenDialog(myStage);
-      fileChooser.getExtensionFilters().addAll(
-          new FileChooser.ExtensionFilter("Text Files", "*.txt")
-          ,new FileChooser.ExtensionFilter("HTML Files", "*.htm")
-      );
       if(selectedFile!= null){
         try {
           scanFile(selectedFile);
         } catch (FileNotFoundException ex) {
+          ///****fix this******
           ex.printStackTrace();
         }
       }
     });
-
-    // Weekdays
-    String languages[] =
-        { "English", "Chinese", "French",
-            "German", "Italian","Portuguese","Russian","Spanish","Urdu" };
-
     // Create a combo box
-    ComboBox combo_box =
+    ComboBox language_box =
         new ComboBox(FXCollections
             .observableArrayList(languages));
-    combo_box.setPromptText("Language");
-
-    // Label to display the selected menuitem
-
-    Label selected = new Label("default item selected");
+    language_box.setPromptText(LANGUAGE_PROMPT);
 
     //Create action event
     EventHandler<ActionEvent> event =
         new EventHandler<ActionEvent>() {
           public void handle(ActionEvent e)
           {
-            selected.setText(combo_box.getValue() + " selected");
-            control.passLanguage(combo_box.getValue().toString());
+            control.passLanguage(language_box.getValue().toString());
           }
         };
     // Set on action
-    combo_box.setOnAction(event);
+    language_box.setOnAction(event);
     // Create a tile pane
 
-    hbox.getChildren().addAll(buttonCurrent, buttonProjected, button, combo_box);
+    ComboBox background_box =
+        new ComboBox(FXCollections
+            .observableArrayList(backgroundColor));
+    background_box.setPromptText(BACKGROUND_PROMPT);
+
+    //Create action event
+    EventHandler<ActionEvent> event1 =
+        new EventHandler<ActionEvent>() {
+          public void handle(ActionEvent e)
+          {
+            // add something here
+          }
+        };
+    // Set on action
+    background_box.setOnAction(event1);
+    // Create a tile pane
+
+    ComboBox pen_box =
+        new ComboBox(FXCollections
+            .observableArrayList(penColor));
+    pen_box.setPromptText(PEN_PROMPT);
+
+    //Create action event
+    EventHandler<ActionEvent> event2 =
+        new EventHandler<ActionEvent>() {
+          public void handle(ActionEvent e)
+          {
+            // add something here
+          }
+        };
+    // Set on action
+    pen_box.setOnAction(event2);
+
+    hbox.getChildren().addAll(buttonCurrent, buttonProjected, button, language_box, background_box, pen_box);
     return hbox;
   }
 
@@ -280,6 +307,12 @@ public class View extends Application {
 
   public String getText(){
     return myText;
+  }
+
+  private GridPane createGridPane() {
+    GridPane grid = new GridPane();
+    grid.getStyleClass().add("grid-pane");
+    return grid ;
   }
 
   public static void main(String[] args) {
