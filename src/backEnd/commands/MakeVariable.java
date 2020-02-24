@@ -1,5 +1,6 @@
 package backEnd.commands;
 
+import Controller.Control;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,8 +13,8 @@ public class MakeVariable extends Command {
   private static int number = 2;
 
 
-  public MakeVariable(String[] varargs) {
-    super(varargs);
+  public MakeVariable(String[] varargs, Control control) {
+    super(varargs, control);
     super.numberOfArgs = number;
     key = varargs[0];
     var = varargs[1];

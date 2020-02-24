@@ -7,10 +7,10 @@ public class Sum extends Command {
   private double a, b, sum;
   private int number=2;
 
-  public Sum(String[] varargs, Control myControl) {
-    super(varargs);
+  public Sum(String[] varargs, Control control) {
+    super(varargs, control);
     super.numberOfArgs=number;
-    Control control = myControl;
+   //myControl;
     a = Double.parseDouble(varargs[0]);
     b = Double.parseDouble(varargs[1]);
     sum = a + b;

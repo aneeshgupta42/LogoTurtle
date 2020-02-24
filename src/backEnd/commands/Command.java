@@ -1,7 +1,6 @@
 package backEnd.commands;
 
 import Controller.Control;
-import java.util.Collection;
 import java.util.Map;
 
 public abstract class Command {
@@ -21,22 +20,19 @@ public abstract class Command {
   protected int numberOfArgs;
   private Control myControl;
   protected Boolean repeat;
+  private int b;
 
   public Command(){
   }
 
   public Command(String[] varargs, Control control) {
     myControl = control;
-    System.out.println("HIT COMMAND CONSTRUCT");
-  }
-
-  public Command(String [] varargs){
-
+  //  System.out.println("HIT COMMAND CONSTRUCT");
   }
 
   public void setControl(Control control){
       myControl = control;
-      System.out.println("Got Control: command");
+     // System.out.println("Got Control: command");
   }
 
   public Control getMyControl() {
@@ -83,6 +79,7 @@ public abstract class Command {
   }
   public Map getVariablesCreated(){return c;}
   public int getNumberOfArgs(){return numberOfArgs;}
+  public int repeatCom(){return b;}
 
 
 

@@ -5,6 +5,10 @@ import Controller.Control;
 public class Forward extends Command {
   private static final int NUMARGS = 1;
 
+  public Forward(){
+    super();
+    super.numberOfArgs=number;
+  }
   public Forward(String[] varargs, Control control){
     super(varargs);
     super.numberOfArgs= NUMARGS;
