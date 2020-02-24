@@ -27,6 +27,7 @@ public abstract class Command {
   public Command(String[] varargs) {
   }
 
+  public void repeatCom(){};
   public void setControl(Control control){
       myControl = control;
   }

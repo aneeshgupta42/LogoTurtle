@@ -1,11 +1,12 @@
 package Controller;
 
+import backEnd.commands.Command;
 import java.util.Deque;
 import java.util.LinkedList;
 
 public class StoreLists {
-
-  private Deque<String> coms;
+  private Deque<String> lines;
+  private Deque<Command> coms;
   private Deque<String> args;
 
   public StoreLists(){
@@ -13,13 +14,20 @@ public class StoreLists {
     args = new LinkedList<>();
   }
 
-  public StoreLists(Deque<String> argument, Deque<String> command) {
-
+  public void store(String line) {
+      lines.push(line);
   }
 
-  public void store(String com, String arg){
-    coms.push(com);
-    args.push(arg);
+  public void storeCom(Command command){
+    coms.push(command);
+  }
+
+  public void runCom(){
+    for (Command c: coms) {
+      coms.pop();
+      System.out.println(c.getNumberOfArgs());
+      System.out.println(c);
+    }
   }
 
 }
