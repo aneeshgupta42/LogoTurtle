@@ -38,7 +38,7 @@ public class Control {
   private String userCom;
   private String input;
   private Map<String, String> variablesUsed = new HashMap<>();
-  private final Turtle turtle;
+  private Turtle myTurtle;
   private double turtleCol;
   private double turtleRow;
   private double turtleAngle;
@@ -49,7 +49,7 @@ public class Control {
   public Control() {
     error = new ErrorHandler();
     parser = new Parser();
-    myTurtle = turtle;
+    //myTurtle = turtle;
   }
 
   public Map getVariables() {
@@ -179,7 +179,7 @@ public class Control {
       objectCommand = constructor.newInstance((Object) new String[]{arg, arg2}, (Object) this);
       Command commandGiven = (Command) objectCommand;
       commandGiven.setControl(this);
-      createCommand(commandGiven, parser1);
+      createCommand(commandGiven, parser);
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
       error.handleCommandClassNotFound();
     }
