@@ -27,7 +27,7 @@ public abstract class Command {
 
   public Command(String[] varargs, Control control) {
     myControl = control;
-    System.out.println("HIT COMMAND CONSTRUCT");
+  //  System.out.println("HIT COMMAND CONSTRUCT");
   }
 
   public Command(String [] varargs){
@@ -36,7 +36,7 @@ public abstract class Command {
 
   public void setControl(Control control){
       myControl = control;
-      System.out.println("Got Control: command");
+     // System.out.println("Got Control: command");
   }
 
   public Control getMyControl() {
@@ -83,6 +83,7 @@ public abstract class Command {
   }
   public Map getVariablesCreated(){return c;}
   public int getNumberOfArgs(){return numberOfArgs;}
+  public void repeatCom(){};
 
 
 

@@ -14,8 +14,8 @@ public class Forward extends Command {
     super.numberOfArgs=number;
     distance = Integer.parseInt(varargs[0]);
     Control myControl = control;
-    initX = myControl.getTurtleCol();
-    initY = myControl.getTurtleRow();
+    initX = (int) myControl.getTurtleCol();
+    initY = (int) myControl.getTurtleRow();
     angle = myControl.getTurtleAngle();
     int newX = (int) (initX + distance*(Math.cos(angle)));
     int newY = (int) (initY + distance*(Math.sin(angle)));
