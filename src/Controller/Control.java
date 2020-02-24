@@ -80,33 +80,34 @@ public class Control {
     command = new LinkedList<>();
     argument = new LinkedList<>();
     lists = new StoreLists();
-    for (String line : lines.split(NEWLINE)) {
+    for (String line : lines.split(NEWLINE))
       if (line.contains("#")) {
         String comment = line;
       } else {
         organizeInStacks(line);
       }
-    }
   }
 
   private void organizeInStacks(String line) {
-    for (String word : line.split(WHITESPACE)) {
+    for (String word : line.split(WHITESPACE))
       if (word.trim().length() > 0) {
         if (!parser.getSymbol(word).equals(ARGUMENT) && !parser.getSymbol(word).equals(VARIABLE)) {
-          command.push(word);
-        } else {
-          if (parser.getSymbol(word).equals(VARIABLE)) {
-            if (variablesUsed.containsKey(word)) {
-              argument.push(variablesUsed.get(word));
-            } else {
-              argument.push(word);
-            }
+          if (parser.getSymbol(word).equals(LIST_END) || parser.getSymbol(word)
+              .equals(LIST_START)) {
+            command.add(word);
+          } else {
+            command.push(word);
+          }
+        } else if (parser.getSymbol(word).equals(VARIABLE)) {
+          if (variablesUsed.containsKey(word)) {
+            argument.push(variablesUsed.get(word));
           } else {
             argument.push(word);
           }
+        } else {
+          argument.push(word);
         }
       }
-    }
     coordinateCommands();
   }
 
@@ -114,21 +115,20 @@ public class Control {
     int args = 0;
     if (!argument.isEmpty()) {
       arg = argument.pollLast();
+      System.out.println(command);
       checkIfList();
       try {
         Class cls = Class.forName(com);
         Object objectCommand;
-        Constructor constructor = cls.getConstructor(String[].class, Control.class);
-        objectCommand = constructor.newInstance((Object) new String[]{"1", "1"}, (Object) this);
+        Constructor constructor = cls.getConstructor();
+        objectCommand = constructor.newInstance();
         Command commandGiven = (Command) objectCommand;
         args = commandGiven.getNumberOfArgs();
       } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
         error.handleCommandClassNotFound();
       }
-
-      if (args == 2) {
+      if (args == 2)
         arg2 = argument.pollLast();
-      }
       passCommand();
     }
     if (!command.isEmpty() && argument.isEmpty()) {
@@ -138,20 +138,16 @@ public class Control {
   }
 
   private void checkIfList() {
-    userCom = command.pollLast();
-    if(inList){
-      lists.store(userCom,arg);
-    }
+    userCom = command.pop();
     makeClassPathToCommand(parser);
-    if (parser.getSymbol(userCom).equals(LIST_START)) {
-      commandArguments = true;
-    }
-    if (parser.getSymbol(userCom).equals(LIST_END)) {
-      commandArguments = false;
-    }
-    if (commandArguments && !parser.getSymbol(userCom).equals(LIST_START) && !parser.getSymbol(userCom).equals(LIST_END)) {
+    if(inList)
       lists.store(userCom, arg);
-    }
+    if (parser.getSymbol(userCom).equals(LIST_START))
+      commandArguments = true;
+    if (parser.getSymbol(userCom).equals(LIST_END))
+      commandArguments = false;
+    if (commandArguments && !parser.getSymbol(userCom).equals(LIST_START) && !parser.getSymbol(userCom).equals(LIST_END))
+      lists.store(userCom, arg);
   }
 
   private void makeClassPathToCommand(Parser parser1) {
@@ -184,18 +180,16 @@ public class Control {
       argument.push(comm.commandValueReturn());
       System.out.println(comm.commandValueReturn());
     }
-    if (parser1.getSymbol(userCom).equals("MakeVariable")) {
+    if (parser1.getSymbol(userCom).equals("MakeVariable"))
       variablesUsed = comm.getVariablesCreated();
-    }
 
     if(commandArguments == false && userfunction !=null && !comm.equals(userfunction) && parser.getSymbol(userCom).equals(LIST_END)){
       int b = userfunction.repeatCom();
       System.out.println(b);
       userInputCom(b);
     }
-    //coordinateCommands();
-
-    /// it stores the commands that are in the [ ], but now they have to be acted upon
+    if(!command.isEmpty())
+      coordinateCommands();
   }
 
   public void userInputCom(int b){

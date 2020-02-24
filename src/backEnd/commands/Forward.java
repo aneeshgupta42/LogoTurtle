@@ -9,8 +9,12 @@ public class Forward extends Command {
   private final int number = 1;
   private double angle;
 
+  public Forward(){
+    super();
+    super.numberOfArgs=number;
+  }
   public Forward(String[] varargs, Control control){
-    super(varargs);
+    super(varargs, control);
     super.numberOfArgs=number;
     distance = Integer.parseInt(varargs[0]);
     Control myControl = control;
