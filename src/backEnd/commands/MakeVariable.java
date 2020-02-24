@@ -9,10 +9,12 @@ public class MakeVariable extends Command {
   public Object getVariablesCreated;
   private String key;
   private String var;
+  private static int number = 2;
 
 
   public MakeVariable(String[] varargs) {
     super(varargs);
+    super.numberOfArgs = number;
     key = varargs[0];
     var = varargs[1];
   }

@@ -6,6 +6,7 @@ import backEnd.commands.Command;
 public class Repeat extends Command {
 
   private int repetition;
+  private Control c;
   private static final int number =  2;
 
   public Repeat(String[] varargs) {
@@ -17,9 +18,15 @@ public class Repeat extends Command {
   @Override
   public void setControl(Control control) {
     super.setControl(control);
-    for(int i=0;i<repetition;i++){
-      control.coordinateCommands();
-      System.out.println(i);
-    }
+    c = control;
   }
+
+ // @Override
+  public void repeatCom(){
+    for(int i=0;i<repetition;i++){
+    //  c.coordinateCommands();
+    //  c.repeat();
+  }
+  }
+
 }
