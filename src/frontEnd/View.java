@@ -1,10 +1,9 @@
 package frontEnd;
 
 import Controller.Control;
-import java.awt.Image;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import javafx.application.Application;
@@ -12,7 +11,6 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -48,6 +46,7 @@ public class View extends Application {
   private Turtle myTurtle;
   private Pen myPen;
   private Control control;
+  private Rectangle rectangle;
 
   public static final String TITLE = "JavaFX Animation Example";
   public static final Dimension DEFAULT_SIZE = new Dimension(1200, 1200);
@@ -74,12 +73,18 @@ public class View extends Application {
   private static final String[] backgroundColor = {"red", "yellow"};
   private static final String PEN_PROMPT  = "Pen Color";
   private static final String[] penColor = {"red", "yellow", "blue"};
+  public static final Color[] colors = {Color.RED, Color.YELLOW, Color.BLUE};
+  private static final HashMap<String, Color> map= new HashMap<>();
 
 
   public View() {
     control = new Control();
     myStage = new Stage();
     myTurtle = new Turtle();
+    for (int i=0; i< colors.length; i++){
+      map.put(penColor[i], colors[i]);
+    }
+
   }
 
   @Override
@@ -141,12 +146,12 @@ public class View extends Application {
     gridPane.getChildren().add(turtleimage);
     return gridPane;*/
     Group gridPane = new Group();
-    Rectangle rect = new Rectangle(DISPLAY_WIDTH, DISPLAY_HEIGHT);
-    rect.getStyleClass().add("group");
+    rectangle = new Rectangle(DISPLAY_WIDTH, DISPLAY_HEIGHT);
+    rectangle.getStyleClass().add("group");
     ImageView turtleimage = (ImageView) myTurtle.displayTurtle();
     setTurtlePosition(turtleimage);
     //turtleimage.setX(750);
-    gridPane.getChildren().addAll(rect, turtleimage);
+    gridPane.getChildren().addAll(rectangle, turtleimage);
     return gridPane;
   }
 
@@ -268,7 +273,7 @@ public class View extends Application {
         new EventHandler<ActionEvent>() {
           public void handle(ActionEvent e)
           {
-            // add something here
+            rectangle.setFill(map.get(background_box.getValue().toString()));
           }
         };
     // Set on action
