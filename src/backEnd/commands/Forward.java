@@ -4,7 +4,7 @@ import Controller.Control;
 import frontEnd.Turtle;
 
 public class Forward extends Command {
-  private int initX, initY;
+  private double initX, initY;
   private int distance;
   private final int number = 1;
   private double angle;
@@ -17,8 +17,8 @@ public class Forward extends Command {
     initX = myControl.getTurtleCol();
     initY = myControl.getTurtleRow();
     angle = myControl.getTurtleAngle();
-    int newX = (int) (initX + distance*(Math.cos(angle)));
-    int newY = (int) (initY + distance*(Math.sin(angle)));
+    int newX = (int) (distance*(Math.cos(angle)));
+    int newY = (int) (distance*(Math.sin(angle)));
     myControl.updateTurtle(newX, newY, angle);
   }
 
