@@ -203,6 +203,5 @@ public class Control {
     turtle.move(col, row, angle);
   }
 
-
 }
 
