@@ -42,9 +42,9 @@ public class Control {
   private String input;
   private Map<String, String> variablesUsed = new HashMap<>();
   private final Turtle turtle;
-  private int turtleCol;
-  private int turtleRow;
-  private int turtleAngle;
+  private double turtleCol;
+  private double turtleRow;
+  private double turtleAngle;
 
   public Control() {
     error = new ErrorHandler();
@@ -196,15 +196,15 @@ public class Control {
     turtleAngle = turtle.getTurtleAngle();
   }
 
-  public int getTurtleCol(){
+  public double getTurtleCol(){
     return turtleCol;
   }
 
-  public int getTurtleRow(){
+  public double getTurtleRow(){
     return turtleRow;
   }
 
-  public int getTurtleAngle(){
+  public double getTurtleAngle(){
     return turtleAngle;
   }
 
@@ -214,7 +214,6 @@ public class Control {
     turtleAngle = turtle.getTurtleAngle();
     turtle.move(col, row, angle);
   }
-
 
 }
 
