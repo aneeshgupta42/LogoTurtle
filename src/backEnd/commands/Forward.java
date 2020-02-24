@@ -1,25 +1,20 @@
 package backEnd.commands;
 
 import Controller.Control;
-import frontEnd.Turtle;
 
 public class Forward extends Command {
-  private double initX, initY;
-  private int distance;
-  private final int number = 1;
-  private double angle;
+  private static final int NUMARGS = 1;
 
   public Forward(String[] varargs, Control control){
     super(varargs);
-    super.numberOfArgs=number;
-    distance = Integer.parseInt(varargs[0]);
-    Control myControl = control;
-    initX = myControl.getTurtleCol();
-    initY = myControl.getTurtleRow();
-    angle = myControl.getTurtleAngle();
-    int newX = (int) (distance*(Math.cos(angle)));
-    int newY = (int) (distance*(Math.sin(angle)));
-    myControl.updateTurtle(newX, newY, angle);
+    super.numberOfArgs= NUMARGS;
+    int distance = Integer.parseInt(varargs[0]);
+    double initX = control.getTurtleCol();
+    double initY = control.getTurtleRow();
+    double angle = control.getTurtleAngle();
+    double newX = (distance *(Math.cos(Math.toRadians(angle%360))));
+    double newY = (distance *(Math.sin(Math.toRadians(angle%360))));
+    control.updateTurtle(newX, newY, 0);
   }
 
 }

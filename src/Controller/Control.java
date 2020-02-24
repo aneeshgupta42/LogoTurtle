@@ -246,7 +246,7 @@ public class Control {
     return turtleAngle;
   }
 
-  public void updateTurtle(int col, int row, double angle){
+  public void updateTurtle(double col, double row, double angle){
     turtleRow = myTurtle.getTurtleRow();
     turtleCol = myTurtle.getTurtleCol();
     turtleAngle = myTurtle.getTurtleAngle();
