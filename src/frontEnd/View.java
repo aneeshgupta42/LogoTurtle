@@ -165,6 +165,7 @@ public class View extends Application {
   private void setTurtlePosition(ImageView image) {
     image.setX(DISPLAY_WIDTH/2-image.getBoundsInLocal().getWidth()/2);
     image.setY(DISPLAY_HEIGHT/2-image.getBoundsInLocal().getHeight()/2);
+    image.setRotate(-90);
     myTurtle.initializeLinePosition(image.getX(), image.getY());
   }
 
