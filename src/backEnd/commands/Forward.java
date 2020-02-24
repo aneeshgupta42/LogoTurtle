@@ -7,10 +7,10 @@ public class Forward extends Command {
 
   public Forward(){
     super();
-    super.numberOfArgs=number;
+    super.numberOfArgs=NUMARGS;
   }
   public Forward(String[] varargs, Control control){
-    super(varargs);
+    super(varargs, control);
     super.numberOfArgs= NUMARGS;
     int distance = Integer.parseInt(varargs[0]);
     double initX = control.getTurtleCol();
