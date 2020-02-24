@@ -23,6 +23,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import java.awt.Dimension;
@@ -47,6 +48,7 @@ public class View extends Application {
   private Pen myPen;
   private Control control;
   private Rectangle rectangle;
+  private Line myLine;
 
   public static final String TITLE = "JavaFX Animation Example";
   public static final Dimension DEFAULT_SIZE = new Dimension(1200, 1200);
@@ -70,9 +72,8 @@ public class View extends Application {
   private static final String[] languages = { "English", "Chinese", "French",
           "German", "Italian","Portuguese","Russian","Spanish","Urdu" };
   private static final String BACKGROUND_PROMPT  = "Background Color";
-  private static final String[] backgroundColor = {"red", "yellow"};
   private static final String PEN_PROMPT  = "Pen Color";
-  private static final String[] penColor = {"red", "yellow", "blue"};
+  private static final String[] colorNames = {"red", "yellow", "blue"};
   public static final Color[] colors = {Color.RED, Color.YELLOW, Color.BLUE};
   private static final HashMap<String, Color> map= new HashMap<>();
 
@@ -83,7 +84,7 @@ public class View extends Application {
     control = new Control(myTurtle);
     //pass in turtle to control (THis was changed, change also in control)
     for (int i=0; i< colors.length; i++){
-      map.put(penColor[i], colors[i]);
+      map.put(colorNames[i], colors[i]);
     }
 
   }
@@ -151,14 +152,16 @@ public class View extends Application {
     rectangle.getStyleClass().add("group");
     ImageView turtleimage = (ImageView) myTurtle.displayTurtle();
     setTurtlePosition(turtleimage);
+    myTurtle.setLine(myLine);
     //turtleimage.setX(750);
-    gridPane.getChildren().addAll(rectangle, turtleimage);
+    gridPane.getChildren().addAll(rectangle, turtleimage, myLine);
     return gridPane;
   }
 
   private void setTurtlePosition(ImageView image) {
     image.setX(DISPLAY_WIDTH/2-image.getBoundsInLocal().getWidth()/2);
     image.setY(DISPLAY_HEIGHT/2-image.getBoundsInLocal().getHeight()/2);
+    myTurtle.initializeLinePosition(image.getX(), image.getY());
   }
 
 
@@ -270,7 +273,7 @@ public class View extends Application {
     control.passLanguage("English");
     ComboBox background_box =
         new ComboBox(FXCollections
-            .observableArrayList(backgroundColor));
+            .observableArrayList(colorNames));
     background_box.setPromptText(BACKGROUND_PROMPT);
 
     //Create action event
@@ -287,7 +290,7 @@ public class View extends Application {
 
     ComboBox pen_box =
         new ComboBox(FXCollections
-            .observableArrayList(penColor));
+            .observableArrayList(colorNames));
     pen_box.setPromptText(PEN_PROMPT);
 
     //Create action event
@@ -295,7 +298,7 @@ public class View extends Application {
         new EventHandler<ActionEvent>() {
           public void handle(ActionEvent e)
           {
-            // add something here
+            myLine.setStroke(map.get(pen_box.getValue().toString()));
           }
         };
     // Set on action
