@@ -77,11 +77,12 @@ public class View extends Application {
   private static final String[] colorNames = {"red", "yellow", "blue"};
   public static final Color[] colors = {Color.RED, Color.YELLOW, Color.BLUE};
   private static final HashMap<String, Color> map= new HashMap<>();
+  private BorderPane root;
 
 
   public View() {
     myStage = new Stage();
-    myTurtle = new Turtle();
+    myTurtle = new Turtle(this);
     //control = new Control(myTurtle);
     control = new Control();
     myLine = new Line();
@@ -113,7 +114,7 @@ public class View extends Application {
    */
 
   private Scene makeScene (int width, int height) {
-    BorderPane root = new BorderPane();
+    root = new BorderPane();
     HBox hbox = addHBox();
     root.setTop(hbox);
     display_window = makeDisplayWindow();
@@ -136,23 +137,10 @@ public class View extends Application {
   }
 
   private Node makeDisplayWindow(){
-    /*Group gridPane = new Group();
-    gridPane.setHgap(10);
-    gridPane.setVgap(10);
-    gridPane.setPadding(new Insets(0, 10, 0, 10));
-    //gridPane.setMaxSize(1200, 400);
-    gridPane.setMinHeight(400);
-    gridPane.setMinWidth(1000);
-    gridPane.setAlignment(Pos.CENTER);
-    display_height = gridPane.getHeight();
-    Node turtleimage = myTurtle.displayTurtle();
-    Button button2 = new Button("Clear");
-    GridPane.setConstraints(turtleimage, 50, 6);
-    gridPane.getChildren().add(turtleimage);
-    return gridPane;*/
     Group gridPane = new Group();
     rectangle = new Rectangle(DISPLAY_WIDTH, DISPLAY_HEIGHT);
-    rectangle.getStyleClass().add("group");
+    //rectangle = new Rectangle();
+    rectangle.getStyleClass().add("rectangle");
     ImageView turtleimage = (ImageView) myTurtle.displayTurtle();
     setTurtlePosition(turtleimage);
     myTurtle.setLine(myLine);
@@ -164,7 +152,8 @@ public class View extends Application {
   private void setTurtlePosition(ImageView image) {
     image.setX(DISPLAY_WIDTH/2-image.getBoundsInLocal().getWidth()/2);
     image.setY(DISPLAY_HEIGHT/2-image.getBoundsInLocal().getHeight()/2);
-    myTurtle.initializeLinePosition(image.getX(), image.getY());
+    image.setRotate(-90);
+    myTurtle.initializeLinePosition(image.getX(), image.getY(), image.getRotate());
   }
 
 
@@ -173,6 +162,10 @@ public class View extends Application {
    // gridPane.setMinHeight(800);
     gridPane.setMinWidth(400);
     return gridPane;
+  }
+
+  public void addLineToRoot(Line line){
+    root.getChildren().add(line);
   }
 
   private Node makeCommandWindow(){
@@ -198,7 +191,7 @@ public class View extends Application {
       control.parseCommand();
       //myTurtle.move(50.5,50.666,0);
     });
-    Button clearButton = new Button("Clear");
+    Button clearButton = new Button("Clear Text");
     clearButton.setPrefSize(100, 20);
 
     clearButton.setOnAction(action -> {
