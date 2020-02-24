@@ -9,9 +9,7 @@ import javafx.scene.layout.GridPane;
 public class Turtle implements Update{
   private static final String TURTLE = "turtle_25.png";
   ImageView myTurtle;
-  private int turtleCol =0;
-  private int turtleRow = 0;
-  private int turtleAngle = 0;
+  private double turtleAngle = 0;
 
   public Turtle(){
 
@@ -24,23 +22,23 @@ public class Turtle implements Update{
     return myTurtle;
   }
 
-  public void move(int x, int y, int angle){
-    GridPane.setConstraints(myTurtle, x, y);
-    turtleCol = x;
-    turtleRow = y;
-    myTurtle.setRotate(angle);
+  public void move(double x, double y, double angle){
+    myTurtle.setX(myTurtle.getX()+x);
+    myTurtle.setY(myTurtle.getY()+y);
+    myTurtle.setRotate(turtleAngle + angle);
+    turtleAngle = turtleAngle + angle;
   }
 
   //get turtle position
-  public int getTurtleCol(){
-    return turtleCol;
+  public double getTurtleCol(){
+    return myTurtle.getX();
   }
 
-  public int getTurtleRow(){
-    return turtleRow;
+  public double getTurtleRow(){
+    return myTurtle.getY();
   }
 
-  public int getTurtleAngle(){
+  public double getTurtleAngle(){
     return turtleAngle;
   }
 

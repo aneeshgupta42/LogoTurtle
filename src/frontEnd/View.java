@@ -182,6 +182,7 @@ public class View extends Application {
       myText = inputArea.getText();
       control.passCommand(myText);
       control.parseCommand();
+      myTurtle.move(50.5,50.666,0);
     });
     Button clearButton = new Button("Clear");
     clearButton.setPrefSize(100, 20);
