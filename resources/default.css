@@ -36,3 +36,7 @@
   -fx-border-radius: 5;
   -fx-border-color: grey;
 }
+
+.rectangle {
+  -fx-fill: grey;
+}

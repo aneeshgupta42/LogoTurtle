@@ -152,7 +152,8 @@ public class View extends Application {
     return gridPane;*/
     Group gridPane = new Group();
     rectangle = new Rectangle(DISPLAY_WIDTH, DISPLAY_HEIGHT);
-    rectangle.getStyleClass().add("group");
+    //rectangle = new Rectangle();
+    rectangle.getStyleClass().add("rectangle");
     ImageView turtleimage = (ImageView) myTurtle.displayTurtle();
     setTurtlePosition(turtleimage);
     myTurtle.setLine(myLine);
@@ -198,7 +199,7 @@ public class View extends Application {
       control.parseCommand();
       //myTurtle.move(50.5,50.666,0);
     });
-    Button clearButton = new Button("Clear");
+    Button clearButton = new Button("Clear Text");
     clearButton.setPrefSize(100, 20);
 
     clearButton.setOnAction(action -> {
