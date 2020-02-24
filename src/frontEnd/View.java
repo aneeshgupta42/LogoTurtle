@@ -64,9 +64,10 @@ public class View extends Application {
   private double display_width;
 
   public View() {
-    control = new Control();
     myStage = new Stage();
     myTurtle = new Turtle();
+    control = new Control(myTurtle);
+    //pass in turtle to control (THis was changed, change also in control)
   }
 
   @Override
@@ -251,7 +252,7 @@ public class View extends Application {
     // Label to display the selected menuitem
 
     Label selected = new Label("default item selected");
-
+    control.passLanguage("English");
     //Create action event
     EventHandler<ActionEvent> event =
         new EventHandler<ActionEvent>() {

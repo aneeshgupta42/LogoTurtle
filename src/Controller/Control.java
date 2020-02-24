@@ -44,16 +44,16 @@ public class Control {
   private Map<String, String> variablesUsed = new HashMap<>();
   private List<String> words;
   private ResourceBundle myResources;
-  private Turtle turtle;
+  private Turtle myTurtle;
   private int turtleCol;
   private int turtleRow;
   private int turtleAngle;
 
-  public Control() {
+  public Control(Turtle turtle) {
     myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + FILE);
     error = new ErrorHandler();
     parser = new Parser();
-    turtle = new Turtle();
+    myTurtle = turtle;
   }
 
   public Map getVariables() {
@@ -129,8 +129,8 @@ public class Control {
       try {
         Class cls = Class.forName(com);
         Object objectCommand;
-        Constructor constructor = cls.getConstructor(String[].class);
-        objectCommand = constructor.newInstance((Object) new String[]{"1", "1"});
+        Constructor constructor = cls.getConstructor(String[].class, Control.class);
+        objectCommand = constructor.newInstance((Object) new String[]{"1", "1"}, (Object) this);
         Command commandGiven = (Command) objectCommand;
         commandGiven.setControl(this);
         args = commandGiven.getNumberOfArgs();
@@ -170,8 +170,8 @@ public class Control {
     try {
       Class cls = Class.forName(com);
       Object objectCommand;
-      Constructor constructor = cls.getConstructor(String[].class);
-      objectCommand = constructor.newInstance((Object) new String[]{arg, arg2});
+      Constructor constructor = cls.getConstructor(String[].class, Control.class);
+      objectCommand = constructor.newInstance((Object) new String[]{arg, arg2}, (Object) this);
       Command commandGiven = (Command) objectCommand;
       commandGiven.setControl(this);
       createCommand(commandGiven, parser1);
@@ -194,11 +194,11 @@ public class Control {
   }
 
 
-  public void passTurtle(Turtle myTurtle){
-    turtle = myTurtle;
-    turtleRow = turtle.getTurtleRow();
-    turtleCol = turtle.getTurtleCol();
-    turtleAngle = turtle.getTurtleAngle();
+  public void passTurtle(Turtle turtle){
+    myTurtle = turtle;
+    turtleRow = myTurtle.getTurtleRow();
+    turtleCol = myTurtle.getTurtleCol();
+    turtleAngle = myTurtle.getTurtleAngle();
     System.out.println("Got turtle: Control:"+turtleCol+turtleRow+turtleAngle);
   }
 
@@ -215,11 +215,14 @@ public class Control {
   }
 
   public void updateTurtle(int col, int row, double angle){
-    turtleRow = turtle.getTurtleRow();
-    turtleCol = turtle.getTurtleCol();
-    turtleAngle = turtle.getTurtleAngle();
-    turtle.move(col, row, angle);
+    turtleRow = myTurtle.getTurtleRow();
+    turtleCol = myTurtle.getTurtleCol();
+    turtleAngle = myTurtle.getTurtleAngle();
+    myTurtle.move(col, row, angle);
   }
 
+  public Turtle getTurtle() {
+    return myTurtle;
+  }
 }
 

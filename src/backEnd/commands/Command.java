@@ -24,7 +24,7 @@ public abstract class Command {
 
   public Command(String[] varargs, Control control) {
     myControl = control;
-    System.out.println("Hit this");
+    System.out.println("HIT COMMAND CONSTRUCT");
   }
 
   public Command(String [] varargs){
