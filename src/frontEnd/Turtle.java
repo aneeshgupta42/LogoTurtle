@@ -14,9 +14,13 @@ public class Turtle implements Update{
   private boolean penDown = true;
   private double lineStartXPosition;
   private double lineStartYPosition;
+  private double turtleStartingXPos;
+  private double turtleStartingYPos;
   Line myLine;
+  View myView;
 
-  public Turtle(){
+  public Turtle(View view){
+    myView = view;
 
   }
 
@@ -33,6 +37,8 @@ public class Turtle implements Update{
   }
 
   public void move(double x, double y, double angle){
+    turtleStartingXPos = myTurtle.getX();
+    turtleStartingYPos= myTurtle.getY();
     myTurtle.setX(myTurtle.getX()+x);
     myTurtle.setY(myTurtle.getY()+y);
     myTurtle.setRotate(turtleAngle + angle);
@@ -43,10 +49,13 @@ public class Turtle implements Update{
   }
 
   private void drawPen() {
-    myLine.setStartX(lineStartXPosition);
-    myLine.setStartY(lineStartYPosition);
-    myLine.setEndX(myTurtle.getX());
-    myLine.setEndY(myTurtle.getY());
+    Line line = new Line();
+    myLine=line;
+    line.setStartX(turtleStartingXPos);
+    line.setStartY(turtleStartingYPos);
+    line.setEndX(myTurtle.getX());
+    line.setEndY(myTurtle.getY());
+    myView.addLineToRoot(myLine);
   }
 
   //get turtle position
