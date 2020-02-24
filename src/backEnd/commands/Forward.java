@@ -21,5 +21,4 @@ public class Forward extends Command {
     int newY = (int) (distance*(Math.sin(angle)));
     myControl.updateTurtle(newX, newY, angle);
   }
-
 }
