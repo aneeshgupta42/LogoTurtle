@@ -38,23 +38,26 @@ public class Turtle implements Update{
 
   public void move(double x, double y, double angle){
     turtleStartingXPos = myTurtle.getX();
+    System.out.println("hi" + turtleStartingXPos + " " + x + " " + y + " " + angle);
     turtleStartingYPos= myTurtle.getY();
     myTurtle.setX(myTurtle.getX()+x);
     myTurtle.setY(myTurtle.getY()+y);
     myTurtle.setRotate(turtleAngle + angle);
     turtleAngle = turtleAngle + angle;
-    if(penDown==true){
-      drawPen();
+    if(penDown){
+      drawPen(x, y);
     }
   }
 
-  private void drawPen() {
+  private void drawPen(double x, double y) {
     Line line = new Line();
     myLine=line;
     line.setStartX(turtleStartingXPos);
-    line.setStartY(turtleStartingYPos);
-    line.setEndX(myTurtle.getX());
-    line.setEndY(myTurtle.getY());
+
+    //line.setStartY(turtleStartingYPos+myTurtle.getBoundsInLocal().getHeight());
+    line.setStartY(200);
+    line.setEndX(turtleStartingXPos);
+    line.setEndY(100);
     myView.addLineToRoot(myLine);
   }
 

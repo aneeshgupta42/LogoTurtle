@@ -133,7 +133,6 @@ public class Control {
         Constructor constructor = cls.getConstructor(String[].class, Control.class);
         objectCommand = constructor.newInstance((Object) new String[]{"1", "1"}, (Object) this);
         Command commandGiven = (Command) objectCommand;
-        commandGiven.setControl(this);
         args = commandGiven.getNumberOfArgs();
       } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
         error.handleCommandClassNotFound();
@@ -178,7 +177,6 @@ public class Control {
       Constructor constructor = cls.getConstructor(String[].class, Control.class);
       objectCommand = constructor.newInstance((Object) new String[]{arg, arg2}, (Object) this);
       Command commandGiven = (Command) objectCommand;
-      commandGiven.setControl(this);
       createCommand(commandGiven, parser);
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
       error.handleCommandClassNotFound();

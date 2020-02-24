@@ -14,6 +14,7 @@ public class Forward extends Command {
     double angle = control.getTurtleAngle();
     double newX = (distance *(Math.cos(Math.toRadians(angle%360))));
     double newY = (distance *(Math.sin(Math.toRadians(angle%360))));
+    System.out.println("d " + distance);
     control.updateTurtle(newX, newY, 0);
   }
 }
