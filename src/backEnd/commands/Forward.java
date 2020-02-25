@@ -23,6 +23,7 @@ public class Forward extends Command {
     double newY = -(distance *(Math.cos(Math.toRadians((angle)))));
     System.out.println("d " + distance);
     control.updateTurtle(newX, newY, 0, distance);
+    System.out.println("fd " + newX +" "+ newY +" "+  distance);
   }
 
   @Override
