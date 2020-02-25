@@ -22,10 +22,6 @@ public class Repeat extends Command {
 
   @Override
   public int repeatCom(){
-  //  for(int i=0;i<repetition;i++){
-  //   c.userInputCom();
- // }
     return repetition;
   }
-
 }

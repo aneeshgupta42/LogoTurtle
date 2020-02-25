@@ -11,17 +11,18 @@ public class StoreLists {
 
   public StoreLists(){
     coms = new LinkedList<>();
-    args = new LinkedList<>();
     lines = new LinkedList<>();
+    args = new LinkedList<>();
   }
 
-  public void store(String line, LinkedList<String> arg) {
+  public void store(String line){
     lines.push(line);
+  }
+  public void storeArg(LinkedList<String> arg) {
 
     for (String s:arg) {
       args.add(s);
     }
-
   }
 
   public Deque print(){
