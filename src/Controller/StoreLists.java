@@ -18,8 +18,6 @@ public class StoreLists {
   public void store(String line, String arg) {
     lines.push(line);
     args.push(arg);
-    System.out.println(lines);
-    System.out.println(args);
   }
 
   public Deque print(){
@@ -27,17 +25,6 @@ public class StoreLists {
   }
   public Deque print2(){
     return args;
-  }
-
-  public void storeCom(Command command){
-    coms.push(command);
-  }
-
-  public Command runCom(){
-    for (Command c: coms) {
-      return c;
-    }
-    return null;
   }
 
 }

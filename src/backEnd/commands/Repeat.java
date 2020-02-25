@@ -1,6 +1,7 @@
 package backEnd.commands;
 
 import Controller.Control;
+import java.util.LinkedList;
 
 public class Repeat extends Command {
 
@@ -8,11 +9,11 @@ public class Repeat extends Command {
   private Control c;
   private static final int number =  2;
 
-  public Repeat(String[] varargs, Control control) {
+  public Repeat(LinkedList<String> varargs, Control control){
     super(varargs, control);
     super.setControl(control);
     c = control;
-    repetition = Integer.parseInt(varargs[0]);
+    repetition = Integer.parseInt(varargs.get(0));
     super.numberOfArgs = number;
   }
 
