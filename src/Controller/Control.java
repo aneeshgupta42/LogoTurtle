@@ -94,8 +94,7 @@ public class Control {
     for (String word : line.split(WHITESPACE))
       if (word.trim().length() > 0) {
         if (!parser.getSymbol(word).equals(ARGUMENT) && !parser.getSymbol(word).equals(VARIABLE)) {
-          if (parser.getSymbol(word).equals(LIST_END) || parser.getSymbol(word)
-              .equals(LIST_START)) {
+          if (parser.getSymbol(word).equals(LIST_END) || parser.getSymbol(word).equals(LIST_START)) {
             command.add(word);
           } else {
             command.push(word);
@@ -115,10 +114,11 @@ public class Control {
 
   public void coordinateCommands() {
     int argNum = 0;
+    System.out.println(argument);
+    System.out.println(command);
     if (!argument.isEmpty()) {
       userCom = command.pop();
       makeClassPathToCommand(parser);
- //     arg = argument.pollLast();
       try {
         Class cls = Class.forName(com);
         Object objectCommand;
@@ -132,9 +132,9 @@ public class Control {
       for (int i =0;i<argNum;i++){
         args.push(argument.pollLast());
       }
+      if(argNum==0) args = null;
       checkIfList();
-     // if (args == 2)
-  //      arg2 = argument.pollLast();
+      System.out.println(commandArguments);
       passCommand();
     }
     if (!command.isEmpty() && argument.isEmpty()) {
@@ -146,14 +146,15 @@ public class Control {
   }
 
   private void checkIfList() {
-    if(inList)
-      lists.store(userCom, arg);
-    if (parser.getSymbol(userCom).equals(LIST_START))
+    if (parser.getSymbol(userCom).equals(LIST_START)){
       commandArguments = true;
-    if (parser.getSymbol(userCom).equals(LIST_END))
+    }
+    if (parser.getSymbol(userCom).equals(LIST_END)){
       commandArguments = false;
-    if (commandArguments && !parser.getSymbol(userCom).equals(LIST_START) && !parser.getSymbol(userCom).equals(LIST_END))
-      lists.store(userCom, arg);
+    }
+    if ((commandArguments && !parser.getSymbol(userCom).equals(LIST_START) && !parser.getSymbol(userCom).equals(LIST_END))){
+      lists.store(userCom, args);
+    }
   }
 
   private void makeClassPathToCommand(Parser parser1) {
@@ -171,6 +172,7 @@ public class Control {
       Command commandGiven = (Command) objectCommand;
       if(commandArguments==false && userfunction==null && !parser.getSymbol(userCom).equals(LIST_END) && once==false) {
         userfunction = commandGiven;
+        System.out.println("hi");
         once = true;
       }
       createCommand(commandGiven, parser);
@@ -200,8 +202,9 @@ public class Control {
   public void userInputCom(int b){
     System.out.println("entered");
     System.out.println(commandArguments);
-    if(b==1){
+    if(b==0){
       System.out.println("done");
+      inList=false;
       hold();
     }
     else {
