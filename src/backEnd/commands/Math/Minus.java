@@ -17,10 +17,10 @@ public class Minus extends Command {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 
-        double a = Double.parseDouble(varargs.get(0));
-        minus = a * -1;
+        double argOne = Double.parseDouble(varargs.get(0));
+        minus = argOne * -1;
 
-        System.out.println("The negative is: " + minus);
+        System.out.println("Minus is: " + minus);
     }
 
     @Override

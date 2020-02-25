@@ -17,9 +17,9 @@ public class Product extends Command {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 
-        double a = Double.parseDouble(varargs.get(0));
-        double b = Double.parseDouble(varargs.get(1));
-        product = a * b;
+        double argTwo = Double.parseDouble(varargs.get(0));
+        double argOne = Double.parseDouble(varargs.get(1));
+        product = argTwo * argOne;
 
         System.out.println("Product is: " + product);
     }

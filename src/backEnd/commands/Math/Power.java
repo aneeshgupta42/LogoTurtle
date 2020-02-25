@@ -18,11 +18,11 @@ public class Power extends Command {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 
-        double power = Double.parseDouble(varargs.get(0));
-        double base = Double.parseDouble(varargs.get(1));
-        result = Math.pow(base, power);
+        double argTwo = Double.parseDouble(varargs.get(0));
+        double argOne = Double.parseDouble(varargs.get(1));
+        result = Math.pow(argOne, argTwo);
 
-        System.out.println("The exponential result is: " + result);
+        System.out.println("Power is: " + result);
     }
 
     @Override

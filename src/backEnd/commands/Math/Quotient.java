@@ -5,8 +5,8 @@ import backEnd.commands.Command;
 import java.util.LinkedList;
 
 public class Quotient extends Command {
-  private double quotient;
   private static final int NUMARGS = 2;
+  private double quotient;
 
   public Quotient() {
     super();
@@ -17,9 +17,9 @@ public class Quotient extends Command {
     super(varargs, control);
     super.numberOfArgs = NUMARGS;
 
-    double a = Double.parseDouble(varargs.get(0));
-    double b = Double.parseDouble(varargs.get(1));
-    quotient = b / a;
+    double argTwo = Double.parseDouble(varargs.get(0));
+    double argOne = Double.parseDouble(varargs.get(1));
+    quotient = argOne / argTwo;
 
     System.out.println("Quotient is " + quotient);
   }

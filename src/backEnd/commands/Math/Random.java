@@ -18,11 +18,11 @@ public class Random extends Command {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 
-        double max = Double.parseDouble(varargs.get(0));
-        random = Math.random() * max;
+        double argOne = Double.parseDouble(varargs.get(0));
+        random = Math.random() * argOne;
         // insert check if max is too big ?
 
-        System.out.println("The random number is: " + random);
+        System.out.println("Random is: " + random);
     }
 
     @Override
