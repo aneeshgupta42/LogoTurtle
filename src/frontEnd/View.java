@@ -79,6 +79,7 @@ public class View extends Application {
   private static final HashMap<String, Color> map= new HashMap<>();
   private BorderPane root;
   private Color lineColor = Color.BLACK;
+  private ImageView turtleimage;
 
 
   public View() {
@@ -142,7 +143,7 @@ public class View extends Application {
     rectangle = new Rectangle(DISPLAY_WIDTH, DISPLAY_HEIGHT);
     //rectangle = new Rectangle();
     rectangle.getStyleClass().add("rectangle");
-    ImageView turtleimage = (ImageView) myTurtle.displayTurtle();
+    turtleimage = (ImageView) myTurtle.displayTurtle();
     setTurtlePosition(turtleimage);
     //turtleimage.setX(750);
     display.getChildren().addAll(rectangle, turtleimage);
@@ -152,7 +153,7 @@ public class View extends Application {
   public void setTurtlePosition(ImageView image) {
     image.setX(DISPLAY_WIDTH/2-image.getBoundsInLocal().getWidth()/2);
     image.setY(DISPLAY_HEIGHT/2-image.getBoundsInLocal().getHeight()/2);
-    //image.setRotate(-90);
+    image.setRotate(0);
     myTurtle.initializeLinePosition(image.getX(), image.getY(), image.getRotate());
   }
 
@@ -232,11 +233,22 @@ public class View extends Application {
     hbox.setSpacing(10);
 //    hbox.setStyle("-fx-background-color: #336699");
 
-    Button buttonCurrent = new Button("Current");
+    Button buttonCurrent = new Button("Help");
     buttonCurrent.setPrefSize(100, 20);
 
-    Button buttonProjected = new Button("Projected");
-    buttonProjected.setPrefSize(100, 20);
+    Button reset_display = new Button("Reset Display");
+    reset_display.setPrefSize(100, 20);
+    EventHandler<ActionEvent> event2 =
+        new EventHandler<ActionEvent>() {
+          public void handle(ActionEvent e)
+          {
+            resetScreen();
+            //rectangle.setFill(map.get(reset_display.getValue().toString()));
+          }
+        };
+    // Set on action
+    reset_display.setOnAction(event2);
+
     FileChooser fileChooser = new FileChooser();
     Button button = new Button("Select File");
     button.setOnAction(e -> {
@@ -293,7 +305,7 @@ public class View extends Application {
     pen_box.setPromptText(PEN_PROMPT);
 
     //Create action event
-    EventHandler<ActionEvent> event2 =
+    EventHandler<ActionEvent> event3 =
         new EventHandler<ActionEvent>() {
           public void handle(ActionEvent e)
           {
@@ -304,10 +316,15 @@ public class View extends Application {
           }
         };
     // Set on action
-    pen_box.setOnAction(event2);
+    pen_box.setOnAction(event3);
 
-    hbox.getChildren().addAll(buttonCurrent, buttonProjected, button, language_box, background_box, pen_box);
+    hbox.getChildren().addAll(buttonCurrent, reset_display, button, language_box, background_box, pen_box);
     return hbox;
+  }
+
+  private void resetScreen() {
+    setTurtlePosition(turtleimage);
+    display.getChildren().removeIf(object -> object != turtleimage && object != rectangle);
   }
 
   private void scanFile(File file) throws FileNotFoundException {
