@@ -47,6 +47,7 @@ public class Control {
   private Command userfunction;
   private boolean once = false;
   private boolean inList =false;
+  private LinkedList<String> args;
 
   public Control() {
     error = new ErrorHandler();
@@ -79,6 +80,7 @@ public class Control {
   private void parseText(String lines) {
     command = new LinkedList<>();
     argument = new LinkedList<>();
+    args = new LinkedList<>();
     lists = new StoreLists();
     for (String line : lines.split(NEWLINE))
       if (line.contains("#")) {
@@ -112,34 +114,38 @@ public class Control {
   }
 
   public void coordinateCommands() {
-    int args = 0;
+    int argNum = 0;
     if (!argument.isEmpty()) {
-      arg = argument.pollLast();
-      System.out.println(command);
-      checkIfList();
+      userCom = command.pop();
+      makeClassPathToCommand(parser);
+ //     arg = argument.pollLast();
       try {
         Class cls = Class.forName(com);
         Object objectCommand;
         Constructor constructor = cls.getConstructor();
         objectCommand = constructor.newInstance();
         Command commandGiven = (Command) objectCommand;
-        args = commandGiven.getNumberOfArgs();
+        argNum = commandGiven.getNumberOfArgs();
       } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
         error.handleCommandClassNotFound();
       }
-      if (args == 2)
-        arg2 = argument.pollLast();
+      for (int i =0;i<argNum;i++){
+        args.push(argument.pollLast());
+      }
+      checkIfList();
+     // if (args == 2)
+  //      arg2 = argument.pollLast();
       passCommand();
     }
     if (!command.isEmpty() && argument.isEmpty()) {
+      userCom = command.pop();
+      makeClassPathToCommand(parser);
       checkIfList();
       passCommand();
     }
   }
 
   private void checkIfList() {
-    userCom = command.pop();
-    makeClassPathToCommand(parser);
     if(inList)
       lists.store(userCom, arg);
     if (parser.getSymbol(userCom).equals(LIST_START))
@@ -156,13 +162,12 @@ public class Control {
 
   public void passCommand() {
     System.out.println(com);
-    System.out.println(arg);
-    System.out.println(arg2);
+    System.out.println(args);
     try {
       Class cls = Class.forName(com);
       Object objectCommand;
-      Constructor constructor = cls.getConstructor(String[].class, Control.class);
-      objectCommand = constructor.newInstance((Object) new String[]{arg, arg2}, (Object) this);
+      Constructor constructor = cls.getConstructor(LinkedList.class, Control.class);
+      objectCommand = constructor.newInstance((Object) args, (Object) this);
       Command commandGiven = (Command) objectCommand;
       if(commandArguments==false && userfunction==null && !parser.getSymbol(userCom).equals(LIST_END) && once==false) {
         userfunction = commandGiven;
@@ -204,8 +209,6 @@ public class Control {
       argument = lists.print2();
       inList = true;
       b-=1;
-      System.out.println(command);
-      System.out.println(argument);
       coordinateCommands();
       userInputCom(b);
     }
@@ -218,7 +221,6 @@ public class Control {
     turtleRow = myTurtle.getTurtleRow();
     turtleCol = myTurtle.getTurtleCol();
     turtleAngle = myTurtle.getTurtleAngle();
-    //System.out.println("Got turtle: Control:" + turtleCol + turtleRow + turtleAngle);
   }
 
   public double getTurtleCol() {
