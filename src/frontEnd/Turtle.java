@@ -1,10 +1,19 @@
 package frontEnd;
 
+import javafx.animation.Animation;
+import javafx.animation.PathTransition;
+import javafx.animation.RotateTransition;
+import javafx.animation.SequentialTransition;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.shape.HLineTo;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.util.Duration;
 
 
 public class Turtle implements Update{
@@ -40,14 +49,42 @@ public class Turtle implements Update{
   public void move(double x, double y, double angle){
     turtleStartingXPos = myTurtle.getX();
     turtleStartingYPos= myTurtle.getY();
+    Animation animation = makeAnimation(myTurtle, x, y);
+    Animation rotate = makeRotate(myTurtle, angle);
+    //myView.addAnimation(animation);
+    if(x!=0 | y !=0) {
+      animation.play();
+    }
+    if (angle!=0) {
+      rotate.play();
+    }
+    //animation.play();
     myTurtle.setX(myTurtle.getX()+x);
     myTurtle.setY(myTurtle.getY()+y);
   //  System.out.println("hey" + turtleStartingYPos + " " + myTurtle.getY());
-    myTurtle.setRotate(turtleAngle + angle);
+    //myTurtle.setRotate(turtleAngle + angle);
     turtleAngle = turtleAngle + angle;
     if(penDown){
       drawPen(x, y);
     }
+  }
+
+  private Animation makeAnimation (Node agent, double x, double y) {
+    // create something to follow
+    Path path = new Path();
+    path.getElements().addAll(new MoveTo(turtleStartingXPos + myTurtle.getBoundsInLocal().getWidth()/2, turtleStartingYPos+ myTurtle.getBoundsInLocal().getHeight()/2), new LineTo(turtleStartingXPos + myTurtle.getBoundsInLocal().getWidth()/2+ x,turtleStartingYPos + myTurtle.getBoundsInLocal().getHeight()/2+ y));
+    // create an animation where the shape follows a path
+    PathTransition pt = new PathTransition(Duration.seconds(2), path, agent);
+    System.out.println(pt);
+    return new SequentialTransition(agent, pt);
+  }
+
+  private Animation makeRotate (Node agent, double angle) {
+    RotateTransition rt = new RotateTransition(Duration.seconds(2), agent);
+    rt.setFromAngle(turtleAngle);
+    rt.setToAngle(turtleAngle+ angle);
+    rt.setNode(agent);
+    return new SequentialTransition(agent, rt);
   }
 
   private void drawPen(double x, double y) {
@@ -61,7 +98,7 @@ public class Turtle implements Update{
 
     line.setEndX(turtleStartingXPos + x+ myTurtle.getBoundsInLocal().getWidth()/2);
     line.setEndY(turtleStartingYPos + y+ myTurtle.getBoundsInLocal().getHeight());
-    myView.addLineToRoot(myLine);
+    myView.addNodeToRoot(myLine);
   }
 
   //get turtle position
