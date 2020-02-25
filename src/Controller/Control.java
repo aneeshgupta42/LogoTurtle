@@ -94,7 +94,6 @@ public class Control {
           var = word;
           if (commandArguments) {
             dotimes = true;
-            commandArguments = false;
           }
           else {
             if (variablesUsed.containsKey(word)) {
@@ -116,6 +115,8 @@ public class Control {
 
   public void coordinateCommands() {
     int argNum = 0;
+  //  System.out.println(argument);
+   // System.out.println(command);
     userCom = command.pop();
     makeClassPathToCommand(parser);
     try {
@@ -139,6 +140,7 @@ public class Control {
       checkIfList();
       runCommand();
       if (!command.isEmpty() && argument.isEmpty()) {
+        checkIfList();
         makeClassPathToCommand(parser);
         runCommand();
       }
@@ -147,6 +149,7 @@ public class Control {
       checkIfList();
     } else if (!argument.isEmpty() && argument.size() <= argNum && argNum != 0) {
       String arg = argument.pollLast();
+      checkIfList();
       command.push(userCom);
       argument.add(arg);
     } else if (argNum == 0) {
@@ -175,9 +178,10 @@ public class Control {
   }
 
   public void runCommand() {
+    System.out.println("run");
     System.out.println(com);
     System.out.println(args);
-    if (commandArguments == false) {
+    if (commandArguments == false || dotimes) {
       obtainCommand();
     }
   }
@@ -189,8 +193,9 @@ public class Control {
       Constructor constructor = cls.getConstructor(LinkedList.class, Control.class);
       objectCommand = constructor.newInstance((Object) args, (Object) this);
       Command commandGiven = (Command) objectCommand;
-      if (commandArguments == false && userfunction == null && !parser.getSymbol(userCom).equals(LIST_END) && once == false) {
+      if (userfunction == null && !parser.getSymbol(userCom).equals(LIST_END) && once == false && !parser.getSymbol(userCom).equals(LIST_START)) {
         userfunction = commandGiven;
+        System.out.println(userfunction);
         once = true;
       }
       createCommand(commandGiven, parser);
@@ -205,9 +210,11 @@ public class Control {
     }
     if (parser1.getSymbol(userCom).equals("MakeVariable")) {
       variablesUsed = comm.getVariablesCreated();
+      System.out.println(variablesUsed);
     }
     if (commandArguments == false && userfunction != null && !comm.equals(userfunction) && parser.getSymbol(userCom).equals(LIST_END)) {
         int loop = userfunction.repeatCom();
+      System.out.println(userfunction);
         int i=0;
         userInputCom(loop,i);
     }
@@ -217,6 +224,7 @@ public class Control {
   }
 
   public void userInputCom(int loop, int i) {
+    System.out.println("Entered");
     if (loop == 0) {
       inList = false;
     } else {
