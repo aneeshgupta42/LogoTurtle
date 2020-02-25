@@ -17,8 +17,8 @@ public class Remainder extends Command {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 
-        double argTwo = Double.parseDouble(varargs.get(0));
-        double argOne = Double.parseDouble(varargs.get(1));
+        double argOne = Double.parseDouble(varargs.get(0));
+        double argTwo = Double.parseDouble(varargs.get(1));
         remainder = argOne % argTwo;
 
         System.out.println("The remainder is: " + remainder);
