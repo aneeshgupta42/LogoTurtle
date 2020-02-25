@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 public class Control {
-
+//check
   private static final String WHITESPACE = " ";
   private static final String NEWLINE = "\n";
   private static final String ARGUMENT = "Constant";
