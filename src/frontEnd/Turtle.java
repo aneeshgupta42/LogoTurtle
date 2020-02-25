@@ -21,8 +21,6 @@ public class Turtle implements Update{
 
   public Turtle(View view){
     myView = view;
-
-
   }
 
   public Node displayTurtle() {
