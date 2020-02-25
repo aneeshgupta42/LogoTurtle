@@ -28,4 +28,8 @@ public class Cosine extends Command {
         String ret = Double.toString(cosResult);
         return ret;
     }
+    @Override
+    public int repeatCom() {
+        return super.repeatCom();
+    }
 }

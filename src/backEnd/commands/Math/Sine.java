@@ -28,4 +28,8 @@ public class Sine extends Command {
     String ret = Double.toString(sinResult);
     return ret;
   }
+  @Override
+  public int repeatCom() {
+    return super.repeatCom();
+  }
 }

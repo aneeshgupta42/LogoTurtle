@@ -30,4 +30,8 @@ public class Random extends Command {
         String ret = Double.toString(random);
         return ret;
     }
+    @Override
+    public int repeatCom() {
+        return super.repeatCom();
+    }
 }

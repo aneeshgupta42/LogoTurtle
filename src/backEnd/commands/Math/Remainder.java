@@ -29,4 +29,8 @@ public class Remainder extends Command {
         String ret = Double.toString(remainder);
         return ret;
     }
+    @Override
+    public int repeatCom() {
+        return super.repeatCom();
+    }
 }

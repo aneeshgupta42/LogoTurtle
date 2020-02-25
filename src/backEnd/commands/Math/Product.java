@@ -29,4 +29,8 @@ public class Product extends Command {
         String ret = Double.toString(product);
         return ret;
     }
+    @Override
+    public int repeatCom() {
+        return super.repeatCom();
+    }
 }
