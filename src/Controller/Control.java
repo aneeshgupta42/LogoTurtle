@@ -42,6 +42,7 @@ public class Control {
   private int count = 0;
   private String var;
   private boolean runnable;
+  private int i=0;
 
   public Control() {
     error = new ErrorHandler();
@@ -158,13 +159,17 @@ public class Control {
 
   private void checkIfList() {
     if (parser.getSymbol(userCom).equals(LIST_START)) {
-      if(runnable){
+      i++;
+      if(runnable && i==1){
         commandArguments=false;
       }
       else commandArguments = true;
     }
     if (parser.getSymbol(userCom).equals(LIST_END)) {
-      commandArguments = false;
+      if(runnable && i==2){
+        commandArguments=true;
+      }
+      else commandArguments = false;
     }
     if ((commandArguments && !parser.getSymbol(userCom).equals(LIST_START) && !parser.getSymbol(userCom).equals(LIST_END)) || inList) {
       lists.store(userCom);
@@ -179,6 +184,7 @@ public class Control {
   public void runCommand() {
     System.out.println(com);
     System.out.println(args);
+    System.out.println(commandArguments);
     if (commandArguments == false || dotimes) {
       obtainCommand();
     }
