@@ -2,23 +2,26 @@ package backEnd.commands.Math;
 
 import Controller.Control;
 import backEnd.commands.Command;
-
 import java.util.LinkedList;
 
 public class Quotient extends Command {
-  private double a,b,quotient;
-  private static final int number =2;
+  private double quotient;
+  private static final int NUMARGS = 2;
 
-  public Quotient(){
+  public Quotient() {
     super();
-    super.numberOfArgs= number;
+    super.numberOfArgs = NUMARGS;
   }
 
-  public Quotient(LinkedList<String> varargs, Control control){
+  public Quotient(LinkedList<String> varargs, Control control) {
     super(varargs, control);
-    a = Double.parseDouble(varargs.get(0));
-    b = Double.parseDouble(varargs.get(1));
-    quotient = b/a;
+    super.numberOfArgs = NUMARGS;
+
+    double a = Double.parseDouble(varargs.get(0));
+    double b = Double.parseDouble(varargs.get(1));
+    quotient = b / a;
+
+    System.out.println("Quotient is " + quotient);
   }
 
   @Override

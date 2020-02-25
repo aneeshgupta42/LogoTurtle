@@ -4,29 +4,28 @@ import Controller.Control;
 import backEnd.commands.Command;
 import java.util.LinkedList;
 
-public class Product extends Command {
-    private static final int NUMARGS = 2;
-    private double product;
+public class Minus extends Command {
+    private static final int NUMARGS = 1;
+    private double minus;
 
-    public Product() {
+    public Minus() {
         super();
         super.numberOfArgs = NUMARGS;
     }
 
-    public Product(LinkedList<String> varargs, Control control){
+    public Minus(LinkedList<String> varargs, Control control) {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 
         double a = Double.parseDouble(varargs.get(0));
-        double b = Double.parseDouble(varargs.get(1));
-        product = a * b;
+        minus = a * -1;
 
-        System.out.println("Product is: " + product);
+        System.out.println("The negative is: " + minus);
     }
 
     @Override
     public String commandValueReturn() {
-        String ret = Double.toString(product);
+        String ret = Double.toString(minus);
         return ret;
     }
 }
