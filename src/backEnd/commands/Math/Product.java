@@ -17,8 +17,8 @@ public class Product extends Command {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 
-        double argTwo = Double.parseDouble(varargs.get(0));
-        double argOne = Double.parseDouble(varargs.get(1));
+        double argOne = Double.parseDouble(varargs.get(0));
+        double argTwo = Double.parseDouble(varargs.get(1));
         product = argTwo * argOne;
 
         System.out.println("Product is: " + product);
@@ -26,8 +26,7 @@ public class Product extends Command {
 
     @Override
     public String commandValueReturn() {
-        String ret = Double.toString(product);
-        return ret;
+        return Double.toString(product);
     }
     @Override
     public int repeatCom() {

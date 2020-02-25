@@ -27,8 +27,7 @@ public class Random extends Command {
 
     @Override
     public String commandValueReturn() {
-        String ret = Double.toString(random);
-        return ret;
+        return Double.toString(random);
     }
     @Override
     public int repeatCom() {

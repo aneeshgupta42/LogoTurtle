@@ -1,36 +1,44 @@
-package backEnd.commands.Math;
+package backEnd.commands.Boolean;
 
 import Controller.Control;
 import backEnd.commands.Command;
 import java.util.LinkedList;
-import java.lang.Math;
 
-public class Power extends Command {
+public class NotEqual extends Command {
     private static final int NUMARGS = 2;
-    private double result;
+    private static final double TRUE = 1.0;
+    private static final double FALSE = 0.0;
+    private double booleanResult;
 
-    public Power() {
+    public NotEqual() {
         super();
         super.numberOfArgs = NUMARGS;
     }
 
-    public Power(LinkedList<String> varargs, Control control) {
+    public NotEqual(LinkedList<String> varargs, Control control) {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 
         double argOne = Double.parseDouble(varargs.get(0));
         double argTwo = Double.parseDouble(varargs.get(1));
-        result = Math.pow(argOne, argTwo);
 
-        System.out.println("Power is: " + result);
+        if(argOne != argTwo) {
+            booleanResult = TRUE;
+        } else {
+            booleanResult = FALSE;
+        }
+
+        System.out.println("The notEquals result is: " + booleanResult);
     }
 
     @Override
     public String commandValueReturn() {
-        return Double.toString(result);
+        return Double.toString(booleanResult);
     }
+
     @Override
     public int repeatCom() {
         return super.repeatCom();
     }
 }
+

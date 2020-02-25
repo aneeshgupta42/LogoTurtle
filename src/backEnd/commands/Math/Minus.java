@@ -25,8 +25,7 @@ public class Minus extends Command {
 
     @Override
     public String commandValueReturn() {
-        String ret = Double.toString(minus);
-        return ret;
+        return Double.toString(minus);
     }
     @Override
     public int repeatCom() {

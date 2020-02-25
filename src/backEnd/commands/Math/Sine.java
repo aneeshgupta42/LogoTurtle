@@ -25,8 +25,7 @@ public class Sine extends Command {
 
   @Override
   public String commandValueReturn() {
-    String ret = Double.toString(sinResult);
-    return ret;
+    return Double.toString(sinResult);
   }
   @Override
   public int repeatCom() {
