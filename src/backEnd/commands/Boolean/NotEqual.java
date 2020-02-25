@@ -33,8 +33,7 @@ public class NotEqual extends Command {
 
     @Override
     public String commandValueReturn() {
-        String ret = Double.toString(booleanResult);
-        return ret;
+        return Double.toString(booleanResult);
     }
 
     @Override
