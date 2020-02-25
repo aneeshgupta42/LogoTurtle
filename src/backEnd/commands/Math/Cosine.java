@@ -25,8 +25,7 @@ public class Cosine extends Command {
 
     @Override
     public String commandValueReturn() {
-        String ret = Double.toString(cosResult);
-        return ret;
+        return Double.toString(cosResult);
     }
     @Override
     public int repeatCom() {

@@ -26,8 +26,7 @@ public class Quotient extends Command {
 
   @Override
   public String commandValueReturn() {
-    String ret = Double.toString(quotient);
-    return ret;
+    return Double.toString(quotient);
   }
   @Override
   public int repeatCom() {

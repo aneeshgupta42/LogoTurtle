@@ -26,8 +26,7 @@ public class Remainder extends Command {
 
     @Override
     public String commandValueReturn() {
-        String ret = Double.toString(remainder);
-        return ret;
+        return Double.toString(remainder);
     }
     @Override
     public int repeatCom() {

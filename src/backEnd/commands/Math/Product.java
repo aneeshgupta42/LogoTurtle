@@ -26,8 +26,7 @@ public class Product extends Command {
 
     @Override
     public String commandValueReturn() {
-        String ret = Double.toString(product);
-        return ret;
+        return Double.toString(product);
     }
     @Override
     public int repeatCom() {

@@ -26,8 +26,7 @@ public class Sum extends Command {
 
   @Override
   public String commandValueReturn() {
-    String ret = Double.toString(sum);
-    return ret;
+    return Double.toString(sum);
   }
   @Override
   public int repeatCom() {

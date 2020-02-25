@@ -25,8 +25,7 @@ public class ArcTangent extends Command {
 
     @Override
     public String commandValueReturn() {
-        String ret = Double.toString(arcTanResult);
-        return ret;
+        return Double.toString(arcTanResult);
     }
     @Override
     public int repeatCom() {

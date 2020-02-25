@@ -26,8 +26,7 @@ public class Difference extends Command {
 
     @Override
     public String commandValueReturn() {
-        String ret = Double.toString(diff);
-        return ret;
+        return Double.toString(diff);
     }
     @Override
     public int repeatCom() {

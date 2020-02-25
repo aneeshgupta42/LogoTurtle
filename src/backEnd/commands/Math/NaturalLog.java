@@ -25,8 +25,7 @@ public class NaturalLog extends Command {
 
     @Override
     public String commandValueReturn() {
-        String ret = Double.toString(log);
-        return ret;
+        return Double.toString(log);
     }
     @Override
     public int repeatCom() {

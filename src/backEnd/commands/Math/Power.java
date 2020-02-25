@@ -27,8 +27,7 @@ public class Power extends Command {
 
     @Override
     public String commandValueReturn() {
-        String ret = Double.toString(result);
-        return ret;
+        return Double.toString(result);
     }
     @Override
     public int repeatCom() {
