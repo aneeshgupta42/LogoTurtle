@@ -80,6 +80,7 @@ public class View extends Application {
   private BorderPane root;
   private Color lineColor = Color.BLACK;
   private ImageView turtleimage;
+  private HBox hbox;
 
 
   public View() {
@@ -118,12 +119,15 @@ public class View extends Application {
 
   private Scene makeScene (int width, int height) {
     root = new BorderPane();
-    HBox hbox = addHBox();
+    hbox = addHBox();
     root.setTop(hbox);
     display_window = makeDisplayWindow();
     root.setLeft(display_window);
     root.setRight(makeSideWindow());
     root.setBottom(makeCommandWindow());
+    turtleimage = (ImageView) myTurtle.displayTurtle();
+    setTurtlePosition(turtleimage);
+    root.getChildren().add(turtleimage);
     return new Scene(root);
   }
 
@@ -143,17 +147,16 @@ public class View extends Application {
     rectangle = new Rectangle(DISPLAY_WIDTH, DISPLAY_HEIGHT);
     //rectangle = new Rectangle();
     rectangle.getStyleClass().add("rectangle");
-    turtleimage = (ImageView) myTurtle.displayTurtle();
-    setTurtlePosition(turtleimage);
     //turtleimage.setX(750);
-    display.getChildren().addAll(rectangle, turtleimage);
+    display.getChildren().addAll(rectangle);
     return display;
   }
 
   public void setTurtlePosition(ImageView image) {
     image.setX(DISPLAY_WIDTH/2-image.getBoundsInLocal().getWidth()/2);
-    image.setY(DISPLAY_HEIGHT/2-image.getBoundsInLocal().getHeight()/2);
+    image.setY(70 + DISPLAY_HEIGHT/2-image.getBoundsInLocal().getHeight()/2);
     image.setRotate(0);
+    System.out.println(display.getLayoutY());
     myTurtle.initializeLinePosition(image.getX(), image.getY(), image.getRotate());
   }
 
@@ -169,9 +172,10 @@ public class View extends Application {
     return gridPane;
   }
 
-  public void addLineToRoot(Line line){
-    display.getChildren().add(line);
+  public void addNodeToRoot(Node object){
+    root.getChildren().add(object);
   }
+
 
   private Node makeCommandWindow(){
     HBox hbox = new HBox();
@@ -229,6 +233,7 @@ public class View extends Application {
 
   public HBox addHBox() {
     HBox hbox = new HBox();
+    hbox.setPrefHeight(70);
     hbox.setPadding(new Insets(15, 12, 15, 12));
     hbox.setSpacing(10);
 //    hbox.setStyle("-fx-background-color: #336699");
