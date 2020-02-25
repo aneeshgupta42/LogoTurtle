@@ -5,7 +5,7 @@ import backEnd.commands.Command;
 import java.util.LinkedList;
 
 public class Sine extends Command {
-  private final int NUMARGS = 1;
+  private static final int NUMARGS = 1;
   private double sinResult;
 
   public Sine() {
