@@ -1,7 +1,9 @@
 package backEnd.commands;
 
+import Controller.Control;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class MakeVariable extends Command {
@@ -12,11 +14,11 @@ public class MakeVariable extends Command {
   private static int number = 2;
 
 
-  public MakeVariable(String[] varargs) {
-    super(varargs);
+  public MakeVariable(LinkedList<String> varargs, Control control){
+    super(varargs, control);
     super.numberOfArgs = number;
-    key = varargs[0];
-    var = varargs[1];
+    key = varargs.get(0);
+    var = varargs.get(1);
   }
 
   @Override

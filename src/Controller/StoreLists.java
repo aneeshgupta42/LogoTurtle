@@ -11,22 +11,25 @@ public class StoreLists {
 
   public StoreLists(){
     coms = new LinkedList<>();
+    lines = new LinkedList<>();
     args = new LinkedList<>();
   }
 
-  public void store(String line) {
-      lines.push(line);
+  public void store(String line){
+    lines.push(line);
   }
+  public void storeArg(LinkedList<String> arg) {
 
-  public void storeCom(Command command){
-    coms.push(command);
-  }
-
-  public Command runCom(){
-    for (Command c: coms) {
-      return c;
+    for (String s:arg) {
+      args.add(s);
     }
-    return null;
+  }
+
+  public Deque print(){
+    return lines;
+  }
+  public Deque print2(){
+    return args;
   }
 
 }

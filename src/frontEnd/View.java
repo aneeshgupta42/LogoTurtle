@@ -16,6 +16,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -23,6 +24,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import java.awt.Dimension;
@@ -40,13 +42,14 @@ import javafx.util.Duration;
 
 public class View extends Application {
   private Scene myScene;
-  private GridPane grid;
+  private Group display;
   private Stage myStage;
 
   private Turtle myTurtle;
   private Pen myPen;
   private Control control;
   private Rectangle rectangle;
+  private Line myLine;
 
   public static final String TITLE = "JavaFX Animation Example";
   public static final Dimension DEFAULT_SIZE = new Dimension(1200, 1200);
@@ -70,19 +73,24 @@ public class View extends Application {
   private static final String[] languages = { "English", "Chinese", "French",
           "German", "Italian","Portuguese","Russian","Spanish","Urdu" };
   private static final String BACKGROUND_PROMPT  = "Background Color";
-  private static final String[] backgroundColor = {"red", "yellow"};
   private static final String PEN_PROMPT  = "Pen Color";
-  private static final String[] penColor = {"red", "yellow", "blue"};
+  private static final String[] colorNames = {"red", "yellow", "blue"};
   public static final Color[] colors = {Color.RED, Color.YELLOW, Color.BLUE};
   private static final HashMap<String, Color> map= new HashMap<>();
+  private BorderPane root;
+  private String lineColor;
 
 
   public View() {
-    control = new Control();
     myStage = new Stage();
-    myTurtle = new Turtle();
+    myTurtle = new Turtle(this);
+    //control = new Control(myTurtle);
+    control = new Control();
+    myLine = new Line();
+    display = new Group();
+    //pass in turtle to control (THis was changed, change also in control)
     for (int i=0; i< colors.length; i++){
-      map.put(penColor[i], colors[i]);
+      map.put(colorNames[i], colors[i]);
     }
 
   }
@@ -108,7 +116,7 @@ public class View extends Application {
    */
 
   private Scene makeScene (int width, int height) {
-    BorderPane root = new BorderPane();
+    root = new BorderPane();
     HBox hbox = addHBox();
     root.setTop(hbox);
     display_window = makeDisplayWindow();
@@ -131,41 +139,37 @@ public class View extends Application {
   }
 
   private Node makeDisplayWindow(){
-    /*Group gridPane = new Group();
-    gridPane.setHgap(10);
-    gridPane.setVgap(10);
-    gridPane.setPadding(new Insets(0, 10, 0, 10));
-    //gridPane.setMaxSize(1200, 400);
-    gridPane.setMinHeight(400);
-    gridPane.setMinWidth(1000);
-    gridPane.setAlignment(Pos.CENTER);
-    display_height = gridPane.getHeight();
-    Node turtleimage = myTurtle.displayTurtle();
-    Button button2 = new Button("Clear");
-    GridPane.setConstraints(turtleimage, 50, 6);
-    gridPane.getChildren().add(turtleimage);
-    return gridPane;*/
-    Group gridPane = new Group();
     rectangle = new Rectangle(DISPLAY_WIDTH, DISPLAY_HEIGHT);
-    rectangle.getStyleClass().add("group");
+    //rectangle = new Rectangle();
+    rectangle.getStyleClass().add("rectangle");
     ImageView turtleimage = (ImageView) myTurtle.displayTurtle();
     setTurtlePosition(turtleimage);
     //turtleimage.setX(750);
-    gridPane.getChildren().addAll(rectangle, turtleimage);
-    return gridPane;
+    display.getChildren().addAll(rectangle, turtleimage);
+    return display;
   }
 
-  private void setTurtlePosition(ImageView image) {
+  public void setTurtlePosition(ImageView image) {
     image.setX(DISPLAY_WIDTH/2-image.getBoundsInLocal().getWidth()/2);
     image.setY(DISPLAY_HEIGHT/2-image.getBoundsInLocal().getHeight()/2);
+    //image.setRotate(-90);
+    myTurtle.initializeLinePosition(image.getX(), image.getY(), image.getRotate());
   }
 
+  public void setLine(Line line) {
+    myLine = line;
+    myLine.getStyleClass().add(getLineColor());
+  }
 
   private Node makeSideWindow() {
     GridPane gridPane = createGridPane();
    // gridPane.setMinHeight(800);
     gridPane.setMinWidth(400);
     return gridPane;
+  }
+
+  public void addLineToRoot(Line line){
+    display.getChildren().add(line);
   }
 
   private Node makeCommandWindow(){
@@ -185,11 +189,13 @@ public class View extends Application {
 
     runButton.setOnAction(action -> {
       myText = inputArea.getText();
+
       control.passCommand(myText);
+      control.passTurtle(myTurtle);
       control.parseCommand();
-      myTurtle.move(50.5,50.666,0);
+      //myTurtle.move(50.5,50.666,0);
     });
-    Button clearButton = new Button("Clear");
+    Button clearButton = new Button("Clear Text");
     clearButton.setPrefSize(100, 20);
 
     clearButton.setOnAction(action -> {
@@ -263,9 +269,10 @@ public class View extends Application {
     language_box.setOnAction(event);
     // Create a tile pane
 
+    control.passLanguage("English");
     ComboBox background_box =
         new ComboBox(FXCollections
-            .observableArrayList(backgroundColor));
+            .observableArrayList(colorNames));
     background_box.setPromptText(BACKGROUND_PROMPT);
 
     //Create action event
@@ -282,7 +289,7 @@ public class View extends Application {
 
     ComboBox pen_box =
         new ComboBox(FXCollections
-            .observableArrayList(penColor));
+            .observableArrayList(colorNames));
     pen_box.setPromptText(PEN_PROMPT);
 
     //Create action event
@@ -290,7 +297,9 @@ public class View extends Application {
         new EventHandler<ActionEvent>() {
           public void handle(ActionEvent e)
           {
-            // add something here
+            myLine.setStroke(map.get(pen_box.getValue().toString()));
+            myLine.getStyleClass().add(pen_box.getValue().toString());
+            lineColor = pen_box.getValue().toString();
           }
         };
     // Set on action
@@ -323,5 +332,9 @@ public class View extends Application {
 
   public static void main(String[] args) {
     launch(args);
+  }
+
+  public String getLineColor() {
+    return lineColor;
   }
 }

@@ -38,18 +38,20 @@ public class Control {
   private String userCom;
   private String input;
   private Map<String, String> variablesUsed = new HashMap<>();
-  private final Turtle turtle;
+  private Turtle myTurtle;
   private double turtleCol;
   private double turtleRow;
   private double turtleAngle;
   private StoreLists lists;
-  private boolean commandArguments;
-  private Command commandObj;
+  private boolean commandArguments = false;
+  private Command userfunction;
+  private boolean once = false;
+  private boolean inList =false;
+  private LinkedList<String> args;
 
   public Control() {
     error = new ErrorHandler();
     parser = new Parser();
-    turtle = new Turtle();
   }
 
   public Map getVariables() {
@@ -78,8 +80,9 @@ public class Control {
   private void parseText(String lines) {
     command = new LinkedList<>();
     argument = new LinkedList<>();
+    args = new LinkedList<>();
     lists = new StoreLists();
-    for (String line : lines.split(NEWLINE)) {
+    for (String line : lines.split(NEWLINE)){
       if (line.contains("#")) {
         String comment = line;
       } else {
@@ -91,77 +94,73 @@ public class Control {
   private void organizeInStacks(String line) {
     for (String word : line.split(WHITESPACE)) {
       if (word.trim().length() > 0) {
-        System.out.println(parser.getSymbol(word));
-          if (!parser.getSymbol(word).equals(ARGUMENT) && !parser.getSymbol(word).equals(VARIABLE)) {
-            command.push(word);
+        if (!parser.getSymbol(word).equals(ARGUMENT) && !parser.getSymbol(word).equals(VARIABLE)) {
+          if (parser.getSymbol(word).equals(LIST_END) || parser.getSymbol(word)
+              .equals(LIST_START)) {
+            command.add(word);
           } else {
-            if (parser.getSymbol(word).equals(VARIABLE)) {
-              if (variablesUsed.containsKey(word)) {
-                argument.push(variablesUsed.get(word));
-              } else {
-                argument.push(word);
-              }
-            } else {
-              argument.push(word);
+            command.push(word);
           }
+        } else if (parser.getSymbol(word).equals(VARIABLE)) {
+          if (variablesUsed.containsKey(word)) {
+            argument.push(variablesUsed.get(word));
+          } else {
+            argument.push(word);
+          }
+        } else {
+          argument.push(word);
         }
       }
     }
-    System.out.println(argument);
-    System.out.println(command);
     coordinateCommands();
   }
 
   public void coordinateCommands() {
-    int args = 0;
-    boolean repeat = false;
-   // if (!argument.isEmpty() && !command.isEmpty()) {
-    if(!argument.isEmpty()) {
+    int argNum = 0;
+    if (!argument.isEmpty()) {
       userCom = command.pop();
-     /* if(parser.getSymbol(userCom).equals(LIST_START)){
-        commandArguments = true;
-   //     userCom = command.pollLast();
-      }
-      if(parser.getSymbol(userCom).equals(LIST_END)){
-        commandArguments = false;
-     //   userCom = command.pollLast();
-      }*/
       makeClassPathToCommand(parser);
       try {
         Class cls = Class.forName(com);
         Object objectCommand;
-        Constructor constructor1 = cls.getConstructor(String[].class);
-        objectCommand = constructor1.newInstance((Object) new String[]{"1", "1"});
+        Constructor constructor = cls.getConstructor();
+        objectCommand = constructor.newInstance();
         Command commandGiven = (Command) objectCommand;
-        args = commandGiven.getNumberOfArgs();
+        argNum = commandGiven.getNumberOfArgs();
       } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
         error.handleCommandClassNotFound();
       }
-
-      arg = argument.pollLast();
-
-      if (args == 2) {
-        arg2 = argument.pollLast();
+      for (int i =0;i<argNum;i++){
+        args.push(argument.pollLast());
       }
+      if(argNum==0) args = null;
+      checkIfList();
       passCommand();
     }
     if (!command.isEmpty() && argument.isEmpty()) {
-          userCom = command.pop();
-         /* if(parser.getSymbol(userCom).equals(LIST_START)){
-            commandArguments = true;
-            System.out.println("hi");
-          //  userCom = command.pollLast();
-          }
-          if(parser.getSymbol(userCom).equals(LIST_END)){
-            commandArguments = false;
-            System.out.println("hi");
-          //  userCom = command.pollLast();
-          }*/
-          makeClassPathToCommand(parser);
-          passCommand();
-    //    }
-      }
+      userCom = command.pop();
+      makeClassPathToCommand(parser);
+      checkIfList();
+      passCommand();
     }
+  }
+
+  private void checkIfList() {
+    if(inList){
+      lists.store(userCom);
+      lists.storeArg(args);
+    }
+    if (parser.getSymbol(userCom).equals(LIST_START)){
+      commandArguments = true;
+    }
+    if (parser.getSymbol(userCom).equals(LIST_END)){
+      commandArguments = false;
+    }
+    if ((commandArguments && !parser.getSymbol(userCom).equals(LIST_START) && !parser.getSymbol(userCom).equals(LIST_END))){
+      lists.store(userCom);
+      lists.storeArg(args);
+    }
+  }
 
   private void makeClassPathToCommand(Parser parser1) {
     com = CLASS_PATH + parser1.getSymbol(userCom);
@@ -169,85 +168,100 @@ public class Control {
 
   public void passCommand() {
     System.out.println(com);
-    System.out.println(arg);
-    System.out.println(arg2);
+    System.out.println(args);
     try {
       Class cls = Class.forName(com);
       Object objectCommand;
-      Constructor constructor = cls.getConstructor(String[].class);
-      objectCommand = constructor.newInstance((Object) new String[]{arg, arg2});
+      Constructor constructor = cls.getConstructor(LinkedList.class, Control.class);
+      objectCommand = constructor.newInstance((Object) args, (Object) this);
       Command commandGiven = (Command) objectCommand;
+      if(commandArguments==false && userfunction==null && !parser.getSymbol(userCom).equals(LIST_END) && once==false) {
+        userfunction = commandGiven;
+        once = true;
+      }
       createCommand(commandGiven, parser);
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
       error.handleCommandClassNotFound();
     }
+
   }
 
   public void createCommand(Command comm, Parser parser1) {
-   // commandObj = comm;
-
-   /* if(commandArguments){
-      System.out.println("okay");
-      lists.storeCom(commandObj);
-      commandObj.setControl(this);
-      commandObj.repeatCom();
-    if(command.isEmpty() && argument.isEmpty()){
-      System.out.println("rer");
-
-   //   repeat();
-    }*/
-
     if (comm.commandValueReturn() != null) {
       argument.push(comm.commandValueReturn());
-      System.out.println(comm.commandValueReturn());
     }
-    if (parser1.getSymbol(userCom).equals("MakeVariable")) {
+    if (parser1.getSymbol(userCom).equals("MakeVariable")){
       variablesUsed = comm.getVariablesCreated();
     }
-    if(!command.isEmpty()) {
+    if(commandArguments == false && userfunction !=null && !comm.equals(userfunction) && parser.getSymbol(userCom).equals(LIST_END)){
+      int b = userfunction.repeatCom();
+      userInputCom(b);
+    }
+    else if(!command.isEmpty() && inList==false){
       coordinateCommands();
     }
   }
 
-  /*public void repeat(){
-    System.out.println("repeating");
-    Command c = lists.runCom();
-    System.out.println(c);
-    System.out.println(c.getNumberOfArgs());
+  public void userInputCom(int b){
+    if(b==1){
+      inList = false;
+    }
+    else {
+      command = lists.print();
+      argument = lists.print2();
+      b-=1;
+      inList = true;
+      args = new LinkedList<>();
+      coordinateCommands();
+      userInputCom(b);
+    }
   }
 
-*/
-
-
-
-
-
-
-
-  public void PassTurtle(Turtle turtle){
-    turtleRow = turtle.getTurtleRow();
-    turtleCol = turtle.getTurtleCol();
-    turtleAngle = turtle.getTurtleAngle();
+  public void passTurtle(Turtle turtle) {
+    myTurtle = turtle;
+    turtleRow = myTurtle.getTurtleRow();
+    turtleCol = myTurtle.getTurtleCol();
+    turtleAngle = myTurtle.getTurtleAngle();
   }
 
-  public double getTurtleCol(){
+  public double getTurtleCol() {
     return turtleCol;
   }
 
-  public double getTurtleRow(){
+  public double getTurtleRow() {
     return turtleRow;
   }
 
-  public double getTurtleAngle(){
+  public double getTurtleAngle() {
     return turtleAngle;
   }
 
-  public void updateTurtle(int col, int row, int angle){
-    turtleRow = turtle.getTurtleRow();
-    turtleCol = turtle.getTurtleCol();
-    turtleAngle = turtle.getTurtleAngle();
-    turtle.move(col, row, angle);
+  public void setTurtleVisible(boolean mode){
+    myTurtle.turteVisible(mode);
   }
 
+  public void updateTurtle(double col, double row, double angle, int distance){
+    turtleRow = myTurtle.getTurtleRow();
+    turtleCol = myTurtle.getTurtleCol();
+    turtleAngle = myTurtle.getTurtleAngle();
+    myTurtle.updateDistanceSoFar(distance);
+    myTurtle.move(col, row, angle);
+  }
+  public int getTurtleDistance(){
+    return myTurtle.getDistanceSoFar();
+  }
+
+  public void turtleHome(boolean clearScreen){
+    if(clearScreen){
+      myTurtle.clearScreen();
+    }
+    else{
+      myTurtle.resetTurtle();
+    }
+  }
+
+  public Turtle getTurtle() {
+    return myTurtle;
+  }
 }
 
