@@ -209,7 +209,7 @@ public class Control {
 
   public void createCommand(Command comm, Parser parser1) {
     if (comm.commandValueReturn() != null) {
-      argument.push(comm.commandValueReturn());
+      if(!command.isEmpty()) argument.push(comm.commandValueReturn());
     }
     if (parser1.getSymbol(userCom).equals("MakeVariable")) {
       variablesUsed.putAll(comm.getVariablesCreated());
@@ -217,8 +217,8 @@ public class Control {
     if(parser1.getSymbol(userCom).equals("If")){
       runnable = comm.runnable();
     }
-    if (commandArguments == false && userfunction != null && !comm.equals(userfunction) && parser.getSymbol(userCom).equals(LIST_END)) {
-        int loop = userfunction.repeatCom();
+    int loop = userfunction.repeatCom();
+    if (loop !=0 && commandArguments == false && userfunction != null && !comm.equals(userfunction) && parser.getSymbol(userCom).equals(LIST_END)) {
         int i=0;
         userInputCom(loop,i);
     }
