@@ -8,9 +8,13 @@ public class Sum extends Command {
   private double a, b, sum;
   private int number=2;
 
+  public Sum(){
+    super();
+    super.numberOfArgs=number;
+  }
+
   public Sum(LinkedList<String> varargs, Control control){
     super(varargs, control);
-    super.numberOfArgs=number;
    //myControl;
     a = Double.parseDouble(varargs.get(0));
     b = Double.parseDouble(varargs.get(1));

@@ -32,8 +32,6 @@ public class Control {
   private String language;
   private Deque<String> command;
   private Deque<String> argument;
-  private String arg;
-  private String arg2;
   private String com;
   private String userCom;
   private String input;
@@ -48,6 +46,7 @@ public class Control {
   private boolean once = false;
   private boolean inList =false;
   private LinkedList<String> args;
+  private boolean dotimes = false;
 
   public Control() {
     error = new ErrorHandler();
@@ -95,13 +94,17 @@ public class Control {
     for (String word : line.split(WHITESPACE)) {
       if (word.trim().length() > 0) {
         if (!parser.getSymbol(word).equals(ARGUMENT) && !parser.getSymbol(word).equals(VARIABLE)) {
-          if (parser.getSymbol(word).equals(LIST_END) || parser.getSymbol(word)
-              .equals(LIST_START)) {
+          if (parser.getSymbol(word).equals(LIST_END) || parser.getSymbol(word).equals(LIST_START)) {
             command.add(word);
           } else {
             command.push(word);
           }
         } else if (parser.getSymbol(word).equals(VARIABLE)) {
+          System.out.println(word);
+          System.out.println(command);
+          if(parser.getSymbol(command.pop()).equals(LIST_START)){
+            dotimes = true;
+          }
           if (variablesUsed.containsKey(word)) {
             argument.push(variablesUsed.get(word));
           } else {
@@ -117,6 +120,8 @@ public class Control {
 
   public void coordinateCommands() {
     int argNum = 0;
+    System.out.println(argument);
+    System.out.println(command);
     if (!argument.isEmpty()) {
       userCom = command.pop();
       makeClassPathToCommand(parser);
@@ -146,17 +151,13 @@ public class Control {
   }
 
   private void checkIfList() {
-    if(inList){
-      lists.store(userCom);
-      lists.storeArg(args);
-    }
     if (parser.getSymbol(userCom).equals(LIST_START)){
       commandArguments = true;
     }
     if (parser.getSymbol(userCom).equals(LIST_END)){
       commandArguments = false;
     }
-    if ((commandArguments && !parser.getSymbol(userCom).equals(LIST_START) && !parser.getSymbol(userCom).equals(LIST_END))){
+    if ((commandArguments && !parser.getSymbol(userCom).equals(LIST_START) && !parser.getSymbol(userCom).equals(LIST_END)) || inList){
       lists.store(userCom);
       lists.storeArg(args);
     }
@@ -189,31 +190,32 @@ public class Control {
   public void createCommand(Command comm, Parser parser1) {
     if (comm.commandValueReturn() != null) {
       argument.push(comm.commandValueReturn());
+      System.out.println(comm.commandValueReturn());
     }
     if (parser1.getSymbol(userCom).equals("MakeVariable")){
       variablesUsed = comm.getVariablesCreated();
     }
     if(commandArguments == false && userfunction !=null && !comm.equals(userfunction) && parser.getSymbol(userCom).equals(LIST_END)){
-      int b = userfunction.repeatCom();
-      userInputCom(b);
+      int loop = userfunction.repeatCom();
+      userInputCom(loop);
     }
-    else if(!command.isEmpty() && inList==false){
+    else if(!command.isEmpty()){
       coordinateCommands();
     }
   }
 
-  public void userInputCom(int b){
-    if(b==1){
+  public void userInputCom(int loop){
+    if(loop==1){
       inList = false;
     }
     else {
       command = lists.print();
       argument = lists.print2();
-      b-=1;
+      loop-=1;
       inList = true;
       args = new LinkedList<>();
       coordinateCommands();
-      userInputCom(b);
+      userInputCom(loop);
     }
   }
 
