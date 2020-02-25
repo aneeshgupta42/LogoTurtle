@@ -7,14 +7,17 @@ public class Repeat extends Command {
 
   private int repetition;
   private Control c;
-  private static final int number =  2;
+  private static final int number =  1;
 
+  public Repeat(){
+    super();
+    super.numberOfArgs = number;
+  }
   public Repeat(LinkedList<String> varargs, Control control){
     super(varargs, control);
     super.setControl(control);
     c = control;
     repetition = Integer.parseInt(varargs.get(0));
-    super.numberOfArgs = number;
   }
 
   @Override

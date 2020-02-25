@@ -15,9 +15,13 @@ public class StoreLists {
     lines = new LinkedList<>();
   }
 
-  public void store(String line, String arg) {
+  public void store(String line, LinkedList<String> arg) {
     lines.push(line);
-    args.push(arg);
+
+    for (String s:arg) {
+      args.add(s);
+    }
+
   }
 
   public Deque print(){
