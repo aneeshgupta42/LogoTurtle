@@ -122,9 +122,8 @@ public class Control {
 
   public void coordinateCommands() {
     int argNum = 0;
-
-  //  System.out.println(argument);
-  //  System.out.println(command);
+    System.out.println(argument);
+    System.out.println(command);
     userCom = command.pop();
     makeClassPathToCommand(parser);
     try {
@@ -138,16 +137,16 @@ public class Control {
       error.handleCommandClassNotFound();
     }
     if (!argument.isEmpty() && argument.size()>=argNum && count<2) {
-      for (int i =0;i<argNum;i++){
-          args.push(argument.pop());
+      for (int i = 0; i < argNum; i++) {
+        args.push(argument.pop());
       }
       checkIfList();
       passCommand();
+      if (!command.isEmpty() && argument.isEmpty()) {
+        makeClassPathToCommand(parser);
+        passCommand();
+      }
     }
-   // if (!command.isEmpty() && argument.isEmpty()) {
-   //   makeClassPathToCommand(parser);
-   //   checkIfList();
-   // }
     else if(argument.isEmpty() && argNum!=0){
       command.push(userCom);
     }
@@ -192,7 +191,6 @@ public class Control {
       Command commandGiven = (Command) objectCommand;
       if(commandArguments==false && userfunction==null && !parser.getSymbol(userCom).equals(LIST_END) && once==false) {
         userfunction = commandGiven;
-        System.out.println(userfunction);
         once = true;
       }
       createCommand(commandGiven, parser);
@@ -211,7 +209,6 @@ public class Control {
     }
     if(commandArguments == false && userfunction !=null && !comm.equals(userfunction) && parser.getSymbol(userCom).equals(LIST_END)){
       int loop = userfunction.repeatCom();
-      System.out.println("hi");
       userInputCom(loop);
     }
     else if(!command.isEmpty() && userfunction.repeatCom()== 0){
