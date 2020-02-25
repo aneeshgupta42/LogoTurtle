@@ -4,29 +4,29 @@ import Controller.Control;
 import backEnd.commands.Command;
 import java.util.LinkedList;
 
-public class Difference extends Command {
+public class Remainder extends Command {
     private static final int NUMARGS = 2;
-    private double diff;
+    private double remainder;
 
-    public Difference() {
+    public Remainder() {
         super();
         super.numberOfArgs = NUMARGS;
     }
 
-    public Difference(LinkedList<String> varargs, Control control){
+    public Remainder(LinkedList<String> varargs, Control control) {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 
         double argTwo = Double.parseDouble(varargs.get(0));
         double argOne = Double.parseDouble(varargs.get(1));
-        diff = argOne - argTwo;
+        remainder = argOne % argTwo;
 
-        System.out.println("Difference is: " + diff);
+        System.out.println("The remainder is: " + remainder);
     }
 
     @Override
     public String commandValueReturn() {
-        String ret = Double.toString(diff);
+        String ret = Double.toString(remainder);
         return ret;
     }
 }
