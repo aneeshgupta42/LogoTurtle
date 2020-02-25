@@ -13,6 +13,9 @@ public class Forward extends Command {
   public Forward(LinkedList<String> varargs, Control control){
     super(varargs, control);
     super.numberOfArgs= NUMARGS;
+    int i=0;
+    i++;
+    System.out.println(i);
     int distance = Integer.parseInt(varargs.get(0));
     double initX = control.getTurtleCol();
     double initY = control.getTurtleRow();

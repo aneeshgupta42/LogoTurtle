@@ -116,7 +116,6 @@ public class Control {
   }
 
   public void coordinateCommands() {
-    args = new LinkedList<>();
     int argNum = 0;
     if (!argument.isEmpty()) {
       userCom = command.pop();
@@ -190,7 +189,6 @@ public class Control {
   public void createCommand(Command comm, Parser parser1) {
     if (comm.commandValueReturn() != null) {
       argument.push(comm.commandValueReturn());
-      if(!command.isEmpty()) coordinateCommands();
     }
     if (parser1.getSymbol(userCom).equals("MakeVariable")){
       variablesUsed = comm.getVariablesCreated();
@@ -198,6 +196,9 @@ public class Control {
     if(commandArguments == false && userfunction !=null && !comm.equals(userfunction) && parser.getSymbol(userCom).equals(LIST_END)){
       int b = userfunction.repeatCom();
       userInputCom(b);
+    }
+    else if(!command.isEmpty() && inList==false){
+      coordinateCommands();
     }
   }
 
@@ -210,6 +211,7 @@ public class Control {
       argument = lists.print2();
       b-=1;
       inList = true;
+      args = new LinkedList<>();
       coordinateCommands();
       userInputCom(b);
     }
