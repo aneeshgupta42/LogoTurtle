@@ -1,10 +1,11 @@
-package backEnd.commands;
+package backEnd.commands.Math;
 
 import Controller.Control;
+import backEnd.commands.Command;
 
 import java.util.LinkedList;
 
-public class Cosine extends Command{
+public class Cosine extends Command {
     private double myResult;
     private final int NUMARGS = 1;
 

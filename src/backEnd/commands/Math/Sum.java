@@ -1,4 +1,4 @@
-package backEnd.commands;
+package backEnd.commands.Math;
 
 import Controller.Control;
 import backEnd.commands.Command;
@@ -21,6 +21,7 @@ public class Sum extends Command {
     double a = Double.parseDouble(varargs.get(0));
     double b = Double.parseDouble(varargs.get(1));
     sum = a + b;
+    System.out.println("Sum is " + sum);
   }
 
   @Override

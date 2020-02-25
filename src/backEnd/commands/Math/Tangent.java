@@ -1,10 +1,11 @@
-package backEnd.commands;
+package backEnd.commands.Math;
 
 import Controller.Control;
+import backEnd.commands.Command;
 
 import java.util.LinkedList;
 
-public class Tangent extends Command{
+public class Tangent extends Command {
     private double myResult;
     private final int NUMARGS = 1;
 
