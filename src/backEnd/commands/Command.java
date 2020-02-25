@@ -1,6 +1,7 @@
 package backEnd.commands;
 
 import Controller.Control;
+import java.util.LinkedList;
 import java.util.Map;
 
 public abstract class Command {
@@ -25,7 +26,7 @@ public abstract class Command {
   public Command(){
   }
 
-  public Command(String[] varargs, Control control) {
+  public Command(LinkedList<String> varargs, Control control) {
     myControl = control;
   //  System.out.println("HIT COMMAND CONSTRUCT");
   }

@@ -2,6 +2,7 @@ package backEnd.commands;
 
 import Controller.Control;
 import backEnd.commands.Command;
+import java.util.LinkedList;
 
 public class Left extends Command {
 

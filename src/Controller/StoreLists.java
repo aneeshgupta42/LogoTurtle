@@ -15,11 +15,13 @@ public class StoreLists {
     lines = new LinkedList<>();
   }
 
-  public void store(String line, String arg) {
+  public void store(String line, LinkedList<String> arg) {
     lines.push(line);
-    args.push(arg);
-    System.out.println(lines);
-    System.out.println(args);
+
+    for (String s:arg) {
+      args.add(s);
+    }
+
   }
 
   public Deque print(){
@@ -27,17 +29,6 @@ public class StoreLists {
   }
   public Deque print2(){
     return args;
-  }
-
-  public void storeCom(Command command){
-    coms.push(command);
-  }
-
-  public Command runCom(){
-    for (Command c: coms) {
-      return c;
-    }
-    return null;
   }
 
 }

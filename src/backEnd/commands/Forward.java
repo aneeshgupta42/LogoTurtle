@@ -1,6 +1,7 @@
 package backEnd.commands;
 
 import Controller.Control;
+import java.util.LinkedList;
 
 public class Forward extends Command {
   private static final int NUMARGS = 1;
@@ -9,10 +10,10 @@ public class Forward extends Command {
     super();
     super.numberOfArgs=NUMARGS;
   }
-  public Forward(String[] varargs, Control control){
+  public Forward(LinkedList<String> varargs, Control control){
     super(varargs, control);
     super.numberOfArgs= NUMARGS;
-    int distance = Integer.parseInt(varargs[0]);
+    int distance = Integer.parseInt(varargs.get(0));
     double initX = control.getTurtleCol();
     double initY = control.getTurtleRow();
     double angle = control.getTurtleAngle();
