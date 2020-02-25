@@ -81,6 +81,7 @@ public abstract class Command {
   public Map getVariablesCreated(){return c;}
   public int getNumberOfArgs(){return numberOfArgs;}
   public int repeatCom(){return b;}
+  public boolean runnable(){return repeat;}
 
 
 

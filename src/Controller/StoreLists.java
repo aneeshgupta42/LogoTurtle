@@ -17,12 +17,14 @@ public class StoreLists {
 
   public void store(String line){
     lines.push(line);
+   // System.out.println(lines);
   }
   public void storeArg(LinkedList<String> arg) {
 
     for (String s:arg) {
       args.add(s);
     }
+  //  System.out.println(args);
   }
 
   public Deque print(){
