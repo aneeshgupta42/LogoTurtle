@@ -13,6 +13,7 @@ public class Sine extends Command {
     super();
     super.numberOfArgs=number;
   }
+  
   public Sine(LinkedList<String> varargs, Control control){
     super(varargs, control);
 

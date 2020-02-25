@@ -86,6 +86,10 @@ public class Turtle implements Update{
     penDown=true;
   }
 
+  public void setPen(boolean pendown){
+    penDown = pendown;
+  }
+
   public void setPenUp(){
     penDown= false;
   }
@@ -106,6 +110,10 @@ public class Turtle implements Update{
   }
   public void clearScreen(){
     resetTurtle();
+  }
+
+  public void turteVisible(boolean visible){
+    myTurtle.setVisible(visible);
   }
 
   @Override

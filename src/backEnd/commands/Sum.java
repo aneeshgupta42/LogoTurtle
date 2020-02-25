@@ -5,15 +5,21 @@ import backEnd.commands.Command;
 import java.util.LinkedList;
 
 public class Sum extends Command {
-  private double a, b, sum;
-  private int number=2;
+  private final int NUMARGS = 2;
+  private double sum;
+
+  public Sum(){
+    super();
+    super.numberOfArgs= NUMARGS;
+  }
 
   public Sum(LinkedList<String> varargs, Control control){
     super(varargs, control);
-    super.numberOfArgs=number;
+
+    super.numberOfArgs= NUMARGS;
    //myControl;
-    a = Double.parseDouble(varargs.get(0));
-    b = Double.parseDouble(varargs.get(1));
+    double a = Double.parseDouble(varargs.get(0));
+    double b = Double.parseDouble(varargs.get(1));
     sum = a + b;
   }
 

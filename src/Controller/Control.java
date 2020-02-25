@@ -236,6 +236,10 @@ public class Control {
     return turtleAngle;
   }
 
+  public void setTurtleVisible(boolean mode){
+    myTurtle.turteVisible(mode);
+  }
+
   public void updateTurtle(double col, double row, double angle, int distance){
     turtleRow = myTurtle.getTurtleRow();
     turtleCol = myTurtle.getTurtleCol();
