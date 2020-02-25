@@ -9,9 +9,13 @@ public class Sine extends Command {
   private double myResult;
   private final int number =1;
 
+  public Sine(){
+    super();
+    super.numberOfArgs=number;
+  }
   public Sine(LinkedList<String> varargs, Control control){
     super(varargs, control);
-    super.numberOfArgs=number;
+
     myAngle = Double.parseDouble(varargs.get(0));
     myResult = Math.sin((Math.toRadians(myAngle)));
   }
