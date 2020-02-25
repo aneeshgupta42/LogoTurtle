@@ -86,7 +86,6 @@ public class Control {
 
   private void organizeInStacks(String line) {
     for (String word : line.split(WHITESPACE)) {
-      System.out.println(commandArguments);
       if (word.trim().length() > 0) {
         if (!parser.getSymbol(word).equals(ARGUMENT) && !parser.getSymbol(word).equals(VARIABLE)) {
             command.push(word);
@@ -95,6 +94,7 @@ public class Control {
           var = word;
           if (commandArguments) {
             dotimes = true;
+            commandArguments = false;
           }
           else {
             if (variablesUsed.containsKey(word)) {
@@ -128,13 +128,11 @@ public class Control {
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
       error.handleCommandClassNotFound();
     }
-    System.out.println(userCom);
-    System.out.println(argNum);
     checkIfCommandCanRun(argNum);
   }
 
   private void checkIfCommandCanRun(int argNum) {
-    if (!argument.isEmpty() && argument.size() >= argNum && count < 2) {
+    if (!argument.isEmpty() && argument.size() >= argNum && count <= 2) {
       for (int i = 0; i < argNum; i++) {
         args.push(argument.pop());
       }
@@ -166,8 +164,7 @@ public class Control {
     if (parser.getSymbol(userCom).equals(LIST_END)) {
       commandArguments = false;
     }
-    if ((commandArguments && !parser.getSymbol(userCom).equals(LIST_START) && !parser
-        .getSymbol(userCom).equals(LIST_END)) || inList) {
+    if ((commandArguments && !parser.getSymbol(userCom).equals(LIST_START) && !parser.getSymbol(userCom).equals(LIST_END)) || inList) {
       lists.store(userCom);
       lists.storeArg(args);
     }
@@ -192,8 +189,7 @@ public class Control {
       Constructor constructor = cls.getConstructor(LinkedList.class, Control.class);
       objectCommand = constructor.newInstance((Object) args, (Object) this);
       Command commandGiven = (Command) objectCommand;
-      if (commandArguments == false && userfunction == null && !parser.getSymbol(userCom)
-          .equals(LIST_END) && once == false) {
+      if (commandArguments == false && userfunction == null && !parser.getSymbol(userCom).equals(LIST_END) && once == false) {
         userfunction = commandGiven;
         once = true;
       }
@@ -209,15 +205,13 @@ public class Control {
     }
     if (parser1.getSymbol(userCom).equals("MakeVariable")) {
       variablesUsed = comm.getVariablesCreated();
-      System.out.println(comm.getVariablesCreated());
     }
-    if (commandArguments == false && userfunction != null && !comm.equals(userfunction) && parser
-        .getSymbol(userCom).equals(LIST_END)) {
+    if (commandArguments == false && userfunction != null && !comm.equals(userfunction) && parser.getSymbol(userCom).equals(LIST_END)) {
         int loop = userfunction.repeatCom();
         int i=0;
         userInputCom(loop,i);
     }
-    else if (!command.isEmpty() && userfunction.repeatCom() == 0) {
+    if (!command.isEmpty() && userfunction.repeatCom() == 0) {
       coordinateCommands();
     }
   }
@@ -230,7 +224,7 @@ public class Control {
       argument = lists.print2();
       loop -=1;
       if(dotimes){
-        repCount(i,var);
+        repCount(loop,var);
       }
       else repCount(i,":repCount");
       i += 1;
