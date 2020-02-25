@@ -14,6 +14,7 @@ public class Right extends Command {
   public Right(LinkedList<String> varargs, Control myControl){
     super(varargs, myControl);
     double angle = Double.parseDouble(varargs.get(0));
+    System.out.println("hi");
     myControl.updateTurtle(0,0, angle, 0);
     System.out.println("rt " + angle);
   }
