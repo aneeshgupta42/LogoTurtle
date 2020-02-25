@@ -25,8 +25,7 @@ public class Tangent extends Command {
 
     @Override
     public String commandValueReturn() {
-        String ret = Double.toString(tanResult);
-        return ret;
+        return Double.toString(tanResult);
     }
     @Override
     public int repeatCom() {

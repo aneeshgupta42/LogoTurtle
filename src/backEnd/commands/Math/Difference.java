@@ -17,8 +17,8 @@ public class Difference extends Command {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 
-        double argTwo = Double.parseDouble(varargs.get(0));
-        double argOne = Double.parseDouble(varargs.get(1));
+        double argOne = Double.parseDouble(varargs.get(0));
+        double argTwo = Double.parseDouble(varargs.get(1));
         diff = argOne - argTwo;
 
         System.out.println("Difference is: " + diff);
@@ -26,8 +26,7 @@ public class Difference extends Command {
 
     @Override
     public String commandValueReturn() {
-        String ret = Double.toString(diff);
-        return ret;
+        return Double.toString(diff);
     }
     @Override
     public int repeatCom() {

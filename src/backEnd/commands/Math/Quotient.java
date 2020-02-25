@@ -17,8 +17,8 @@ public class Quotient extends Command {
     super(varargs, control);
     super.numberOfArgs = NUMARGS;
 
-    double argTwo = Double.parseDouble(varargs.get(0));
-    double argOne = Double.parseDouble(varargs.get(1));
+    double argOne = Double.parseDouble(varargs.get(0));
+    double argTwo = Double.parseDouble(varargs.get(1));
     quotient = argOne / argTwo;
 
     System.out.println("Quotient is " + quotient);
@@ -26,8 +26,7 @@ public class Quotient extends Command {
 
   @Override
   public String commandValueReturn() {
-    String ret = Double.toString(quotient);
-    return ret;
+    return Double.toString(quotient);
   }
   @Override
   public int repeatCom() {
