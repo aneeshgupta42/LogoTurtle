@@ -8,7 +8,7 @@ import javafx.scene.shape.Line;
 
 
 public class Turtle implements Update{
-  private static final String TURTLE = "turtle_25.png";
+  private static final String TURTLE = "turtle_25_upwards.png";
   ImageView myTurtle;
   private double turtleAngle;
   private boolean penDown = true;
@@ -21,6 +21,7 @@ public class Turtle implements Update{
 
   public Turtle(View view){
     myView = view;
+
 
   }
 
@@ -38,10 +39,11 @@ public class Turtle implements Update{
 
   public void move(double x, double y, double angle){
     turtleStartingXPos = myTurtle.getX();
-    System.out.println("hi" + turtleStartingXPos + " " + x + " " + y + " " + angle);
     turtleStartingYPos= myTurtle.getY();
+    System.out.println("hi" + turtleStartingYPos + " " + x + " " + y + " " + angle);
     myTurtle.setX(myTurtle.getX()+x);
     myTurtle.setY(myTurtle.getY()+y);
+    System.out.println("hey" + turtleStartingYPos + " " + myTurtle.getY());
     myTurtle.setRotate(turtleAngle + angle);
     turtleAngle = turtleAngle + angle;
     if(penDown){
@@ -52,12 +54,18 @@ public class Turtle implements Update{
   private void drawPen(double x, double y) {
     Line line = new Line();
     myLine=line;
-    line.setStartX(turtleStartingXPos);
+    myLine.getStyleClass().add(myView.getLineColor());
+    System.out.println(myView.getLineColor());
+    myView.setLine(myLine);
+    line.setStartX(turtleStartingXPos+ myTurtle.getBoundsInLocal().getWidth()/2);
 
     //line.setStartY(turtleStartingYPos+myTurtle.getBoundsInLocal().getHeight());
-    line.setStartY(200);
-    line.setEndX(turtleStartingXPos);
-    line.setEndY(100);
+    line.setStartY(turtleStartingYPos + myTurtle.getBoundsInLocal().getHeight());
+    System.out.println("yo" + turtleStartingYPos + " " + myTurtle.getY());
+
+
+    line.setEndX(turtleStartingXPos + x+ myTurtle.getBoundsInLocal().getWidth()/2);
+    line.setEndY(turtleStartingYPos + y+ myTurtle.getBoundsInLocal().getHeight());
     myView.addLineToRoot(myLine);
   }
 
@@ -95,9 +103,5 @@ public class Turtle implements Update{
   @Override
   public int orientationUpdate(int changeInAngle) {
     return 0;
-  }
-
-  public void setLine(Line line) {
-    myLine = line;
   }
 }

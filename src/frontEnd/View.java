@@ -42,7 +42,7 @@ import javafx.util.Duration;
 
 public class View extends Application {
   private Scene myScene;
-  private GridPane grid;
+  private Group display;
   private Stage myStage;
 
   private Turtle myTurtle;
@@ -78,6 +78,7 @@ public class View extends Application {
   public static final Color[] colors = {Color.RED, Color.YELLOW, Color.BLUE};
   private static final HashMap<String, Color> map= new HashMap<>();
   private BorderPane root;
+  private String lineColor;
 
 
   public View() {
@@ -86,6 +87,7 @@ public class View extends Application {
     //control = new Control(myTurtle);
     control = new Control();
     myLine = new Line();
+    display = new Group();
     //pass in turtle to control (THis was changed, change also in control)
     for (int i=0; i< colors.length; i++){
       map.put(colorNames[i], colors[i]);
@@ -137,25 +139,26 @@ public class View extends Application {
   }
 
   private Node makeDisplayWindow(){
-    Group gridPane = new Group();
     rectangle = new Rectangle(DISPLAY_WIDTH, DISPLAY_HEIGHT);
     //rectangle = new Rectangle();
     rectangle.getStyleClass().add("rectangle");
     ImageView turtleimage = (ImageView) myTurtle.displayTurtle();
     setTurtlePosition(turtleimage);
-    myTurtle.setLine(myLine);
     //turtleimage.setX(750);
-    gridPane.getChildren().addAll(rectangle, turtleimage, myLine);
-    return gridPane;
+    display.getChildren().addAll(rectangle, turtleimage);
+    return display;
   }
 
   private void setTurtlePosition(ImageView image) {
     image.setX(DISPLAY_WIDTH/2-image.getBoundsInLocal().getWidth()/2);
     image.setY(DISPLAY_HEIGHT/2-image.getBoundsInLocal().getHeight()/2);
-    image.setRotate(-90);
+    //image.setRotate(-90);
     myTurtle.initializeLinePosition(image.getX(), image.getY(), image.getRotate());
   }
-
+  public void setLine(Line line) {
+    myLine = line;
+    myLine.getStyleClass().add(getLineColor());
+  }
 
   private Node makeSideWindow() {
     GridPane gridPane = createGridPane();
@@ -165,7 +168,7 @@ public class View extends Application {
   }
 
   public void addLineToRoot(Line line){
-    root.getChildren().add(line);
+    display.getChildren().add(line);
   }
 
   private Node makeCommandWindow(){
@@ -294,6 +297,8 @@ public class View extends Application {
           public void handle(ActionEvent e)
           {
             myLine.setStroke(map.get(pen_box.getValue().toString()));
+            myLine.getStyleClass().add(pen_box.getValue().toString());
+            lineColor = pen_box.getValue().toString();
           }
         };
     // Set on action
@@ -326,5 +331,9 @@ public class View extends Application {
 
   public static void main(String[] args) {
     launch(args);
+  }
+
+  public String getLineColor() {
+    return lineColor;
   }
 }
