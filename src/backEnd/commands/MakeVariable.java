@@ -8,7 +8,6 @@ import java.util.Map;
 
 public class MakeVariable extends Command {
 
-  public Object getVariablesCreated;
   private String key;
   private String var;
   private static int number = 2;
@@ -27,7 +26,7 @@ public MakeVariable(){
   public Map getVariablesCreated(){
     Map<String,String> variables = new HashMap<>();
     if(!variables.containsKey(key)){
-      variables.put(var,key);
+      variables.put(key,var);
     }
     return variables;
   }
