@@ -16,28 +16,21 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import java.awt.Dimension;
-import javafx.animation.Animation;
-import javafx.animation.PathTransition;
-import javafx.animation.RotateTransition;
-import javafx.animation.SequentialTransition;
-import javafx.scene.shape.HLineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
-import javafx.util.Duration;
 
 
 public class View extends Application {
@@ -67,8 +60,6 @@ public class View extends Application {
   private static final String STYLESHEET = "default.css";
   private ResourceBundle styleResources;
   private Node display_window;
-  private double display_height;
-  private double display_width;
   private static final String LANGUAGE_PROMPT  = "Language";
   private static final String[] languages = { "English", "Chinese", "French",
           "German", "Italian","Portuguese","Russian","Spanish","Urdu" };
@@ -76,21 +67,22 @@ public class View extends Application {
   private static final String PEN_PROMPT  = "Pen Color";
   private static final String[] colorNames = {"red", "yellow", "blue"};
   public static final Color[] colors = {Color.RED, Color.YELLOW, Color.BLUE};
-  private static final HashMap<String, Color> map= new HashMap<>();
+  private static final HashMap<String, Color> map = new HashMap<>();
   private BorderPane root;
   private Color lineColor = Color.BLACK;
   private ImageView turtleimage;
   private HBox hbox;
 
+  final WebView browser = new WebView();
+  final WebEngine webEngine = browser.getEngine();
+
 
   public View() {
     myStage = new Stage();
     myTurtle = new Turtle(this);
-    //control = new Control(myTurtle);
     control = new Control();
     myLine = new Line();
     display = new Group();
-    //pass in turtle to control (THis was changed, change also in control)
     for (int i=0; i< colors.length; i++){
       map.put(colorNames[i], colors[i]);
     }
@@ -109,8 +101,6 @@ public class View extends Application {
     myStage.setScene(myScene);
     myStage.show();
     myStage.setOnCloseRequest(t->stopEverything());
-    Animation animation = makeAnimation(myActor);
-    //animation.play();
   }
 
   /**
@@ -127,16 +117,10 @@ public class View extends Application {
     root.setBottom(makeCommandWindow());
     turtleimage = (ImageView) myTurtle.displayTurtle();
     setTurtlePosition(turtleimage);
-    root.getChildren().add(turtleimage);
+    root.getChildren().addAll(turtleimage, browser);
     return new Scene(root);
   }
 
-  // create something to animate
-  private Node makeActor () {
-    Shape result = new Rectangle(50, 50, 50, 50);
-    result.setFill(Color.PLUM);
-    return result;
-  }
 
 
   public void closeWindow(){
@@ -158,11 +142,6 @@ public class View extends Application {
     image.setRotate(0);
     System.out.println(display.getLayoutY());
     myTurtle.initializeLinePosition(image.getX(), image.getY(), image.getRotate());
-  }
-
-  public void setLine(Line line) {
-    myLine = line;
-    //myLine.getStyleClass().add(getLineColor());
   }
 
   private Node makeSideWindow() {
@@ -198,7 +177,6 @@ public class View extends Application {
       control.passCommand(myText);
       control.passTurtle(myTurtle);
       control.parseCommand();
-      //myTurtle.move(50.5,50.666,0);
     });
     Button clearButton = new Button("Clear Text");
     clearButton.setPrefSize(100, 20);
@@ -213,22 +191,8 @@ public class View extends Application {
     return hbox;
   }
 
-
   private void stopEverything(){
     System.exit(1);
-  }
-
-  private Animation makeAnimation (Node agent) {
-    // create something to follow
-    Path path = new Path();
-    path.getElements().addAll(new MoveTo(50, 50), new HLineTo(350));
-    // create an animation where the shape follows a path
-    PathTransition pt = new PathTransition(Duration.seconds(4), path, agent);
-    // create an animation that rotates the shape
-    RotateTransition rt = new RotateTransition(Duration.seconds(3));
-    rt.setByAngle(90);
-    // put them together in order
-    return new SequentialTransition(agent, pt, rt);
   }
 
   public HBox addHBox() {
@@ -238,8 +202,24 @@ public class View extends Application {
     hbox.setSpacing(10);
 //    hbox.setStyle("-fx-background-color: #336699");
 
-    Button buttonCurrent = new Button("Help");
-    buttonCurrent.setPrefSize(100, 20);
+    Button help = new Button("Help");
+    help.setPrefSize(100, 20);
+    Stage stage2 = new Stage();
+    TextArea textArea = new TextArea();
+    EventHandler<ActionEvent> event4 =
+        new EventHandler<ActionEvent>() {
+          public void handle(ActionEvent e)
+          {
+            textArea.setText("HELPPPPPPPPPPP");
+            stage2.setScene(new Scene(textArea, 400, 400));
+            stage2.show();
+
+            //webEngine.load("www.cs.duke.edu/courses/spring20/compsci308/assign/03_parser/commands.php");
+            //rectangle.setFill(map.get(reset_display.getValue().toString()));
+          }
+        };
+    // Set on action
+    help.setOnAction(event4);
 
     Button reset_display = new Button("Reset Display");
     reset_display.setPrefSize(100, 20);
@@ -323,7 +303,8 @@ public class View extends Application {
     // Set on action
     pen_box.setOnAction(event3);
 
-    hbox.getChildren().addAll(buttonCurrent, reset_display, button, language_box, background_box, pen_box);
+    hbox.getChildren().addAll(help, reset_display, button, language_box, background_box, pen_box, browser);
+    HBox.setHgrow(browser, Priority.ALWAYS);
     return hbox;
   }
 
