@@ -52,9 +52,7 @@ public class Turtle implements Update{
   private void drawPen(double x, double y) {
     Line line = new Line();
     myLine=line;
-    myLine.getStyleClass().add(myView.getLineColor());
-    System.out.println(myView.getLineColor());
-    myView.setLine(myLine);
+    myLine.setStroke(myView.getLineColor());
     line.setStartX(turtleStartingXPos+ myTurtle.getBoundsInLocal().getWidth()/2);
 
     line.setStartY(turtleStartingYPos + myTurtle.getBoundsInLocal().getHeight());
