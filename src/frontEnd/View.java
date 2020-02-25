@@ -78,7 +78,9 @@ public class View extends Application {
   public static final Color[] colors = {Color.RED, Color.YELLOW, Color.BLUE};
   private static final HashMap<String, Color> map= new HashMap<>();
   private BorderPane root;
-  private String lineColor;
+  private Color lineColor = Color.BLACK;
+  private ImageView turtleimage;
+  private HBox hbox;
 
 
   public View() {
@@ -117,12 +119,15 @@ public class View extends Application {
 
   private Scene makeScene (int width, int height) {
     root = new BorderPane();
-    HBox hbox = addHBox();
+    hbox = addHBox();
     root.setTop(hbox);
     display_window = makeDisplayWindow();
     root.setLeft(display_window);
     root.setRight(makeSideWindow());
     root.setBottom(makeCommandWindow());
+    turtleimage = (ImageView) myTurtle.displayTurtle();
+    setTurtlePosition(turtleimage);
+    root.getChildren().add(turtleimage);
     return new Scene(root);
   }
 
@@ -142,23 +147,22 @@ public class View extends Application {
     rectangle = new Rectangle(DISPLAY_WIDTH, DISPLAY_HEIGHT);
     //rectangle = new Rectangle();
     rectangle.getStyleClass().add("rectangle");
-    ImageView turtleimage = (ImageView) myTurtle.displayTurtle();
-    setTurtlePosition(turtleimage);
     //turtleimage.setX(750);
-    display.getChildren().addAll(rectangle, turtleimage);
+    display.getChildren().addAll(rectangle);
     return display;
   }
 
   public void setTurtlePosition(ImageView image) {
     image.setX(DISPLAY_WIDTH/2-image.getBoundsInLocal().getWidth()/2);
-    image.setY(DISPLAY_HEIGHT/2-image.getBoundsInLocal().getHeight()/2);
-    //image.setRotate(-90);
+    image.setY(70 + DISPLAY_HEIGHT/2-image.getBoundsInLocal().getHeight()/2);
+    image.setRotate(0);
+    System.out.println(display.getLayoutY());
     myTurtle.initializeLinePosition(image.getX(), image.getY(), image.getRotate());
   }
 
   public void setLine(Line line) {
     myLine = line;
-    myLine.getStyleClass().add(getLineColor());
+    //myLine.getStyleClass().add(getLineColor());
   }
 
   private Node makeSideWindow() {
@@ -168,9 +172,10 @@ public class View extends Application {
     return gridPane;
   }
 
-  public void addLineToRoot(Line line){
-    display.getChildren().add(line);
+  public void addNodeToRoot(Node object){
+    root.getChildren().add(object);
   }
+
 
   private Node makeCommandWindow(){
     HBox hbox = new HBox();
@@ -228,15 +233,27 @@ public class View extends Application {
 
   public HBox addHBox() {
     HBox hbox = new HBox();
+    hbox.setPrefHeight(70);
     hbox.setPadding(new Insets(15, 12, 15, 12));
     hbox.setSpacing(10);
 //    hbox.setStyle("-fx-background-color: #336699");
 
-    Button buttonCurrent = new Button("Current");
+    Button buttonCurrent = new Button("Help");
     buttonCurrent.setPrefSize(100, 20);
 
-    Button buttonProjected = new Button("Projected");
-    buttonProjected.setPrefSize(100, 20);
+    Button reset_display = new Button("Reset Display");
+    reset_display.setPrefSize(100, 20);
+    EventHandler<ActionEvent> event2 =
+        new EventHandler<ActionEvent>() {
+          public void handle(ActionEvent e)
+          {
+            resetScreen();
+            //rectangle.setFill(map.get(reset_display.getValue().toString()));
+          }
+        };
+    // Set on action
+    reset_display.setOnAction(event2);
+
     FileChooser fileChooser = new FileChooser();
     Button button = new Button("Select File");
     button.setOnAction(e -> {
@@ -293,20 +310,26 @@ public class View extends Application {
     pen_box.setPromptText(PEN_PROMPT);
 
     //Create action event
-    EventHandler<ActionEvent> event2 =
+    EventHandler<ActionEvent> event3 =
         new EventHandler<ActionEvent>() {
           public void handle(ActionEvent e)
           {
             myLine.setStroke(map.get(pen_box.getValue().toString()));
             myLine.getStyleClass().add(pen_box.getValue().toString());
-            lineColor = pen_box.getValue().toString();
+            //lineColor = pen_box.getValue().toString();
+            lineColor = map.get(pen_box.getValue());
           }
         };
     // Set on action
-    pen_box.setOnAction(event2);
+    pen_box.setOnAction(event3);
 
-    hbox.getChildren().addAll(buttonCurrent, buttonProjected, button, language_box, background_box, pen_box);
+    hbox.getChildren().addAll(buttonCurrent, reset_display, button, language_box, background_box, pen_box);
     return hbox;
+  }
+
+  private void resetScreen() {
+    setTurtlePosition(turtleimage);
+    display.getChildren().removeIf(object -> object != turtleimage && object != rectangle);
   }
 
   private void scanFile(File file) throws FileNotFoundException {
@@ -334,7 +357,7 @@ public class View extends Application {
     launch(args);
   }
 
-  public String getLineColor() {
+  public Color getLineColor() {
     return lineColor;
   }
 }
