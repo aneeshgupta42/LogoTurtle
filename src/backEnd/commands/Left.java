@@ -1,7 +1,6 @@
 package backEnd.commands;
 
 import Controller.Control;
-import backEnd.commands.Command;
 import java.util.LinkedList;
 
 public class Left extends Command {
@@ -16,6 +15,6 @@ public class Left extends Command {
     super(varargs, myControl);
     super.numberOfArgs= NUMARGS;
     double angle = Double.parseDouble(varargs.get(0));
-    myControl.updateTurtle(0,0, -angle);
+    myControl.updateTurtle(0,0, -angle, 0);
   }
 }

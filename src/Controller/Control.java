@@ -47,6 +47,7 @@ public class Control {
   private boolean inList =false;
   private LinkedList<String> args;
   private boolean dotimes = false;
+  private int count =0;
 
   public Control() {
     error = new ErrorHandler();
@@ -73,15 +74,15 @@ public class Control {
     passCommand(input);
     parser.addPatterns(language);
     parser.addPatterns("Syntax");
-    parseText(input);
+    parseText();
   }
 
-  private void parseText(String lines) {
+  private void parseText() {
     command = new LinkedList<>();
     argument = new LinkedList<>();
     args = new LinkedList<>();
     lists = new StoreLists();
-    for (String line : lines.split(NEWLINE)){
+    for (String line : input.split(NEWLINE)){
       if (line.contains("#")) {
         String comment = line;
       } else {
@@ -114,40 +115,48 @@ public class Control {
           argument.push(word);
         }
       }
+      coordinateCommands();
     }
-    coordinateCommands();
+
   }
 
   public void coordinateCommands() {
     int argNum = 0;
     System.out.println(argument);
     System.out.println(command);
-    if (!argument.isEmpty()) {
-      userCom = command.pop();
-      makeClassPathToCommand(parser);
-      try {
-        Class cls = Class.forName(com);
-        Object objectCommand;
-        Constructor constructor = cls.getConstructor();
-        objectCommand = constructor.newInstance();
-        Command commandGiven = (Command) objectCommand;
-        argNum = commandGiven.getNumberOfArgs();
-      } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
-        error.handleCommandClassNotFound();
-      }
+    userCom = command.pop();
+    makeClassPathToCommand(parser);
+    try {
+      Class cls = Class.forName(com);
+      Object objectCommand;
+      Constructor constructor = cls.getConstructor();
+      objectCommand = constructor.newInstance();
+      Command commandGiven = (Command) objectCommand;
+      argNum = commandGiven.getNumberOfArgs();
+    } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
+      error.handleCommandClassNotFound();
+    }
+    if (!argument.isEmpty() && argument.size()>=argNum && count<2) {
       for (int i =0;i<argNum;i++){
-        args.push(argument.pollLast());
+          args.push(argument.pop());
       }
       if(argNum==0) args = null;
       checkIfList();
       passCommand();
     }
-    if (!command.isEmpty() && argument.isEmpty()) {
-      userCom = command.pop();
-      makeClassPathToCommand(parser);
-      checkIfList();
-      passCommand();
+   // if (!command.isEmpty() && argument.isEmpty()) {
+   //   makeClassPathToCommand(parser);
+   //   checkIfList();
+   // }
+    if(argument.isEmpty()){
+      command.push(userCom);
     }
+    if(!argument.isEmpty() && argument.size()<=argNum){
+      String arg = argument.pollLast();
+      command.push(userCom);
+      argument.add(arg);
+    }
+     count =argNum;
   }
 
   private void checkIfList() {
@@ -190,7 +199,6 @@ public class Control {
   public void createCommand(Command comm, Parser parser1) {
     if (comm.commandValueReturn() != null) {
       argument.push(comm.commandValueReturn());
-      System.out.println(comm.commandValueReturn());
     }
     if (parser1.getSymbol(userCom).equals("MakeVariable")){
       variablesUsed = comm.getVariablesCreated();
@@ -238,11 +246,28 @@ public class Control {
     return turtleAngle;
   }
 
-  public void updateTurtle(double col, double row, double angle){
+  public void setTurtleVisible(boolean mode){
+    myTurtle.turteVisible(mode);
+  }
+
+  public void updateTurtle(double col, double row, double angle, int distance){
     turtleRow = myTurtle.getTurtleRow();
     turtleCol = myTurtle.getTurtleCol();
     turtleAngle = myTurtle.getTurtleAngle();
+    myTurtle.updateDistanceSoFar(distance);
     myTurtle.move(col, row, angle);
+  }
+  public int getTurtleDistance(){
+    return myTurtle.getDistanceSoFar();
+  }
+
+  public void turtleHome(boolean clearScreen){
+    if(clearScreen){
+      myTurtle.clearScreen();
+    }
+    else{
+      myTurtle.resetTurtle();
+    }
   }
 
   public Turtle getTurtle() {

@@ -13,6 +13,7 @@ public class Turtle implements Update{
   private double turtleAngle;
   private boolean penDown = true;
   private double lineStartXPosition;
+  private int distanceSoFar;
   private double lineStartYPosition;
   private double turtleStartingXPos;
   private double turtleStartingYPos;
@@ -21,6 +22,7 @@ public class Turtle implements Update{
 
   public Turtle(View view){
     myView = view;
+    distanceSoFar = 0;
   }
 
   public Node displayTurtle() {
@@ -38,7 +40,6 @@ public class Turtle implements Update{
   public void move(double x, double y, double angle){
     turtleStartingXPos = myTurtle.getX();
     turtleStartingYPos= myTurtle.getY();
-    System.out.println("hi" + turtleStartingYPos + " " + x + " " + y + " " + angle);
     myTurtle.setX(myTurtle.getX()+x);
     myTurtle.setY(myTurtle.getY()+y);
   //  System.out.println("hey" + turtleStartingYPos + " " + myTurtle.getY());
@@ -57,10 +58,8 @@ public class Turtle implements Update{
     myView.setLine(myLine);
     line.setStartX(turtleStartingXPos+ myTurtle.getBoundsInLocal().getWidth()/2);
 
-    //line.setStartY(turtleStartingYPos+myTurtle.getBoundsInLocal().getHeight());
     line.setStartY(turtleStartingYPos + myTurtle.getBoundsInLocal().getHeight());
  //   System.out.println("yo" + turtleStartingYPos + " " + myTurtle.getY());
-
 
     line.setEndX(turtleStartingXPos + x+ myTurtle.getBoundsInLocal().getWidth()/2);
     line.setEndY(turtleStartingYPos + y+ myTurtle.getBoundsInLocal().getHeight());
@@ -80,12 +79,38 @@ public class Turtle implements Update{
     return turtleAngle;
   }
 
-  public void putPenDown(){
+  public void setPenDown(){
     penDown=true;
   }
 
-  public void pickPenUp(){
+  public void setPen(boolean pendown){
+    penDown = pendown;
+  }
+
+  public void setPenUp(){
     penDown= false;
+  }
+
+  public void updateDistanceSoFar(int d){
+      distanceSoFar += d;
+  }
+  public int getDistanceSoFar(){
+    return distanceSoFar;
+  }
+
+  public void resetTurtle(){
+    myTurtle.setRotate(0);
+    myView.setTurtlePosition(myTurtle);
+  }
+  public void eraseLines(){
+    // Need Cayla's help
+  }
+  public void clearScreen(){
+    resetTurtle();
+  }
+
+  public void turteVisible(boolean visible){
+    myTurtle.setVisible(visible);
   }
 
   @Override
