@@ -38,10 +38,8 @@ public class Turtle implements Update{
   public void move(double x, double y, double angle){
     turtleStartingXPos = myTurtle.getX();
     turtleStartingYPos= myTurtle.getY();
-    System.out.println("hi" + turtleStartingYPos + " " + x + " " + y + " " + angle);
     myTurtle.setX(myTurtle.getX()+x);
     myTurtle.setY(myTurtle.getY()+y);
-    System.out.println("hey" + turtleStartingYPos + " " + myTurtle.getY());
     myTurtle.setRotate(turtleAngle + angle);
     turtleAngle = turtleAngle + angle;
     if(penDown){
@@ -57,10 +55,7 @@ public class Turtle implements Update{
     myView.setLine(myLine);
     line.setStartX(turtleStartingXPos+ myTurtle.getBoundsInLocal().getWidth()/2);
 
-    //line.setStartY(turtleStartingYPos+myTurtle.getBoundsInLocal().getHeight());
     line.setStartY(turtleStartingYPos + myTurtle.getBoundsInLocal().getHeight());
-    System.out.println("yo" + turtleStartingYPos + " " + myTurtle.getY());
-
 
     line.setEndX(turtleStartingXPos + x+ myTurtle.getBoundsInLocal().getWidth()/2);
     line.setEndY(turtleStartingYPos + y+ myTurtle.getBoundsInLocal().getHeight());
