@@ -1,5 +1,5 @@
 package backEnd.commands;
 
-public class XCoordinate {
+public class XCoordinate extends Command {
 
 }

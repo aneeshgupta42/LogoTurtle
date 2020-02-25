@@ -1,5 +1,5 @@
 package backEnd.commands;
 
-public class SetPosition {
+public class SetPosition extends Command {
 
 }

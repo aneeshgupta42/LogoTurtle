@@ -135,11 +135,15 @@ public class Turtle implements Update{
     myTurtle.setRotate(0);
     myView.setTurtlePosition(myTurtle);
   }
+
   public void eraseLines(){
     // Need Cayla's help
   }
-  public void clearScreen(){
+  public void clearScreen()
+  {
     resetTurtle();
+    eraseLines();
+
   }
 
   public void turteVisible(boolean visible){
