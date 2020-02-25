@@ -326,8 +326,8 @@ public class View extends Application {
   }
 
   private void resetScreen() {
+    root.getChildren().removeIf(object -> object instanceof Line);
     setTurtlePosition(turtleimage);
-    display.getChildren().removeIf(object -> object != turtleimage && object != rectangle);
   }
 
   private void scanFile(File file) throws FileNotFoundException {
@@ -349,6 +349,10 @@ public class View extends Application {
     GridPane grid = new GridPane();
     grid.getStyleClass().add("grid-pane");
     return grid ;
+  }
+
+  public void setLine(Line line){
+    myLine = line;
   }
 
   public static void main(String[] args) {
