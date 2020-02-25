@@ -13,6 +13,7 @@ public class Turtle implements Update{
   private double turtleAngle;
   private boolean penDown = true;
   private double lineStartXPosition;
+  private int distanceSoFar;
   private double lineStartYPosition;
   private double turtleStartingXPos;
   private double turtleStartingYPos;
@@ -21,6 +22,7 @@ public class Turtle implements Update{
 
   public Turtle(View view){
     myView = view;
+    distanceSoFar = 0;
   }
 
   public Node displayTurtle() {
@@ -80,12 +82,30 @@ public class Turtle implements Update{
     return turtleAngle;
   }
 
-  public void putPenDown(){
+  public void setPenDown(){
     penDown=true;
   }
 
-  public void pickPenUp(){
+  public void setPenUp(){
     penDown= false;
+  }
+
+  public void updateDistanceSoFar(int d){
+      distanceSoFar += d;
+  }
+  public int getDistanceSoFar(){
+    return distanceSoFar;
+  }
+
+  public void resetTurtle(){
+    myTurtle.setRotate(0);
+    myView.setTurtlePosition(myTurtle);
+  }
+  public void eraseLines(){
+    // Need Cayla's help
+  }
+  public void clearScreen(){
+    resetTurtle();
   }
 
   @Override

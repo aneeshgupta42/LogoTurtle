@@ -236,11 +236,24 @@ public class Control {
     return turtleAngle;
   }
 
-  public void updateTurtle(double col, double row, double angle){
+  public void updateTurtle(double col, double row, double angle, int distance){
     turtleRow = myTurtle.getTurtleRow();
     turtleCol = myTurtle.getTurtleCol();
     turtleAngle = myTurtle.getTurtleAngle();
+    myTurtle.updateDistanceSoFar(distance);
     myTurtle.move(col, row, angle);
+  }
+  public int getTurtleDistance(){
+    return myTurtle.getDistanceSoFar();
+  }
+
+  public void turtleHome(boolean clearScreen){
+    if(clearScreen){
+      myTurtle.clearScreen();
+    }
+    else{
+      myTurtle.resetTurtle();
+    }
   }
 
   public Turtle getTurtle() {

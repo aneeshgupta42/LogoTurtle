@@ -149,12 +149,13 @@ public class View extends Application {
     return display;
   }
 
-  private void setTurtlePosition(ImageView image) {
+  public void setTurtlePosition(ImageView image) {
     image.setX(DISPLAY_WIDTH/2-image.getBoundsInLocal().getWidth()/2);
     image.setY(DISPLAY_HEIGHT/2-image.getBoundsInLocal().getHeight()/2);
     //image.setRotate(-90);
     myTurtle.initializeLinePosition(image.getX(), image.getY(), image.getRotate());
   }
+
   public void setLine(Line line) {
     myLine = line;
     myLine.getStyleClass().add(getLineColor());
