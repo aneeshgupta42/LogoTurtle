@@ -23,6 +23,9 @@ public class Backward extends Command {
     System.out.println("d " + distance);
     control.updateTurtle(newX, newY, 0, distance);
   }
-
+  @Override
+  public int repeatCom() {
+    return super.repeatCom();
+  }
 
 }

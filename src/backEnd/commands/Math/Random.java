@@ -3,29 +3,31 @@ package backEnd.commands.Math;
 import Controller.Control;
 import backEnd.commands.Command;
 import java.util.LinkedList;
+import java.lang.Math;
 
-public class Cosine extends Command {
+public class Random extends Command {
     private static final int NUMARGS = 1;
-    private double cosResult;
+    private double random;
 
-    public Cosine() {
+    public Random() {
         super();
-        super.numberOfArgs= NUMARGS;
+        super.numberOfArgs = NUMARGS;
     }
 
-    public Cosine(LinkedList<String> varargs, Control control) {
+    public Random(LinkedList<String> varargs, Control control) {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 
         double argOne = Double.parseDouble(varargs.get(0));
-        cosResult = Math.cos((Math.toRadians(argOne)));
+        random = Math.random() * argOne;
+        // insert check if max is too big ?
 
-        System.out.println("Cosine is: " + cosResult);
+        System.out.println("Random is: " + random);
     }
 
     @Override
     public String commandValueReturn() {
-        String ret = Double.toString(cosResult);
+        String ret = Double.toString(random);
         return ret;
     }
     @Override

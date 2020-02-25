@@ -4,29 +4,29 @@ import Controller.Control;
 import backEnd.commands.Command;
 import java.util.LinkedList;
 
-public class Product extends Command {
+public class Remainder extends Command {
     private static final int NUMARGS = 2;
-    private double product;
+    private double remainder;
 
-    public Product() {
+    public Remainder() {
         super();
         super.numberOfArgs = NUMARGS;
     }
 
-    public Product(LinkedList<String> varargs, Control control){
+    public Remainder(LinkedList<String> varargs, Control control) {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 
         double argTwo = Double.parseDouble(varargs.get(0));
         double argOne = Double.parseDouble(varargs.get(1));
-        product = argTwo * argOne;
+        remainder = argOne % argTwo;
 
-        System.out.println("Product is: " + product);
+        System.out.println("The remainder is: " + remainder);
     }
 
     @Override
     public String commandValueReturn() {
-        String ret = Double.toString(product);
+        String ret = Double.toString(remainder);
         return ret;
     }
     @Override

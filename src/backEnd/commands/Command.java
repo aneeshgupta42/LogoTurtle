@@ -21,7 +21,7 @@ public abstract class Command {
   protected int numberOfArgs;
   private Control myControl;
   protected Boolean repeat;
-  private int b;
+  private int b =0;
 
   public Command(){
   }

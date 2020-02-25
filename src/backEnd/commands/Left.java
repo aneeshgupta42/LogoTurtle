@@ -17,4 +17,9 @@ public class Left extends Command {
     double angle = Double.parseDouble(varargs.get(0));
     myControl.updateTurtle(0,0, -angle, 0);
   }
+
+  @Override
+  public int repeatCom() {
+    return super.repeatCom();
+  }
 }

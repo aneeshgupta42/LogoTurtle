@@ -4,28 +4,28 @@ import Controller.Control;
 import backEnd.commands.Command;
 import java.util.LinkedList;
 
-public class Cosine extends Command {
+public class Minus extends Command {
     private static final int NUMARGS = 1;
-    private double cosResult;
+    private double minus;
 
-    public Cosine() {
+    public Minus() {
         super();
-        super.numberOfArgs= NUMARGS;
+        super.numberOfArgs = NUMARGS;
     }
 
-    public Cosine(LinkedList<String> varargs, Control control) {
+    public Minus(LinkedList<String> varargs, Control control) {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 
         double argOne = Double.parseDouble(varargs.get(0));
-        cosResult = Math.cos((Math.toRadians(argOne)));
+        minus = argOne * -1;
 
-        System.out.println("Cosine is: " + cosResult);
+        System.out.println("Minus is: " + minus);
     }
 
     @Override
     public String commandValueReturn() {
-        String ret = Double.toString(cosResult);
+        String ret = Double.toString(minus);
         return ret;
     }
     @Override
