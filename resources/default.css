@@ -40,3 +40,7 @@
 .rectangle {
   -fx-fill: grey;
 }
+
+.red {
+  -fx-fill: red;
+}
