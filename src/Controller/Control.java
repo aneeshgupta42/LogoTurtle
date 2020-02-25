@@ -184,7 +184,6 @@ public class Control {
   public void runCommand() {
     System.out.println(com);
     System.out.println(args);
-    System.out.println(commandArguments);
     if (commandArguments == false || dotimes) {
       obtainCommand();
     }
@@ -197,6 +196,7 @@ public class Control {
       Constructor constructor = cls.getConstructor(LinkedList.class, Control.class);
       objectCommand = constructor.newInstance((Object) args, (Object) this);
       Command commandGiven = (Command) objectCommand;
+      System.out.println(commandGiven);
       if (userfunction == null && !parser.getSymbol(userCom).equals(LIST_END) && once == false && !parser.getSymbol(userCom).equals(LIST_START)) {
         userfunction = commandGiven;
         once = true;
@@ -223,14 +223,10 @@ public class Control {
         userInputCom(loop,i);
     }
     if (!command.isEmpty() && userfunction.repeatCom() == 0) {
-      System.out.println(comm);
       coordinateCommands();
     }
   }
 
-  private void hold() {
-    System.out.println("stop plz");
-  }
 
   public void userInputCom(int loop, int i) {
     if (loop == 0) {

@@ -12,11 +12,11 @@ public class Forward extends Command {
   }
   public Forward(LinkedList<String> varargs, Control control){
     super(varargs, control);
-    super.numberOfArgs= NUMARGS;
+    System.out.println("Reached");
     int i=0;
     i++;
     System.out.println(i);
-    int distance = Integer.parseInt(varargs.get(0));
+    int distance = (int)(Double.parseDouble(varargs.get(0)));
     double angle = control.getTurtleAngle();
 //    System.out.println("Angle: " + angle);
     double newX = (distance *(Math.sin(Math.toRadians((angle)))));
