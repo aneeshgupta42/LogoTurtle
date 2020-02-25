@@ -5,11 +5,17 @@ import backEnd.commands.Command;
 import java.util.LinkedList;
 
 public class Left extends Command {
+  private static final int NUMARGS = 1;
 
-  public Left(String[] varargs, Control myControl)
-  {
-    //super(varargs);
-    double angle = Double.parseDouble(varargs[0]);
-    myControl.updateTurtle(0,0, -angle);
+  public Left() {
+    super();
+    super.numberOfArgs = NUMARGS;
+  }
+
+  public Left(LinkedList<String> varargs, Control control){
+    super(varargs, control);
+    super.numberOfArgs=NUMARGS;
+    double angle = Double.parseDouble(varargs.get(0));
+    control.updateTurtle(0,0, -angle);
   }
 }
