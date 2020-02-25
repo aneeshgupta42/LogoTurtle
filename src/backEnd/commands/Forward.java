@@ -25,4 +25,8 @@ public class Forward extends Command {
     control.updateTurtle(newX, newY, 0, distance);
   }
 
+  @Override
+  public int repeatCom() {
+    return super.repeatCom();
+  }
 }

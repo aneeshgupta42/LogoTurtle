@@ -31,5 +31,8 @@ public MakeVariable(){
     }
     return variables;
   }
-
+  @Override
+  public int repeatCom() {
+    return super.repeatCom();
+  }
 }

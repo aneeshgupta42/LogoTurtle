@@ -21,4 +21,8 @@ public class ShowTurtle extends Command{
     String ret = Integer.toString(1);
     return ret;
   }
+  @Override
+  public int repeatCom() {
+    return super.repeatCom();
+  }
   }

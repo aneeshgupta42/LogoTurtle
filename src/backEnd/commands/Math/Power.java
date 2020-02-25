@@ -30,4 +30,8 @@ public class Power extends Command {
         String ret = Double.toString(result);
         return ret;
     }
+    @Override
+    public int repeatCom() {
+        return super.repeatCom();
+    }
 }

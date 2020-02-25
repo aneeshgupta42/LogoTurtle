@@ -29,4 +29,8 @@ public class Difference extends Command {
         String ret = Double.toString(diff);
         return ret;
     }
+    @Override
+    public int repeatCom() {
+        return super.repeatCom();
+    }
 }

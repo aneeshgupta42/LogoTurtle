@@ -22,4 +22,9 @@ public class HideTurtle extends Command {
         String ret = Integer.toString(0);
         return ret;
     }
+
+    @Override
+    public int repeatCom() {
+        return super.repeatCom();
+    }
 }

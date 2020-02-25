@@ -23,5 +23,10 @@ public class Pi extends Command {
   public String commandValueReturn(){
     return Double.toString(Math.PI);
   }
+
+  @Override
+  public int repeatCom() {
+    return super.repeatCom();
+  }
 }
 

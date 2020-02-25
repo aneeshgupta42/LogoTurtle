@@ -28,4 +28,8 @@ public class Tangent extends Command {
         String ret = Double.toString(tanResult);
         return ret;
     }
+    @Override
+    public int repeatCom() {
+        return super.repeatCom();
+    }
 }

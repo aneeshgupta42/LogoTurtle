@@ -24,4 +24,6 @@ public class DoTimes extends Command {
   public int repeatCom() {
     return repetition;
   }
+
+
 }
