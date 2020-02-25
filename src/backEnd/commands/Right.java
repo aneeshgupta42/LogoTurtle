@@ -15,11 +15,12 @@ public class Right extends Command {
     super(varargs, myControl);
     super.numberOfArgs= NUMARGS;
     double angle = Double.parseDouble(varargs.get(0));
+    System.out.println("hi");
     myControl.updateTurtle(0,0, angle, 0);
   }
   @Override
   public int repeatCom() {
-    return super.repeatCom();
+    return 0;
   }
 
 }
