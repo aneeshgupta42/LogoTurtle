@@ -13,10 +13,12 @@ public class MakeVariable extends Command {
   private String var;
   private static int number = 2;
 
-
+public MakeVariable(){
+  super();
+  super.numberOfArgs = number;
+}
   public MakeVariable(LinkedList<String> varargs, Control control){
     super(varargs, control);
-    super.numberOfArgs = number;
     key = varargs.get(0);
     var = varargs.get(1);
   }
@@ -25,9 +27,12 @@ public class MakeVariable extends Command {
   public Map getVariablesCreated(){
     Map<String,String> variables = new HashMap<>();
     if(!variables.containsKey(key)){
-      variables.put(key,var);
+      variables.put(var,key);
     }
     return variables;
   }
-
+  @Override
+  public int repeatCom() {
+    return super.repeatCom();
+  }
 }

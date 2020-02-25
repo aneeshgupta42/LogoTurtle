@@ -42,6 +42,7 @@ public class Turtle implements Update{
     turtleStartingYPos= myTurtle.getY();
     myTurtle.setX(myTurtle.getX()+x);
     myTurtle.setY(myTurtle.getY()+y);
+  //  System.out.println("hey" + turtleStartingYPos + " " + myTurtle.getY());
     myTurtle.setRotate(turtleAngle + angle);
     turtleAngle = turtleAngle + angle;
     if(penDown){
@@ -52,12 +53,11 @@ public class Turtle implements Update{
   private void drawPen(double x, double y) {
     Line line = new Line();
     myLine=line;
-    myLine.getStyleClass().add(myView.getLineColor());
-    System.out.println(myView.getLineColor());
-    myView.setLine(myLine);
+    myLine.setStroke(myView.getLineColor());
     line.setStartX(turtleStartingXPos+ myTurtle.getBoundsInLocal().getWidth()/2);
 
     line.setStartY(turtleStartingYPos + myTurtle.getBoundsInLocal().getHeight());
+ //   System.out.println("yo" + turtleStartingYPos + " " + myTurtle.getY());
 
     line.setEndX(turtleStartingXPos + x+ myTurtle.getBoundsInLocal().getWidth()/2);
     line.setEndY(turtleStartingYPos + y+ myTurtle.getBoundsInLocal().getHeight());

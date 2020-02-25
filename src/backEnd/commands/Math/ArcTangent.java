@@ -28,4 +28,8 @@ public class ArcTangent extends Command {
         String ret = Double.toString(arcTanResult);
         return ret;
     }
+    @Override
+    public int repeatCom() {
+        return super.repeatCom();
+    }
 }

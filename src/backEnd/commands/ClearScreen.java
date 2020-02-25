@@ -23,4 +23,8 @@ public class ClearScreen extends Command {
     String ret = Integer.toString(distance);
     return ret;
   }
+  @Override
+  public int repeatCom() {
+    return super.repeatCom();
+  }
 }

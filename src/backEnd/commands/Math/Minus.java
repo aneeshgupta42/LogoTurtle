@@ -28,4 +28,8 @@ public class Minus extends Command {
         String ret = Double.toString(minus);
         return ret;
     }
+    @Override
+    public int repeatCom() {
+        return super.repeatCom();
+    }
 }

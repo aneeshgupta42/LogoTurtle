@@ -78,7 +78,7 @@ public class View extends Application {
   public static final Color[] colors = {Color.RED, Color.YELLOW, Color.BLUE};
   private static final HashMap<String, Color> map= new HashMap<>();
   private BorderPane root;
-  private String lineColor;
+  private Color lineColor = Color.BLACK;
 
 
   public View() {
@@ -158,7 +158,7 @@ public class View extends Application {
 
   public void setLine(Line line) {
     myLine = line;
-    myLine.getStyleClass().add(getLineColor());
+    //myLine.getStyleClass().add(getLineColor());
   }
 
   private Node makeSideWindow() {
@@ -299,7 +299,8 @@ public class View extends Application {
           {
             myLine.setStroke(map.get(pen_box.getValue().toString()));
             myLine.getStyleClass().add(pen_box.getValue().toString());
-            lineColor = pen_box.getValue().toString();
+            //lineColor = pen_box.getValue().toString();
+            lineColor = map.get(pen_box.getValue());
           }
         };
     // Set on action
@@ -334,7 +335,7 @@ public class View extends Application {
     launch(args);
   }
 
-  public String getLineColor() {
+  public Color getLineColor() {
     return lineColor;
   }
 }

@@ -29,4 +29,8 @@ public class Quotient extends Command {
     String ret = Double.toString(quotient);
     return ret;
   }
+  @Override
+  public int repeatCom() {
+    return super.repeatCom();
+  }
 }

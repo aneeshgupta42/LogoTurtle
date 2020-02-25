@@ -28,4 +28,8 @@ public class NaturalLog extends Command {
         String ret = Double.toString(log);
         return ret;
     }
+    @Override
+    public int repeatCom() {
+        return super.repeatCom();
+    }
 }

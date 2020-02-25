@@ -29,4 +29,8 @@ public class Sum extends Command {
     String ret = Double.toString(sum);
     return ret;
   }
+  @Override
+  public int repeatCom() {
+    return super.repeatCom();
+  }
 }
