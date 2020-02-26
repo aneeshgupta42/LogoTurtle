@@ -1,5 +1,5 @@
 package backEnd.commands;
 
-public class SetHeading {
+public class SetHeading extends Command {
 
 }

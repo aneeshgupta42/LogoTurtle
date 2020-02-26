@@ -89,6 +89,7 @@ public class Turtle implements Update{
     Line line = new Line();
     myLine=line;
     myLine.setStroke(myView.getLineColor());
+    myView.setLine(line);
     line.setStartX(turtleStartingXPos+ myTurtle.getBoundsInLocal().getWidth()/2);
 
     line.setStartY(turtleStartingYPos + myTurtle.getBoundsInLocal().getHeight());
@@ -135,11 +136,15 @@ public class Turtle implements Update{
     myTurtle.setRotate(0);
     myView.setTurtlePosition(myTurtle);
   }
+
   public void eraseLines(){
     // Need Cayla's help
   }
-  public void clearScreen(){
+  public void clearScreen()
+  {
     resetTurtle();
+    eraseLines();
+
   }
 
   public void turteVisible(boolean visible){

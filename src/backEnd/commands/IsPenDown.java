@@ -1,5 +1,5 @@
 package backEnd.commands;
 
-public class IsPenDown {
+public class IsPenDown extends Command {
 
 }

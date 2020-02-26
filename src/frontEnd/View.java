@@ -16,6 +16,9 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -114,7 +117,7 @@ public class View extends Application {
     display_window = makeDisplayWindow();
     root.setLeft(display_window);
     root.setRight(makeSideWindow());
-    root.setBottom(makeCommandWindow());
+    //root.setBottom(makeCommandWindow());
     turtleimage = (ImageView) myTurtle.displayTurtle();
     setTurtlePosition(turtleimage);
     root.getChildren().addAll(turtleimage, browser);
@@ -128,11 +131,13 @@ public class View extends Application {
   }
 
   private Node makeDisplayWindow(){
+    VBox vbox = new VBox();
     rectangle = new Rectangle(DISPLAY_WIDTH, DISPLAY_HEIGHT);
     //rectangle = new Rectangle();
     rectangle.getStyleClass().add("rectangle");
+    vbox.getChildren().addAll(rectangle, makeCommandWindow());
     //turtleimage.setX(750);
-    display.getChildren().addAll(rectangle);
+    display.getChildren().addAll(vbox);
     return display;
   }
 
@@ -145,10 +150,21 @@ public class View extends Application {
   }
 
   private Node makeSideWindow() {
-    GridPane gridPane = createGridPane();
-   // gridPane.setMinHeight(800);
-    gridPane.setMinWidth(400);
-    return gridPane;
+    TabPane tabPane = new TabPane();
+    tabPane.setMinWidth(300);
+
+    Tab tab1 = new Tab("History", new Label("Show all planes available"));
+    Tab tab2 = new Tab("Variables"  , new Label("Show all cars available"));
+    Tab tab3 = new Tab("Commands" , new Label("Show all boats available"));
+
+    tabPane.getTabs().add(tab1);
+    tabPane.getTabs().add(tab2);
+    tabPane.getTabs().add(tab3);
+
+    VBox vBox = new VBox(tabPane);
+    Scene scene = new Scene(vBox);
+
+    return tabPane;
   }
 
   public void addNodeToRoot(Node object){
@@ -197,6 +213,7 @@ public class View extends Application {
 
   public HBox addHBox() {
     HBox hbox = new HBox();
+    hbox.getStyleClass().add("hbox");
     hbox.setPrefHeight(70);
     hbox.setPadding(new Insets(15, 12, 15, 12));
     hbox.setSpacing(10);
@@ -309,8 +326,8 @@ public class View extends Application {
   }
 
   private void resetScreen() {
+    root.getChildren().removeIf(object -> object instanceof Line);
     setTurtlePosition(turtleimage);
-    display.getChildren().removeIf(object -> object != turtleimage && object != rectangle);
   }
 
   private void scanFile(File file) throws FileNotFoundException {
@@ -332,6 +349,10 @@ public class View extends Application {
     GridPane grid = new GridPane();
     grid.getStyleClass().add("grid-pane");
     return grid ;
+  }
+
+  public void setLine(Line line){
+    myLine = line;
   }
 
   public static void main(String[] args) {
