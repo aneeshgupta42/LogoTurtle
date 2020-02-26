@@ -1,6 +1,7 @@
 package Controller;
 
 import backEnd.ErrorHandler;
+import frontEnd.ErrorBoxes;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,7 +45,9 @@ public class Parser {
         return e.getKey();
       }
     }
-    ErrorHandler.handle();
+    ErrorBoxes box = new ErrorBoxes(new ErrorHandler("InvalidCommand"));
+    //ErrorHandler.handle();
+    // why do we need to return null ?
     return null;
   }
 
