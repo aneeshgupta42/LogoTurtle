@@ -102,6 +102,7 @@ public class Control {
     command = new LinkedList<>();
     argument = new LinkedList<>();
     args = new LinkedList<>();
+    logicStatementInt =0;
     for (String line : input.split(NEWLINE)) {
       if (line.contains("#")) {
         String comment = line;
@@ -246,16 +247,16 @@ public class Control {
     }
     if (parser.getSymbol(userCom).equals(LIST_START)) {
       logicStatementInt++;
-      if(runnableIf && logicStatementInt%2==1){
+      if((runnableIf && logicStatementInt==1)){
+        checkingIfLoopInt =false;
+      }
+      else if((!runnableIf && logicStatementInt==2)){
         checkingIfLoopInt =false;
       }
       else checkingIfLoopInt = true;
     }
      if (parser.getSymbol(userCom).equals(LIST_END)) {
-      if(runnableIf && logicStatementInt%2==0){
-        checkingIfLoopInt =true;
-      }
-      else checkingIfLoopInt = false;
+      checkingIfLoopInt = false;
     }
     else if (checkingIfLoopInt) {
        lists.store(userCom);
@@ -317,7 +318,7 @@ public class Control {
      if (parser1.getSymbol(userCom).equals("MakeVariable")) {
       variablesUsed.putAll(comm.getVariablesCreated());
     }
-    if(parser1.getSymbol(userCom).equals("If")){
+    if(parser1.getSymbol(userCom).equals("If") || parser1.getSymbol(userCom).equals("IfElse")){
       runnableIf = comm.runnable();
     }
     if (!comm.equals(userfunction) && checkingIfLoopInt == false && userfunction != null && parser.getSymbol(userCom).equals(LIST_END)) {
