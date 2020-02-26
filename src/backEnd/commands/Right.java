@@ -14,8 +14,8 @@ public class Right extends Command {
 
   public Right(LinkedList<String> varargs, Control myControl){
     super(varargs, myControl);
+    super.numberOfArgs= NUMARGS;
     angle = Double.parseDouble(varargs.get(0));
-    System.out.println("hi");
     myControl.updateTurtle(0,0, angle, 0);
     System.out.println("rt " + angle);
   }
@@ -25,8 +25,7 @@ public class Right extends Command {
   }
 
   @Override
-  public String commandValueReturn(){
+  public String commandValueReturn() {
     return Double.toString(angle);
   }
-
 }

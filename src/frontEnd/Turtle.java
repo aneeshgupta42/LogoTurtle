@@ -19,11 +19,10 @@ public class Turtle implements Update{
   private static final String TURTLE = "turtle_25_upwards.png";
   ImageView myTurtle;
   private double turtleAngle;
-  private boolean penDown = true;
+  private boolean penDown;
   private boolean turtleVisible = true;
   private double lineStartXPosition;
   private int distanceSoFar;
-  private boolean turtleVisible;
   private double lineStartYPosition;
   private double turtleStartingXPos;
   private double turtleStartingYPos;
@@ -34,6 +33,7 @@ public class Turtle implements Update{
 
   public Turtle(View view){
     myView = view;
+    // do we want this to start as true?
     penDown = true;
     turtleVisible = true;
     distanceSoFar = 0;
@@ -96,7 +96,7 @@ public class Turtle implements Update{
     Line line = new Line();
     myLine=line;
     myLine.setStroke(myView.getLineColor());
-    myView.setLine(line);
+    //myView.setLine(line);
     line.setStartX(turtleStartingXPos+ myTurtle.getBoundsInLocal().getWidth()/2);
 
     line.setStartY(turtleStartingYPos + myTurtle.getBoundsInLocal().getHeight());
@@ -120,12 +120,8 @@ public class Turtle implements Update{
     return turtleAngle;
   }
 
-  public boolean isPenDown() {
-    return penDown;
-  }
-
-  public void setPen(boolean pendown){
-    penDown = pendown;
+  public void setPen(boolean bool){
+    penDown=bool;
   }
 
   public void updateDistanceSoFar(int d){
@@ -157,6 +153,14 @@ public class Turtle implements Update{
     myTurtle.setVisible(this.turtleVisible);
   }
 
+  public boolean isPenDown() {
+    return penDown;
+  }
+
+  public boolean isTurtleVisible() {
+    return turtleVisible;
+  }
+
   @Override
   public int locationXUpdate(int changeInXPos) {
     return 0;
@@ -183,10 +187,6 @@ public class Turtle implements Update{
 
   public double getTurtleCenterYPos() {
     return this.turtleCenterYPos;
-  }
-
-  public boolean getTurtleVisibility() {
-    return this.turtleVisible;
   }
 }
 
