@@ -186,6 +186,7 @@ public class Control {
     System.out.println(args);
     if (commandArguments == false || dotimes) {
       obtainCommand();
+      System.out.println("ran");
     }
   }
 
@@ -196,7 +197,6 @@ public class Control {
       Constructor constructor = cls.getConstructor(LinkedList.class, Control.class);
       objectCommand = constructor.newInstance((Object) args, (Object) this);
       Command commandGiven = (Command) objectCommand;
-      System.out.println(commandGiven);
       if (userfunction == null && !parser.getSymbol(userCom).equals(LIST_END) && once == false && !parser.getSymbol(userCom).equals(LIST_START)) {
         userfunction = commandGiven;
         once = true;
@@ -209,7 +209,9 @@ public class Control {
 
   public void createCommand(Command comm, Parser parser1) {
     if (comm.commandValueReturn() != null) {
-      if(!command.isEmpty()) argument.push(comm.commandValueReturn());
+      if(!command.isEmpty()) {
+        argument.push(comm.commandValueReturn());
+      }
     }
     if (parser1.getSymbol(userCom).equals("MakeVariable")) {
       variablesUsed.putAll(comm.getVariablesCreated());
