@@ -19,6 +19,8 @@ public class ErrorBoxes {
     Label errorLabel = new Label(e.getMessage());
     errorLabel.setAlignment(Pos.CENTER);
     Scene errorScene = new Scene(errorLabel);
+    errorLabel.getStyleClass().add("error-label");
+    errorScene.getStylesheets().add("default.css");
     errorStage.setScene(errorScene);
     errorStage.showAndWait();
   }

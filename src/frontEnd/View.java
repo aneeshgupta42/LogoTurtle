@@ -26,6 +26,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -209,7 +211,6 @@ public class View extends Application {
     runButton.setOnAction(action -> {
       myText = inputArea.getText();
       String thistext = myText;
-
       control.passCommand(myText);
       control.passTurtle(myTurtle);
       control.parseCommand();
@@ -279,9 +280,10 @@ public class View extends Application {
         new EventHandler<ActionEvent>() {
           public void handle(ActionEvent e)
           {
-            textArea.setText("HELPPPPPPPPPPP");
-            stage2.setScene(new Scene(textArea, 400, 400));
-            stage2.show();
+            //textArea.setText("HELPPPPPPPPPPP");
+            displayHelpScreen();
+            //stage2.setScene(new Scene(textArea, 400, 400));
+            //stage2.show();
 
             //webEngine.load("www.cs.duke.edu/courses/spring20/compsci308/assign/03_parser/commands.php");
             //rectangle.setFill(map.get(reset_display.getValue().toString()));
@@ -376,6 +378,36 @@ public class View extends Application {
     return hbox;
   }
 
+  private void displayHelpScreen() {
+    Stage stage2 = new Stage();
+    Scene scene = new Scene(new Group());
+    stage2.setTitle("Table View Sample");
+    TableView table = new TableView();
+    stage2.setWidth(300);
+    stage2.setHeight(500);
+
+    final Label label = new Label("Address Book");
+    label.setFont(new Font("Arial", 20));
+
+    table.setEditable(true);
+
+    TableColumn firstNameCol = new TableColumn("First Name");
+    TableColumn lastNameCol = new TableColumn("Last Name");
+    TableColumn emailCol = new TableColumn("Email");
+
+    table.getColumns().addAll(firstNameCol, lastNameCol, emailCol);
+
+    final VBox vbox = new VBox();
+    vbox.setSpacing(5);
+    vbox.setPadding(new Insets(10, 0, 0, 10));
+    vbox.getChildren().addAll(label, table);
+
+    ((Group) scene.getRoot()).getChildren().addAll(vbox);
+
+    stage2.setScene(scene);
+    stage2.show();
+  }
+
   private void resetScreen() {
     root.getChildren().removeIf(object -> object instanceof Line);
     setTurtlePosition(turtleimage);
@@ -408,5 +440,9 @@ public class View extends Application {
 
   public Color getLineColor() {
     return lineColor;
+  }
+
+  private void createErrorDialog(Exception e){
+    ErrorBoxes ep = new ErrorBoxes(e);
   }
 }

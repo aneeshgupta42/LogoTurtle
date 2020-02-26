@@ -2,6 +2,7 @@ package Controller;
 
 import backEnd.ErrorHandler;
 import backEnd.commands.Command;
+import frontEnd.ErrorBoxes;
 import frontEnd.Turtle;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -20,7 +21,7 @@ public class Control {
   private static final String CLASS_PATH = "backEnd.commands.";
   private static final String LIST_END = "ListEnd";
   private static final String LIST_START = "ListStart";
-  private final ErrorHandler error;
+  //private final ErrorHandler error;
   private final Parser parser;
   private String language;
   private Deque<String> command;
@@ -48,7 +49,7 @@ public class Control {
 
   public Control() {
     lists = new StoreLists();
-    error = new ErrorHandler();
+    //error = new ErrorHandler();
     parser = new Parser();
   }
 
@@ -143,7 +144,10 @@ public class Control {
         System.out.println(commandGiven);
         argNum = commandGiven.getNumberOfArgs();
       } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
-        error.handleCommandClassNotFound();
+        //error.handleCommandClassNotFound()
+        ErrorBoxes box = new ErrorBoxes(new ErrorHandler("InvalidCommand"));
+        //throw new ErrorHandler("FileErrorMessage");
+        //ErrorBoxes errorScreen = new ErrorHandler(new RuntimeException(styleResources.getString(errorMessageProperty)));
       }
       checkIfCommandCanRun(argNum);
     }
@@ -219,8 +223,11 @@ public class Control {
         once = true;
       }
       createCommand(commandGiven, parser);
-    } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
-      error.handleCommandClassNotFound();
+    } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException | ExceptionInInitializerError e) {
+      //error.handleCommandClassNotFound();
+      //System.out.println("wrong");
+      //throw new ErrorHandler("FileErrorMessage");
+      ErrorBoxes box = new ErrorBoxes(new ErrorHandler("NoClass"));
     }
   }
 
