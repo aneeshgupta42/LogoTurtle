@@ -7,6 +7,7 @@ import javafx.animation.SequentialTransition;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
@@ -113,16 +114,12 @@ public class Turtle implements Update{
     return turtleAngle;
   }
 
-  public void setPenDown(){
-    penDown=true;
+  public boolean isPenDown() {
+    return penDown;
   }
 
   public void setPen(boolean pendown){
     penDown = pendown;
-  }
-
-  public void setPenUp(){
-    penDown= false;
   }
 
   public void updateDistanceSoFar(int d){
@@ -139,12 +136,14 @@ public class Turtle implements Update{
 
   public void eraseLines(){
     // Need Cayla's help
+    BorderPane root = myView.getRoot();
+    root.getChildren().removeIf(object -> object instanceof Line);
   }
+
   public void clearScreen()
   {
     resetTurtle();
     eraseLines();
-
   }
 
   public void turteVisible(boolean visible){

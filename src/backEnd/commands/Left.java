@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 public class Left extends Command {
   private static final int NUMARGS = 1;
-
+  private double angle;
   public Left(){
     super();
     super.numberOfArgs= NUMARGS;
@@ -14,8 +14,13 @@ public class Left extends Command {
   {
     super(varargs, myControl);
     super.numberOfArgs= NUMARGS;
-    double angle = Double.parseDouble(varargs.get(0));
+    angle = Double.parseDouble(varargs.get(0));
     myControl.updateTurtle(0,0, -angle, 0);
+  }
+
+  @Override
+  public String commandValueReturn(){
+    return Double.toString(angle);
   }
 
   @Override

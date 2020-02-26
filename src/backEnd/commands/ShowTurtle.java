@@ -16,11 +16,13 @@ public class ShowTurtle extends Command{
       super.numberOfArgs= NUMARGS;
       myControl.setTurtleVisible(true);
     }
+
   @Override
   public String commandValueReturn() {
     String ret = Integer.toString(1);
     return ret;
   }
+
   @Override
   public int repeatCom() {
     return super.repeatCom();
