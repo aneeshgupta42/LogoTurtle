@@ -3,22 +3,31 @@ package frontEnd;
 import Controller.Control;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TabPane.TabClosingPolicy;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -28,6 +37,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
@@ -75,6 +86,8 @@ public class View extends Application {
   private Color lineColor = Color.BLACK;
   private ImageView turtleimage;
   private HBox hbox;
+  private ScrollPane scrollPane;
+  private TextArea inputArea;
 
   final WebView browser = new WebView();
   final WebEngine webEngine = browser.getEngine();
@@ -157,8 +170,10 @@ public class View extends Application {
   private Node makeSideWindow() {
     TabPane tabPane = new TabPane();
     tabPane.setMinWidth(300);
+    tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+    scrollPane = new ScrollPane();
+    Tab tab1 = new Tab("History", scrollPane);
 
-    Tab tab1 = new Tab("History", new Label("Show all planes available"));
     Tab tab2 = new Tab("Variables"  , new Label("Show all cars available"));
     Tab tab3 = new Tab("Commands" , new Label("Show all boats available"));
 
@@ -179,7 +194,7 @@ public class View extends Application {
 
   private Node makeCommandWindow(){
     HBox hbox = new HBox();
-    TextArea inputArea = new TextArea();
+    inputArea = new TextArea();
     myCommander = inputArea;
     inputArea.setPromptText("Enter Command");
     inputArea.setPrefColumnCount(10);
@@ -190,14 +205,37 @@ public class View extends Application {
     VBox vbox = new VBox();
     Button runButton = new Button("Run");
     runButton.setPrefSize(100, 20);
+    VBox box = new VBox();
 
 
     runButton.setOnAction(action -> {
       myText = inputArea.getText();
-
       control.setCommand(myText);
+      String thistext = myText;
       control.passTurtle(myTurtle);
       control.parseCommand();
+      TextArea text = new TextArea();
+      Hyperlink link = new Hyperlink();
+      link.getStyleClass().add("hyper-link");
+      link.setText(myText);
+      link.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent e) {
+          inputArea.setText(thistext);
+        }
+      });
+      text.setText(myText);
+      text.setEditable(false);
+      text.setDisable(true);
+      //setAction(text);
+      box.getChildren().add(0, link);
+     /* text.setOnMouseClicked(e -> {
+            inputArea.setText(text.getText());
+            System.out.println(text.getText());
+          });*/
+      scrollPane.setContent(box);
+      inputArea.setText("");
+
     });
     Button clearButton = new Button("Clear Text");
     clearButton.setPrefSize(100, 20);
@@ -212,6 +250,16 @@ public class View extends Application {
     return hbox;
   }
 
+  private void setAction(TextArea text){
+    EventHandler<ActionEvent> event =
+        new EventHandler<ActionEvent>() {
+          public void handle(ActionEvent e)
+          {
+            inputArea.setText(text.getText());
+            System.out.println("hi");
+          }
+        };
+  }
   private void stopEverything(){
     System.exit(1);
   }
@@ -232,9 +280,10 @@ public class View extends Application {
         new EventHandler<ActionEvent>() {
           public void handle(ActionEvent e)
           {
-            textArea.setText("HELPPPPPPPPPPP");
-            stage2.setScene(new Scene(textArea, 400, 400));
-            stage2.show();
+            //textArea.setText("HELPPPPPPPPPPP");
+            displayHelpScreen();
+            //stage2.setScene(new Scene(textArea, 400, 400));
+            //stage2.show();
 
             //webEngine.load("www.cs.duke.edu/courses/spring20/compsci308/assign/03_parser/commands.php");
             //rectangle.setFill(map.get(reset_display.getValue().toString()));
@@ -294,40 +343,73 @@ public class View extends Application {
             .observableArrayList(colorNames));
     background_box.setPromptText(BACKGROUND_PROMPT);
 
-    //Create action event
-    EventHandler<ActionEvent> event1 =
-        new EventHandler<ActionEvent>() {
-          public void handle(ActionEvent e)
-          {
-            rectangle.setFill(map.get(background_box.getValue().toString()));
-          }
-        };
-    // Set on action
-    background_box.setOnAction(event1);
-    // Create a tile pane
+    final ColorPicker colorBackgroundPicker = new ColorPicker();
+    colorBackgroundPicker.setValue(Color.GREY);
 
-    ComboBox pen_box =
-        new ComboBox(FXCollections
-            .observableArrayList(colorNames));
-    pen_box.setPromptText(PEN_PROMPT);
+    Text backgrouondText = new Text(BACKGROUND_PROMPT + ":");
 
-    //Create action event
-    EventHandler<ActionEvent> event3 =
-        new EventHandler<ActionEvent>() {
-          public void handle(ActionEvent e)
-          {
-            myLine.setStroke(map.get(pen_box.getValue().toString()));
-            myLine.getStyleClass().add(pen_box.getValue().toString());
-            //lineColor = pen_box.getValue().toString();
-            lineColor = map.get(pen_box.getValue());
-          }
-        };
-    // Set on action
-    pen_box.setOnAction(event3);
+    //penText.setFont(Font.font ("Verdana", 20));
+    //backgrouondText.setFill(colorBackgroundPicker.getValue());
 
-    hbox.getChildren().addAll(help, reset_display, button, language_box, background_box, pen_box, browser);
+    colorBackgroundPicker.setOnAction(new EventHandler() {
+      @Override
+      public void handle(Event event) {
+        //penText.setFill(colorPenPicker.getValue());
+        rectangle.setFill(colorBackgroundPicker.getValue());
+      }
+    });
+
+    final ColorPicker colorPenPicker = new ColorPicker();
+    colorPenPicker.setValue(Color.BLACK);
+
+    Text penText = new Text(PEN_PROMPT + ":");
+
+    //penText.setFont(Font.font ("Verdana", 20));
+    //penText.setFill(colorPenPicker.getValue());
+
+    colorPenPicker.setOnAction(new EventHandler() {
+      @Override
+      public void handle(Event event) {
+        //penText.setFill(colorPenPicker.getValue());
+        myLine.setStroke(colorPenPicker.getValue());
+        lineColor = colorPenPicker.getValue();
+      }
+    });
+
+
+    hbox.getChildren().addAll(help, reset_display, button, language_box, browser, backgrouondText, colorBackgroundPicker, penText, colorPenPicker);
     HBox.setHgrow(browser, Priority.ALWAYS);
     return hbox;
+  }
+
+  private void displayHelpScreen() {
+    Stage stage2 = new Stage();
+    Scene scene = new Scene(new Group());
+    stage2.setTitle("Table View Sample");
+    TableView table = new TableView();
+    stage2.setWidth(300);
+    stage2.setHeight(500);
+
+    final Label label = new Label("Address Book");
+    label.setFont(new Font("Arial", 20));
+
+    table.setEditable(true);
+
+    TableColumn firstNameCol = new TableColumn("First Name");
+    TableColumn lastNameCol = new TableColumn("Last Name");
+    TableColumn emailCol = new TableColumn("Email");
+
+    table.getColumns().addAll(firstNameCol, lastNameCol, emailCol);
+
+    final VBox vbox = new VBox();
+    vbox.setSpacing(5);
+    vbox.setPadding(new Insets(10, 0, 0, 10));
+    vbox.getChildren().addAll(label, table);
+
+    ((Group) scene.getRoot()).getChildren().addAll(vbox);
+
+    stage2.setScene(scene);
+    stage2.show();
   }
 
   private void resetScreen() {
@@ -356,15 +438,15 @@ public class View extends Application {
     return grid ;
   }
 
-  public void setLine(Line line){
-    myLine = line;
-  }
-
   public static void main(String[] args) {
     launch(args);
   }
 
   public Color getLineColor() {
     return lineColor;
+  }
+
+  private void createErrorDialog(Exception e){
+    ErrorBoxes ep = new ErrorBoxes(e);
   }
 }

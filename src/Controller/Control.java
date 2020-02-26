@@ -2,6 +2,7 @@ package Controller;
 
 import backEnd.ErrorHandler;
 import backEnd.commands.Command;
+import frontEnd.ErrorBoxes;
 import frontEnd.Turtle;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -18,7 +19,7 @@ public class Control {
   private static final String CLASS_PATH = "backEnd.commands.";
   private static final String LIST_END = "ListEnd";
   private static final String LIST_START = "ListStart";
-  private final ErrorHandler error;
+  //private final ErrorHandler error;
   private final Parser parser;
   private String language;
   private Deque<String> command;
@@ -52,7 +53,7 @@ public class Control {
    */
   public Control() {
     lists = new StoreLists();
-    error = new ErrorHandler();
+    //error = new ErrorHandler();
     parser = new Parser();
   }
 
@@ -177,6 +178,8 @@ public class Control {
   Getting the number of arguments for each command
    */
   public void coordinateCommands() {
+    System.out.println(argument);
+    System.out.println(command);
     int argNum = 0;
     if(!command.isEmpty()) {
       userCom = command.pop();
@@ -192,7 +195,10 @@ public class Control {
         Command commandGiven = (Command) objectCommand;
         argNum = commandGiven.getNumberOfArgs();
       } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
-        error.handleCommandClassNotFound();
+        //error.handleCommandClassNotFound()
+        ErrorBoxes box = new ErrorBoxes(new ErrorHandler("InvalidCommand"));
+        //throw new ErrorHandler("FileErrorMessage");
+        //ErrorBoxes errorScreen = new ErrorHandler(new RuntimeException(styleResources.getString(errorMessageProperty)));
       }
       checkIfCommandCanRun(argNum);
     }
@@ -240,13 +246,13 @@ public class Control {
     }
     if (parser.getSymbol(userCom).equals(LIST_START)) {
       logicStatementInt++;
-      if(runnableIf && logicStatementInt ==1){
+      if(runnableIf && logicStatementInt%2==1){
         checkingIfLoopInt =false;
       }
       else checkingIfLoopInt = true;
     }
      if (parser.getSymbol(userCom).equals(LIST_END)) {
-      if(runnableIf && logicStatementInt ==2){
+      if(runnableIf && logicStatementInt%2==0){
         checkingIfLoopInt =true;
       }
       else checkingIfLoopInt = false;
@@ -283,13 +289,17 @@ public class Control {
       Constructor constructor = cls.getConstructor(LinkedList.class, Control.class);
       objectCommand = constructor.newInstance((Object) args, (Object) this);
       Command commandGiven = (Command) objectCommand;
-      if (userfunction == null && !parser.getSymbol(userCom).equals(LIST_END) && once == false && !parser.getSymbol(userCom).equals(LIST_START)) {
+      if (numOfLoops!=0 && userfunction == null && !parser.getSymbol(userCom).equals(LIST_END) && once == false && !parser.getSymbol(userCom).equals(LIST_START)) {
         userfunction = commandGiven;
+        System.out.println(userfunction);
         once = true;
       }
       createCommand(commandGiven, parser);
-    } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
-      error.handleCommandClassNotFound();
+    } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException | ExceptionInInitializerError e) {
+      //error.handleCommandClassNotFound();
+      //System.out.println("wrong");
+      //throw new ErrorHandler("FileErrorMessage");
+      ErrorBoxes box = new ErrorBoxes(new ErrorHandler("NoClass"));
     }
   }
 
@@ -410,15 +420,16 @@ If user input command, runs the content inside the [ ] the specified numbers of 
   }
 
   public boolean findTurtleVisibility() {
-    return myTurtle.getTurtleVisibility();
+    return myTurtle.isTurtleVisible();
   }
 
   public void updateTurtle(double col, double row, double angle, int distance) {
-    turtleRow = myTurtle.getTurtleRow()+row;
-    turtleCol = myTurtle.getTurtleCol()+col;
-    turtleAngle = myTurtle.getTurtleAngle()+angle;
+    turtleRow = myTurtle.getTurtleRow() + row;
+    turtleCol = myTurtle.getTurtleCol() + col;
+    turtleAngle = myTurtle.getTurtleAngle() + angle;
     myTurtle.updateDistanceSoFar(distance);
     myTurtle.move(col, row, angle);
+    System.out.println("update" + col + " " + row + " " + angle);
   }
 
   public int getTurtleDistance() {
