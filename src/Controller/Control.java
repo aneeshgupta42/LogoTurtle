@@ -155,7 +155,7 @@ public class Control {
       makeFunction = false;
       coordinateCommands();
     }
-    else  command.push(word);
+    else command.push(word);
   }
 
   /*
@@ -250,7 +250,7 @@ public class Control {
       if((runnableIf && logicStatementInt==1)){
         checkingIfLoopInt =false;
       }
-      else if((!runnableIf && logicStatementInt==2)){
+      else if((!runnableIf && logicStatementInt%2==0)){
         checkingIfLoopInt =false;
       }
       else checkingIfLoopInt = true;
@@ -284,13 +284,15 @@ public class Control {
   Passes arguments to the command class and grabs a user function if it exists.
    */
   private void obtainCommand() {
+   // System.out.println(com);
+   // System.out.println(args);
     try {
       Class cls = Class.forName(com);
       Object objectCommand;
       Constructor constructor = cls.getConstructor(LinkedList.class, Control.class);
       objectCommand = constructor.newInstance((Object) args, (Object) this);
       Command commandGiven = (Command) objectCommand;
-      if (numOfLoops!=0 && userfunction == null && !parser.getSymbol(userCom).equals(LIST_END) && once == false && !parser.getSymbol(userCom).equals(LIST_START)) {
+      if (userfunction == null && !parser.getSymbol(userCom).equals(LIST_END) && once == false && !parser.getSymbol(userCom).equals(LIST_START)) {
         userfunction = commandGiven;
         System.out.println(userfunction);
         once = true;
@@ -318,12 +320,15 @@ public class Control {
      if (parser1.getSymbol(userCom).equals("MakeVariable")) {
       variablesUsed.putAll(comm.getVariablesCreated());
     }
-    if(parser1.getSymbol(userCom).equals("If") || parser1.getSymbol(userCom).equals("IfElse")){
+    if(parser1.getSymbol(userCom).equals("If") ||parser1.getSymbol(userCom).equals("IfElse") ){
       runnableIf = comm.runnable();
     }
     if (!comm.equals(userfunction) && checkingIfLoopInt == false && userfunction != null && parser.getSymbol(userCom).equals(LIST_END)) {
         int i=0;
         userInputCom(numOfLoops,i, numOfLoops);
+    }
+    if(!command.isEmpty()) {
+      coordinateCommands();
     }
   }
 
@@ -333,27 +338,28 @@ If user input command, runs the content inside the [ ] the specified numbers of 
   public void userInputCom(int looping, int i, int start) {
     if (looping == 0) {
       inList = false;
-    } else {
-        inList = true;
-        doTimes = false;
-      System.out.println(userfunction);
-        if (start == looping) {
-          command = lists.getCommands();
-          System.out.println(command);
-          System.out.println(argument);
-          argument = lists.getArguments();
-          numberOfCommands = lists.getLength();
-          System.out.println(numberOfCommands);
-        }
-        coordinateCommands();
-        repCount(looping, var);
-        repCount(i, ":repCount");
-        if (loopingComplete == false) {
-          iterationOfLoopInt = 0;
-        }
-      looping--;
-      i++;
-       userInputCom(looping, i, start);
+    }   else {
+    inList = true;
+    doTimes = false;
+    //System.out.println(userfunction);
+    if (start == looping) {
+      command = lists.getCommands();
+   //   System.out.println(command);
+    //  System.out.println(argument);
+      argument = lists.getArguments();
+      numberOfCommands = lists.getLength();
+    //  System.out.println(numberOfCommands);
+    }
+    coordinateCommands();
+    repCount(looping, var);
+    repCount(i, ":repCount");
+    if (loopingComplete == false) {
+      iterationOfLoopInt = 0;
+    }
+    looping--;
+    i++;
+
+    userInputCom(looping, i, start);
      // }
     }
   }
