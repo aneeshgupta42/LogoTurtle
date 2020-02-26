@@ -270,18 +270,29 @@ public class Control {
     return turtleRow;
   }
 
+  public void setPenDown(boolean mode){
+    myTurtle.setPen(mode);
+  }
+  public boolean isPenDown(){
+    return myTurtle.isPenDown();
+  }
+
   public double getTurtleAngle() {
     return turtleAngle;
   }
 
   public void setTurtleVisible(boolean mode) {
-    myTurtle.turteVisible(mode);
+    myTurtle.turtleVisible(mode);
+  }
+
+  public boolean findTurtleVisibility() {
+    return myTurtle.getTurtleVisibility();
   }
 
   public void updateTurtle(double col, double row, double angle, int distance) {
-    turtleRow = myTurtle.getTurtleRow();
-    turtleCol = myTurtle.getTurtleCol();
-    turtleAngle = myTurtle.getTurtleAngle();
+    turtleRow = myTurtle.getTurtleRow()+row;
+    turtleCol = myTurtle.getTurtleCol()+col;
+    turtleAngle = myTurtle.getTurtleAngle()+angle;
     myTurtle.updateDistanceSoFar(distance);
     myTurtle.move(col, row, angle);
   }
@@ -300,6 +311,14 @@ public class Control {
 
   public Turtle getTurtle() {
     return myTurtle;
+  }
+
+  public double getTurtleRelativeXPos() {
+    return turtleCol - myTurtle.getTurtleCenterXPos();
+  }
+
+  public double getTurtleRelativeYPos() {
+    return myTurtle.getTurtleCenterYPos() - turtleRow;
   }
 }
 

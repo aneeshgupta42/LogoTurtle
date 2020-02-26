@@ -7,6 +7,7 @@ import javafx.animation.SequentialTransition;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
@@ -19,16 +20,21 @@ public class Turtle implements Update{
   ImageView myTurtle;
   private double turtleAngle;
   private boolean penDown = true;
+  private boolean turtleVisible = true;
   private double lineStartXPosition;
   private int distanceSoFar;
   private double lineStartYPosition;
   private double turtleStartingXPos;
   private double turtleStartingYPos;
+  private double turtleCenterXPos;
+  private double turtleCenterYPos;
   Line myLine;
   View myView;
 
   public Turtle(View view){
     myView = view;
+    penDown = true;
+    turtleVisible = true;
     distanceSoFar = 0;
   }
 
@@ -89,6 +95,7 @@ public class Turtle implements Update{
     Line line = new Line();
     myLine=line;
     myLine.setStroke(myView.getLineColor());
+    myView.setLine(line);
     line.setStartX(turtleStartingXPos+ myTurtle.getBoundsInLocal().getWidth()/2);
 
     line.setStartY(turtleStartingYPos + myTurtle.getBoundsInLocal().getHeight());
@@ -112,16 +119,12 @@ public class Turtle implements Update{
     return turtleAngle;
   }
 
-  public void setPenDown(){
-    penDown=true;
+  public boolean isPenDown() {
+    return penDown;
   }
 
   public void setPen(boolean pendown){
     penDown = pendown;
-  }
-
-  public void setPenUp(){
-    penDown= false;
   }
 
   public void updateDistanceSoFar(int d){
@@ -135,15 +138,22 @@ public class Turtle implements Update{
     myTurtle.setRotate(0);
     myView.setTurtlePosition(myTurtle);
   }
+
   public void eraseLines(){
     // Need Cayla's help
-  }
-  public void clearScreen(){
-    resetTurtle();
+    BorderPane root = myView.getRoot();
+    root.getChildren().removeIf(object -> object instanceof Line);
   }
 
-  public void turteVisible(boolean visible){
-    myTurtle.setVisible(visible);
+  public void clearScreen()
+  {
+    resetTurtle();
+    eraseLines();
+  }
+
+  public void turtleVisible(boolean visible){
+    this.turtleVisible = visible;
+    myTurtle.setVisible(this.turtleVisible);
   }
 
   @Override
@@ -160,4 +170,23 @@ public class Turtle implements Update{
   public int orientationUpdate(int changeInAngle) {
     return 0;
   }
+
+  public void setTurtleInitialCords(double initialX, double initialY) {
+    this.turtleCenterXPos = initialX;
+    this.turtleCenterYPos = initialY;
+  }
+
+  public double getTurtleCenterXPos() {
+    return this.turtleCenterXPos;
+  }
+
+  public double getTurtleCenterYPos() {
+    return this.turtleCenterYPos;
+  }
+
+  public boolean getTurtleVisibility() {
+    return this.turtleVisible;
+  }
 }
+
+

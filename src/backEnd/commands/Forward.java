@@ -11,6 +11,7 @@ public class Forward extends Command {
     super();
     super.numberOfArgs=NUMARGS;
   }
+
   public Forward(LinkedList<String> varargs, Control control){
     super(varargs, control);
     System.out.println("Reached");
@@ -23,6 +24,12 @@ public class Forward extends Command {
     double newY = -(distance *(Math.cos(Math.toRadians((angle)))));
     System.out.println("d " + distance + newX + newY);
     control.updateTurtle(newX, newY, 0, distance);
+    System.out.println("fd " + newX +" "+ newY +" "+  distance);
+  }
+
+  @Override
+  public String commandValueReturn() {
+    return Integer.toString(distance);
   }
 
   @Override
@@ -30,8 +37,4 @@ public class Forward extends Command {
     return 0;
   }
 
-  @Override
-  public String commandValueReturn() {
-    return Integer.toString(distance);
-  }
 }
