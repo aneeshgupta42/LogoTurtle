@@ -153,6 +153,14 @@ public class Turtle implements Update{
     myTurtle.setVisible(this.turtleVisible);
   }
 
+  public boolean isPenDown() {
+    return penDown;
+  }
+
+  public boolean isTurtleVisible() {
+    return turtleVisible;
+  }
+
   @Override
   public int locationXUpdate(int changeInXPos) {
     return 0;
@@ -179,14 +187,6 @@ public class Turtle implements Update{
 
   public double getTurtleCenterYPos() {
     return this.turtleCenterYPos;
-  }
-
-  public boolean getTurtleVisibility() {
-    return this.turtleVisible;
-  }
-
-  public boolean isPenDown() {
-    return penDown;
   }
 }
 
