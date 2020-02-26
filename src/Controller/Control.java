@@ -277,9 +277,9 @@ public class Control {
   }
 
   public void updateTurtle(double col, double row, double angle, int distance) {
-    turtleRow = myTurtle.getTurtleRow();
-    turtleCol = myTurtle.getTurtleCol();
-    turtleAngle = myTurtle.getTurtleAngle();
+    turtleRow = myTurtle.getTurtleRow()+row;
+    turtleCol = myTurtle.getTurtleCol()+col;
+    turtleAngle = myTurtle.getTurtleAngle()+angle;
     myTurtle.updateDistanceSoFar(distance);
     myTurtle.move(col, row, angle);
   }
