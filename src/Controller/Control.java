@@ -232,6 +232,7 @@ public class Control {
   }
 
   public void createCommand(Command comm, Parser parser1) {
+    int loop =0;
     if (comm.commandValueReturn() != null) {
       if(!command.isEmpty()) {
         argument.push(comm.commandValueReturn());
@@ -243,7 +244,8 @@ public class Control {
     if(parser1.getSymbol(userCom).equals("If")){
       runnable = comm.runnable();
     }
-    int loop = userfunction.repeatCom();
+    if(userfunction!=null)  { loop = userfunction.repeatCom();
+    }
     if (loop !=0 && commandArguments == false && userfunction != null && !comm.equals(userfunction) && parser.getSymbol(userCom).equals(LIST_END)) {
         int i=0;
         userInputCom(loop,i);

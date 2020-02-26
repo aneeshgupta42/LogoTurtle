@@ -3,9 +3,8 @@ package frontEnd;
 import Controller.Control;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import javafx.application.Application;
@@ -33,6 +32,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -88,6 +88,9 @@ public class View extends Application {
   private HBox hbox;
   private ScrollPane scrollPane;
   private TextArea inputArea;
+  private static final String ButtonResources = "resources.ButtonActions";
+  private ResourceBundle myButtonResources;
+
 
   final WebView browser = new WebView();
   final WebEngine webEngine = browser.getEngine();
@@ -102,6 +105,7 @@ public class View extends Application {
     for (int i=0; i< colors.length; i++){
       map.put(colorNames[i], colors[i]);
     }
+    myButtonResources = ResourceBundle.getBundle(ButtonResources);
 
   }
 
@@ -141,6 +145,13 @@ public class View extends Application {
     return new Scene(root);
   }
 
+  public Pane getPane(){
+    return root;
+  }
+
+  public ImageView getImage(){
+    return turtleimage;
+  }
 
 
   public void closeWindow(){
@@ -271,54 +282,10 @@ public class View extends Application {
     hbox.setPadding(new Insets(15, 12, 15, 12));
     hbox.setSpacing(10);
 //    hbox.setStyle("-fx-background-color: #336699");
+    for (String key : Collections.list(myButtonResources.getKeys())) {
+     hbox.getChildren().add(new OurButtons(myButtonResources.getString(key), key, this));
+    }
 
-    Button help = new Button("Help");
-    help.setPrefSize(100, 20);
-    Stage stage2 = new Stage();
-    TextArea textArea = new TextArea();
-    EventHandler<ActionEvent> event4 =
-        new EventHandler<ActionEvent>() {
-          public void handle(ActionEvent e)
-          {
-            //textArea.setText("HELPPPPPPPPPPP");
-            displayHelpScreen();
-            //stage2.setScene(new Scene(textArea, 400, 400));
-            //stage2.show();
-
-            //webEngine.load("www.cs.duke.edu/courses/spring20/compsci308/assign/03_parser/commands.php");
-            //rectangle.setFill(map.get(reset_display.getValue().toString()));
-          }
-        };
-    // Set on action
-    help.setOnAction(event4);
-
-    Button reset_display = new Button("Reset Display");
-    reset_display.setPrefSize(100, 20);
-    EventHandler<ActionEvent> event2 =
-        new EventHandler<ActionEvent>() {
-          public void handle(ActionEvent e)
-          {
-            resetScreen();
-            //rectangle.setFill(map.get(reset_display.getValue().toString()));
-          }
-        };
-    // Set on action
-    reset_display.setOnAction(event2);
-
-    FileChooser fileChooser = new FileChooser();
-    Button button = new Button("Select File");
-    button.setOnAction(e -> {
-      fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
-      File selectedFile = fileChooser.showOpenDialog(myStage);
-      if(selectedFile!= null){
-        try {
-          scanFile(selectedFile);
-        } catch (FileNotFoundException ex) {
-          ///****fix this******
-          ex.printStackTrace();
-        }
-      }
-    });
     // Create a combo box
     ComboBox language_box =
         new ComboBox(FXCollections
@@ -373,44 +340,19 @@ public class View extends Application {
     });
 
 
-    hbox.getChildren().addAll(help, reset_display, button, language_box, browser, backgrouondText, colorBackgroundPicker, penText, colorPenPicker);
+    hbox.getChildren().addAll(language_box, browser, backgrouondText, colorBackgroundPicker, penText, colorPenPicker);
     HBox.setHgrow(browser, Priority.ALWAYS);
     return hbox;
   }
 
-  private void displayHelpScreen() {
-    Stage stage2 = new Stage();
-    Scene scene = new Scene(new Group());
-    stage2.setTitle("Table View Sample");
-    TableView table = new TableView();
-    stage2.setWidth(300);
-    stage2.setHeight(500);
 
-    final Label label = new Label("Address Book");
-    label.setFont(new Font("Arial", 20));
-
-    table.setEditable(true);
-
-    TableColumn firstNameCol = new TableColumn("First Name");
-    TableColumn lastNameCol = new TableColumn("Last Name");
-    TableColumn emailCol = new TableColumn("Email");
-
-    table.getColumns().addAll(firstNameCol, lastNameCol, emailCol);
-
-    final VBox vbox = new VBox();
-    vbox.setSpacing(5);
-    vbox.setPadding(new Insets(10, 0, 0, 10));
-    vbox.getChildren().addAll(label, table);
-
-    ((Group) scene.getRoot()).getChildren().addAll(vbox);
-
-    stage2.setScene(scene);
-    stage2.show();
-  }
-
-  private void resetScreen() {
+  void resetScreen() {
     root.getChildren().removeIf(object -> object instanceof Line);
     setTurtlePosition(turtleimage);
+  }
+
+  public Node getNode(){
+    return root;
   }
 
   private void scanFile(File file) throws FileNotFoundException {
@@ -444,5 +386,60 @@ public class View extends Application {
 
   private void createErrorDialog(Exception e){
     ErrorBoxes ep = new ErrorBoxes(e);
+  }
+
+
+  public void action1() {
+    System.out.println("made");
+    Stage stage2 = new Stage();
+    Scene scene = new Scene(new Group());
+    stage2.setTitle("Table View Sample");
+    TableView table = new TableView();
+    stage2.setWidth(300);
+    stage2.setHeight(500);
+
+    final Label label = new Label("Address Book");
+    label.setFont(new Font("Arial", 20));
+
+    table.setEditable(true);
+
+    TableColumn firstNameCol = new TableColumn("First Name");
+    TableColumn lastNameCol = new TableColumn("Last Name");
+    TableColumn emailCol = new TableColumn("Email");
+
+    table.getColumns().addAll(firstNameCol, lastNameCol, emailCol);
+
+    final VBox vbox = new VBox();
+    vbox.setSpacing(5);
+    vbox.setPadding(new Insets(10, 0, 0, 10));
+    vbox.getChildren().addAll(label, table);
+
+    ((Group) scene.getRoot()).getChildren().addAll(vbox);
+
+    stage2.setScene(scene);
+    stage2.show();
+  }
+
+
+  public void action2() {
+    root.getChildren().removeIf(object -> object instanceof Line);
+    setTurtlePosition(turtleimage);
+  }
+
+  public void action3() {
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+    File selectedFile = fileChooser.showOpenDialog(myStage);
+    if(selectedFile!= null){
+      try {
+        scanFile(selectedFile);
+      } catch (FileNotFoundException ex) {
+        ///****fix this******
+        ex.printStackTrace();
+      }
+    }
+  }
+
+  public void action4() {
   }
 }
