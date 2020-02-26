@@ -211,7 +211,6 @@ public class View extends Application {
     runButton.setOnAction(action -> {
       myText = inputArea.getText();
       String thistext = myText;
-
       control.passCommand(myText);
       control.passTurtle(myTurtle);
       control.parseCommand();

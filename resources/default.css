@@ -52,3 +52,9 @@
   -fx-background-radius: 10;
   -fx-padding: 8;
 }
+
+
+.error-label {
+  -fx-background-color: #336699;
+  -fx-text-fill: white;
+}
