@@ -23,6 +23,7 @@ public class Turtle implements Update{
   private boolean turtleVisible = true;
   private double lineStartXPosition;
   private int distanceSoFar;
+  private boolean turtleVisible;
   private double lineStartYPosition;
   private double turtleStartingXPos;
   private double turtleStartingYPos;
@@ -33,6 +34,8 @@ public class Turtle implements Update{
 
   public Turtle(View view){
     myView = view;
+    penDown = true;
+    turtleVisible = true;
     distanceSoFar = 0;
   }
 
