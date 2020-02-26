@@ -22,6 +22,7 @@ public class Turtle implements Update{
   private boolean penDown = true;
   private double lineStartXPosition;
   private int distanceSoFar;
+  private boolean turtleVisible;
   private double lineStartYPosition;
   private double turtleStartingXPos;
   private double turtleStartingYPos;
@@ -32,6 +33,8 @@ public class Turtle implements Update{
 
   public Turtle(View view){
     myView = view;
+    penDown = true;
+    turtleVisible = true;
     distanceSoFar = 0;
   }
 
@@ -149,7 +152,8 @@ public class Turtle implements Update{
   }
 
   public void turteVisible(boolean visible){
-    myTurtle.setVisible(visible);
+    turtleVisible = visible;
+    myTurtle.setVisible(turtleVisible);
   }
 
   @Override
