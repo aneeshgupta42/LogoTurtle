@@ -9,6 +9,7 @@ public class StoreLists {
   private Deque<String> lines;
   private Map<String,String> function;
   private Deque<String> args;
+  private int length;
 
   public StoreLists(){
     function = new HashMap<>();
@@ -17,11 +18,12 @@ public class StoreLists {
   }
 
   public void store(String line){
-    lines.add(line);
+    if(!line.equals("[") && !line.equals("]"))
+      lines.add(line);
   }
   public void storeArg(LinkedList<String> arg) {
     for (String s:arg) {
-      args.add(s);
+      args.push(s);
     }
   }
 
@@ -44,6 +46,9 @@ public class StoreLists {
   }
   public Map getFunction(){
     return function;}
-
+    public int getLength(){
+      if(lines.size()>0) return lines.size();
+      else return 1;
+    }
 
 }

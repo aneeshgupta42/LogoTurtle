@@ -195,7 +195,7 @@ public class View extends Application {
     runButton.setOnAction(action -> {
       myText = inputArea.getText();
 
-      control.passCommand(myText);
+      control.setCommand(myText);
       control.passTurtle(myTurtle);
       control.parseCommand();
     });
@@ -281,14 +281,14 @@ public class View extends Application {
         new EventHandler<ActionEvent>() {
           public void handle(ActionEvent e)
           {
-            control.passLanguage(language_box.getValue().toString());
+            control.setLanguage(language_box.getValue().toString());
           }
         };
     // Set on action
     language_box.setOnAction(event);
     // Create a tile pane
 
-    control.passLanguage("English");
+    control.setLanguage("English");
     ComboBox background_box =
         new ComboBox(FXCollections
             .observableArrayList(colorNames));
