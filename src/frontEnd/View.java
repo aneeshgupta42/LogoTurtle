@@ -151,6 +151,7 @@ public class View extends Application {
     image.setRotate(0);
     System.out.println(display.getLayoutY());
     myTurtle.initializeLinePosition(image.getX(), image.getY(), image.getRotate());
+    myTurtle.setTurtleInitialCords(image.getX(), image.getY());
   }
 
   private Node makeSideWindow() {
