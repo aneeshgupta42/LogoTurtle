@@ -46,6 +46,7 @@ public class Control {
   private int numOfLoops;
   private int numberOfCommands;
   private boolean loopingComplete;
+  private boolean doTimes;
   /*
   Initializing a control (for reference storeLists is where all the data in lists is being passed)
    */
@@ -119,15 +120,15 @@ public class Control {
     for (String word : line.split(WHITESPACE)) {
       if (word.trim().length() > 0) {
         if (!parser.getSymbol(word).equals(ARGUMENT) && !parser.getSymbol(word).equals(VARIABLE)) {
-          System.out.println("Command");
+        //  System.out.println("Command");
           checkingTypeOfCommand(word);
         }
         else if (parser.getSymbol(word).equals(VARIABLE)) {
-          System.out.println("variable");
+         // System.out.println("variable");
           checkingIfVariableExists(word);
         }
         else if(parser.getSymbol(word).equals(ARGUMENT)){
-          System.out.println("Argument");
+        //  System.out.println("Argument");
           argument.push(word);
         }
       }
@@ -161,6 +162,7 @@ public class Control {
   private void checkingIfVariableExists(String word) {
     if (checkingIfLoopInt) {
       //if this is a loop that contains a variable
+      doTimes = true;
       var = word;
     }
     else if (variablesUsed.containsKey(word)) {
@@ -266,7 +268,7 @@ public class Control {
   Checks if you are not in the parsing of a list, and runs the command
    */
   public void runCommand() {
-    if (checkingIfLoopInt == false) {
+    if (checkingIfLoopInt == false || doTimes) {
       obtainCommand();
     }
   }
@@ -295,7 +297,7 @@ public class Control {
   Calls the methods of a command to continue parsing logic
    */
   public void createCommand(Command comm, Parser parser1) {
-    numOfLoops = userfunction.repeatCom();
+   if(userfunction!=null) numOfLoops = userfunction.repeatCom();
     if (comm.commandValueReturn() != null) {
       if(!command.isEmpty()) {
         argument.push(comm.commandValueReturn());
@@ -318,29 +320,30 @@ public class Control {
 If user input command, runs the content inside the [ ] the specified numbers of times.
  */
   public void userInputCom(int looping, int i, int start) {
-   /* if (loop == 0) {
+    if (looping == 0) {
       inList = false;
-    } else {*/
-   if(looping>0){
-      inList=true;
-      if(start ==looping){
-        command = lists.getCommands();
-        System.out.println(command);
-        System.out.println(argument);
-        argument = lists.getArguments();
-        numberOfCommands = lists.getLength();
-        System.out.println(numberOfCommands);
-      }
-      coordinateCommands();
+    } else {
+        inList = true;
+        doTimes = false;
+      System.out.println(userfunction);
+        if (start == looping) {
+          command = lists.getCommands();
+          System.out.println(command);
+          System.out.println(argument);
+          argument = lists.getArguments();
+          numberOfCommands = lists.getLength();
+          System.out.println(numberOfCommands);
+        }
+        coordinateCommands();
+        repCount(looping, var);
+        repCount(i, ":repCount");
+        if (loopingComplete == false) {
+          iterationOfLoopInt = 0;
+        }
       looping--;
       i++;
-      repCount(looping,var);
-      repCount(i,":repCount");
-      if(loopingComplete==false) {
-        iterationOfLoopInt =0;
-
-      }
-   //   userInputCom(loop, i, start);
+       userInputCom(looping, i, start);
+     // }
     }
   }
 
