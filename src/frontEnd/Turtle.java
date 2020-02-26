@@ -113,16 +113,8 @@ public class Turtle implements Update{
     return turtleAngle;
   }
 
-  public void setPenDown(){
-    penDown=true;
-  }
-
-  public void setPen(boolean pendown){
-    penDown = pendown;
-  }
-
-  public void setPenUp(){
-    penDown= false;
+  public void setPen(boolean bool){
+    penDown=bool;
   }
 
   public void updateDistanceSoFar(int d){
