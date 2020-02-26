@@ -17,7 +17,7 @@ public class Right extends Command {
     super.numberOfArgs= NUMARGS;
     angle = Double.parseDouble(varargs.get(0));
     myControl.updateTurtle(0,0, angle, 0);
-    System.out.println("rt " + angle);
+    System.out.println("rt done" + angle);
   }
   @Override
   public int repeatCom() {

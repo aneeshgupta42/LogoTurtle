@@ -12,15 +12,14 @@ public class StoreLists {
 
   public StoreLists(){
     function = new HashMap<>();
-    lines = new LinkedList<>();
     args = new LinkedList<>();
+    lines = new LinkedList<>();
   }
 
   public void store(String line){
-    lines.push(line);
+    lines.add(line);
   }
   public void storeArg(LinkedList<String> arg) {
-
     for (String s:arg) {
       args.add(s);
     }
@@ -44,7 +43,6 @@ public class StoreLists {
     return args;
   }
   public Map getFunction(){
-    System.out.println(function);
     return function;}
 
 
