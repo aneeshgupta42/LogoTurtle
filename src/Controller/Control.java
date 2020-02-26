@@ -16,6 +16,7 @@ public class Control {
   private static final String NEWLINE = "\n";
   private static final String ARGUMENT = "Constant";
   private static final String VARIABLE = "Variable";
+  private static final String FUNCCOMMAND = "Command";
   private static final String CLASS_PATH = "backEnd.commands.";
   private static final String LIST_END = "ListEnd";
   private static final String LIST_START = "ListStart";
@@ -43,8 +44,10 @@ public class Control {
   private String var;
   private boolean runnable;
   private int i=0;
+  private boolean makeFunction;
 
   public Control() {
+    lists = new StoreLists();
     error = new ErrorHandler();
     parser = new Parser();
   }
@@ -73,10 +76,10 @@ public class Control {
   }
 
   private void parseText() {
+    System.out.println("here");
     command = new LinkedList<>();
     argument = new LinkedList<>();
     args = new LinkedList<>();
-    lists = new StoreLists();
     for (String line : input.split(NEWLINE)) {
       if (line.contains("#")) {
         String comment = line;
@@ -87,10 +90,21 @@ public class Control {
   }
 
   private void organizeInStacks(String line) {
+    int j=0;
     for (String word : line.split(WHITESPACE)) {
       if (word.trim().length() > 0) {
         if (!parser.getSymbol(word).equals(ARGUMENT) && !parser.getSymbol(word).equals(VARIABLE)) {
-            command.push(word);
+          Map<String, String> map = lists.getFunction();
+          if (map.keySet().contains(word) && input!=map.get(word)) {
+            input = map.get(word);
+            parseText();
+          }
+          else if(makeFunction){
+              lists.storeFunction(word, input);
+              makeFunction = false;
+              coordinateCommands();
+          }
+          else  command.push(word);
         }
         else if (parser.getSymbol(word).equals(VARIABLE)) {
           if (commandArguments) {
@@ -104,7 +118,7 @@ public class Control {
               argument.push(word);
             }
         }
-        else {
+        else if(parser.getSymbol(word).equals(ARGUMENT)){
           argument.push(word);
         }
       }
@@ -114,19 +128,25 @@ public class Control {
 
   public void coordinateCommands() {
     int argNum = 0;
-    userCom = command.pop();
-    makeClassPathToCommand(parser);
-    try {
-      Class cls = Class.forName(com);
-      Object objectCommand;
-      Constructor constructor = cls.getConstructor();
-      objectCommand = constructor.newInstance();
-      Command commandGiven = (Command) objectCommand;
-      argNum = commandGiven.getNumberOfArgs();
-    } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
-      error.handleCommandClassNotFound();
+    if(!command.isEmpty()) {
+      userCom = command.pop();
+      if (parser.getSymbol(userCom).equals("MakeUserInstruction")) {
+        makeFunction = true;
+      }
+      makeClassPathToCommand(parser);
+      try {
+        Class cls = Class.forName(com);
+        Object objectCommand;
+        Constructor constructor = cls.getConstructor();
+        objectCommand = constructor.newInstance();
+        Command commandGiven = (Command) objectCommand;
+        System.out.println(commandGiven);
+        argNum = commandGiven.getNumberOfArgs();
+      } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
+        error.handleCommandClassNotFound();
+      }
+      checkIfCommandCanRun(argNum);
     }
-    checkIfCommandCanRun(argNum);
   }
 
   private void checkIfCommandCanRun(int argNum) {
@@ -182,11 +202,8 @@ public class Control {
   }
 
   public void runCommand() {
-    System.out.println(com);
-    System.out.println(args);
     if (commandArguments == false || dotimes) {
       obtainCommand();
-      System.out.println("ran");
     }
   }
 
@@ -234,8 +251,8 @@ public class Control {
     if (loop == 0) {
       inList = false;
     } else {
-      command = lists.print();
-      argument = lists.print2();
+      command = lists.getCommands();
+      argument = lists.getArguments();
       repCount(loop,var);
       repCount(i,":repCount");
       loop -=1;
