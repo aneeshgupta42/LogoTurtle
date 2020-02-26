@@ -11,12 +11,14 @@ import java.util.Scanner;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
@@ -33,13 +35,14 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import java.awt.Dimension;
 import javafx.scene.shape.Rectangle;
-import org.w3c.dom.Text;
 
 
 public class View extends Application {
@@ -333,43 +336,42 @@ public class View extends Application {
     // Create a tile pane
 
     control.passLanguage("English");
-    ComboBox background_box =
-        new ComboBox(FXCollections
-            .observableArrayList(colorNames));
-    background_box.setPromptText(BACKGROUND_PROMPT);
 
-    //Create action event
-    EventHandler<ActionEvent> event1 =
-        new EventHandler<ActionEvent>() {
-          public void handle(ActionEvent e)
-          {
-            rectangle.setFill(map.get(background_box.getValue().toString()));
-          }
-        };
-    // Set on action
-    background_box.setOnAction(event1);
-    // Create a tile pane
+    final ColorPicker colorBackgroundPicker = new ColorPicker();
+    colorBackgroundPicker.setValue(Color.GREY);
 
-    ComboBox pen_box =
-        new ComboBox(FXCollections
-            .observableArrayList(colorNames));
-    pen_box.setPromptText(PEN_PROMPT);
+    Text backgrouondText = new Text(BACKGROUND_PROMPT + ":");
 
-    //Create action event
-    EventHandler<ActionEvent> event3 =
-        new EventHandler<ActionEvent>() {
-          public void handle(ActionEvent e)
-          {
-            myLine.setStroke(map.get(pen_box.getValue().toString()));
-            myLine.getStyleClass().add(pen_box.getValue().toString());
-            //lineColor = pen_box.getValue().toString();
-            lineColor = map.get(pen_box.getValue());
-          }
-        };
-    // Set on action
-    pen_box.setOnAction(event3);
+    //penText.setFont(Font.font ("Verdana", 20));
+    //backgrouondText.setFill(colorBackgroundPicker.getValue());
 
-    hbox.getChildren().addAll(help, reset_display, button, language_box, background_box, pen_box, browser);
+    colorBackgroundPicker.setOnAction(new EventHandler() {
+      @Override
+      public void handle(Event event) {
+        //penText.setFill(colorPenPicker.getValue());
+        rectangle.setFill(colorBackgroundPicker.getValue());
+      }
+    });
+
+    final ColorPicker colorPenPicker = new ColorPicker();
+    colorPenPicker.setValue(Color.BLACK);
+
+    Text penText = new Text(PEN_PROMPT + ":");
+
+    //penText.setFont(Font.font ("Verdana", 20));
+    //penText.setFill(colorPenPicker.getValue());
+
+    colorPenPicker.setOnAction(new EventHandler() {
+      @Override
+      public void handle(Event event) {
+        //penText.setFill(colorPenPicker.getValue());
+        myLine.setStroke(colorPenPicker.getValue());
+        lineColor = colorPenPicker.getValue();
+      }
+    });
+
+
+    hbox.getChildren().addAll(help, reset_display, button, language_box, browser, backgrouondText, colorBackgroundPicker, penText, colorPenPicker);
     HBox.setHgrow(browser, Priority.ALWAYS);
     return hbox;
   }
@@ -398,10 +400,6 @@ public class View extends Application {
     GridPane grid = new GridPane();
     grid.getStyleClass().add("grid-pane");
     return grid ;
-  }
-
-  public void setLine(Line line){
-    myLine = line;
   }
 
   public static void main(String[] args) {

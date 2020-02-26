@@ -19,7 +19,7 @@ public class Turtle implements Update{
   private static final String TURTLE = "turtle_25_upwards.png";
   ImageView myTurtle;
   private double turtleAngle;
-  private boolean penDown = true;
+  private boolean penDown;
   private boolean turtleVisible = true;
   private double lineStartXPosition;
   private int distanceSoFar;
@@ -33,6 +33,7 @@ public class Turtle implements Update{
 
   public Turtle(View view){
     myView = view;
+    // do we want this to start as true?
     penDown = true;
     turtleVisible = true;
     distanceSoFar = 0;
@@ -95,7 +96,7 @@ public class Turtle implements Update{
     Line line = new Line();
     myLine=line;
     myLine.setStroke(myView.getLineColor());
-    myView.setLine(line);
+    //myView.setLine(line);
     line.setStartX(turtleStartingXPos+ myTurtle.getBoundsInLocal().getWidth()/2);
 
     line.setStartY(turtleStartingYPos + myTurtle.getBoundsInLocal().getHeight());
