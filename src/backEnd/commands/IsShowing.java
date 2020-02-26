@@ -1,28 +1,29 @@
 package backEnd.commands;
 
 import Controller.Control;
-
 import java.util.LinkedList;
 
 public class IsShowing extends Command {
     private final int NUMARGS = 0;
-    private int return_value;
-    public IsShowing(){
+    private int returnBoolean;
+
+    public IsShowing() {
         super();
         super.numberOfArgs = NUMARGS;
     }
 
-    public IsShowing(LinkedList<String> varargs, Control control)
-    {
+    public IsShowing(LinkedList<String> varargs, Control control) {
         super(varargs, control);
-        // TO DO
-        // WIll need to make functions in Turtle, and then in Control to do this.
-//        return_value = control.tu ? 1:0;
+        super.numberOfArgs = NUMARGS;
+
+        returnBoolean = control.findTurtleVisibility() ? 1:0;
+
+        System.out.println("Is the turtle visible: " + returnBoolean);
     }
 
     @Override
     public String commandValueReturn() {
-        return Integer.toString(return_value);
+        return Integer.toString(returnBoolean);
     }
 
     @Override
