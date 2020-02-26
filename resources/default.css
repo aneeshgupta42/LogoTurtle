@@ -44,3 +44,11 @@
 .red {
   -fx-fill: red;
 }
+
+
+.hyper-link {
+  -fx-border-color: #3FB0C9;
+  -fx-border-radius: 15;
+  -fx-background-radius: 10;
+  -fx-padding: 8;
+}

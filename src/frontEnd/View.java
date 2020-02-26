@@ -3,7 +3,9 @@ package frontEnd;
 import Controller.Control;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import javafx.application.Application;
@@ -16,9 +18,12 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -34,6 +39,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import java.awt.Dimension;
 import javafx.scene.shape.Rectangle;
+import org.w3c.dom.Text;
 
 
 public class View extends Application {
@@ -75,6 +81,8 @@ public class View extends Application {
   private Color lineColor = Color.BLACK;
   private ImageView turtleimage;
   private HBox hbox;
+  private ScrollPane scrollPane;
+  private TextArea inputArea;
 
   final WebView browser = new WebView();
   final WebEngine webEngine = browser.getEngine();
@@ -157,8 +165,10 @@ public class View extends Application {
   private Node makeSideWindow() {
     TabPane tabPane = new TabPane();
     tabPane.setMinWidth(300);
+    tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+    scrollPane = new ScrollPane();
+    Tab tab1 = new Tab("History", scrollPane);
 
-    Tab tab1 = new Tab("History", new Label("Show all planes available"));
     Tab tab2 = new Tab("Variables"  , new Label("Show all cars available"));
     Tab tab3 = new Tab("Commands" , new Label("Show all boats available"));
 
@@ -179,7 +189,7 @@ public class View extends Application {
 
   private Node makeCommandWindow(){
     HBox hbox = new HBox();
-    TextArea inputArea = new TextArea();
+    inputArea = new TextArea();
     myCommander = inputArea;
     inputArea.setPromptText("Enter Command");
     inputArea.setPrefColumnCount(10);
@@ -190,14 +200,38 @@ public class View extends Application {
     VBox vbox = new VBox();
     Button runButton = new Button("Run");
     runButton.setPrefSize(100, 20);
+    VBox box = new VBox();
 
 
     runButton.setOnAction(action -> {
       myText = inputArea.getText();
+      String thistext = myText;
 
       control.passCommand(myText);
       control.passTurtle(myTurtle);
       control.parseCommand();
+      TextArea text = new TextArea();
+      Hyperlink link = new Hyperlink();
+      link.getStyleClass().add("hyper-link");
+      link.setText(myText);
+      link.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent e) {
+          inputArea.setText(thistext);
+        }
+      });
+      text.setText(myText);
+      text.setEditable(false);
+      text.setDisable(true);
+      //setAction(text);
+      box.getChildren().add(0, link);
+     /* text.setOnMouseClicked(e -> {
+            inputArea.setText(text.getText());
+            System.out.println(text.getText());
+          });*/
+      scrollPane.setContent(box);
+      inputArea.setText("");
+
     });
     Button clearButton = new Button("Clear Text");
     clearButton.setPrefSize(100, 20);
@@ -212,6 +246,16 @@ public class View extends Application {
     return hbox;
   }
 
+  private void setAction(TextArea text){
+    EventHandler<ActionEvent> event =
+        new EventHandler<ActionEvent>() {
+          public void handle(ActionEvent e)
+          {
+            inputArea.setText(text.getText());
+            System.out.println("hi");
+          }
+        };
+  }
   private void stopEverything(){
     System.exit(1);
   }
