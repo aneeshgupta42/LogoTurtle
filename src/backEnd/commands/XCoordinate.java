@@ -14,6 +14,8 @@ public class XCoordinate extends Command {
 
     public XCoordinate(LinkedList<String> varargs, Control control) {
         super(varargs, control);
+        super.numberOfArgs = NUMARGS;
+
         returnXCord = control.getTurtleRelativeXPos();
     }
 

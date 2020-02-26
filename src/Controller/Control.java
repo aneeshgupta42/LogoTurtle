@@ -312,7 +312,7 @@ public class Control {
   }
 
   public double getTurtleRelativeYPos() {
-    return turtleRow - myTurtle.getTurtleCenterYPos();
+    return myTurtle.getTurtleCenterYPos() - turtleRow;
   }
 }
 
