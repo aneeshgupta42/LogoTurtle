@@ -268,6 +268,13 @@ public class Control {
     return turtleRow;
   }
 
+  public void setPenDown(boolean mode){
+    myTurtle.setPen(mode);
+  }
+  public boolean isPenDown(){
+    return myTurtle.isPenDown();
+  }
+
   public double getTurtleAngle() {
     return turtleAngle;
   }
