@@ -240,7 +240,7 @@ public class Control {
    */
   private void checkIfList() {
     iterationOfLoopInt++;
-    loopingComplete = inList && (iterationOfLoopInt < ((numOfLoops)* numberOfCommands + numberOfCommands%2));
+    loopingComplete = (inList || doTimes) && (iterationOfLoopInt < ((numOfLoops)* numberOfCommands + numberOfCommands%2));
     if(loopingComplete){
       lists.store(userCom);
       lists.storeArg(args);
@@ -294,7 +294,6 @@ public class Control {
       Command commandGiven = (Command) objectCommand;
       if (userfunction == null && !parser.getSymbol(userCom).equals(LIST_END) && once == false && !parser.getSymbol(userCom).equals(LIST_START)) {
         userfunction = commandGiven;
-        System.out.println(userfunction);
         once = true;
       }
       createCommand(commandGiven, parser);
@@ -327,9 +326,6 @@ public class Control {
         int i=0;
         userInputCom(numOfLoops,i, numOfLoops);
     }
-    if(!command.isEmpty()) {
-      coordinateCommands();
-    }
   }
 
 /*
@@ -340,16 +336,16 @@ If user input command, runs the content inside the [ ] the specified numbers of 
       inList = false;
     }   else {
     inList = true;
-    doTimes = false;
+   // doTimes = false;
     //System.out.println(userfunction);
-    if (start == looping) {
+    //if (start == looping) {
       command = lists.getCommands();
-   //   System.out.println(command);
-    //  System.out.println(argument);
+      System.out.println(command);
+      System.out.println(argument);
       argument = lists.getArguments();
       numberOfCommands = lists.getLength();
-    //  System.out.println(numberOfCommands);
-    }
+      System.out.println(numberOfCommands);
+   // }
     coordinateCommands();
     repCount(looping, var);
     repCount(i, ":repCount");
@@ -436,7 +432,7 @@ If user input command, runs the content inside the [ ] the specified numbers of 
     turtleAngle = myTurtle.getTurtleAngle() + angle;
     myTurtle.updateDistanceSoFar(distance);
     myTurtle.move(col, row, angle);
-    System.out.println("update" + col + " " + row + " " + angle);
+ //   System.out.println("update" + col + " " + row + " " + angle);
   }
 
   public int getTurtleDistance() {
