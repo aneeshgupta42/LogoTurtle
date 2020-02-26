@@ -89,7 +89,10 @@ public class View extends Application {
   private ScrollPane scrollPane;
   private TextArea inputArea;
   private static final String ButtonResources = "resources.ButtonActions";
+  private static final String ComboBoxResources = "resources.ComboBoxActions";
   private ResourceBundle myButtonResources;
+  private ResourceBundle myComboBoxResources;
+  private ComboBox language_box;
 
 
   final WebView browser = new WebView();
@@ -106,6 +109,7 @@ public class View extends Application {
       map.put(colorNames[i], colors[i]);
     }
     myButtonResources = ResourceBundle.getBundle(ButtonResources);
+    myComboBoxResources = ResourceBundle.getBundle(ComboBoxResources);
 
   }
 
@@ -283,11 +287,15 @@ public class View extends Application {
     hbox.setSpacing(10);
 //    hbox.setStyle("-fx-background-color: #336699");
     for (String key : Collections.list(myButtonResources.getKeys())) {
-     hbox.getChildren().add(new OurButtons(myButtonResources.getString(key), key, this));
+      hbox.getChildren().add(new OurButtons(myButtonResources.getString(key), key, this));
+    }
+    for (String key : Collections.list(myComboBoxResources.getKeys())) {
+     hbox.getChildren().add(new OurComboBox(myComboBoxResources.getString(key), key, this, FXCollections
+         .observableArrayList(languages)));
     }
 
     // Create a combo box
-    ComboBox language_box =
+    language_box =
         new ComboBox(FXCollections
             .observableArrayList(languages));
     language_box.setPromptText(LANGUAGE_PROMPT);
@@ -340,7 +348,7 @@ public class View extends Application {
     });
 
 
-    hbox.getChildren().addAll(language_box, browser, backgrouondText, colorBackgroundPicker, penText, colorPenPicker);
+    hbox.getChildren().addAll(browser, backgrouondText, colorBackgroundPicker, penText, colorPenPicker);
     HBox.setHgrow(browser, Priority.ALWAYS);
     return hbox;
   }
@@ -389,7 +397,7 @@ public class View extends Application {
   }
 
 
-  public void action1() {
+  public void displayHelpScreen() {
     System.out.println("made");
     Stage stage2 = new Stage();
     Scene scene = new Scene(new Group());
@@ -421,12 +429,12 @@ public class View extends Application {
   }
 
 
-  public void action2() {
+  public void resetDisplay() {
     root.getChildren().removeIf(object -> object instanceof Line);
     setTurtlePosition(turtleimage);
   }
 
-  public void action3() {
+  public void selectFileScreen() {
     FileChooser fileChooser = new FileChooser();
     fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
     File selectedFile = fileChooser.showOpenDialog(myStage);
@@ -440,6 +448,7 @@ public class View extends Application {
     }
   }
 
-  public void action4() {
+  public void setLanguage(String language) {
+    control.passLanguage(language);
   }
 }

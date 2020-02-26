@@ -1,35 +1,23 @@
 package frontEnd;
 
-import Controller.Control;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import java.lang.reflect.Method;
-import javax.swing.Action;
 
-/**
- * Basic class that can be used interchangeably with other JavaFX GUI components.
- *
- * @author Robert C. Duvall
- */
-public class OurButtons extends Button implements Display {
-  /**
-   * Create input with given label and method to call on the given Controller.
-   */
-  public OurButtons(String promptText, String methodName, View target) {
-    setText(promptText);
+public class OurComboBox extends ComboBox {
+
+  public OurComboBox(String promptText, String methodName, View target, ObservableList items){
+    setItems(items);
+    setPromptText(promptText);
     EventHandler<ActionEvent> whathappened = Result(methodName, target);
     setOnAction(whathappened);
-    //ActionEvent event = new ActionEvent(target.getClass().getDeclaredMethod(methodName));
-    //setOnAction(target.getClass().getDeclaredMethod(methodName));
-    //getChildren().addAll(
-        //makeInputAction(target, methodName);
   }
 
   // make input prompt, very basic for now but could be much more involved in general
@@ -60,12 +48,10 @@ public class OurButtons extends Button implements Display {
       @Override
       public void handle(ActionEvent event) {
         try {
-          Method m = target.getClass().getDeclaredMethod(methodName);
+          Method m = target.getClass().getDeclaredMethod(methodName,String.class);
           try {
-            m.invoke(target);
-          } catch (IllegalAccessException e) {
-            e.printStackTrace();
-          } catch (InvocationTargetException e) {
+            m.invoke(target, getValue().toString());
+          } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
           }
           System.out.println(methodName);
