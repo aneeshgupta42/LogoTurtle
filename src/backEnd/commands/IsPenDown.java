@@ -1,7 +1,6 @@
 package backEnd.commands;
 
 import Controller.Control;
-
 import java.util.LinkedList;
 
 public class IsPenDown extends Command {
