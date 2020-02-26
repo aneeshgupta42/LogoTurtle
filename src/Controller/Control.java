@@ -268,6 +268,13 @@ public class Control {
     return turtleRow;
   }
 
+  public void setPenDown(boolean mode){
+    myTurtle.setPen(mode);
+  }
+  public boolean isPenDown(){
+    return myTurtle.isPenDown();
+  }
+
   public double getTurtleAngle() {
     return turtleAngle;
   }
@@ -277,9 +284,9 @@ public class Control {
   }
 
   public void updateTurtle(double col, double row, double angle, int distance) {
-    turtleRow = myTurtle.getTurtleRow();
-    turtleCol = myTurtle.getTurtleCol();
-    turtleAngle = myTurtle.getTurtleAngle();
+    turtleRow = myTurtle.getTurtleRow()+row;
+    turtleCol = myTurtle.getTurtleCol()+col;
+    turtleAngle = myTurtle.getTurtleAngle()+angle;
     myTurtle.updateDistanceSoFar(distance);
     myTurtle.move(col, row, angle);
   }
