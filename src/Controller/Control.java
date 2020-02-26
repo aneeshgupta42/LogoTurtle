@@ -280,7 +280,11 @@ public class Control {
   }
 
   public void setTurtleVisible(boolean mode) {
-    myTurtle.turteVisible(mode);
+    myTurtle.turtleVisible(mode);
+  }
+
+  public boolean findTurtleVisibility() {
+    return myTurtle.getTurtleVisibility();
   }
 
   public void updateTurtle(double col, double row, double angle, int distance) {

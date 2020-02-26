@@ -6,14 +6,16 @@ import java.util.LinkedList;
 public class IsPenDown extends Command {
     private final int NUMARGS = 0;
     private int return_value;
+
     public IsPenDown(){
         super();
         super.numberOfArgs = NUMARGS;
     }
 
-    public IsPenDown(LinkedList<String> varargs, Control control)
-    {
+    public IsPenDown(LinkedList<String> varargs, Control control) {
         super(varargs, control);
+        super.numberOfArgs = NUMARGS;
+
         return_value = control.isPenDown() ? 1:0;
     }
 

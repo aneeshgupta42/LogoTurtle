@@ -20,6 +20,7 @@ public class Turtle implements Update{
   ImageView myTurtle;
   private double turtleAngle;
   private boolean penDown = true;
+  private boolean turtleVisible = true;
   private double lineStartXPosition;
   private int distanceSoFar;
   private double lineStartYPosition;
@@ -148,8 +149,9 @@ public class Turtle implements Update{
     eraseLines();
   }
 
-  public void turteVisible(boolean visible){
-    myTurtle.setVisible(visible);
+  public void turtleVisible(boolean visible){
+    this.turtleVisible = visible;
+    myTurtle.setVisible(this.turtleVisible);
   }
 
   @Override
@@ -178,6 +180,10 @@ public class Turtle implements Update{
 
   public double getTurtleCenterYPos() {
     return this.turtleCenterYPos;
+  }
+
+  public boolean getTurtleVisibility() {
+    return this.turtleVisible;
   }
 }
 
