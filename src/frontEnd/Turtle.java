@@ -7,6 +7,7 @@ import javafx.animation.SequentialTransition;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
@@ -19,16 +20,21 @@ public class Turtle implements Update{
   ImageView myTurtle;
   private double turtleAngle;
   private boolean penDown = true;
+  private boolean turtleVisible = true;
   private double lineStartXPosition;
   private int distanceSoFar;
   private double lineStartYPosition;
   private double turtleStartingXPos;
   private double turtleStartingYPos;
+  private double turtleCenterXPos;
+  private double turtleCenterYPos;
   Line myLine;
   View myView;
 
   public Turtle(View view){
     myView = view;
+    penDown = true;
+    turtleVisible = true;
     distanceSoFar = 0;
   }
 
@@ -131,16 +137,19 @@ public class Turtle implements Update{
 
   public void eraseLines(){
     // Need Cayla's help
+    BorderPane root = myView.getRoot();
+    root.getChildren().removeIf(object -> object instanceof Line);
   }
+
   public void clearScreen()
   {
     resetTurtle();
     eraseLines();
-
   }
 
-  public void turteVisible(boolean visible){
-    myTurtle.setVisible(visible);
+  public void turtleVisible(boolean visible){
+    this.turtleVisible = visible;
+    myTurtle.setVisible(this.turtleVisible);
   }
 
   @Override
@@ -157,4 +166,23 @@ public class Turtle implements Update{
   public int orientationUpdate(int changeInAngle) {
     return 0;
   }
+
+  public void setTurtleInitialCords(double initialX, double initialY) {
+    this.turtleCenterXPos = initialX;
+    this.turtleCenterYPos = initialY;
+  }
+
+  public double getTurtleCenterXPos() {
+    return this.turtleCenterXPos;
+  }
+
+  public double getTurtleCenterYPos() {
+    return this.turtleCenterYPos;
+  }
+
+  public boolean getTurtleVisibility() {
+    return this.turtleVisible;
+  }
 }
+
+

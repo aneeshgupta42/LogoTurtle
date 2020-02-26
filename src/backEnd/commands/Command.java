@@ -40,12 +40,12 @@ public abstract class Command {
     return myControl;
   }
 
-  public int getTurtleCurrentX() {
-    return turtleXVal;
+  public double getTurtleCurrentX() {
+    return myControl.getTurtleCol();
   }
 
-  public int getTurtleCurrentY() {
-    return turtleYVal;
+  public double getTurtleCurrentY() {
+    return myControl.getTurtleRow();
   }
 
   public int getPenCurrentX() {
@@ -56,8 +56,8 @@ public abstract class Command {
     return penYVal;
   }
 
-  public int getTurtleAngle() {
-    return turtleAngle;
+  public double getTurtleAngle() {
+    return myControl.getTurtleAngle();
   }
 
   public int getPenAngle() {

@@ -100,6 +100,10 @@ public class View extends Application {
 
   }
 
+  public BorderPane getRoot() {
+    return root;
+  }
+
   @Override
   public void start(Stage primaryStage){
     myStage.setTitle(TITLE);
@@ -155,6 +159,7 @@ public class View extends Application {
     image.setRotate(0);
     System.out.println(display.getLayoutY());
     myTurtle.initializeLinePosition(image.getX(), image.getY(), image.getRotate());
+    myTurtle.setTurtleInitialCords(image.getX(), image.getY());
   }
 
   private Node makeSideWindow() {
