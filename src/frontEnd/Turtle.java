@@ -25,6 +25,8 @@ public class Turtle implements Update{
   private double lineStartYPosition;
   private double turtleStartingXPos;
   private double turtleStartingYPos;
+  private double turtleCenterXPos;
+  private double turtleCenterYPos;
   Line myLine;
   View myView;
 
@@ -164,4 +166,19 @@ public class Turtle implements Update{
   public int orientationUpdate(int changeInAngle) {
     return 0;
   }
+
+  public void setTurtleInitialCords(double initialX, double initialY) {
+    this.turtleCenterXPos = initialX;
+    this.turtleCenterYPos = initialY;
+  }
+
+  public double getTurtleCenterXPos() {
+    return this.turtleCenterXPos;
+  }
+
+  public double getTurtleCenterYPos() {
+    return this.turtleCenterYPos;
+  }
 }
+
+
