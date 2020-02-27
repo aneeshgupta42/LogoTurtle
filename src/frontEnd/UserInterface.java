@@ -88,10 +88,12 @@ public class UserInterface extends Application {
   private static final String ComboBoxResources = "resources.UIActions.ComboBoxActions";
   private static final String ColorPickerResources = "resources.UIActions.ColorPickerActions";
   private static final String InitialColorResources = "resources.UIActions.InitialColors";
+  private static final String ComboBoxOptionsResources = "resources.UIActions.ComboBoxOptions";
   private ResourceBundle myButtonResources;
   private ResourceBundle myComboBoxResources;
   private ResourceBundle myColorPickerResources;
   private ResourceBundle myInitialColorResources;
+  private ResourceBundle myComboBoxOptionsResources;
 
 
   public UserInterface() {
@@ -107,6 +109,7 @@ public class UserInterface extends Application {
     myComboBoxResources = ResourceBundle.getBundle(ComboBoxResources);
     myColorPickerResources= ResourceBundle.getBundle(ColorPickerResources);
     myInitialColorResources= ResourceBundle.getBundle(InitialColorResources);
+    myComboBoxOptionsResources = ResourceBundle.getBundle(ComboBoxOptionsResources);
     control.passLanguage("English");
 
   }
@@ -320,7 +323,7 @@ public class UserInterface extends Application {
     }
     for (String key : Collections.list(myComboBoxResources.getKeys())) {
       hbox.getChildren().add(new OurComboBox(myComboBoxResources.getString(key), key, this, FXCollections
-          .observableArrayList(languages)));
+          .observableArrayList(myComboBoxOptionsResources.getString(key+"Options"))));
     }
     for (String key : Collections.list(myColorPickerResources.getKeys())) {
       hbox.getChildren().add(new OurLabeledColorPickers(myColorPickerResources.getString(key), key, this, myInitialColorResources.getString(key + "Initial")));
