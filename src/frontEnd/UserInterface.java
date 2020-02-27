@@ -3,8 +3,8 @@ package frontEnd;
 import Controller.Control;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Collections;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import javafx.animation.KeyFrame;
@@ -43,27 +43,45 @@ public class UserInterface extends Application {
   private Scene myScene;
   private Group display;
   private Stage myStage;
-
   private Mover myMover;
   private Control control;
   private Rectangle rectangle;
   private Line myLine;
+  private double lineStartx;
+  private double lineStarty;
+  private ImageView moverImage;
+  private HBox hbox;
+  private ScrollPane history;
+  private ScrollPane variables;
+  private ScrollPane userCommands;
+  private TextArea inputArea;
+  private HBox commandWindow;
+  private TabPane tabPane;
+  private String myText;
+  private TextArea myCommander;
+  private Node display_window;
+  private BorderPane root;
+  VBox historyBox = new VBox();
+  VBox variablesBox = new VBox();
+  VBox userCommandsBox = new VBox();
+  private ResourceBundle myButtonResources;
+  private ResourceBundle myComboBoxResources;
+  private ResourceBundle myColorPickerResources;
+  private ResourceBundle myInitialColorResources;
+  private ResourceBundle myComboBoxOptionsResources;
+  private ResourceBundle myTextButtonResources;
+  private Hyperlink linkVariable;
+
 
   private static final int FRAMES_PER_SECOND = 60;
   private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
   private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
-  public static final String TITLE = "JavaFX Animation Example";
-  public static final Dimension DEFAULT_SIZE = new Dimension(1200, 1200);
-  private static final int DISPLAY_WIDTH = 1000;
-  private static final int DISPLAY_HEIGHT = 500;
-  private HBox commandWindow;
-  private TabPane tabPane;
+  public static final String TITLE = "Slogo Team 17";
+  private static final double DISPLAY_WIDTH = 1200;
+  private static final double DISPLAY_HEIGHT = 500;
   private static final String COMMAND_ONE = "viewboc.png";
   private static final String COMMAND_TWO = "viewbox.png";
-  private Node myActor;
-  private TextArea myCommander;
   private static final String TURTLE = "turtle.png";
-  private String myText;
   private static final String RESOURCES = "resources.languages.";
   public static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
   private static final String DEFAULT_RESOURCE_FOLDER = "" + RESOURCES + "/";
@@ -71,27 +89,29 @@ public class UserInterface extends Application {
   private static final String XML_PROPERTIES_FILENAME = DEFAULT_RESOURCE_PACKAGE + "XMLTagNames";
   private static final String STYLESHEET = "default.css";
   private ResourceBundle styleResources;
-  private Node display_window;
-  private BorderPane root;
   private Color lineColor = Color.BLACK;
-  private ImageView moverImage;
-  private HBox hbox;
-  private ScrollPane history;
-  private ScrollPane variables;
-  private ScrollPane userCommands;
-  private TextArea inputArea;
   private static final String ButtonResources = "resources.UIActions.ButtonActions";
   private static final String ComboBoxResources = "resources.UIActions.ComboBoxActions";
   private static final String ColorPickerResources = "resources.UIActions.ColorPickerActions";
   private static final String InitialColorResources = "resources.UIActions.InitialColors";
   private static final String ComboBoxOptionsResources = "resources.UIActions.ComboBoxOptions";
-  private ResourceBundle myButtonResources;
-  private ResourceBundle myComboBoxResources;
-  private ResourceBundle myColorPickerResources;
-  private ResourceBundle myInitialColorResources;
-  private ResourceBundle myComboBoxOptionsResources;
-  private double lineStartx;
-  private double lineStarty;
+  private static final String TextBoxButtonResources = "resources.UIActions.TextButtonActions";
+  private static final String DEFAULT_LANGUAGE = "English";
+  private static final String RECTANGLE_STYLE = "rectangle";
+  private static final String HBOX_STYLE = "hbox";
+  private static final String HYPERLINK_STYLE = "hyper-link";
+  private static final String COMBO_OPTIONS = "Options";
+  private static final String COLOR_INITIAL = "Initial";
+  private static final String HISTORY_TAB_TITLE = "History";
+  private static final String VARIABLE_TAB_TITLE = "Variables";
+  private static final String COMMAND_TAB_TITLE = "User Commands";
+  private static final String TEXT_INPUT_PROMPT = "Enter Command";
+  private static final int BUTTON_PANE_HEIGHT = 70;
+  private static final int TABPANE_WIDTH = 300;
+  private static final int NUM_TEXT_COLUMNS= 10;
+
+
+
 
 
   public UserInterface() {
@@ -105,13 +125,11 @@ public class UserInterface extends Application {
     myColorPickerResources= ResourceBundle.getBundle(ColorPickerResources);
     myInitialColorResources= ResourceBundle.getBundle(InitialColorResources);
     myComboBoxOptionsResources = ResourceBundle.getBundle(ComboBoxOptionsResources);
-    control.setLanguage("English");
+    myTextButtonResources = ResourceBundle.getBundle(TextBoxButtonResources);
+    control.setLanguage(DEFAULT_LANGUAGE);
 
   }
 
-  public BorderPane getRoot() {
-    return root;
-  }
 
   @Override
   public void start(Stage primaryStage){
@@ -120,12 +138,12 @@ public class UserInterface extends Application {
     myStage.setX(0);
     makeDisplayWindow();
     makeCommandWindow();
-    myScene = makeScene(DEFAULT_SIZE.width, DEFAULT_SIZE.height);
-    myScene.getStylesheets().add("default.css");
+    myScene = makeScene();
+    myScene.getStylesheets().add(STYLESHEET);
     myStage.setScene(myScene);
     myStage.show();
     KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> {
-      step(SECOND_DELAY);
+      step();
     });
     Timeline animation = new Timeline();
     animation.setCycleCount(Timeline.INDEFINITE);
@@ -134,7 +152,7 @@ public class UserInterface extends Application {
     myStage.setOnCloseRequest(t->stopEverything());
   }
 
-  private void step(double secondDelay) {
+  private void step() {
     if(moverImage.getBoundsInParent().intersects(hbox.getBoundsInParent()) ){
       hideMoverAndLine(myMover.getLine().getStartX(), hbox.getBoundsInParent().getMaxY());
     }
@@ -147,11 +165,9 @@ public class UserInterface extends Application {
   }
 
   private void hideMoverAndLine(double endX, double endY) {
-    lineStartx = myMover.getLine().getStartX();
-    lineStarty = myMover.getLine().getStartY();
     myMover.moverVisible(false);
     root.getChildren().remove(myMover.getLine());
-    Line line = new Line(lineStartx, lineStarty, endX, endY);
+    Line line = new Line(myMover.getLine().getStartX(), myMover.getLine().getStartY(), endX, endY);
     root.getChildren().add(line);
   }
 
@@ -159,29 +175,47 @@ public class UserInterface extends Application {
    * Returns scene for the browser so it can be added to stage.
    */
 
-  private Scene makeScene (int width, int height) {
+  private Scene makeScene () {
     root = new BorderPane();
     hbox = addHBox();
     root.setTop(hbox);
     display_window = makeDisplayWindow();
     root.setLeft(display_window);
     root.setRight(makeSideWindow());
-    //root.setBottom(makeCommandWindow());
     moverImage = (ImageView) myMover.displayMover(TURTLE);
     setMoverPosition(moverImage);
     root.getChildren().addAll(moverImage);
     return new Scene(root);
   }
 
-  public void closeWindow(){
-    myStage.close();
+  //fix numbers
+  public HBox addHBox() {
+    HBox buttonPane = new HBox();
+    buttonPane.getStyleClass().add(HBOX_STYLE);
+    buttonPane.setPrefHeight(BUTTON_PANE_HEIGHT);
+    buttonPane.setPadding(new Insets(15, 12, 15, 12));
+    buttonPane.setSpacing(10);
+    addButtons(buttonPane);
+    return buttonPane;
+  }
+
+  private void addButtons(HBox hbox) {
+    for (String key : Collections.list(myButtonResources.getKeys())) {
+      hbox.getChildren().add(new OurButtons(myButtonResources.getString(key), key, this));
+    }
+    for (String key : Collections.list(myComboBoxResources.getKeys())) {
+      hbox.getChildren().add(new OurComboBox(myComboBoxResources.getString(key), key, this, FXCollections
+          .observableArrayList(myComboBoxOptionsResources.getString(key+COMBO_OPTIONS).split(","))));
+    }
+    for (String key : Collections.list(myColorPickerResources.getKeys())) {
+      hbox.getChildren().add(new OurLabeledColorPickers(myColorPickerResources.getString(key), key, this, myInitialColorResources.getString(key + COLOR_INITIAL)));
+    }
   }
 
   private Node makeDisplayWindow(){
     VBox vbox = new VBox();
     rectangle = new Rectangle(DISPLAY_WIDTH, DISPLAY_HEIGHT);
-    //rectangle = new Rectangle();
-    rectangle.getStyleClass().add("rectangle");
+    rectangle.getStyleClass().add(RECTANGLE_STYLE);
     commandWindow = new HBox(makeCommandWindow());
     vbox.getChildren().addAll(rectangle, commandWindow);
     display.getChildren().addAll(vbox);
@@ -190,24 +224,23 @@ public class UserInterface extends Application {
 
   public void setMoverPosition(ImageView image) {
     image.setX(DISPLAY_WIDTH/2-image.getBoundsInLocal().getWidth()/2);
-    image.setY(70 + DISPLAY_HEIGHT/2-image.getBoundsInLocal().getHeight()/2);
+    image.setY(BUTTON_PANE_HEIGHT + DISPLAY_HEIGHT/2-image.getBoundsInLocal().getHeight()/2);
     image.setRotate(0);
-    System.out.println(display.getLayoutY());
     myMover.initializeLinePosition(image.getX(), image.getY(), image.getRotate());
     myMover.setMoverInitialCords(image.getX(), image.getY());
   }
 
   private Node makeSideWindow() {
     tabPane = new TabPane();
-    tabPane.setMinWidth(300);
+    tabPane.setMinWidth(TABPANE_WIDTH);
     tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
     history = new ScrollPane();
     variables = new ScrollPane();
     userCommands = new ScrollPane();
-    Tab tab1 = new Tab("History", history);
+    Tab tab1 = new Tab(HISTORY_TAB_TITLE, history);
 
-    Tab tab2 = new Tab("Variables"  , variables);
-    Tab tab3 = new Tab("Commands" , userCommands);
+    Tab tab2 = new Tab(VARIABLE_TAB_TITLE  , variables);
+    Tab tab3 = new Tab(COMMAND_TAB_TITLE , userCommands);
 
     tabPane.getTabs().add(tab1);
     tabPane.getTabs().add(tab2);
@@ -219,95 +252,49 @@ public class UserInterface extends Application {
     return tabPane;
   }
 
-  public void addNodeToRoot(Node object){
-    root.getChildren().add(object);
-  }
-
-
   private Node makeCommandWindow(){
     HBox hbox = new HBox();
     inputArea = new TextArea();
     myCommander = inputArea;
-    inputArea.setPromptText("Enter Command");
-    inputArea.setPrefColumnCount(10);
+    inputArea.setPromptText(TEXT_INPUT_PROMPT);
+    inputArea.setPrefColumnCount(NUM_TEXT_COLUMNS);
     inputArea.getText();
     GridPane.setConstraints(inputArea, 0, 0);
     inputArea.setMinWidth(1100);
     inputArea.setMaxHeight(200);
     VBox vbox = new VBox();
-    Button runButton = new Button("Run");
-    runButton.setPrefSize(100, 20);
-    VBox historyBox = new VBox();
-    VBox variablesBox = new VBox();
-    VBox userCommandsBox = new VBox();
-
-
-    runButton.setOnAction(action -> {
-      myText = inputArea.getText();
-      String thistext = myText;
-      control.setCommand(myText);
-      control.passTurtle(myMover);
-      control.parseCommand();
-      inputArea.setText("");
-      if(myMover.objectMoved()) {
-        System.out.println("variables" + control.getVariables().keySet());
-        setHistoryTab(historyBox, thistext);
-        setVariablesTab(variablesBox);
-        setUserCommandsTab(userCommandsBox);
-        myMover.setObjectMoved(false);
-      }});
-    Button clearButton = new Button("Clear Text");
-    clearButton.setPrefSize(100, 20);
-
-    clearButton.setOnAction(action -> {
-      inputArea.setText("");
-
-    });
-    vbox.getChildren().addAll(runButton, clearButton);
+    for (String key : Collections.list(myTextButtonResources.getKeys())) {
+      vbox.getChildren().add(new OurButtons(myTextButtonResources.getString(key), key, this));
+    }
     hbox.getChildren().addAll(inputArea, vbox);
-
     return hbox;
   }
 
-  private void setUserCommandsTab(VBox userCommandsBox) {
-    userCommandsBox.getChildren().clear();
-    for(Object variable: control.getUserCommands().keySet()) {
-      Hyperlink linkVariable = new Hyperlink(variable.toString());
-      linkVariable.getStyleClass().add("hyper-link");
-      userCommandsBox.getChildren().add(linkVariable);
-      ;
-      linkVariable.setOnAction(new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent e) {
-          inputArea.setText(linkVariable.getText());
-        }
-      });
-    }
-    //variablesBox.getChildren().addAll(control.getVariables().keySet());
-    userCommands.setContent(userCommandsBox);
-  }
 
-  private void setVariablesTab(VBox variablesBox) {
-    variablesBox.getChildren().clear();
-    for(Object variable: control.getVariables().keySet()) {
-      Hyperlink linkVariable = new Hyperlink(variable.toString());
-      linkVariable.getStyleClass().add("hyper-link");
-      variablesBox.getChildren().add(linkVariable);
-      ;
+  private void createStoredElementsTabs(VBox vbox, ScrollPane tab, Map map, boolean needValue) {
+    vbox.getChildren().clear();
+    for(Object variable: map.keySet()) {
+      if(needValue) {
+        linkVariable = new Hyperlink(variable.toString() + "=" + map.get(variable));
+      }
+      else{
+        linkVariable = new Hyperlink(variable.toString());
+      }
+      linkVariable.getStyleClass().add(HYPERLINK_STYLE);
+      vbox.getChildren().add(linkVariable);
       linkVariable.setOnAction(new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
-          inputArea.setText(linkVariable.getText());
+          inputArea.setText(variable.toString());
         }
       });
     }
-    //variablesBox.getChildren().addAll(control.getVariables().keySet());
-    variables.setContent(variablesBox);
+    tab.setContent(vbox);
   }
 
   private void setHistoryTab(VBox historyBox, String thistext) {
     Hyperlink link = new Hyperlink();
-    link.getStyleClass().add("hyper-link");
+    link.getStyleClass().add(HYPERLINK_STYLE);
     link.setText(myText);
     link.setOnAction(new EventHandler<ActionEvent>() {
       @Override
@@ -323,28 +310,6 @@ public class UserInterface extends Application {
     System.exit(1);
   }
 
-  public HBox addHBox() {
-    HBox hbox = new HBox();
-    hbox.getStyleClass().add("hbox");
-    hbox.setPrefHeight(70);
-    hbox.setPadding(new Insets(15, 12, 15, 12));
-    hbox.setSpacing(10);
-    addButtons(hbox);
-    return hbox;
-  }
-
-  private void addButtons(HBox hbox) {
-    for (String key : Collections.list(myButtonResources.getKeys())) {
-      hbox.getChildren().add(new OurButtons(myButtonResources.getString(key), key, this));
-    }
-    for (String key : Collections.list(myComboBoxResources.getKeys())) {
-      hbox.getChildren().add(new OurComboBox(myComboBoxResources.getString(key), key, this, FXCollections
-          .observableArrayList(myComboBoxOptionsResources.getString(key+"Options").split(","))));
-    }
-    for (String key : Collections.list(myColorPickerResources.getKeys())) {
-      hbox.getChildren().add(new OurLabeledColorPickers(myColorPickerResources.getString(key), key, this, myInitialColorResources.getString(key + "Initial")));
-    }
-  }
 
 
   private void scanFile(File file) throws FileNotFoundException {
@@ -374,6 +339,13 @@ public class UserInterface extends Application {
 
   public Color getLineColor() {
     return lineColor;
+  }
+
+  public BorderPane getRoot() {
+    return root;
+  }
+  public void addNodeToRoot(Node object){
+    root.getChildren().add(object);
   }
 
   private void createErrorDialog(Exception e){
@@ -453,5 +425,25 @@ public class UserInterface extends Application {
   public void setPenColor(Color color){
     myLine.setStroke(color);
     lineColor = color;
+  }
+
+  public void setOnRun(){
+    myText = inputArea.getText();
+    String thistext = myText;
+    control.setCommand(myText);
+    control.passTurtle(myMover);
+    control.parseCommand();
+    inputArea.setText("");
+    if(myMover.objectMoved()) {
+      System.out.println("variables" + control.getVariables().keySet());
+      setHistoryTab(historyBox, thistext);
+      myMover.setObjectMoved(false);
+    }
+    createStoredElementsTabs(variablesBox, variables, control.getVariables(), true);
+    createStoredElementsTabs(userCommandsBox, userCommands, control.getUserCommands(), false);
+  }
+
+  public void setOnClear(){
+    inputArea.setText("");
   }
 }
