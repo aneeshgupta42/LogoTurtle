@@ -29,9 +29,9 @@ public class Turtle implements Update{
   private double turtleCenterXPos;
   private double turtleCenterYPos;
   Line myLine;
-  View myView;
+  UserInterface myView;
 
-  public Turtle(View view){
+  public Turtle(UserInterface view){
     myView = view;
     // do we want this to start as true?
     penDown = true;

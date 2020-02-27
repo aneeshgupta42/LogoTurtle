@@ -1,13 +1,5 @@
 package frontEnd;
 
-import Controller.Control;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Scanner;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -48,9 +40,6 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import java.awt.Dimension;
-import javafx.scene.shape.Rectangle;
-
 
 public class View extends Application {
   private Scene myScene;
@@ -454,7 +443,5 @@ public class View extends Application {
     return lineColor;
   }
 
-  private void createErrorDialog(Exception e){
-    ErrorBoxes ep = new ErrorBoxes(e);
   }
 }
