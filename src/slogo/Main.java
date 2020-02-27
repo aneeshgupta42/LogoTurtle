@@ -1,6 +1,6 @@
 package slogo;
 
-import frontEnd.View;
+import frontEnd.UserInterface;
 import javafx.application.Application;
 
 
@@ -9,7 +9,7 @@ import javafx.application.Application;
  */
 public class Main {
     public static void main (String[] args) {
-        Application.launch(View.class, args);
+        Application.launch(UserInterface.class, args);
     }
 }
 
