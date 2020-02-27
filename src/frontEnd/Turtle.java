@@ -98,10 +98,8 @@ public class Turtle implements Update{
     myLine.setStroke(myView.getLineColor());
     //myView.setLine(line);
     line.setStartX(turtleStartingXPos+ myTurtle.getBoundsInLocal().getWidth()/2);
-
     line.setStartY(turtleStartingYPos + myTurtle.getBoundsInLocal().getHeight());
  //   System.out.println("yo" + turtleStartingYPos + " " + myTurtle.getY());
-
     line.setEndX(turtleStartingXPos + x+ myTurtle.getBoundsInLocal().getWidth()/2);
     line.setEndY(turtleStartingYPos + y+ myTurtle.getBoundsInLocal().getHeight());
     myView.addNodeToRoot(myLine);

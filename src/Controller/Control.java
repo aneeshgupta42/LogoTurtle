@@ -65,6 +65,10 @@ public class Control {
     return variablesUsed;
   }
 
+  public Map getUserDefinedCommands(){
+    return lists.getFunction();
+  }
+
   /*
   Sets the Map to be the map retrieved from our StoreLists object
    */
@@ -101,7 +105,7 @@ public class Control {
   private void parseText() {
     command = new LinkedList<>();
     argument = new LinkedList<>();
-    args = new LinkedList<>();
+
     logicStatementInt =0;
     for (String line : input.split(NEWLINE)) {
       if (line.contains("#")) {
@@ -119,6 +123,7 @@ public class Control {
   private void organizeInStacks(String line) {
     iterationOfLoopInt =0;
     trackPreviousNumArgsInt =0;
+    args = new LinkedList<>();
     for (String word : line.split(WHITESPACE)) {
       if (word.trim().length() > 0) {
         if (!parser.getSymbol(word).equals(ARGUMENT) && !parser.getSymbol(word).equals(VARIABLE)) {
@@ -179,10 +184,11 @@ public class Control {
   Getting the number of arguments for each command
    */
   public void coordinateCommands() {
-//    System.out.println(command);
+    System.out.println(command);
     int argNum = 0;
     if(!command.isEmpty()) {
       userCom = command.pop();
+      System.out.println(userCom);
       if (parser.getSymbol(userCom).equals("MakeUserInstruction")) {
         makeFunction = true;
       }
@@ -208,6 +214,7 @@ public class Control {
   Coordinating the command to the number of arguments it needs and pushing it to be run
    */
   private void checkIfCommandCanRun(int argNum) {
+    System.out.println(userCom);
     if (!argument.isEmpty() && argument.size() >= argNum && trackPreviousNumArgsInt <= 2) {
       for (int i = 0; i < argNum; i++) {
         args.push(argument.pop());
@@ -221,16 +228,18 @@ public class Control {
         runCommand();
       }
     } else if (argument.isEmpty() && argNum != 0) {
-      command.push(userCom);
+      command.add(userCom);
     } else if (!argument.isEmpty() && argument.size() <= argNum && argNum != 0) {
       String arg = argument.pollLast();
       command.push(userCom);
       argument.add(arg);
-    } else if (argNum == 0) {
+    }
+    else if (argNum == 0) {
       args = new LinkedList<>();
       checkIfList();
       runCommand();
     }
+    System.out.println(args);
     trackPreviousNumArgsInt = argNum;
   }
 
