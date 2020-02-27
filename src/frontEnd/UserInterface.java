@@ -8,26 +8,19 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -38,8 +31,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import java.awt.Dimension;
@@ -95,10 +86,12 @@ public class UserInterface extends Application {
   private static final String ComboBoxResources = "resources.UIActions.ComboBoxActions";
   private static final String ColorPickerResources = "resources.UIActions.ColorPickerActions";
   private static final String InitialColorResources = "resources.UIActions.InitialColors";
+  private static final String ComboBoxOptionsResources = "resources.UIActions.ComboBoxOptions";
   private ResourceBundle myButtonResources;
   private ResourceBundle myComboBoxResources;
   private ResourceBundle myColorPickerResources;
   private ResourceBundle myInitialColorResources;
+  private ResourceBundle myComboBoxOptionsResources;
 
 
   public UserInterface() {
@@ -114,6 +107,7 @@ public class UserInterface extends Application {
     myComboBoxResources = ResourceBundle.getBundle(ComboBoxResources);
     myColorPickerResources= ResourceBundle.getBundle(ColorPickerResources);
     myInitialColorResources= ResourceBundle.getBundle(InitialColorResources);
+    myComboBoxOptionsResources = ResourceBundle.getBundle(ComboBoxOptionsResources);
     control.setLanguage("English");
 
   }
@@ -148,7 +142,7 @@ public class UserInterface extends Application {
     root.setLeft(display_window);
     root.setRight(makeSideWindow());
     //root.setBottom(makeCommandWindow());
-    turtleimage = (ImageView) myTurtle.displayTurtle();
+    turtleimage = (ImageView) myTurtle.displayTurtle(TURTLE);
     setTurtlePosition(turtleimage);
     root.getChildren().addAll(turtleimage);
     return new Scene(root);
@@ -327,7 +321,7 @@ public class UserInterface extends Application {
     }
     for (String key : Collections.list(myComboBoxResources.getKeys())) {
       hbox.getChildren().add(new OurComboBox(myComboBoxResources.getString(key), key, this, FXCollections
-          .observableArrayList(languages)));
+          .observableArrayList(myComboBoxOptionsResources.getString(key+"Options").split(","))));
     }
     for (String key : Collections.list(myColorPickerResources.getKeys())) {
       hbox.getChildren().add(new OurLabeledColorPickers(myColorPickerResources.getString(key), key, this, myInitialColorResources.getString(key + "Initial")));
@@ -369,19 +363,10 @@ public class UserInterface extends Application {
   }
 
 
-  private void displayHelpScreen() {
+  public void displayHelpScreen() {
     Stage stage2 = new Stage();
     stage2.setTitle("Table View Sample");
     ScrollPane pane = new ScrollPane();
-    ScrollBar bar = new ScrollBar();
-    bar.setOrientation(Orientation.VERTICAL);
-    bar.valueProperty().addListener(new ChangeListener<Number>() {
-      public void changed(ObservableValue<? extends Number> ov,
-          Number old_val, Number new_val) {
-        bar.setLayoutX(-new_val.doubleValue());
-        pane.hvalueProperty().bindBidirectional(bar.valueProperty());
-      }
-    });
     stage2.setWidth(300);
     stage2.setHeight(500);
 
@@ -408,7 +393,8 @@ public class UserInterface extends Application {
 
   public void selectFileScreen() {
     FileChooser fileChooser = new FileChooser();
-    fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+    String dataPath = System.getProperty("user.dir") + "/data/examples";
+    fileChooser.setInitialDirectory(new File(dataPath));
     File selectedFile = fileChooser.showOpenDialog(myStage);
     if(selectedFile!= null){
       try {
@@ -422,6 +408,19 @@ public class UserInterface extends Application {
 
   public void setLanguage(String language) {
     control.setLanguage(language);
+  }
+
+  public void setImage(String image){
+    double turtleXPos = turtleimage.getX();
+    double turtleYPos = turtleimage.getY();
+    double turtleAngle = myTurtle.getTurtleAngle();
+    root.getChildren().remove(turtleimage);
+    String path = myComboBoxOptionsResources.getString(image);
+    turtleimage = (ImageView) myTurtle.displayTurtle(path);
+    turtleimage.setX(turtleXPos);
+    turtleimage.setY(turtleYPos);
+    turtleimage.setRotate(turtleAngle);
+    root.getChildren().add(turtleimage);
   }
 
   public void setBackgroundColor(Color color){
