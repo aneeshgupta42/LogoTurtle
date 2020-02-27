@@ -9,16 +9,23 @@ public class StoreLists {
   private Deque<String> lines;
   private Map<String,String> function;
   private Deque<String> args;
-  private int length;
+  private Deque<String> words;
 
   public StoreLists(){
     function = new HashMap<>();
     args = new LinkedList<>();
     lines = new LinkedList<>();
+    words = new LinkedList<>();
   }
 
+  public void storeForArg(String line){
+    for (String word:line.split(" ")) {
+      if(!line.equals("[") && !line.equals("]") && !line.equals("For"))
+        words.add(word);
+    }
+  }
   public void store(String line){
-    if(!line.equals("[") && !line.equals("]"))
+    if(!line.equals("[") && !line.equals("]") )
       lines.add(line);
   }
   public void storeArg(LinkedList<String> arg) {
@@ -38,6 +45,9 @@ public class StoreLists {
     function.put(functionName,func);
   }
 
+  public Deque getForArgs() {
+    return words;
+  }
   public Deque getCommands(){
     return lines;
   }

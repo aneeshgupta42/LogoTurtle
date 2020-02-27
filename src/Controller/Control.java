@@ -179,8 +179,7 @@ public class Control {
   Getting the number of arguments for each command
    */
   public void coordinateCommands() {
-    System.out.println(argument);
-    System.out.println(command);
+//    System.out.println(command);
     int argNum = 0;
     if(!command.isEmpty()) {
       userCom = command.pop();
@@ -292,6 +291,7 @@ public class Control {
       Constructor constructor = cls.getConstructor(LinkedList.class, Control.class);
       objectCommand = constructor.newInstance((Object) args, (Object) this);
       Command commandGiven = (Command) objectCommand;
+//      System.out.println(commandGiven);
       if (userfunction == null && !parser.getSymbol(userCom).equals(LIST_END) && once == false && !parser.getSymbol(userCom).equals(LIST_START)) {
         userfunction = commandGiven;
         once = true;
@@ -337,15 +337,15 @@ If user input command, runs the content inside the [ ] the specified numbers of 
     }   else {
     inList = true;
    // doTimes = false;
-    //System.out.println(userfunction);
-    //if (start == looping) {
+ //   System.out.println(userfunction);
+  //  if (start == looping) {
       command = lists.getCommands();
-      System.out.println(command);
-      System.out.println(argument);
+   //   System.out.println(command);
+   //   System.out.println(argument);
       argument = lists.getArguments();
       numberOfCommands = lists.getLength();
-      System.out.println(numberOfCommands);
-   // }
+   //   System.out.println(numberOfCommands);
+  //  }
     coordinateCommands();
     repCount(looping, var);
     repCount(i, ":repCount");
