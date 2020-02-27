@@ -9,11 +9,14 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -22,6 +25,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -29,6 +33,7 @@ import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -59,6 +64,8 @@ public class View extends Application {
   private Line myLine;
 
   public static final String TITLE = "JavaFX Animation Example";
+  private static final String COMMAND_ONE = "viewboc.png";
+  private static final String COMMAND_TWO = "viewbox.png";
   public static final Dimension DEFAULT_SIZE = new Dimension(1200, 1200);
   private static final int DISPLAY_WIDTH = 1000;
   private static final int DISPLAY_HEIGHT = 500;
@@ -384,30 +391,31 @@ public class View extends Application {
 
   private void displayHelpScreen() {
     Stage stage2 = new Stage();
-    Scene scene = new Scene(new Group());
     stage2.setTitle("Table View Sample");
-    TableView table = new TableView();
+    ScrollPane pane = new ScrollPane();
+    ScrollBar bar = new ScrollBar();
+    bar.setOrientation(Orientation.VERTICAL);
+    bar.valueProperty().addListener(new ChangeListener<Number>() {
+      public void changed(ObservableValue<? extends Number> ov,
+          Number old_val, Number new_val) {
+        bar.setLayoutX(-new_val.doubleValue());
+        scrollPane.hvalueProperty().bindBidirectional(bar.valueProperty());
+      }
+    });
     stage2.setWidth(300);
     stage2.setHeight(500);
 
-    final Label label = new Label("Address Book");
-    label.setFont(new Font("Arial", 20));
-
-    table.setEditable(true);
-
-    TableColumn firstNameCol = new TableColumn("First Name");
-    TableColumn lastNameCol = new TableColumn("Last Name");
-    TableColumn emailCol = new TableColumn("Email");
-
-    table.getColumns().addAll(firstNameCol, lastNameCol, emailCol);
+    Image command= new Image(getClass().getClassLoader().getResourceAsStream(COMMAND_ONE));
+    ImageView commandOneIm = new ImageView(command);
+    Image commandTwo= new Image(getClass().getClassLoader().getResourceAsStream(COMMAND_TWO));
+    ImageView commandTwoIm = new ImageView(commandTwo);
 
     final VBox vbox = new VBox();
     vbox.setSpacing(5);
     vbox.setPadding(new Insets(10, 0, 0, 10));
-    vbox.getChildren().addAll(label, table);
-
-    ((Group) scene.getRoot()).getChildren().addAll(vbox);
-
+    vbox.getChildren().addAll(commandOneIm,commandTwoIm);
+    pane.setContent(vbox);
+    Scene scene = new Scene(pane);
     stage2.setScene(scene);
     stage2.show();
   }
