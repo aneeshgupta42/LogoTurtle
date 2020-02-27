@@ -3,11 +3,10 @@ package Controller;
 import backEnd.ErrorHandler;
 import backEnd.commands.Command;
 import frontEnd.ErrorBoxes;
-import frontEnd.Turtle;
+import frontEnd.Mover;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.TreeMap;
@@ -29,7 +28,7 @@ public class Control {
   private String userCom;
   private String input;
   private Map<String, String> variablesUsed = new TreeMap<>();
-  private Turtle myTurtle;
+  private Mover myMover;
   private double turtleCol;
   private double turtleRow;
   private double turtleAngle;
@@ -405,11 +404,11 @@ If user input command, runs the content inside the [ ] the specified numbers of 
   // THIS NEEDS TO BE A DIFFERENT CLASS @ ANEESH
 
 
-  public void passTurtle(Turtle turtle) {
-    myTurtle = turtle;
-    turtleRow = myTurtle.getTurtleRow();
-    turtleCol = myTurtle.getTurtleCol();
-    turtleAngle = myTurtle.getTurtleAngle();
+  public void passTurtle(Mover mover) {
+    myMover = mover;
+    turtleRow = myMover.getMoverRow();
+    turtleCol = myMover.getMoverCol();
+    turtleAngle = myMover.getMoverAngle();
   }
 
   public double getTurtleCol() {
@@ -421,10 +420,10 @@ If user input command, runs the content inside the [ ] the specified numbers of 
   }
 
   public void setPenDown(boolean mode){
-    myTurtle.setPen(mode);
+    myMover.setPen(mode);
   }
   public boolean isPenDown(){
-    return myTurtle.isPenDown();
+    return myMover.isPenDown();
   }
 
   public double getTurtleAngle() {
@@ -432,44 +431,44 @@ If user input command, runs the content inside the [ ] the specified numbers of 
   }
 
   public void setTurtleVisible(boolean mode) {
-    myTurtle.turtleVisible(mode);
+    myMover.moverVisible(mode);
   }
 
   public boolean findTurtleVisibility() {
-    return myTurtle.isTurtleVisible();
+    return myMover.isMoverVisible();
   }
 
   public void updateTurtle(double col, double row, double angle, int distance) {
-    turtleRow = myTurtle.getTurtleRow() + row;
-    turtleCol = myTurtle.getTurtleCol() + col;
-    turtleAngle = myTurtle.getTurtleAngle() + angle;
-    myTurtle.updateDistanceSoFar(distance);
-    myTurtle.move(col, row, angle);
+    turtleRow = myMover.getMoverRow() + row;
+    turtleCol = myMover.getMoverCol() + col;
+    turtleAngle = myMover.getMoverAngle() + angle;
+    myMover.updateDistanceSoFar(distance);
+    myMover.move(col, row, angle);
  //   System.out.println("update" + col + " " + row + " " + angle);
   }
 
   public int getTurtleDistance() {
-    return myTurtle.getDistanceSoFar();
+    return myMover.getDistanceSoFar();
   }
 
   public void turtleHome(boolean clearScreen) {
     if (clearScreen) {
-      myTurtle.clearScreen();
+      myMover.clearScreen();
     } else {
-      myTurtle.resetTurtle();
+      myMover.resetTurtle();
     }
   }
 
-  public Turtle getTurtle() {
-    return myTurtle;
+  public Mover getTurtle() {
+    return myMover;
   }
 
   public double getTurtleRelativeXPos() {
-    return turtleCol - myTurtle.getTurtleCenterXPos();
+    return turtleCol - myMover.getMoverCenterXPos();
   }
 
   public double getTurtleRelativeYPos() {
-    return myTurtle.getTurtleCenterYPos() - turtleRow;
+    return myMover.getMoverCenterYPos() - turtleRow;
   }
 }
 

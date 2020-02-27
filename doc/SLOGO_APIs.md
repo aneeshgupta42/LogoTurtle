@@ -36,19 +36,19 @@ APIs:
     - APIs should be closed 
     - implementing new features : inheritance and extending classes
 # Use Cases:
-- The user types 'fd 50' in the command window, sees the turtle move in the display window leaving a trail, and has the command added to the environment's history.
+- The user types 'fd 50' in the command window, sees the mover move in the display window leaving a trail, and has the command added to the environment's history.
     - Command passed from view to Parser
     - Parser set up the command object and loads in the information
-    - Model takes the command object and updates the status of the turtle
+    - Model takes the command object and updates the status of the mover
     - Turtle object in the view class as well is then updated 
 - The user types '50 fd' in the command window and sees an error message that the command was not formatted correctly.
     - Command passed from view to parser
     - Parser registers an error with the command (Could also be the Model or an additional command class)
     - Throws an exception and sends the info to view (bypasses model)(store in model?)
     - View pops up dialog error box
-- The user types 'pu fd 50 pd fd 50' in the command window and sees the turtle move twice (once without a trail and once with a trail).
+- The user types 'pu fd 50 pd fd 50' in the command window and sees the mover move twice (once without a trail and once with a trail).
     - Same as above 
-    - Parser or command class indictaes there are multiple commands and then the turtle is updated twice accordingly and same with the model and the view
+    - Parser or command class indictaes there are multiple commands and then the mover is updated twice accordingly and same with the model and the view
 - The user changes the color of the environment's background.
     - Button in view can just change background image of scene. `setSceneColor(Color newColor)`
     

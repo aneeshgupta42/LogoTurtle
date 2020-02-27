@@ -5,13 +5,13 @@ Okay so ....
 * Front end
 * Create an environment for users to experiment with SLogo commands. At the very least, it should allow the user to:
 
-    * enter commands to the turtle interactively by entering text commands
+    * enter commands to the mover interactively by entering text commands
         * display class
-    * see the results of the turtle executing commands displayed visually
-        * NOTE, the turtle starts in the center of the display which is considered (0, 0)
+    * see the results of the mover executing commands displayed visually
+        * NOTE, the mover starts in the center of the display which is considered (0, 0)
     * see errors that may result from entered commands in a user friendly way (i.e., not just printed to the console)
-    * set a background color for the turtle's display area
-    * set an image to use for the turtle
+    * set a background color for the mover's display area
+    * set an image to use for the mover
     * set a color to use for the pen
     * see commands previously run in the environment
     * see variables currently available in the environment

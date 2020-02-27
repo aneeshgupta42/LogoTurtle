@@ -27,7 +27,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -42,8 +41,7 @@ public class UserInterface extends Application {
   private Group display;
   private Stage myStage;
 
-  private Turtle myTurtle;
-  private Pen myPen;
+  private Mover myMover;
   private Control control;
   private Rectangle rectangle;
   private Line myLine;
@@ -66,17 +64,9 @@ public class UserInterface extends Application {
   private static final String STYLESHEET = "default.css";
   private ResourceBundle styleResources;
   private Node display_window;
-  private static final String LANGUAGE_PROMPT  = "Language";
-  private static final String[] languages = { "English", "Chinese", "French",
-          "German", "Italian","Portuguese","Russian","Spanish","Urdu" };
-  private static final String BACKGROUND_PROMPT  = "Background Color";
-  private static final String PEN_PROMPT  = "Pen Color";
-  private static final String[] colorNames = {"red", "yellow", "blue"};
-  public static final Color[] colors = {Color.RED, Color.YELLOW, Color.BLUE};
-  private static final HashMap<String, Color> map = new HashMap<>();
   private BorderPane root;
   private Color lineColor = Color.BLACK;
-  private ImageView turtleimage;
+  private ImageView moverImage;
   private HBox hbox;
   private ScrollPane history;
   private ScrollPane variables;
@@ -96,13 +86,10 @@ public class UserInterface extends Application {
 
   public UserInterface() {
     myStage = new Stage();
-    myTurtle = new Turtle(this);
+    myMover = new Mover(this);
     control = new Control();
     myLine = new Line();
     display = new Group();
-    for (int i=0; i< colors.length; i++){
-      map.put(colorNames[i], colors[i]);
-    }
     myButtonResources = ResourceBundle.getBundle(ButtonResources);
     myComboBoxResources = ResourceBundle.getBundle(ComboBoxResources);
     myColorPickerResources= ResourceBundle.getBundle(ColorPickerResources);
@@ -142,20 +129,11 @@ public class UserInterface extends Application {
     root.setLeft(display_window);
     root.setRight(makeSideWindow());
     //root.setBottom(makeCommandWindow());
-    turtleimage = (ImageView) myTurtle.displayTurtle(TURTLE);
-    setTurtlePosition(turtleimage);
-    root.getChildren().addAll(turtleimage);
+    moverImage = (ImageView) myMover.displayMover(TURTLE);
+    setMoverPosition(moverImage);
+    root.getChildren().addAll(moverImage);
     return new Scene(root);
   }
-
-  public Pane getPane(){
-    return root;
-  }
-
-  public ImageView getImage(){
-    return turtleimage;
-  }
-
 
   public void closeWindow(){
     myStage.close();
@@ -167,18 +145,17 @@ public class UserInterface extends Application {
     //rectangle = new Rectangle();
     rectangle.getStyleClass().add("rectangle");
     vbox.getChildren().addAll(rectangle, makeCommandWindow());
-    //turtleimage.setX(750);
     display.getChildren().addAll(vbox);
     return display;
   }
 
-  public void setTurtlePosition(ImageView image) {
+  public void setMoverPosition(ImageView image) {
     image.setX(DISPLAY_WIDTH/2-image.getBoundsInLocal().getWidth()/2);
     image.setY(70 + DISPLAY_HEIGHT/2-image.getBoundsInLocal().getHeight()/2);
     image.setRotate(0);
     System.out.println(display.getLayoutY());
-    myTurtle.initializeLinePosition(image.getX(), image.getY(), image.getRotate());
-    myTurtle.setTurtleInitialCords(image.getX(), image.getY());
+    myMover.initializeLinePosition(image.getX(), image.getY(), image.getRotate());
+    myMover.setMoverInitialCords(image.getX(), image.getY());
   }
 
   private Node makeSideWindow() {
@@ -230,14 +207,16 @@ public class UserInterface extends Application {
       myText = inputArea.getText();
       String thistext = myText;
       control.setCommand(myText);
-      control.passTurtle(myTurtle);
+      control.passTurtle(myMover);
       control.parseCommand();
-      System.out.println("variables" + control.getVariables().keySet());
-      setHistoryTab(historyBox, thistext);
-      setVariablesTab(variablesBox);
-      setUserCommandsTab(userCommandsBox);
       inputArea.setText("");
-    });
+      if(myMover.objectMoved()) {
+        System.out.println("variables" + control.getVariables().keySet());
+        setHistoryTab(historyBox, thistext);
+        setVariablesTab(variablesBox);
+        setUserCommandsTab(userCommandsBox);
+        myMover.setObjectMoved(false);
+      }});
     Button clearButton = new Button("Clear Text");
     clearButton.setPrefSize(100, 20);
 
@@ -367,19 +346,24 @@ public class UserInterface extends Application {
     Stage stage2 = new Stage();
     stage2.setTitle("Table View Sample");
     ScrollPane pane = new ScrollPane();
-    stage2.setWidth(300);
+    stage2.setWidth(1100);
     stage2.setHeight(500);
 
     Image command= new Image(getClass().getClassLoader().getResourceAsStream(COMMAND_ONE));
     ImageView commandOneIm = new ImageView(command);
+    commandOneIm.setPreserveRatio(true);
+    commandOneIm.setFitWidth(800);
     Image commandTwo= new Image(getClass().getClassLoader().getResourceAsStream(COMMAND_TWO));
     ImageView commandTwoIm = new ImageView(commandTwo);
+    commandTwoIm.setPreserveRatio(true);
+    commandTwoIm.setFitWidth(1000);
 
     final VBox vbox = new VBox();
     vbox.setSpacing(5);
     vbox.setPadding(new Insets(10, 0, 0, 10));
     vbox.getChildren().addAll(commandOneIm,commandTwoIm);
     pane.setContent(vbox);
+    pane.setFitToWidth(true);
     Scene scene = new Scene(pane);
     stage2.setScene(scene);
     stage2.show();
@@ -388,7 +372,7 @@ public class UserInterface extends Application {
 
   public void resetDisplay() {
     root.getChildren().removeIf(object -> object instanceof Line);
-    setTurtlePosition(turtleimage);
+    setMoverPosition(moverImage);
   }
 
   public void selectFileScreen() {
@@ -411,16 +395,16 @@ public class UserInterface extends Application {
   }
 
   public void setImage(String image){
-    double turtleXPos = turtleimage.getX();
-    double turtleYPos = turtleimage.getY();
-    double turtleAngle = myTurtle.getTurtleAngle();
-    root.getChildren().remove(turtleimage);
+    double moverXPos = moverImage.getX();
+    double moverYPos = moverImage.getY();
+    double moverAngle = myMover.getMoverAngle();
+    root.getChildren().remove(moverImage);
     String path = myComboBoxOptionsResources.getString(image);
-    turtleimage = (ImageView) myTurtle.displayTurtle(path);
-    turtleimage.setX(turtleXPos);
-    turtleimage.setY(turtleYPos);
-    turtleimage.setRotate(turtleAngle);
-    root.getChildren().add(turtleimage);
+    moverImage = (ImageView) myMover.displayMover(path);
+    moverImage.setX(moverXPos);
+    moverImage.setY(moverYPos);
+    moverImage.setRotate(moverAngle);
+    root.getChildren().add(moverImage);
   }
 
   public void setBackgroundColor(Color color){
