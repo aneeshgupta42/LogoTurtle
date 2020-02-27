@@ -17,10 +17,12 @@ public class For extends Command {
     super(varags,control);
     start = Integer.parseInt(varags.get(0));
     stop = Integer.parseInt(varags.get(1));
+    System.out.println(start + " " + stop);
   }
 
   @Override
   public int repeatCom() {
+    System.out.println(start + " " + stop);
     return (stop-start);
   }
 }
