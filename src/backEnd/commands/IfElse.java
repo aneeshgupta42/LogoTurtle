@@ -18,7 +18,7 @@ public class IfElse extends Command{
 
   @Override
   public boolean runnable() {
-    return check!=0;
+    return check !=0;
   }
 
   @Override

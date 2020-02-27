@@ -13,12 +13,10 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class Control {
-//check
   private static final String WHITESPACE = " ";
   private static final String NEWLINE = "\n";
   private static final String ARGUMENT = "Constant";
   private static final String VARIABLE = "Variable";
-  private static final String FUNCCOMMAND = "Command";
   private static final String CLASS_PATH = "backEnd.commands.";
   private static final String LIST_END = "ListEnd";
   private static final String LIST_START = "ListStart";
@@ -36,24 +34,34 @@ public class Control {
   private double turtleRow;
   private double turtleAngle;
   private StoreLists lists;
-  private boolean commandArguments = false;
+  private boolean checkingIfLoopInt = false;
   private Command userfunction;
   private boolean once = false;
   private boolean inList = false;
   private LinkedList<String> args;
-  private boolean dotimes = false;
-  private int count = 0;
+  private int trackPreviousNumArgsInt = 0;
   private String var;
-  private boolean runnable;
-  private int i=0;
+  private boolean runnableIf;
+  private int logicStatementInt =0;
   private boolean makeFunction;
-
+  private int iterationOfLoopInt =0;
+  private int numOfLoops;
+  private int numberOfCommands;
+  private boolean loopingComplete;
+  private boolean doTimes;
+  /*
+  Initializing a control (for reference storeLists is where all the data in lists is being passed)
+   */
   public Control() {
     lists = new StoreLists();
     //error = new ErrorHandler();
     parser = new Parser();
   }
 
+  /*
+  Gets the variables that have been used by the user and returns them as a Map (variables are the key)
+  @return variablesUsed
+   */
   public Map getVariables() {
     return variablesUsed;
   }
@@ -61,69 +69,72 @@ public class Control {
     return lists.getFunction();
   }
 
+  /*
+  Sets the Map to be the map retrieved from our StoreLists object
+   */
   public void setVariables(Map saved) {
     variablesUsed = saved;
   }
 
-  public void passCommand(String command) {
+  /*
+  Sets user input to be parsed
+   */
+  public void setCommand(String command) {
     input = command;
   }
-
-  public void passLanguage(String lang) {
+  /*
+  Sets language to be used
+ */
+  public void setLanguage(String lang) {
     language = lang;
   }
 
+  /*
+  Calls the parser to start parsing the user input
+   */
   public void parseCommand() {
-    passCommand(input);
+    setCommand(input);
     parser.addPatterns(language);
     parser.addPatterns("Syntax");
     parseText();
   }
 
+  /*
+    Splits text into lines
+   */
   private void parseText() {
-    System.out.println("here");
     command = new LinkedList<>();
     argument = new LinkedList<>();
     args = new LinkedList<>();
+    logicStatementInt =0;
     for (String line : input.split(NEWLINE)) {
       if (line.contains("#")) {
         String comment = line;
-      } else {
+      }
+      else {
         organizeInStacks(line);
       }
     }
   }
 
+  /*
+  Splits lines into words and categorizes them into two stacks
+   */
   private void organizeInStacks(String line) {
-    int j=0;
+    iterationOfLoopInt =0;
+    trackPreviousNumArgsInt =0;
     for (String word : line.split(WHITESPACE)) {
       if (word.trim().length() > 0) {
         if (!parser.getSymbol(word).equals(ARGUMENT) && !parser.getSymbol(word).equals(VARIABLE)) {
-          Map<String, String> map = lists.getFunction();
-          if (map.keySet().contains(word) && input!=map.get(word)) {
-            input = map.get(word);
-            parseText();
-          }
-          else if(makeFunction){
-              lists.storeFunction(word, input);
-              makeFunction = false;
-              coordinateCommands();
-          }
-          else  command.push(word);
+        //  System.out.println("Command");
+          checkingTypeOfCommand(word);
         }
         else if (parser.getSymbol(word).equals(VARIABLE)) {
-          if (commandArguments) {
-            dotimes = true;
-            var = word;
-          }
-          else if (variablesUsed.containsKey(word)) {
-              argument.push(variablesUsed.get(word));
-            }
-            else {
-              argument.push(word);
-            }
+         // System.out.println("variable");
+          checkingIfVariableExists(word);
         }
         else if(parser.getSymbol(word).equals(ARGUMENT)){
+        //  System.out.println("Argument");
           argument.push(word);
         }
       }
@@ -131,7 +142,48 @@ public class Control {
     }
   }
 
+  /*
+  Checking if command comes from a TO function, else pushing to stack to be run immediately.
+   */
+  private void checkingTypeOfCommand(String word) {
+    //this is if you input a to function
+    Map<String, String> map = lists.getFunction();
+    if (map.keySet().contains(word) && input!=map.get(word)) {
+      //it checks that it isn't already running before parsing it
+      input = map.get(word);
+      parseText();
+    }
+    else if(makeFunction){
+      //otherwise if the map does not have that function stored already, it stores it
+      lists.storeFunction(word, input);
+      makeFunction = false;
+      coordinateCommands();
+    }
+    else command.push(word);
+  }
+
+  /*
+  Checks if variable is already present. If it is a TO statement, this is saving the variable name separately.
+   */
+  private void checkingIfVariableExists(String word) {
+    if (checkingIfLoopInt) {
+      //if this is a loop that contains a variable
+      doTimes = true;
+      var = word;
+    }
+    else if (variablesUsed.containsKey(word)) {
+        argument.push(variablesUsed.get(word));
+      }
+      else {
+        argument.push(word);
+      }
+  }
+
+  /*
+  Getting the number of arguments for each command
+   */
   public void coordinateCommands() {
+//    System.out.println(command);
     int argNum = 0;
     if(!command.isEmpty()) {
       userCom = command.pop();
@@ -145,7 +197,6 @@ public class Control {
         Constructor constructor = cls.getConstructor();
         objectCommand = constructor.newInstance();
         Command commandGiven = (Command) objectCommand;
-        System.out.println(commandGiven);
         argNum = commandGiven.getNumberOfArgs();
       } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
         //error.handleCommandClassNotFound()
@@ -157,24 +208,26 @@ public class Control {
     }
   }
 
+  /*
+  Coordinating the command to the number of arguments it needs and pushing it to be run
+   */
   private void checkIfCommandCanRun(int argNum) {
-    if (!argument.isEmpty() && argument.size() >= argNum && count <= 2) {
+    if (!argument.isEmpty() && argument.size() >= argNum && trackPreviousNumArgsInt <= 2) {
       for (int i = 0; i < argNum; i++) {
         args.push(argument.pop());
       }
       checkIfList();
       runCommand();
       if (!command.isEmpty() && argument.isEmpty()) {
-        checkIfList();
+        userCom = command.pop();
         makeClassPathToCommand(parser);
+        checkIfList();
         runCommand();
       }
     } else if (argument.isEmpty() && argNum != 0) {
       command.push(userCom);
-      checkIfList();
     } else if (!argument.isEmpty() && argument.size() <= argNum && argNum != 0) {
       String arg = argument.pollLast();
-      checkIfList();
       command.push(userCom);
       argument.add(arg);
     } else if (argNum == 0) {
@@ -182,46 +235,67 @@ public class Control {
       checkIfList();
       runCommand();
     }
-    count = argNum;
+    trackPreviousNumArgsInt = argNum;
   }
 
+  /*
+  This checks if you have entered into a list [ ]
+   */
   private void checkIfList() {
-    if (parser.getSymbol(userCom).equals(LIST_START)) {
-      i++;
-      if(runnable && i==1){
-        commandArguments=false;
-      }
-      else commandArguments = true;
-    }
-    if (parser.getSymbol(userCom).equals(LIST_END)) {
-      if(runnable && i==2){
-        commandArguments=true;
-      }
-      else commandArguments = false;
-    }
-    if ((commandArguments && !parser.getSymbol(userCom).equals(LIST_START) && !parser.getSymbol(userCom).equals(LIST_END)) || inList) {
+    iterationOfLoopInt++;
+    loopingComplete = (inList || doTimes) && (iterationOfLoopInt < ((numOfLoops)* numberOfCommands + numberOfCommands%2));
+    if(loopingComplete){
       lists.store(userCom);
       lists.storeArg(args);
     }
+    if (parser.getSymbol(userCom).equals(LIST_START)) {
+      logicStatementInt++;
+      if((runnableIf && logicStatementInt==1)){
+        checkingIfLoopInt =false;
+      }
+      else if((!runnableIf && logicStatementInt%2==0)){
+        checkingIfLoopInt =false;
+      }
+      else checkingIfLoopInt = true;
+    }
+     if (parser.getSymbol(userCom).equals(LIST_END)) {
+      checkingIfLoopInt = false;
+    }
+    else if (checkingIfLoopInt) {
+       lists.store(userCom);
+       lists.storeArg(args);
+    }
   }
 
+  /*
+  Creates the complete path for the command class
+   */
   private void makeClassPathToCommand(Parser parser1) {
-    com = CLASS_PATH + parser1.getSymbol(userCom);
+    com = CLASS_PATH + parser.getSymbol(userCom);
   }
 
+  /*
+  Checks if you are not in the parsing of a list, and runs the command
+   */
   public void runCommand() {
-    if (commandArguments == false || dotimes) {
+    if (checkingIfLoopInt == false || doTimes) {
       obtainCommand();
     }
   }
 
+  /*
+  Passes arguments to the command class and grabs a user function if it exists.
+   */
   private void obtainCommand() {
+   // System.out.println(com);
+   // System.out.println(args);
     try {
       Class cls = Class.forName(com);
       Object objectCommand;
       Constructor constructor = cls.getConstructor(LinkedList.class, Control.class);
       objectCommand = constructor.newInstance((Object) args, (Object) this);
       Command commandGiven = (Command) objectCommand;
+//      System.out.println(commandGiven);
       if (userfunction == null && !parser.getSymbol(userCom).equals(LIST_END) && once == false && !parser.getSymbol(userCom).equals(LIST_START)) {
         userfunction = commandGiven;
         once = true;
@@ -235,48 +309,64 @@ public class Control {
     }
   }
 
+  /*
+  Calls the methods of a command to continue parsing logic
+   */
   public void createCommand(Command comm, Parser parser1) {
-    int loop =0;
+   if(userfunction!=null) numOfLoops = userfunction.repeatCom();
     if (comm.commandValueReturn() != null) {
       if(!command.isEmpty()) {
         argument.push(comm.commandValueReturn());
+        coordinateCommands();
       }
     }
-    if (parser1.getSymbol(userCom).equals("MakeVariable")) {
+     if (parser1.getSymbol(userCom).equals("MakeVariable")) {
       variablesUsed.putAll(comm.getVariablesCreated());
     }
-    if(parser1.getSymbol(userCom).equals("If")){
-      runnable = comm.runnable();
+    if(parser1.getSymbol(userCom).equals("If") ||parser1.getSymbol(userCom).equals("IfElse") ){
+      runnableIf = comm.runnable();
     }
-    if(userfunction!=null)  { loop = userfunction.repeatCom();
-    }
-    if (loop !=0 && commandArguments == false && userfunction != null && !comm.equals(userfunction) && parser.getSymbol(userCom).equals(LIST_END)) {
+    if (!comm.equals(userfunction) && checkingIfLoopInt == false && userfunction != null && parser.getSymbol(userCom).equals(LIST_END)) {
         int i=0;
-        userInputCom(loop,i);
-    }
-    if (!command.isEmpty() && userfunction.repeatCom() == 0) {
-      coordinateCommands();
+        userInputCom(numOfLoops,i, numOfLoops);
     }
   }
 
-
-  public void userInputCom(int loop, int i) {
-    if (loop == 0) {
+/*
+If user input command, runs the content inside the [ ] the specified numbers of times.
+ */
+  public void userInputCom(int looping, int i, int start) {
+    if (looping == 0) {
       inList = false;
-    } else {
+    }   else {
+    inList = true;
+   // doTimes = false;
+ //   System.out.println(userfunction);
+  //  if (start == looping) {
       command = lists.getCommands();
+   //   System.out.println(command);
+   //   System.out.println(argument);
       argument = lists.getArguments();
-      repCount(loop,var);
-      repCount(i,":repCount");
-      loop -=1;
-      i += 1;
-      inList = true;
-      args = new LinkedList<>();
-      coordinateCommands();
-      userInputCom(loop, i);
+      numberOfCommands = lists.getLength();
+   //   System.out.println(numberOfCommands);
+  //  }
+    coordinateCommands();
+    repCount(looping, var);
+    repCount(i, ":repCount");
+    if (loopingComplete == false) {
+      iterationOfLoopInt = 0;
+    }
+    looping--;
+    i++;
+
+    userInputCom(looping, i, start);
+     // }
     }
   }
 
+  /*
+  Makes variables for the repetitions of loops
+   */
   private void repCount(int loop, String s) {
     userCom = "make";
     args.push(s);
@@ -284,6 +374,27 @@ public class Control {
     makeClassPathToCommand(parser);
     obtainCommand();
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // THIS NEEDS TO BE A DIFFERENT CLASS @ ANEESH
+
 
   public void passTurtle(Turtle turtle) {
     myTurtle = turtle;
@@ -325,7 +436,7 @@ public class Control {
     turtleAngle = myTurtle.getTurtleAngle() + angle;
     myTurtle.updateDistanceSoFar(distance);
     myTurtle.move(col, row, angle);
-    System.out.println("update" + col + " " + row + " " + angle);
+ //   System.out.println("update" + col + " " + row + " " + angle);
   }
 
   public int getTurtleDistance() {
