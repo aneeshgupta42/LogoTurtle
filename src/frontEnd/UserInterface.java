@@ -3,10 +3,12 @@ package frontEnd;
 import Controller.Control;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.Scanner;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -34,6 +36,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import java.awt.Dimension;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 
 public class UserInterface extends Application {
@@ -46,10 +49,15 @@ public class UserInterface extends Application {
   private Rectangle rectangle;
   private Line myLine;
 
+  private static final int FRAMES_PER_SECOND = 60;
+  private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
+  private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
   public static final String TITLE = "JavaFX Animation Example";
   public static final Dimension DEFAULT_SIZE = new Dimension(1200, 1200);
   private static final int DISPLAY_WIDTH = 1000;
   private static final int DISPLAY_HEIGHT = 500;
+  private HBox commandWindow;
+  private TabPane tabPane;
   private static final String COMMAND_ONE = "viewboc.png";
   private static final String COMMAND_TWO = "viewbox.png";
   private Node myActor;
@@ -82,6 +90,8 @@ public class UserInterface extends Application {
   private ResourceBundle myColorPickerResources;
   private ResourceBundle myInitialColorResources;
   private ResourceBundle myComboBoxOptionsResources;
+  private double lineStartx;
+  private double lineStarty;
 
 
   public UserInterface() {
@@ -114,7 +124,35 @@ public class UserInterface extends Application {
     myScene.getStylesheets().add("default.css");
     myStage.setScene(myScene);
     myStage.show();
+    KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> {
+      step(SECOND_DELAY);
+    });
+    Timeline animation = new Timeline();
+    animation.setCycleCount(Timeline.INDEFINITE);
+    animation.getKeyFrames().add(frame);
+    animation.play();
     myStage.setOnCloseRequest(t->stopEverything());
+  }
+
+  private void step(double secondDelay) {
+    if(moverImage.getBoundsInParent().intersects(hbox.getBoundsInParent()) ){
+      hideMoverAndLine(myMover.getLine().getStartX(), hbox.getBoundsInParent().getMaxY());
+    }
+    if(moverImage.getBoundsInParent().intersects(commandWindow.getBoundsInParent())){
+      hideMoverAndLine(myMover.getLine().getStartX(), commandWindow.getBoundsInParent().getMinY());
+    }
+    if(moverImage.getBoundsInParent().intersects(tabPane.getBoundsInParent())){
+      hideMoverAndLine(tabPane.getBoundsInParent().getMinX(), myMover.getLine().getStartY());
+    }
+  }
+
+  private void hideMoverAndLine(double endX, double endY) {
+    lineStartx = myMover.getLine().getStartX();
+    lineStarty = myMover.getLine().getStartY();
+    myMover.moverVisible(false);
+    root.getChildren().remove(myMover.getLine());
+    Line line = new Line(lineStartx, lineStarty, endX, endY);
+    root.getChildren().add(line);
   }
 
   /**
@@ -144,7 +182,8 @@ public class UserInterface extends Application {
     rectangle = new Rectangle(DISPLAY_WIDTH, DISPLAY_HEIGHT);
     //rectangle = new Rectangle();
     rectangle.getStyleClass().add("rectangle");
-    vbox.getChildren().addAll(rectangle, makeCommandWindow());
+    commandWindow = new HBox(makeCommandWindow());
+    vbox.getChildren().addAll(rectangle, commandWindow);
     display.getChildren().addAll(vbox);
     return display;
   }
@@ -159,7 +198,7 @@ public class UserInterface extends Application {
   }
 
   private Node makeSideWindow() {
-    TabPane tabPane = new TabPane();
+    tabPane = new TabPane();
     tabPane.setMinWidth(300);
     tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
     history = new ScrollPane();
@@ -373,6 +412,7 @@ public class UserInterface extends Application {
   public void resetDisplay() {
     root.getChildren().removeIf(object -> object instanceof Line);
     setMoverPosition(moverImage);
+    myMover.moverVisible(true);
   }
 
   public void selectFileScreen() {

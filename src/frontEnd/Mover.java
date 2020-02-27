@@ -115,6 +115,10 @@ public class Mover implements Update {
     myView.addNodeToRoot(myLine);
   }
 
+  public Line getLine(){
+    return myLine;
+  }
+
   //get turtle position
   public double getMoverCol(){
     return myMover.getX();
