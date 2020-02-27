@@ -421,7 +421,7 @@ public class UserInterface extends Application {
   }
 
   public void setLanguage(String language) {
-    control.passLanguage(language);
+    control.setLanguage(language);
   }
 
   public void setBackgroundColor(Color color){
