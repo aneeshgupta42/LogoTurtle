@@ -2,7 +2,6 @@ package frontEnd;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -13,7 +12,7 @@ import javafx.scene.control.TextField;
 
 public class OurComboBox extends ComboBox {
 
-  public OurComboBox(String promptText, String methodName, View target, ObservableList items){
+  public OurComboBox(String promptText, String methodName, UserInterface target, ObservableList items){
     setItems(items);
     setPromptText(promptText);
     EventHandler<ActionEvent> whathappened = Result(methodName, target);
@@ -26,7 +25,7 @@ public class OurComboBox extends ComboBox {
   }
 
   // make input field that calls Controller method using reflection as its action
-  private Node makeInputAction (View target, String methodName) {
+  private Node makeInputAction (UserInterface target, String methodName) {
     TextField result = new TextField();
     result.setOnAction(handler -> {
       try {
@@ -43,7 +42,7 @@ public class OurComboBox extends ComboBox {
     return result;
   }
 
-  private EventHandler<ActionEvent> Result(String methodName, View target) {
+  private EventHandler<ActionEvent> Result(String methodName, UserInterface target) {
     EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {

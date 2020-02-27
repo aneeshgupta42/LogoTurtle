@@ -1,17 +1,13 @@
 package frontEnd;
 
-import Controller.Control;
 import java.lang.reflect.InvocationTargetException;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
 import java.lang.reflect.Method;
-import javax.swing.Action;
 
 /**
  * Basic class that can be used interchangeably with other JavaFX GUI components.
@@ -22,7 +18,7 @@ public class OurButtons extends Button implements Display {
   /**
    * Create input with given label and method to call on the given Controller.
    */
-  public OurButtons(String promptText, String methodName, View target) {
+  public OurButtons(String promptText, String methodName, UserInterface target) {
     setText(promptText);
     EventHandler<ActionEvent> whathappened = Result(methodName, target);
     setOnAction(whathappened);
@@ -38,7 +34,7 @@ public class OurButtons extends Button implements Display {
   }
 
   // make input field that calls Controller method using reflection as its action
-  private Node makeInputAction (View target, String methodName) {
+  private Node makeInputAction (UserInterface target, String methodName) {
     TextField result = new TextField();
     result.setOnAction(handler -> {
       try {
@@ -55,7 +51,7 @@ public class OurButtons extends Button implements Display {
     return result;
   }
 
-  private EventHandler<ActionEvent> Result(String methodName, View target) {
+  private EventHandler<ActionEvent> Result(String methodName, UserInterface target) {
     EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
