@@ -10,6 +10,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class Control {
   private static final String WHITESPACE = " ";
@@ -27,7 +28,7 @@ public class Control {
   private String com;
   private String userCom;
   private String input;
-  private Map<String, String> variablesUsed = new HashMap<>();
+  private Map<String, String> variablesUsed = new TreeMap<>();
   private Turtle myTurtle;
   private double turtleCol;
   private double turtleRow;
@@ -63,6 +64,9 @@ public class Control {
    */
   public Map getVariables() {
     return variablesUsed;
+  }
+  public Map getUserCommands() {
+    return lists.getFunction();
   }
 
   /*
