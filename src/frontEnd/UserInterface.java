@@ -222,6 +222,7 @@ public class UserInterface extends Application {
     runButton.setPrefSize(100, 20);
     VBox historyBox = new VBox();
     VBox variablesBox = new VBox();
+    VBox userCommandsBox = new VBox();
 
 
     runButton.setOnAction(action -> {
@@ -233,6 +234,7 @@ public class UserInterface extends Application {
       System.out.println("variables" + control.getVariables().keySet());
       setHistoryTab(historyBox, thistext);
       setVariablesTab(variablesBox);
+      setUserCommandsTab(userCommandsBox);
       inputArea.setText("");
     });
     Button clearButton = new Button("Clear Text");
@@ -248,9 +250,26 @@ public class UserInterface extends Application {
     return hbox;
   }
 
+  private void setUserCommandsTab(VBox userCommandsBox) {
+    userCommandsBox.getChildren().clear();
+    for(Object variable: control.getUserCommands().keySet()) {
+      Hyperlink linkVariable = new Hyperlink(variable.toString());
+      linkVariable.getStyleClass().add("hyper-link");
+      userCommandsBox.getChildren().add(linkVariable);
+      ;
+      linkVariable.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent e) {
+          inputArea.setText(linkVariable.getText());
+        }
+      });
+    }
+    //variablesBox.getChildren().addAll(control.getVariables().keySet());
+    userCommands.setContent(userCommandsBox);
+  }
+
   private void setVariablesTab(VBox variablesBox) {
     variablesBox.getChildren().clear();
-    System.out.println("v"+variablesBox.getChildren());
     for(Object variable: control.getVariables().keySet()) {
       Hyperlink linkVariable = new Hyperlink(variable.toString());
       linkVariable.getStyleClass().add("hyper-link");
