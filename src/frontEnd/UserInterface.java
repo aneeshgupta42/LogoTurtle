@@ -17,14 +17,12 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -33,8 +31,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import java.awt.Dimension;
@@ -56,6 +52,8 @@ public class UserInterface extends Application {
   public static final Dimension DEFAULT_SIZE = new Dimension(1200, 1200);
   private static final int DISPLAY_WIDTH = 1000;
   private static final int DISPLAY_HEIGHT = 500;
+  private static final String COMMAND_ONE = "viewboc.png";
+  private static final String COMMAND_TWO = "viewbox.png";
   private Node myActor;
   private TextArea myCommander;
   private static final String TURTLE = "turtle.png";
@@ -88,10 +86,12 @@ public class UserInterface extends Application {
   private static final String ComboBoxResources = "resources.UIActions.ComboBoxActions";
   private static final String ColorPickerResources = "resources.UIActions.ColorPickerActions";
   private static final String InitialColorResources = "resources.UIActions.InitialColors";
+  private static final String ComboBoxOptionsResources = "resources.UIActions.ComboBoxOptions";
   private ResourceBundle myButtonResources;
   private ResourceBundle myComboBoxResources;
   private ResourceBundle myColorPickerResources;
   private ResourceBundle myInitialColorResources;
+  private ResourceBundle myComboBoxOptionsResources;
 
 
   public UserInterface() {
@@ -107,6 +107,7 @@ public class UserInterface extends Application {
     myComboBoxResources = ResourceBundle.getBundle(ComboBoxResources);
     myColorPickerResources= ResourceBundle.getBundle(ColorPickerResources);
     myInitialColorResources= ResourceBundle.getBundle(InitialColorResources);
+    myComboBoxOptionsResources = ResourceBundle.getBundle(ComboBoxOptionsResources);
     control.setLanguage("English");
 
   }
@@ -141,7 +142,7 @@ public class UserInterface extends Application {
     root.setLeft(display_window);
     root.setRight(makeSideWindow());
     //root.setBottom(makeCommandWindow());
-    turtleimage = (ImageView) myTurtle.displayTurtle();
+    turtleimage = (ImageView) myTurtle.displayTurtle(TURTLE);
     setTurtlePosition(turtleimage);
     root.getChildren().addAll(turtleimage);
     return new Scene(root);
@@ -320,7 +321,7 @@ public class UserInterface extends Application {
     }
     for (String key : Collections.list(myComboBoxResources.getKeys())) {
       hbox.getChildren().add(new OurComboBox(myComboBoxResources.getString(key), key, this, FXCollections
-          .observableArrayList(languages)));
+              .observableArrayList(myComboBoxOptionsResources.getString(key+"Options").split(","))));
     }
     for (String key : Collections.list(myColorPickerResources.getKeys())) {
       hbox.getChildren().add(new OurLabeledColorPickers(myColorPickerResources.getString(key), key, this, myInitialColorResources.getString(key + "Initial")));
@@ -363,32 +364,23 @@ public class UserInterface extends Application {
 
 
   public void displayHelpScreen() {
-    System.out.println("made");
     Stage stage2 = new Stage();
-    Scene scene = new Scene(new Group());
     stage2.setTitle("Table View Sample");
-    TableView table = new TableView();
+    ScrollPane pane = new ScrollPane();
     stage2.setWidth(300);
     stage2.setHeight(500);
 
-    final Label label = new Label("Address Book");
-    label.setFont(new Font("Arial", 20));
-
-    table.setEditable(true);
-
-    TableColumn firstNameCol = new TableColumn("First Name");
-    TableColumn lastNameCol = new TableColumn("Last Name");
-    TableColumn emailCol = new TableColumn("Email");
-
-    table.getColumns().addAll(firstNameCol, lastNameCol, emailCol);
+    Image command= new Image(getClass().getClassLoader().getResourceAsStream(COMMAND_ONE));
+    ImageView commandOneIm = new ImageView(command);
+    Image commandTwo= new Image(getClass().getClassLoader().getResourceAsStream(COMMAND_TWO));
+    ImageView commandTwoIm = new ImageView(commandTwo);
 
     final VBox vbox = new VBox();
     vbox.setSpacing(5);
     vbox.setPadding(new Insets(10, 0, 0, 10));
-    vbox.getChildren().addAll(label, table);
-
-    ((Group) scene.getRoot()).getChildren().addAll(vbox);
-
+    vbox.getChildren().addAll(commandOneIm,commandTwoIm);
+    pane.setContent(vbox);
+    Scene scene = new Scene(pane);
     stage2.setScene(scene);
     stage2.show();
   }
@@ -401,7 +393,8 @@ public class UserInterface extends Application {
 
   public void selectFileScreen() {
     FileChooser fileChooser = new FileChooser();
-    fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+    String dataPath = System.getProperty("user.dir") + "/data/examples";
+    fileChooser.setInitialDirectory(new File(dataPath));
     File selectedFile = fileChooser.showOpenDialog(myStage);
     if(selectedFile!= null){
       try {
@@ -415,6 +408,19 @@ public class UserInterface extends Application {
 
   public void setLanguage(String language) {
     control.setLanguage(language);
+  }
+
+  public void setImage(String image){
+    double turtleXPos = turtleimage.getX();
+    double turtleYPos = turtleimage.getY();
+    double turtleAngle = myTurtle.getTurtleAngle();
+    root.getChildren().remove(turtleimage);
+    String path = myComboBoxOptionsResources.getString(image);
+    turtleimage = (ImageView) myTurtle.displayTurtle(path);
+    turtleimage.setX(turtleXPos);
+    turtleimage.setY(turtleYPos);
+    turtleimage.setRotate(turtleAngle);
+    root.getChildren().add(turtleimage);
   }
 
   public void setBackgroundColor(Color color){

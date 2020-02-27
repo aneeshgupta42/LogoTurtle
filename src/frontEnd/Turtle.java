@@ -16,7 +16,7 @@ import javafx.util.Duration;
 
 
 public class Turtle implements Update{
-  private static final String TURTLE = "turtle_25_upwards.png";
+  private static final String TURTLE = "turtle.png";
   ImageView myTurtle;
   private double turtleAngle;
   private boolean penDown;
@@ -39,8 +39,8 @@ public class Turtle implements Update{
     distanceSoFar = 0;
   }
 
-  public Node displayTurtle() {
-    Image turtle= new Image(getClass().getClassLoader().getResourceAsStream(TURTLE));
+  public Node displayTurtle(String imagePath) {
+    Image turtle= new Image(getClass().getClassLoader().getResourceAsStream(imagePath));
     myTurtle = new ImageView(turtle);
     return myTurtle;
   }
