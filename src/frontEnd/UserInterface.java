@@ -1,6 +1,7 @@
 package frontEnd;
 
 import Controller.Control;
+import backEnd.ErrorHandler;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Collections;
@@ -396,8 +397,7 @@ public class UserInterface extends Application {
       try {
         scanFile(selectedFile);
       } catch (FileNotFoundException ex) {
-        ///****fix this******
-        ex.printStackTrace();
+        ErrorBoxes box = new ErrorBoxes(new ErrorHandler("InvalidFile"));
       }
     }
   }
