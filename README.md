@@ -26,7 +26,7 @@ The CS308 Piazza board and lectures, Java and JavaFX documentation, and stack ov
 ### Running the Program
 Main class: View
 
-Data files needed: English.properties (and all other language property files), turtle.png
+Data files needed: English.properties (and all other language property files), mover.png
 
 Features implemented: Features described in the basic implementation (including commands in the command specification document)
 

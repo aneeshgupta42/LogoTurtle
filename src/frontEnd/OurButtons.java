@@ -28,29 +28,6 @@ public class OurButtons extends Button implements Display {
         //makeInputAction(target, methodName);
   }
 
-  // make input prompt, very basic for now but could be much more involved in general
-  private Node makePrompt (String text) {
-    return new Label(text + "  ");
-  }
-
-  // make input field that calls Controller method using reflection as its action
-  private Node makeInputAction (UserInterface target, String methodName) {
-    TextField result = new TextField();
-    result.setOnAction(handler -> {
-      try {
-        // find method with given name that takes String as its only parameter
-        Method m = target.getClass().getDeclaredMethod(methodName, String.class);
-        m.invoke(target, result.getText());
-        result.clear();
-      }
-      catch (Exception e) {
-        // FIXME: typically make your own custom exception to throw
-        throw new RuntimeException("Improper configuration", e);
-      }
-    });
-    return result;
-  }
-
   private EventHandler<ActionEvent> Result(String methodName, UserInterface target) {
     EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
       @Override

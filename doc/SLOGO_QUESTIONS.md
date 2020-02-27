@@ -30,7 +30,7 @@
             - `errorDisplay()`
             - `receiveCommand()`
         - Collaborators:
-            - Turtle (turtle's display)
+            - Turtle (mover's display)
             - Parser (Parser parses commands entered in view)
     - Model
         - Responsibilities:
