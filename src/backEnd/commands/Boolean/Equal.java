@@ -27,6 +27,7 @@ public class Equal extends Command {
         } else {
             booleanResult = FALSE;
         }
+//        booleanResult = argOne == argTwo ? TRUE:FALSE;
 
         System.out.println("The Equals result is: " + booleanResult);
     }

@@ -321,7 +321,7 @@ public class UserInterface extends Application {
     }
     for (String key : Collections.list(myComboBoxResources.getKeys())) {
       hbox.getChildren().add(new OurComboBox(myComboBoxResources.getString(key), key, this, FXCollections
-          .observableArrayList(myComboBoxOptionsResources.getString(key+"Options").split(","))));
+              .observableArrayList(myComboBoxOptionsResources.getString(key+"Options").split(","))));
     }
     for (String key : Collections.list(myColorPickerResources.getKeys())) {
       hbox.getChildren().add(new OurLabeledColorPickers(myColorPickerResources.getString(key), key, this, myInitialColorResources.getString(key + "Initial")));

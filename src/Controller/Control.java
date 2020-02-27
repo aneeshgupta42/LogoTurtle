@@ -314,7 +314,7 @@ public class Control {
       //error.handleCommandClassNotFound();
       //System.out.println("wrong");
       //throw new ErrorHandler("FileErrorMessage");
-      ErrorBoxes box = new ErrorBoxes(new ErrorHandler("NoClass"));
+//      ErrorBoxes box = new ErrorBoxes(new ErrorHandler("NoClass"));
     }
   }
 
