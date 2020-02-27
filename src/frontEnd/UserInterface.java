@@ -107,7 +107,7 @@ public class UserInterface extends Application {
     myComboBoxResources = ResourceBundle.getBundle(ComboBoxResources);
     myColorPickerResources= ResourceBundle.getBundle(ColorPickerResources);
     myInitialColorResources= ResourceBundle.getBundle(InitialColorResources);
-    control.passLanguage("English");
+    control.setLanguage("English");
 
   }
 
@@ -228,7 +228,7 @@ public class UserInterface extends Application {
     runButton.setOnAction(action -> {
       myText = inputArea.getText();
       String thistext = myText;
-      control.passCommand(myText);
+      control.setCommand(myText);
       control.passTurtle(myTurtle);
       control.parseCommand();
       System.out.println("variables" + control.getVariables().keySet());
@@ -414,7 +414,7 @@ public class UserInterface extends Application {
   }
 
   public void setLanguage(String language) {
-    control.passLanguage(language);
+    control.setLanguage(language);
   }
 
   public void setBackgroundColor(Color color){
