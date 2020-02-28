@@ -19,7 +19,7 @@ public class Control {
   private static final String CLASS_PATH = "backEnd.commands.";
   private static final String LIST_END = "ListEnd";
   private static final String LIST_START = "ListStart";
-  //private final ErrorHandler error;
+  private static final String COMMENT = "Comment";
   private final Parser parser;
   private String language;
   private Deque<String> command;
@@ -53,7 +53,6 @@ public class Control {
    */
   public Control() {
     lists = new StoreLists();
-    //error = new ErrorHandler();
     parser = new Parser();
   }
 
@@ -85,11 +84,17 @@ public class Control {
   public void setCommand(String command) {
     input = command;
   }
+  public String getCommand() {
+    return input;
+  }
   /*
   Sets language to be used
  */
   public void setLanguage(String lang) {
     language = lang;
+  }
+  public String getLanguage() {
+    return language;
   }
 
   /*
@@ -108,13 +113,9 @@ public class Control {
   private void parseText() {
     command = new LinkedList<>();
     argument = new LinkedList<>();
-
     logicStatementInt =0;
     for (String line : input.split(NEWLINE)) {
-      if (line.contains("#")) {
-        String comment = line;
-      }
-      else {
+      if(!line.contains("#")){
         organizeInStacks(line);
       }
     }
@@ -129,16 +130,15 @@ public class Control {
     args = new LinkedList<>();
     for (String word : line.split(WHITESPACE)) {
       if (word.trim().length() > 0) {
+        System.out.println(word);
+        System.out.println(parser.getSymbol(word));
         if (!parser.getSymbol(word).equals(ARGUMENT) && !parser.getSymbol(word).equals(VARIABLE)) {
-        //  System.out.println("Command");
           checkingTypeOfCommand(word);
         }
         else if (parser.getSymbol(word).equals(VARIABLE)) {
-         // System.out.println("variable");
           checkingIfVariableExists(word);
         }
         else if(parser.getSymbol(word).equals(ARGUMENT)){
-        //  System.out.println("Argument");
           argument.push(word);
         }
       }
@@ -187,11 +187,9 @@ public class Control {
   Getting the number of arguments for each command
    */
   public void coordinateCommands() {
-    System.out.println(command);
     int argNum = 0;
     if(!command.isEmpty()) {
       userCom = command.pop();
-      System.out.println(userCom);
       if (parser.getSymbol(userCom).equals("MakeUserInstruction")) {
         makeFunction = true;
       }
@@ -204,10 +202,7 @@ public class Control {
         Command commandGiven = (Command) objectCommand;
         argNum = commandGiven.getNumberOfArgs();
       } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
-        //error.handleCommandClassNotFound()
         ErrorBoxes box = new ErrorBoxes(new ErrorHandler("InvalidCommand"));
-        //throw new ErrorHandler("FileErrorMessage");
-        //ErrorBoxes errorScreen = new ErrorHandler(new RuntimeException(styleResources.getString(errorMessageProperty)));
       }
       checkIfCommandCanRun(argNum);
     }
@@ -242,7 +237,6 @@ public class Control {
       checkIfList();
       runCommand();
     }
-    System.out.println(args);
     trackPreviousNumArgsInt = argNum;
   }
 
@@ -295,24 +289,18 @@ public class Control {
   Passes arguments to the command class and grabs a user function if it exists.
    */
   private void obtainCommand() {
-   // System.out.println(com);
-   // System.out.println(args);
     try {
       Class cls = Class.forName(com);
       Object objectCommand;
       Constructor constructor = cls.getConstructor(LinkedList.class, Control.class);
       objectCommand = constructor.newInstance((Object) args, (Object) this);
       Command commandGiven = (Command) objectCommand;
-//      System.out.println(commandGiven);
       if (userfunction == null && !parser.getSymbol(userCom).equals(LIST_END) && once == false && !parser.getSymbol(userCom).equals(LIST_START)) {
         userfunction = commandGiven;
         once = true;
       }
       createCommand(commandGiven, parser);
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException | ExceptionInInitializerError e) {
-      //error.handleCommandClassNotFound();
-      //System.out.println("wrong");
-      //throw new ErrorHandler("FileErrorMessage");
 //      ErrorBoxes box = new ErrorBoxes(new ErrorHandler("NoClass"));
     }
   }
@@ -348,16 +336,9 @@ If user input command, runs the content inside the [ ] the specified numbers of 
       inList = false;
     }   else {
     inList = true;
-   // doTimes = false;
- //   System.out.println(userfunction);
-  //  if (start == looping) {
-      command = lists.getCommands();
-   //   System.out.println(command);
-   //   System.out.println(argument);
-      argument = lists.getArguments();
-      numberOfCommands = lists.getLength();
-   //   System.out.println(numberOfCommands);
-  //  }
+    command = lists.getCommands();
+    argument = lists.getArguments();
+    numberOfCommands = lists.getLength();
     coordinateCommands();
     repCount(looping, var);
     repCount(i, ":repCount");
@@ -366,9 +347,7 @@ If user input command, runs the content inside the [ ] the specified numbers of 
     }
     looping--;
     i++;
-
     userInputCom(looping, i, start);
-     // }
     }
   }
 
@@ -401,7 +380,6 @@ If user input command, runs the content inside the [ ] the specified numbers of 
 
 
 
-  // THIS NEEDS TO BE A DIFFERENT CLASS @ ANEESH
 
 
   public void passTurtle(Mover mover) {
