@@ -20,6 +20,7 @@ public class Control {
   private static final String LIST_END = "ListEnd";
   private static final String LIST_START = "ListStart";
   private static final String MAKE = "MakeVariable";
+  private static final String DOTIMES = "DoTimes";
   private static final String COMMENT = "Comment";
   private final Parser parser;
   private String language;
@@ -78,7 +79,7 @@ public class Control {
   public void parseCommand() {
     setCommand(input);
     setLanguage(language);
-    System.out.println(input);
+ //   System.out.println(input);
     parser.addPatterns(language);
     parser.addPatterns("Syntax");
     parseText();
@@ -112,8 +113,8 @@ public class Control {
         }
       }
     }
-    System.out.println(argument);
-    System.out.println(command);
+  //  System.out.println(argument);
+  //  System.out.println(command);
     coordinateCommands();
   }
 
@@ -126,7 +127,7 @@ public class Control {
     if(!command.isEmpty()) {
       for (int i=0;i<command.size();i++) {
         userCom = command.pop();
-        makeClassPathToCommand();
+        makeClassPathToCommand(userCom);
         try {
           Class cls = Class.forName(com);
           Object objectCommand;
@@ -146,8 +147,8 @@ public class Control {
   /*
   Creates the complete path for the command class
    */
-  private void makeClassPathToCommand() {
-    com = CLASS_PATH + parser.getSymbol(userCom);
+  private void makeClassPathToCommand(String comm) {
+    com = CLASS_PATH + parser.getSymbol(comm);
   }
 
 
@@ -160,20 +161,21 @@ public class Control {
     } else {
       if (argument.size() >= argNum) {
         String arg = argument.pop();
-        if (variablesUsed.containsKey(arg)) {
-         args.push(variablesUsed.get(arg));
+        if(parser.getSymbol(arg).equals(VARIABLE)) {
+          if (variablesUsed.containsKey(arg)) {
+            args.push(variablesUsed.get(arg));
+          }
+          else args.push(arg);
         }
-        else {
-          args.push(arg);
-        }
+        else args.push(arg);
       }
       argNum--;
       System.out.println(userCom);
+      System.out.println(argNum);
       System.out.println("Numb "+args);
       checkIfCommandCanRun(argNum);
     }
   }
-
 
   /*
   Checks if you are not in the parsing of a list, and runs the command
@@ -196,6 +198,7 @@ public class Control {
       createCommand(commandGiven);
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException | ExceptionInInitializerError e) {
       //error is thrown above
+      System.out.println("err");
     }
   }
 
@@ -203,35 +206,33 @@ public class Control {
   Calls the methods of a command to continue parsing logic
    */
   public void createCommand(Command comm) {
-
-    if (parser.getSymbol(userCom).equals(MAKE)) {
+    if (parser.getSymbol(userCom).equals(MAKE) || parser.getSymbol(userCom).equals(DOTIMES)) {
       variablesUsed.putAll(comm.getVariablesCreated());
       if(!command.isEmpty()) {
-        System.out.println("Aqui" + variablesUsed);
         coordinateCommands();
       }
-
     }
 
-
-      else if(comm.commandValueReturn()!=null){
+    if(comm.commandValueReturn()!=null){
         argument.push(comm.commandValueReturn());
         if(!command.isEmpty()) {
           coordinateCommands();
         }
     }
 
-
-   else if(comm.repeatCom()!=0) {
-      int loop = comm.repeatCom();
-      setCommand(input.substring(input.indexOf("["), input.indexOf("]")));
-      while (loop != 0) {
-        parseText();
-        loop--;
-      }
+    if(comm.repeatCom()!=0) {
+      System.out.println("here");
+        int loop = comm.repeatCom();
+        setCommand(input.substring(input.lastIndexOf("["), input.lastIndexOf("]")));
+        while (loop >0) {
+          parseText();
+          loop--;
+        }
     }
 
-
+    if(!command.isEmpty() && comm.repeatCom()==0) {
+      coordinateCommands();
+    }
 
   }
 
