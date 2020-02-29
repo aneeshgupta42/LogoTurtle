@@ -187,7 +187,6 @@ public class Control {
    */
   private void checkIfCommandCanRun(int argNum) {
     if (argNum == 0) {
-      checkIfList();
       runCommand();
     } else {
       if (argument.size() >= argNum) {
