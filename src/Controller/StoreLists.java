@@ -10,12 +10,14 @@ public class StoreLists {
   private Map<String,String> function;
   private Deque<String> args;
   private Deque<String> words;
+  private String functionName;
 
   public StoreLists(){
     function = new HashMap<>();
     args = new LinkedList<>();
     lines = new LinkedList<>();
     words = new LinkedList<>();
+    functionName ="";
   }
 
   public void storeForArg(String line){
@@ -34,14 +36,20 @@ public class StoreLists {
     }
   }
 
-  public void storeFunction(String functionName, String line){
+  public void storeFunction(String line){
     String func ="";
+    LinkedList<String> words = new LinkedList();
     for(String lines :line.split("\n")){
     for (String word : lines.split(" ")) {
+         words.add(word);
+    }
+   }
+    String functionName = words.get(words.indexOf("to")+1);
+    for (String word: words){
       if (!word.equals("to") && !word.equals(functionName) && !word.equals("[") && !word.equals("]")) {
-            func = func + " " + word;
-          }
-    }}
+        func = func + " " + word;
+      }
+    }
     function.put(functionName,func);
   }
 
@@ -60,5 +68,6 @@ public class StoreLists {
       if(lines.size()>0) return lines.size();
       else return 1;
     }
+    public String getFunctionName(){return functionName;}
 
 }

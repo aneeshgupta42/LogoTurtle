@@ -20,7 +20,7 @@ public abstract class Command {
   private Map c;
   protected int numberOfArgs;
   private Control myControl;
-  protected Boolean repeat;
+  protected Boolean repeat = false;
   private int b;
 
   public Command(){
