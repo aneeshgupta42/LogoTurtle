@@ -6,10 +6,7 @@ import frontEnd.ErrorBoxes;
 import frontEnd.Mover;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Deque;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.TreeMap;
@@ -22,6 +19,7 @@ public class Control {
   private static final String CLASS_PATH = "backEnd.commands.";
   private static final String LIST_END = "ListEnd";
   private static final String LIST_START = "ListStart";
+  private static final String MAKE = "MakeVariable";
   private static final String COMMENT = "Comment";
   private final Parser parser;
   private String language;
@@ -36,6 +34,9 @@ public class Control {
   private double turtleRow;
   private double turtleAngle;
   private LinkedList<String> args;
+  private boolean inList;
+  private int listStart;
+  private int listEnd;
   /*
   Initializing a control (for reference storeLists is where all the data in lists is being passed)
    */
@@ -107,10 +108,12 @@ public class Control {
           command.push(word);
         }
         else{
-          argument.push(word);
+            argument.push(word);
         }
       }
     }
+    System.out.println(argument);
+    System.out.println(command);
     coordinateCommands();
   }
 
@@ -123,7 +126,6 @@ public class Control {
     if(!command.isEmpty()) {
       for (int i=0;i<command.size();i++) {
         userCom = command.pop();
-        System.out.println(userCom);
         makeClassPathToCommand();
         try {
           Class cls = Class.forName(com);
@@ -135,7 +137,6 @@ public class Control {
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
           ErrorBoxes box = new ErrorBoxes(new ErrorHandler("InvalidCommand"));
         }
-        System.out.println("This "+argNum);
         args.clear();
         checkIfCommandCanRun(argNum);
       }
@@ -143,37 +144,43 @@ public class Control {
   }
 
   /*
-  Coordinating the command to the number of arguments it needs and pushing it to be run
-   */
-  private void checkIfCommandCanRun(int argNum) {
-    if(argNum==0){
-      runCommand();
-    }
-    else{
-      if(argument.size()>=argNum){
-        args.push(argument.pop());
-      }
-      argNum--;
-      System.out.println(argNum);
-      System.out.println("Number " + args);
-      checkIfCommandCanRun(argNum);
-    }
-
-
-  }
-  /*
   Creates the complete path for the command class
    */
   private void makeClassPathToCommand() {
     com = CLASS_PATH + parser.getSymbol(userCom);
   }
 
+
+  /*
+  Coordinating the command to the number of arguments it needs and pushing it to be run
+   */
+  private void checkIfCommandCanRun(int argNum) {
+    if (argNum == 0) {
+      runCommand();
+    } else {
+      if (argument.size() >= argNum) {
+        String arg = argument.pop();
+        if (variablesUsed.containsKey(arg)) {
+         args.push(variablesUsed.get(arg));
+        }
+        else {
+          args.push(arg);
+        }
+      }
+      argNum--;
+      System.out.println(userCom);
+      System.out.println("Numb "+args);
+      checkIfCommandCanRun(argNum);
+    }
+  }
+
+
   /*
   Checks if you are not in the parsing of a list, and runs the command
    */
   public void runCommand() {
     System.out.println("GotHere " + userCom +"  " + args);
-      obtainCommand();
+    obtainCommand();
   }
 
   /*
@@ -186,7 +193,7 @@ public class Control {
       Constructor constructor = cls.getConstructor(LinkedList.class, Control.class);
       objectCommand = constructor.newInstance((Object) args, (Object) this);
       Command commandGiven = (Command) objectCommand;
-      createCommand(commandGiven, parser);
+      createCommand(commandGiven);
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException | ExceptionInInitializerError e) {
       //error is thrown above
     }
@@ -195,15 +202,27 @@ public class Control {
   /*
   Calls the methods of a command to continue parsing logic
    */
-  public void createCommand(Command comm, Parser parser1) {
-    if(!command.isEmpty()) {
-      if(comm.commandValueReturn()!=null){
-        argument.add(comm.commandValueReturn());
+  public void createCommand(Command comm) {
+
+    if (parser.getSymbol(userCom).equals(MAKE)) {
+      variablesUsed.putAll(comm.getVariablesCreated());
+      if(!command.isEmpty()) {
+        System.out.println("Aqui" + variablesUsed);
+        coordinateCommands();
       }
-      coordinateCommands();
+
     }
 
-    if(comm.repeatCom()!=0) {
+
+      else if(comm.commandValueReturn()!=null){
+        argument.push(comm.commandValueReturn());
+        if(!command.isEmpty()) {
+          coordinateCommands();
+        }
+    }
+
+
+   else if(comm.repeatCom()!=0) {
       int loop = comm.repeatCom();
       setCommand(input.substring(input.indexOf("["), input.indexOf("]")));
       while (loop != 0) {
@@ -211,13 +230,10 @@ public class Control {
         loop--;
       }
     }
+
+
+
   }
-
-
-
-
-
-
 
 
 

@@ -18,8 +18,15 @@ public MakeVariable(){
 }
   public MakeVariable(LinkedList<String> varargs, Control control){
     super(varargs, control);
-    key = varargs.get(0);
-    var = varargs.get(1);
+    if(varargs.get(0).contains(":")){
+      key =varargs.get(0);
+      var = varargs.get(1);
+    }
+    else{
+      var =varargs.get(0);
+      key = varargs.get(1);
+    }
+
   }
 
   @Override
@@ -32,6 +39,6 @@ public MakeVariable(){
   }
   @Override
   public int repeatCom() {
-    return super.repeatCom();
+    return 0;
   }
 }
