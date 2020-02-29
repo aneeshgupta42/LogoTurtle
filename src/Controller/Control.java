@@ -122,7 +122,7 @@ public class Control {
           checkingTypeOfCommand(word);
         }
         else{
-            argument.push(word);
+            argument.add(word);
         }
       }
     }
@@ -143,7 +143,7 @@ public class Control {
       hasBeenStored = true;
     }
     else
-       command.push(word);
+       command.add(word);
   }
 
 
@@ -151,11 +151,12 @@ public class Control {
   Getting the number of arguments for each command
    */
   public void coordinateCommands() {
+    System.out.println(argument);
+    System.out.println(command);
     int argNum = 0;
     if(!command.isEmpty()) {
       for (int i=0;i<command.size();i++) {
-        userCom = command.pollLast();
-        checkIfList();
+        userCom = command.pop();
         makeClassPathToCommand(userCom);
         try {
           Class cls = Class.forName(com);
@@ -186,6 +187,7 @@ public class Control {
    */
   private void checkIfCommandCanRun(int argNum) {
     if (argNum == 0) {
+      checkIfList();
       runCommand();
     } else {
       if (argument.size() >= argNum) {
@@ -285,6 +287,9 @@ public class Control {
 
     if(parser.getSymbol(userCom).equals(IF)||parser.getSymbol(userCom).equals(IFELSE)){
       logicStatement = comm.runnable();
+      if(!command.isEmpty()) {
+        coordinateCommands();
+      }
     }
   }
 
