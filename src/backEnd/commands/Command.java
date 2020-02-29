@@ -28,53 +28,12 @@ public abstract class Command {
 
   public Command(LinkedList<String> varargs, Control control) {
     myControl = control;
-  //  System.out.println("HIT COMMAND CONSTRUCT");
   }
 
   public void setControl(Control control){
       myControl = control;
-     // System.out.println("Got Control: command");
   }
 
-  public Control getMyControl() {
-    return myControl;
-  }
-
-  public double getTurtleCurrentX() {
-    return myControl.getTurtleCol();
-  }
-
-  public double getTurtleCurrentY() {
-    return myControl.getTurtleRow();
-  }
-
-  public int getPenCurrentX() {
-    return penXVal;
-  }
-
-  public int getPenCurrentY() {
-    return penYVal;
-  }
-
-  public double getTurtleAngle() {
-    return myControl.getTurtleAngle();
-  }
-
-  public int getPenAngle() {
-    return penAngle;
-  }
-
-  public int getPenColor() {
-    return penColor;
-  }
-
-  public int getTurtleColor() {
-    return turtleColor;
-  }
-
-  public String getLanguage() {
-    return language;
-  }
   public String commandValueReturn(){
     return commandReturn;
   }

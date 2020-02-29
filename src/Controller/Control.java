@@ -2,7 +2,6 @@ package Controller;
 
 import backEnd.ErrorHandler;
 import backEnd.commands.Command;
-import backEnd.commands.MakeUserInstruction;
 import frontEnd.ErrorBoxes;
 import frontEnd.Mover;
 import java.lang.reflect.Constructor;
@@ -45,6 +44,7 @@ public class Control {
   private boolean storeFunction;
   private StoreLists lists;
   private boolean hasBeenStored = false;
+  private boolean trueFalseStatement;
   private boolean canRun;
   private int logicInt;
 
@@ -116,6 +116,8 @@ public class Control {
    */
   private void organizeInStacks(String line) {
     args = new LinkedList<>();
+    command = new LinkedList<>();
+    argument = new LinkedList<>();
     for (String word : line.split(WHITESPACE)) {
       if (word.trim().length() > 0) {
         if (!parser.getSymbol(word).equals(ARGUMENT) && !parser.getSymbol(word).equals(VARIABLE)) {
@@ -133,7 +135,6 @@ public class Control {
     if(parser.getSymbol(word).equals(STOREFUNCTION)) storeFunction=true;
     Map<String, String> map = lists.getFunction();
     if (map.keySet().contains(word) && input!=map.get(word) && hasBeenStored==false) {
-      System.out.println(map);
       input = map.get(word);
       parseText();
     }
@@ -200,18 +201,31 @@ public class Control {
         else args.push(arg);
       }
       argNum--;
-      System.out.println(userCom);
-      System.out.println(argNum);
-      System.out.println("Numb "+args);
+      System.out.println("Numb "+args + userCom);
       checkIfCommandCanRun(argNum);
     }
   }
 
   /*
- This checks if you have entered into a list [ ]
-  */
+  Checks if you are not in the parsing of a list, and runs the command
+   */
+  public void runCommand() {
+    System.out.println("GotHere " + userCom +"  " + args);
+    if(trueFalseStatement){
+      checkIfList();
+      if(canRun) obtainCommand();
+    }
+    else {
+      if (hasBeenStored == false) {
+        obtainCommand();
+      }
+    }
+  }
+
+  /*
+This checks if you have entered into a list [ ]
+ */
   private void checkIfList() {
-    System.out.println("this" + logicInt);
     if (parser.getSymbol(userCom).equals(LIST_START)) {
       logicInt++;
       if((logicStatement && logicInt==1)){
@@ -223,21 +237,12 @@ public class Control {
       else canRun = false;
     }
     if (parser.getSymbol(userCom).equals(LIST_END)) {
-      canRun = true;
+      if((logicStatement && logicInt==1)) canRun = false;
+      else canRun = true;
     }
   }
 
 
-
-  /*
-  Checks if you are not in the parsing of a list, and runs the command
-   */
-  public void runCommand() {
-    System.out.println("GotHere " + userCom +"  " + args);
-    if(hasBeenStored==false && canRun){
-      obtainCommand();
-    }
-  }
 
   /*
   Passes arguments to the command class and grabs a user function if it exists.
@@ -275,7 +280,6 @@ public class Control {
     }
 
     if(comm.repeatCom()!=0) {
-      System.out.println("here");
         int loop = comm.repeatCom();
         setCommand(input.substring(input.lastIndexOf("["), input.lastIndexOf("]")));
         while (loop >0) {
@@ -285,12 +289,22 @@ public class Control {
     }
 
     if(parser.getSymbol(userCom).equals(IF)||parser.getSymbol(userCom).equals(IFELSE)){
+      trueFalseStatement = true;
       logicStatement = comm.runnable();
       if(!command.isEmpty()) {
         coordinateCommands();
       }
     }
   }
+
+
+
+
+
+
+
+
+
 
 
 
