@@ -135,6 +135,8 @@ public class Control {
         }
       }
     }
+    System.out.println("These are commands" + command);
+    System.out.println("These are arguments" + argument);
     coordinateCommands();
   }
 
@@ -206,7 +208,7 @@ public class Control {
         else args.push(arg);
       }
       argNum--;
-      System.out.println("Numb "+args + userCom);
+      System.out.println("Num "+args +" "+ userCom);
       checkIfCommandCanRun(argNum);
     }
   }
@@ -223,7 +225,7 @@ public class Control {
     }
     else {
       if (hasBeenStored == false) {
-        System.out.println("Variable storing" +hasBeenStored);
+        System.out.println("Variable storing " +hasBeenStored);
         obtainCommand();
       }
     }
@@ -299,13 +301,15 @@ This checks if you have entered into a list [ ]
 
     if(comm.repeatCom()!=0) {
       int loop = comm.repeatCom();
-      setCommand(input.substring(input.indexOf("["), input.lastIndexOf("]")));
+      String section = input.substring(input.indexOf("[")+1, input.lastIndexOf("]"));
       while (loop >0) {
-        System.out.println("This is the new loop input :" + input);
+        System.out.println("This is the new loop input :" + section);
+        setCommand(section);
         parseText();
         loop--;
       }
     }
+    else if(!command.isEmpty()) coordinateCommands();
   }
 
 
