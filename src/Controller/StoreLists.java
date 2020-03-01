@@ -25,7 +25,7 @@ public class StoreLists {
          words.add(word);
     }
    }
-    String functionName = words.get(words.indexOf("to")+1);
+    String functionName = words.get(words.indexOf("to")+2);
     for (String word: words){
       if (!word.equals("to") && !word.equals(functionName) && !word.equals("[") && !word.equals("]")) {
         func = func + " " + word;

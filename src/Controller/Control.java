@@ -44,7 +44,7 @@ public class Control {
   private boolean trueFalseStatement;
   private boolean canRun;
   private int logicInt;
-  private boolean hasLooped;
+  private String section ="";
 
   private static final String IF = "If";
   private static final String IFELSE = "IfElse";
@@ -302,14 +302,16 @@ This checks if you have entered into a list [ ]
 
     if(comm.repeatCom()!=0) {
       int loop = comm.repeatCom();
-      String section = input.substring(input.indexOf("[")+1, input.lastIndexOf("]"));
+      if(input.contains("[") && input.contains("]")){
+        section = input.substring(input.indexOf("[")+1, input.lastIndexOf("]"));
+      }
       while (loop >0) {
-        command.add(userCom);
-        argument.addAll(args);
-        System.out.println("This is the new loop input :" + section);
+      //  lists.storeFunction(section);
+        System.out.println("This is the new loop input : " + section);
+        loop--;
         setCommand(section);
         parseText();
-        loop--;
+        System.out.println(loop);
       }
     }
 
