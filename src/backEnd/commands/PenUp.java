@@ -24,7 +24,7 @@ public class PenUp extends Command {
 
     @Override
     public int repeatCom() {
-        return super.repeatCom();
+        return 0;
     }
 
 }

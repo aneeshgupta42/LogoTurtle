@@ -19,11 +19,8 @@ public class Control {
   private static final String CLASS_PATH = "backEnd.commands.";
   private static final String LIST_END = "ListEnd";
   private static final String LIST_START = "ListStart";
-  private static final String MAKE = "MakeVariable";
   private static final String STOREFUNCTION = "MakeUserInstruction";
-  private static final String IF = "If";
-  private static final String IFELSE = "IfElse";
-  private static final String DOTIMES = "DoTimes";
+
 
   private final Parser parser;
   private String language;
@@ -48,6 +45,12 @@ public class Control {
   private boolean canRun;
   private int logicInt;
 
+  private static final String IF = "If";
+  private static final String IFELSE = "IfElse";
+  private static final String DOTIMES = "DoTimes";
+  private static final String MAKE = "MakeVariable";
+
+
   /*
   Initializing a control (for reference storeLists is where all the data in lists is being passed)
    */
@@ -56,6 +59,7 @@ public class Control {
     lists = new StoreLists();
   }
 
+  public Parser getParser(){return parser;}
   /*
   Gets the variables that have been used by the user and returns them as a Map (variables are the key)
   @return variablesUsed
@@ -76,6 +80,9 @@ public class Control {
    */
   public void setCommand(String command) {
     input = command;
+  }
+  public String getCommand() {
+    return input;
   }
   /*
   Sets language to be used
@@ -98,7 +105,7 @@ public class Control {
   /*
     Splits text into lines
    */
-  private void parseText() {
+  void parseText() {
     command = new LinkedList<>();
     argument = new LinkedList<>();
     hasBeenStored = false;
@@ -144,7 +151,7 @@ public class Control {
       hasBeenStored = true;
     }
     else
-       command.add(word);
+       command.push(word);
   }
 
 
@@ -152,8 +159,6 @@ public class Control {
   Getting the number of arguments for each command
    */
   public void coordinateCommands() {
-    System.out.println(argument);
-    System.out.println(command);
     int argNum = 0;
     if(!command.isEmpty()) {
       for (int i=0;i<command.size();i++) {
@@ -213,10 +218,12 @@ public class Control {
     System.out.println("GotHere " + userCom +"  " + args);
     if(trueFalseStatement){
       checkIfList();
+      System.out.println("The list can run " + canRun);
       if(canRun) obtainCommand();
     }
     else {
       if (hasBeenStored == false) {
+        System.out.println("Variable storing" +hasBeenStored);
         obtainCommand();
       }
     }
@@ -248,6 +255,7 @@ This checks if you have entered into a list [ ]
   Passes arguments to the command class and grabs a user function if it exists.
    */
   private void obtainCommand() {
+    System.out.println(com);
     try {
       Class cls = Class.forName(com);
       Object objectCommand;
@@ -267,32 +275,35 @@ This checks if you have entered into a list [ ]
   public void createCommand(Command comm) {
     if (parser.getSymbol(userCom).equals(MAKE) || parser.getSymbol(userCom).equals(DOTIMES)) {
       variablesUsed.putAll(comm.getVariablesCreated());
+      System.out.println("Variables "+ variablesUsed);
       if(!command.isEmpty()) {
         coordinateCommands();
       }
     }
 
     if(comm.commandValueReturn()!=null){
-        argument.push(comm.commandValueReturn());
-        if(!command.isEmpty()) {
-          coordinateCommands();
-        }
-    }
-
-    if(comm.repeatCom()!=0) {
-        int loop = comm.repeatCom();
-        setCommand(input.substring(input.lastIndexOf("["), input.lastIndexOf("]")));
-        while (loop >0) {
-          parseText();
-          loop--;
-        }
+      argument.add(comm.commandValueReturn());
+      if(!command.isEmpty()) {
+        coordinateCommands();
+      }
     }
 
     if(parser.getSymbol(userCom).equals(IF)||parser.getSymbol(userCom).equals(IFELSE)){
       trueFalseStatement = true;
       logicStatement = comm.runnable();
+      System.out.println("Can the logic run " + logicStatement);
       if(!command.isEmpty()) {
         coordinateCommands();
+      }
+    }
+
+    if(comm.repeatCom()!=0) {
+      int loop = comm.repeatCom();
+      setCommand(input.substring(input.indexOf("["), input.lastIndexOf("]")));
+      while (loop >0) {
+        System.out.println("This is the new loop input :" + input);
+        parseText();
+        loop--;
       }
     }
   }
