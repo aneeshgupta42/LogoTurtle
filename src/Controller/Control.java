@@ -45,6 +45,8 @@ public class Control {
   private boolean canRun;
   private int logicInt;
   private String section ="";
+  private int numLoops;
+  private Command myCommand;
 
   private static final String IF = "If";
   private static final String IFELSE = "IfElse";
@@ -100,6 +102,7 @@ public class Control {
     setLanguage(language);
     parser.addPatterns(language);
     parser.addPatterns("Syntax");
+    numLoops =0;
     parseText();
   }
 
@@ -302,30 +305,43 @@ This checks if you have entered into a list [ ]
 
     if(comm.repeatCom()!=0) {
       int loop = comm.repeatCom();
+      setCommand(input.substring(input.indexOf("["), input.lastIndexOf("]")));
+      while (loop >0) {
+        System.out.println("This is the new loop input :" + input);
+        parseText();
+        loop--;
+      }
+    }
+
+/*    if(comm.repeatCom()!=0) {
+      int loop = comm.repeatCom();
+      numLoops++;
+      myCommand = comm;
       if(input.contains("[") && input.contains("]")){
         section = input.substring(input.indexOf("[")+1, input.lastIndexOf("]"));
       }
-      while (loop >0) {
-      //  lists.storeFunction(section);
-        System.out.println("This is the new loop input : " + section);
-        loop--;
-        setCommand(section);
-        parseText();
-        System.out.println(loop);
-      }
-    }
+      repeatLoop(loop);
+    }*/
 
 
     else if(!command.isEmpty()) coordinateCommands();
   }
 
 
+/*
+  private void repeatLoop(int loop) {
+   if(loop == 1) {
+      // coordinateCommands();
+   }
+    else {
+   //   System.out.println("This is the new loop input : " + section);
+      loop--;
+      setCommand(section);
+      parseText();
+      repeatLoop(loop);
 
-
-
-
-
-
+    }
+  }*/
 
 
 

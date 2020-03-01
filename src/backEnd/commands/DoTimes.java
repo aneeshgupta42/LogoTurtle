@@ -21,8 +21,14 @@ public class DoTimes extends Command {
   public DoTimes(LinkedList<String> varargs, Control control){
     super(varargs, control);
     c = control;
-    val = varargs.get(1);
-    key = varargs.get(0);
+    if(varargs.get(0).contains(":")){
+      key =varargs.get(0);
+      val = varargs.get(1);
+    }
+    else{
+      val =varargs.get(0);
+      key = varargs.get(1);
+    }
     System.out.println("dotime" + key + val);
   }
 
