@@ -44,6 +44,7 @@ public class Control {
   private boolean trueFalseStatement;
   private boolean canRun;
   private int logicInt;
+  private boolean hasLooped;
 
   private static final String IF = "If";
   private static final String IFELSE = "IfElse";
@@ -105,15 +106,15 @@ public class Control {
   /*
     Splits text into lines
    */
-  void parseText() {
+  private void parseText() {
     command = new LinkedList<>();
     argument = new LinkedList<>();
     hasBeenStored = false;
     canRun = true;
     logicInt =0;
     for (String line : input.split(NEWLINE)) {
-      if(!line.contains("#") || !line.isEmpty()){
-        organizeInStacks(line);
+      if(!line.contains("#") && !line.isEmpty()){
+       organizeInStacks(line);
       }
     }
   }
@@ -131,7 +132,7 @@ public class Control {
           checkingTypeOfCommand(word);
         }
         else{
-            argument.add(word);
+          argument.add(word);
         }
       }
     }
@@ -303,12 +304,16 @@ This checks if you have entered into a list [ ]
       int loop = comm.repeatCom();
       String section = input.substring(input.indexOf("[")+1, input.lastIndexOf("]"));
       while (loop >0) {
+        command.add(userCom);
+        argument.addAll(args);
         System.out.println("This is the new loop input :" + section);
         setCommand(section);
         parseText();
         loop--;
       }
     }
+
+
     else if(!command.isEmpty()) coordinateCommands();
   }
 
