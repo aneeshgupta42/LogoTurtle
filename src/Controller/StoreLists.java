@@ -32,7 +32,6 @@ public class StoreLists {
     }
    }
     String functionName = words.get(words.indexOf("to")+1);
-    System.out.println("Name" + functionName);
     for (String word: words){
       if (!word.equals("to") && !word.equals(functionName)) {
         func = func + " " + word;

@@ -26,7 +26,7 @@ public MakeVariable(){
       var =varargs.get(0);
       key = varargs.get(1);
     }
-
+    System.out.println(key + " " + var);
   }
 
   @Override

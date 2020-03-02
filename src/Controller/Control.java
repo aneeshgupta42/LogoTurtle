@@ -52,6 +52,7 @@ public class Control {
   private int numends;
   private int first;
   private int end;
+  private String variable;
 
   private static final String IF = "If";
   private static final String IFELSE = "IfElse";
@@ -210,7 +211,6 @@ public class Control {
       parseText();
     }
     else if(storeFunction){
-      System.out.println("Store" + storeFunction);
       lists.storeFunction(input);
       storeFunction = false;
       hasBeenStored = true;
@@ -264,6 +264,7 @@ public class Control {
         String arg = argument.pop();
         if(parser.getSymbol(arg).equals(VARIABLE)) {
           if (variablesUsed.containsKey(arg)) {
+            variable = arg;
             args.push(variablesUsed.get(arg));
           }
           else args.push(arg);
@@ -338,6 +339,7 @@ This checks if you have entered into a list [ ]
   Calls the methods of a command to continue parsing logic
    */
   public void createCommand(Command comm) {
+
     if (parser.getSymbol(userCom).equals(MAKE) || parser.getSymbol(userCom).equals(DOTIMES)) {
       variablesUsed.putAll(comm.getVariablesCreated());
       System.out.println("Variables "+ variablesUsed);
@@ -365,11 +367,15 @@ This checks if you have entered into a list [ ]
     if(comm.repeatCom()!=0) {
       int loop = comm.repeatCom();
       findLists();
+      int i=0;
       System.out.println(input.substring(first, end));
       section = input.substring(first, end);
       setCommand(section);
        while (loop >0) {
-        System.out.println("This is the new loop input :" + input);
+         i ++;
+         if(variable!=null) repCount(loop, variable);
+         else repCount(i, ":repCount");
+         System.out.println("This is the new loop input :" + input);
         parseText();
         loop--;
       }
@@ -377,6 +383,41 @@ This checks if you have entered into a list [ ]
 
       else if(!command.isEmpty()) coordinateCommands();
   }
+
+  /*
+  Makes variables for the repetitions of loops
+   */
+  private void repCount(int loop, String s) {
+    args.clear();
+    userCom = "make";
+    args.push(s);
+    args.push(loop+"");
+    makeClassPathToCommand(userCom);
+    obtainCommand();
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
