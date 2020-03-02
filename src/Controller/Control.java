@@ -6,10 +6,12 @@ import frontEnd.ErrorBoxes;
 import frontEnd.Mover;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 public class Control {
@@ -390,29 +392,43 @@ This checks if you have entered into a list [ ]
         section = input.substring(first, end);
         setCommand(section);
       }
-      while (loop >0) {
-        i ++;
-        if(variable!=null) repCount(loop, variable);
-        else repCount(i, ":repCount");
-        System.out.println("This is the new loop input :" + section);
-        parseText();
-        loop--;
-      if(outsideLoop) {
-        System.out.println("outside loop HERE");
-        input = saved;
-        findLists(input);
-        section = input.substring(first, end);
-        setCommand(section);
-        while (loop > 0) {
-          outsideLoop = false;
-          System.out.println("This is the outside loop input :" + section);
-          parseText();
-          loop--;
-        }
-      }
-      }
+      recurseLoop(loop, i);
     }
       else if(!command.isEmpty()) coordinateCommands();
+  }
+
+  private void recurseLoop(int loop, int i) {
+    if(loop==0){
+     coordinateCommands();
+    }
+    if (loop >0) {
+      i ++;
+      if(variable!=null) repCount(loop, variable);
+      else repCount(i, ":repCount");
+      System.out.println("This is the new loop input :" + section);
+      parseText();
+      outside(loop);
+      loop--;
+      recurseLoop(loop,i);
+    }
+  }
+
+  public void outside(int loop) {
+    if(loop==0)recurseLoop(loop,0);
+    if (outsideLoop) {
+      System.out.println("outside loop HERE");
+      input = saved;
+      findLists(input);
+      section = input.substring(first, end);
+      setCommand(section);
+      if (loop > 0) {
+        outsideLoop = false;
+        System.out.println("This is the outside loop input :" + section);
+        parseText();
+        loop--;
+        outside(loop);
+      }
+    }
   }
 
   /*
