@@ -6,6 +6,7 @@ import frontEnd.ErrorBoxes;
 import frontEnd.Mover;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Map;
@@ -20,7 +21,6 @@ public class Control {
   private static final String LIST_END = "ListEnd";
   private static final String LIST_START = "ListStart";
   private static final String STOREFUNCTION = "MakeUserInstruction";
-
 
   private final Parser parser;
   private String language;
@@ -45,13 +45,19 @@ public class Control {
   private boolean canRun;
   private int logicInt;
   private String section ="";
-  private int numLoops;
-  private Command myCommand;
+  private LinkedList<Integer> starts;
+  private LinkedList<Integer> ends;
+  private LinkedList<ArrayList<Integer>> sets;
+  private int numstarts;
+  private int numends;
+  private int first;
+  private int end;
 
   private static final String IF = "If";
   private static final String IFELSE = "IfElse";
   private static final String DOTIMES = "DoTimes";
   private static final String MAKE = "MakeVariable";
+  private static final String FOR = "For";
 
 
   /*
@@ -98,13 +104,62 @@ public class Control {
   Calls the parser to start parsing the user input
    */
   public void parseCommand() {
+    numstarts =0;
+    numends =0;
     setCommand(input);
     setLanguage(language);
     parser.addPatterns(language);
     parser.addPatterns("Syntax");
-    numLoops =0;
     parseText();
   }
+
+
+  private void findLists(){
+    ArrayList<Integer> two = new ArrayList<>();
+    starts = new LinkedList<>();
+    ends = new LinkedList<>();
+    sets = new LinkedList<ArrayList<Integer>>();
+
+    int index = input.indexOf("[");
+    while(index >= 0) {
+      System.out.println(index);
+      starts.push(index);
+      numstarts++;
+      index = input.indexOf("[", index+1);
+    }
+
+    int indextwo = input.indexOf("]");
+    while(indextwo >= 0) {
+      System.out.println(indextwo);
+      ends.push(indextwo);
+      numends++;
+      indextwo = input.indexOf("]", indextwo+1);
+    }
+
+    matchingLists();
+    System.out.println("this is it " + sets);
+    ArrayList<Integer> set = sets.pollLast();
+    if(parser.getSymbol(userCom).equals(DOTIMES) || parser.getSymbol(userCom).equals(FOR)){
+      set = sets.pollLast();
+    }
+    first = set.get(0)+1;
+    end = set.get(1)-1;
+  }
+
+  private void matchingLists() {
+    ArrayList<Integer> two = new ArrayList<>();
+    while(numstarts>0) {
+      int first = starts.pop();
+      int last = ends.pop();
+      two.add(first);
+      two.add(last);
+      numends--;
+      numstarts--;
+      sets.add(two);
+      two = new ArrayList<>();
+    }
+  }
+
 
   /*
     Splits text into lines
@@ -112,21 +167,23 @@ public class Control {
   private void parseText() {
     command = new LinkedList<>();
     argument = new LinkedList<>();
+    args = new LinkedList<>();
     hasBeenStored = false;
     canRun = true;
     logicInt =0;
     for (String line : input.split(NEWLINE)) {
       if(!line.contains("#") && !line.isEmpty()){
-       organizeInStacks(line);
+        organizeInStacks(line);
       }
     }
   }
+
+
 
   /*
   Splits lines into words and categorizes them into two stacks
    */
   private void organizeInStacks(String line) {
-    args = new LinkedList<>();
     command = new LinkedList<>();
     argument = new LinkedList<>();
     for (String word : line.split(WHITESPACE)) {
@@ -135,7 +192,7 @@ public class Control {
           checkingTypeOfCommand(word);
         }
         else{
-          argument.add(word);
+          argument.push(word);
         }
       }
     }
@@ -145,13 +202,15 @@ public class Control {
   }
 
   private void checkingTypeOfCommand(String word) {
-    if(parser.getSymbol(word).equals(STOREFUNCTION)) storeFunction=true;
+    System.out.println(word);
     Map<String, String> map = lists.getFunction();
-    if (map.keySet().contains(word) && input!=map.get(word) && hasBeenStored==false) {
+    if(parser.getSymbol(word).equals(STOREFUNCTION)) storeFunction=true;
+    else if (map.keySet().contains(word) && input!=map.get(word) && hasBeenStored==false) {
       input = map.get(word);
       parseText();
     }
     else if(storeFunction){
+      System.out.println("Store" + storeFunction);
       lists.storeFunction(input);
       storeFunction = false;
       hasBeenStored = true;
@@ -305,48 +364,19 @@ This checks if you have entered into a list [ ]
 
     if(comm.repeatCom()!=0) {
       int loop = comm.repeatCom();
-      setCommand(input.substring(input.indexOf("["), input.lastIndexOf("]")));
-      while (loop >0) {
+      findLists();
+      System.out.println(input.substring(first, end));
+      section = input.substring(first, end);
+      setCommand(section);
+       while (loop >0) {
         System.out.println("This is the new loop input :" + input);
         parseText();
         loop--;
       }
     }
 
-/*    if(comm.repeatCom()!=0) {
-      int loop = comm.repeatCom();
-      numLoops++;
-      myCommand = comm;
-      if(input.contains("[") && input.contains("]")){
-        section = input.substring(input.indexOf("[")+1, input.lastIndexOf("]"));
-      }
-      repeatLoop(loop);
-    }*/
-
-
-    else if(!command.isEmpty()) coordinateCommands();
+      else if(!command.isEmpty()) coordinateCommands();
   }
-
-
-/*
-  private void repeatLoop(int loop) {
-   if(loop == 1) {
-      // coordinateCommands();
-   }
-    else {
-   //   System.out.println("This is the new loop input : " + section);
-      loop--;
-      setCommand(section);
-      parseText();
-      repeatLoop(loop);
-
-    }
-  }*/
-
-
-
-
-
 
 
 

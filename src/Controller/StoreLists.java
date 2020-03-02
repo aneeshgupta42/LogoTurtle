@@ -1,21 +1,27 @@
 package Controller;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
 public class StoreLists {
-  private Deque<String> lines;
+  private ArrayList<String> lines;
   private Map<String,String> function;
   private Deque<String> words;
   private String functionName;
+  private String input;
 
   public StoreLists(){
+    lines = new ArrayList<String>();
     function = new HashMap<>();
     words = new LinkedList<>();
     functionName ="";
   }
+
+
 
   public void storeFunction(String line){
     String func ="";
@@ -25,9 +31,10 @@ public class StoreLists {
          words.add(word);
     }
    }
-    String functionName = words.get(words.indexOf("to")+2);
+    String functionName = words.get(words.indexOf("to")+1);
+    System.out.println("Name" + functionName);
     for (String word: words){
-      if (!word.equals("to") && !word.equals(functionName) && !word.equals("[") && !word.equals("]")) {
+      if (!word.equals("to") && !word.equals(functionName)) {
         func = func + " " + word;
       }
     }
