@@ -144,14 +144,16 @@ public class Control {
       set = sets.pollLast();
     }
     first = set.get(0)+1;
-    end = set.get(1)-1;
+    end = set.get(1);
   }
 
   private void matchingLists() {
     ArrayList<Integer> two = new ArrayList<>();
     while(numstarts>0) {
+      int last=0;
       int first = starts.pop();
-      int last = ends.pop();
+      if(parser.getSymbol(userCom).equals(DOTIMES)) last = ends.pop();
+      else  last = ends.pollLast();
       two.add(first);
       two.add(last);
       numends--;
@@ -176,7 +178,9 @@ public class Control {
       if(!line.contains("#") && !line.isEmpty()){
         organizeInStacks(line);
       }
+      coordinateCommands();
     }
+
   }
 
 
@@ -199,7 +203,7 @@ public class Control {
     }
     System.out.println("These are commands" + command);
     System.out.println("These are arguments" + argument);
-    coordinateCommands();
+
   }
 
   private void checkingTypeOfCommand(String word) {
@@ -366,10 +370,10 @@ This checks if you have entered into a list [ ]
 
     if(comm.repeatCom()!=0) {
       int loop = comm.repeatCom();
-      findLists();
       int i=0;
-      System.out.println(input.substring(first, end));
+      findLists();
       section = input.substring(first, end);
+      System.out.println(input.substring(first, end));
       setCommand(section);
        while (loop >0) {
          i ++;
