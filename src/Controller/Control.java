@@ -53,6 +53,9 @@ public class Control {
   private int first;
   private int end;
   private String variable;
+  private boolean outsideLoop;
+  private boolean once;
+  private String saved;
 
   private static final String IF = "If";
   private static final String IFELSE = "IfElse";
@@ -107,6 +110,8 @@ public class Control {
   public void parseCommand() {
     numstarts =0;
     numends =0;
+    once = true;
+    saved = input;
     setCommand(input);
     setLanguage(language);
     parser.addPatterns(language);
@@ -115,7 +120,7 @@ public class Control {
   }
 
 
-  private void findLists() {
+  private void findLists(String input) {
     ArrayList<Integer> two = new ArrayList<>();
     starts = new LinkedList<>();
     ends = new LinkedList<>();
@@ -123,7 +128,7 @@ public class Control {
 
     int index = input.indexOf("[");
     while (index >= 0) {
-      System.out.println(index);
+  //    System.out.println(index);
       starts.push(index);
       numstarts++;
       index = input.indexOf("[", index + 1);
@@ -131,14 +136,14 @@ public class Control {
 
     int indextwo = input.indexOf("]");
     while (indextwo >= 0) {
-      System.out.println(indextwo);
+  //    System.out.println(indextwo);
       ends.push(indextwo);
       numends++;
       indextwo = input.indexOf("]", indextwo + 1);
     }
 
     matchingLists();
-    System.out.println("this is it " + sets);
+   // System.out.println("this is it " + sets);
     ArrayList<Integer> set = new ArrayList<>();
     if (sets.size() != 0) {
       set = sets.pollLast();
@@ -150,6 +155,7 @@ public class Control {
         end = set.get(1);
       }
     }
+    else outsideLoop=true;
   }
 
 
@@ -207,8 +213,8 @@ public class Control {
         }
       }
     }
-    System.out.println("These are commands" + command);
-    System.out.println("These are arguments" + argument);
+ //   System.out.println("These are commands" + command);
+ //   System.out.println("These are arguments" + argument);
 
   }
 
@@ -282,7 +288,7 @@ public class Control {
         else args.push(arg);
       }
       argNum--;
-      System.out.println("Num "+args +" "+ userCom);
+   //   System.out.println("Num "+args +" "+ userCom);
       checkIfCommandCanRun(argNum);
     }
   }
@@ -291,15 +297,15 @@ public class Control {
   Checks if you are not in the parsing of a list, and runs the command
    */
   public void runCommand() {
-    System.out.println("GotHere " + userCom +"  " + args);
+  //  System.out.println("GotHere " + userCom +"  " + args);
     if(trueFalseStatement){
       checkIfList();
-      System.out.println("The list can run " + canRun);
+   //   System.out.println("The list can run " + canRun);
       if(canRun) obtainCommand();
     }
     else {
       if (hasBeenStored == false) {
-        System.out.println("Variable storing " +hasBeenStored);
+  //      System.out.println("Variable storing " +hasBeenStored);
         obtainCommand();
       }
     }
@@ -331,7 +337,7 @@ This checks if you have entered into a list [ ]
   Passes arguments to the command class and grabs a user function if it exists.
    */
   private void obtainCommand() {
-    System.out.println(com);
+ //   System.out.println(com);
     try {
       Class cls = Class.forName(com);
       Object objectCommand;
@@ -352,7 +358,7 @@ This checks if you have entered into a list [ ]
 
     if (parser.getSymbol(userCom).equals(MAKE) || parser.getSymbol(userCom).equals(DOTIMES)) {
       variablesUsed.putAll(comm.getVariablesCreated());
-      System.out.println("Variables "+ variablesUsed);
+    //  System.out.println("Variables "+ variablesUsed);
       if(!command.isEmpty()) {
         coordinateCommands();
       }
@@ -368,7 +374,7 @@ This checks if you have entered into a list [ ]
     if(parser.getSymbol(userCom).equals(IF)||parser.getSymbol(userCom).equals(IFELSE)){
       trueFalseStatement = true;
       logicStatement = comm.runnable();
-      System.out.println("Can the logic run " + logicStatement);
+  //    System.out.println("Can the logic run " + logicStatement);
       if(!command.isEmpty()) {
         coordinateCommands();
       }
@@ -377,38 +383,35 @@ This checks if you have entered into a list [ ]
     if(comm.repeatCom()!=0) {
       int loop = comm.repeatCom();
       int i=0;
-      String save ="";
-      int f =0;
-      findLists();
-      if (sets.size() > 1 || sets.size()==0) {
-        f = loop;
-        save = section;
+      int nums=0;
+      int nume=0;
+      findLists(input);
+      if(outsideLoop==false ){
+        section = input.substring(first, end);
+        setCommand(section);
       }
-      section = input.substring(first, end);
-      System.out.println(input.substring(first, end));
-      setCommand(section);
-       while (loop >0) {
-         i ++;
-         if(variable!=null) repCount(loop, variable);
-         else repCount(i, ":repCount");
-         System.out.println("This is the new loop input :" + input);
+      while (loop >0) {
+        i ++;
+        if(variable!=null) repCount(loop, variable);
+        else repCount(i, ":repCount");
+        System.out.println("This is the new loop input :" + section);
         parseText();
         loop--;
-      }
-      if(loop==0 && f!=0){
-        setCommand(save);
-        while(f>0){
-          i ++;
-          if(variable!=null) repCount(loop, variable);
-          else repCount(i, ":repCount");
-          System.out.println("This is the new loop input :" + input);
+      if(outsideLoop) {
+        System.out.println("outside loop HERE");
+        input = saved;
+        findLists(input);
+        section = input.substring(first, end);
+        setCommand(section);
+        while (loop > 0) {
+          outsideLoop = false;
+          System.out.println("This is the outside loop input :" + section);
           parseText();
-          f--;
+          loop--;
         }
       }
-
+      }
     }
-
       else if(!command.isEmpty()) coordinateCommands();
   }
 
