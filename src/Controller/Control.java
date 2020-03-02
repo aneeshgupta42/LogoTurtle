@@ -115,37 +115,43 @@ public class Control {
   }
 
 
-  private void findLists(){
+  private void findLists() {
     ArrayList<Integer> two = new ArrayList<>();
     starts = new LinkedList<>();
     ends = new LinkedList<>();
     sets = new LinkedList<ArrayList<Integer>>();
 
     int index = input.indexOf("[");
-    while(index >= 0) {
+    while (index >= 0) {
       System.out.println(index);
       starts.push(index);
       numstarts++;
-      index = input.indexOf("[", index+1);
+      index = input.indexOf("[", index + 1);
     }
 
     int indextwo = input.indexOf("]");
-    while(indextwo >= 0) {
+    while (indextwo >= 0) {
       System.out.println(indextwo);
       ends.push(indextwo);
       numends++;
-      indextwo = input.indexOf("]", indextwo+1);
+      indextwo = input.indexOf("]", indextwo + 1);
     }
 
     matchingLists();
     System.out.println("this is it " + sets);
-    ArrayList<Integer> set = sets.pollLast();
-    if(parser.getSymbol(userCom).equals(DOTIMES) || parser.getSymbol(userCom).equals(FOR)){
+    ArrayList<Integer> set = new ArrayList<>();
+    if (sets.size() != 0) {
       set = sets.pollLast();
+      if (parser.getSymbol(userCom).equals(DOTIMES) || parser.getSymbol(userCom).equals(FOR)) {
+        set = sets.pollLast();
+      }
+      if (set.size() != 0) {
+        first = set.get(0) + 1;
+        end = set.get(1);
+      }
     }
-    first = set.get(0)+1;
-    end = set.get(1);
   }
+
 
   private void matchingLists() {
     ArrayList<Integer> two = new ArrayList<>();
@@ -371,7 +377,13 @@ This checks if you have entered into a list [ ]
     if(comm.repeatCom()!=0) {
       int loop = comm.repeatCom();
       int i=0;
+      String save ="";
+      int f =0;
       findLists();
+      if (sets.size() > 1 || sets.size()==0) {
+        f = loop;
+        save = section;
+      }
       section = input.substring(first, end);
       System.out.println(input.substring(first, end));
       setCommand(section);
@@ -383,6 +395,18 @@ This checks if you have entered into a list [ ]
         parseText();
         loop--;
       }
+      if(loop==0 && f!=0){
+        setCommand(save);
+        while(f>0){
+          i ++;
+          if(variable!=null) repCount(loop, variable);
+          else repCount(i, ":repCount");
+          System.out.println("This is the new loop input :" + input);
+          parseText();
+          f--;
+        }
+      }
+
     }
 
       else if(!command.isEmpty()) coordinateCommands();
