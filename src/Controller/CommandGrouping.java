@@ -207,8 +207,7 @@ public class CommandGrouping {
   public void runCommand() {
     System.out.println("GotHere " + userCom +"  " + args);
     if(trueFalseStatement){
-      checkIfList();
-      System.out.println("The list can run " + logicStatement);
+     checkIfList();
       if(canRun) obtainCommand(); //NEED TO FIX
     }
     else {
@@ -223,23 +222,16 @@ public class CommandGrouping {
 This checks if you have entered into a list [ ]
  */
   private void checkIfList() {
-    if (parser.getSymbol(userCom).equals(LIST_START)) {
+    if(parser.getSymbol(userCom).equals(LIST_END)){
       logicInt++;
       System.out.println(logicInt);
-      if((logicStatement && logicInt==1)){
-        canRun = true;
-      }
-      else if((!logicStatement && logicInt%2==0)){
-        canRun =true;
-      }
-      else canRun = false;
     }
-    if (parser.getSymbol(userCom).equals(LIST_END)) {
-      if((logicStatement && logicInt==2)) canRun = false;
-      else canRun = true;
+    if (logicInt>=2){
+      canRun = !logicStatement;
     }
+    else  canRun = logicStatement;
   }
-  
+
   /*
   Passes arguments to the command class and grabs a user function if it exists.
    */
