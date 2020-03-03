@@ -97,6 +97,7 @@ public class CommandGrouping {
   private void parseText() {
     hasBeenStored = false;
     logicInt =0;
+   // findLists(input);
     for (String line : input.split(NEWLINE)) {
       if(!line.contains("#") && !line.isEmpty()){
         organizeInStacks(line);
@@ -354,12 +355,14 @@ This checks if you have entered into a list [ ]
       numends++;
       indextwo = input.indexOf("]", indextwo + 1);
     }
+    System.out.println("Starts "+starts);
+    System.out.println("Ends "+ends);
     matchingLists();
     ArrayList<Integer> set = new ArrayList<Integer>();
     if (sets.size() != 0) {
-      set = sets.pollLast();
+      set = sets.pop();
       if (parser.getSymbol(userCom).equals(DOTIMES) || parser.getSymbol(userCom).equals(FOR)) {
-        set = sets.pollLast();
+        set = sets.pop();
       }
       if (set.size() != 0) {
         first = set.get(0) + 1;
@@ -374,17 +377,26 @@ This checks if you have entered into a list [ ]
   private void matchingLists() {
     ArrayList<Integer> two = new ArrayList<>();
     while(numstarts>0) {
-      int last=0;
-      int first = starts.pop();
-      if(parser.getSymbol(userCom).equals(DOTIMES)) last = ends.pop();
-      else  last = ends.pollLast();
+      int first = starts.pollLast();
+      int last = ends.pollLast();
+      System.out.println("Matching "+first + " with " + last);
+      for (int next: starts) {
+        System.out.println("COmpare "+  next);
+        if(next<last){
+          int store = last;
+          last = ends.pollLast();
+          System.out.println("get next end "+last);
+          ends.push(store);
+          System.out.println("this is what ends is now "+ends);
+        }
+      }
+      numstarts--;
       two.add(first);
       two.add(last);
-      numends--;
-      numstarts--;
       sets.add(two);
       two = new ArrayList<>();
     }
+    System.out.println(sets);
   }
 
 
