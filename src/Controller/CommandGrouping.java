@@ -239,9 +239,7 @@ This checks if you have entered into a list [ ]
       else canRun = true;
     }
   }
-
-
-
+  
   /*
   Passes arguments to the command class and grabs a user function if it exists.
    */

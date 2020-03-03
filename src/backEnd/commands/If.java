@@ -15,11 +15,12 @@ public class If extends Command {
   public If(LinkedList<String> varargs, Control control){
     super(varargs, control);
     check = Double.parseDouble(varargs.get(0));
+    System.out.println(check);
   }
 
   @Override
   public boolean runnable() {
-    return check != 0;
+    return check != 0.0;
   }
 
   @Override
