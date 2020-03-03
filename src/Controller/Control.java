@@ -109,9 +109,13 @@ public class Control {
   public void parseCommand() {
     parser = new Parser();
     variablesUsed = new TreeMap();
+    command = new LinkedList<>();
+    argument = new LinkedList<>();
+    args = new LinkedList<>();
     numstarts =0;
     numends =0;
     once = true;
+    canRun = true;
     saved = input;
     setCommand(input);
     setLanguage(language);
@@ -126,17 +130,15 @@ public class Control {
     Splits text into lines
    */
   private void parseText() {
-    command = new LinkedList<>();
-    argument = new LinkedList<>();
-    args = new LinkedList<>();
     hasBeenStored = false;
-    canRun = true;
     logicInt =0;
     for (String line : input.split(NEWLINE)) {
       if(!line.contains("#") && !line.isEmpty()){
         organizeInStacks(line);
       }
       coordinateCommands();
+      System.out.println("These are commands" + command);
+      System.out.println("These are arguments" + argument);
     }
   }
 
@@ -156,9 +158,6 @@ public class Control {
         }
       }
     }
-    System.out.println("These are commands" + command);
-    System.out.println("These are arguments" + argument);
-
   }
 
   private void checkingTypeOfCommand(String word) {
@@ -175,7 +174,7 @@ public class Control {
       hasBeenStored = true;
     }
     else
-       command.push(word);
+       command.add(word);
   }
 
 
@@ -260,6 +259,7 @@ This checks if you have entered into a list [ ]
   private void checkIfList() {
     if (parser.getSymbol(userCom).equals(LIST_START)) {
       logicInt++;
+      System.out.println(logicInt);
       if((logicStatement && logicInt==1)){
         canRun = true;
       }
@@ -269,7 +269,7 @@ This checks if you have entered into a list [ ]
       else canRun = false;
     }
     if (parser.getSymbol(userCom).equals(LIST_END)) {
-      if((logicStatement && logicInt==1)) canRun = false;
+      if((logicStatement && logicInt==2)) canRun = false;
       else canRun = true;
     }
   }
