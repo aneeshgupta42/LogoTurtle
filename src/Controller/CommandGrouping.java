@@ -84,7 +84,7 @@ public class CommandGrouping {
     numends =0;
     once = true;
     canRun = true;
-    saved = input;
+    saved = control.getCommand();
     setCommand(input);
     setLanguage(language);
     parser.addPatterns(language);
@@ -97,7 +97,7 @@ public class CommandGrouping {
   private void parseText() {
     hasBeenStored = false;
     logicInt =0;
-   // findLists(input);
+    //findLists(input);
     for (String line : input.split(NEWLINE)) {
       if(!line.contains("#") && !line.isEmpty()){
         organizeInStacks(line);
@@ -276,12 +276,13 @@ This checks if you have entered into a list [ ]
         repCount(loop, variable);
       }
       else repCount(i, ":repCount");
-      findLists(input);
+      findLists();
       if(outsideLoop==false ){  //if there are lists
         section = input.substring(first, end); //get the value inside brackets
         setCommand(section); //set command to that set of values
+        recurseLoop(loop, i);
       }
-      recurseLoop(loop, i);
+
     }
 
     else if(!command.isEmpty()) coordinateCommands();
@@ -312,7 +313,7 @@ This checks if you have entered into a list [ ]
     if(loop==1){
       input = saved;
       outsideLoop=false;
-      findLists(input);
+      findLists();
       section = input.substring(first, end);
       setCommand(section);
     }
@@ -338,11 +339,10 @@ This checks if you have entered into a list [ ]
 
 
 
-  private void findLists(String input) {
+  private void findLists() {
     ArrayList<Integer> two = new ArrayList<>();
     starts = new LinkedList<>();
     ends = new LinkedList<>();
-    sets = new LinkedList<ArrayList<Integer>>();
     int index = input.indexOf("[");
     while (index >= 0) {
       starts.push(index);
@@ -355,39 +355,39 @@ This checks if you have entered into a list [ ]
       numends++;
       indextwo = input.indexOf("]", indextwo + 1);
     }
-    System.out.println("Starts "+starts);
-    System.out.println("Ends "+ends);
     matchingLists();
+    organizeListPairs();
+  }
+
+  private void organizeListPairs() {
     ArrayList<Integer> set = new ArrayList<Integer>();
     if (sets.size() != 0) {
       set = sets.pop();
       if (parser.getSymbol(userCom).equals(DOTIMES) || parser.getSymbol(userCom).equals(FOR)) {
         set = sets.pop();
-      }
-      if (set.size() != 0) {
+     }
         first = set.get(0) + 1;
         end = set.get(1);
-      }
     }
     else outsideLoop=true;
-    System.out.println(sets);
   }
 
 
   private void matchingLists() {
+    sets = new LinkedList<ArrayList<Integer>>();
     ArrayList<Integer> two = new ArrayList<>();
     while(numstarts>0) {
       int first = starts.pollLast();
       int last = ends.pollLast();
       System.out.println("Matching "+first + " with " + last);
       for (int next: starts) {
-        System.out.println("COmpare "+  next);
-        if(next<last){
+        System.out.println("Compare " + next);
+        if (next < last) {
           int store = last;
           last = ends.pollLast();
-          System.out.println("get next end "+last);
+          System.out.println("get next end " + last);
           ends.push(store);
-          System.out.println("this is what ends is now "+ends);
+          System.out.println("this is what ends is now " + ends);
         }
       }
       numstarts--;
