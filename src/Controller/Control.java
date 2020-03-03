@@ -122,61 +122,6 @@ public class Control {
   }
 
 
-  private void findLists(String input) {
-    ArrayList<Integer> two = new ArrayList<>();
-    starts = new LinkedList<>();
-    ends = new LinkedList<>();
-    sets = new LinkedList<ArrayList<Integer>>();
-
-    int index = input.indexOf("[");
-    while (index >= 0) {
-  //    System.out.println(index);
-      starts.push(index);
-      numstarts++;
-      index = input.indexOf("[", index + 1);
-    }
-
-    int indextwo = input.indexOf("]");
-    while (indextwo >= 0) {
-  //    System.out.println(indextwo);
-      ends.push(indextwo);
-      numends++;
-      indextwo = input.indexOf("]", indextwo + 1);
-    }
-
-    matchingLists();
-   // System.out.println("this is it " + sets);
-    ArrayList<Integer> set = new ArrayList<>();
-    if (sets.size() != 0) {
-      set = sets.pollLast();
-      if (parser.getSymbol(userCom).equals(DOTIMES) || parser.getSymbol(userCom).equals(FOR)) {
-        set = sets.pollLast();
-      }
-      if (set.size() != 0) {
-        first = set.get(0) + 1;
-        end = set.get(1);
-      }
-    }
-    else outsideLoop=true;
-  }
-
-
-  private void matchingLists() {
-    ArrayList<Integer> two = new ArrayList<>();
-    while(numstarts>0) {
-      int last=0;
-      int first = starts.pop();
-      if(parser.getSymbol(userCom).equals(DOTIMES)) last = ends.pop();
-      else  last = ends.pollLast();
-      two.add(first);
-      two.add(last);
-      numends--;
-      numstarts--;
-      sets.add(two);
-      two = new ArrayList<>();
-    }
-  }
-
 
   /*
     Splits text into lines
@@ -385,45 +330,46 @@ This checks if you have entered into a list [ ]
     if(comm.repeatCom()!=0) {
       int loop = comm.repeatCom();
       int i=0;
-      int nums=0;
-      int nume=0;
       findLists(input);
-      if(outsideLoop==false ){
-        section = input.substring(first, end);
-        setCommand(section);
+      if(outsideLoop==false ){  //if there are lists
+        section = input.substring(first, end); //get the value inside brackets
+        setCommand(section); //set command to that set of values
       }
       recurseLoop(loop, i);
     }
-      else if(!command.isEmpty()) coordinateCommands();
+
+    else if(!command.isEmpty()) coordinateCommands();
   }
 
   private void recurseLoop(int loop, int i) {
     if(loop==0){
-     coordinateCommands();
+    //  if (outsideLoop) {
+        input = saved;
+        outsideLoop=false;
+        findLists(input);
+        section = input.substring(first, end);
+        setCommand(section);
+        //parseText();
+    //  }
     }
     if (loop >0) {
-      i ++;
-      if(variable!=null) repCount(loop, variable);
-      else repCount(i, ":repCount");
-      System.out.println("This is the new loop input :" + section);
-      parseText();
-      outside(loop);
-      loop--;
-      recurseLoop(loop,i);
+    //  outsideLoop=true;//while the loop value should be repeating
+      parseText(); //parse the text for those commands
+   //   outside(loop); // call
+      loop--; // subtract from that loop
+      recurseLoop(loop,i); //repeat
     }
   }
 
   public void outside(int loop) {
     if(loop==0)recurseLoop(loop,0);
     if (outsideLoop) {
-      System.out.println("outside loop HERE");
       input = saved;
       findLists(input);
       section = input.substring(first, end);
       setCommand(section);
       if (loop > 0) {
         outsideLoop = false;
-        System.out.println("This is the outside loop input :" + section);
         parseText();
         loop--;
         outside(loop);
@@ -445,7 +391,55 @@ This checks if you have entered into a list [ ]
 
 
 
+  private void findLists(String input) {
+    ArrayList<Integer> two = new ArrayList<>();
+    starts = new LinkedList<>();
+    ends = new LinkedList<>();
+    sets = new LinkedList<ArrayList<Integer>>();
+    int index = input.indexOf("[");
+    while (index >= 0) {
+      starts.push(index);
+      numstarts++;
+      index = input.indexOf("[", index + 1);
+    }
+    int indextwo = input.indexOf("]");
+    while (indextwo >= 0) {
+      ends.push(indextwo);
+      numends++;
+      indextwo = input.indexOf("]", indextwo + 1);
+    }
+    matchingLists();
+    ArrayList<Integer> set = new ArrayList<Integer>();
+    if (sets.size() != 0) {
+      set = sets.pollLast();
+      if (parser.getSymbol(userCom).equals(DOTIMES) || parser.getSymbol(userCom).equals(FOR)) {
+        set = sets.pollLast();
+      }
+      if (set.size() != 0) {
+        first = set.get(0) + 1;
+        end = set.get(1);
+      }
+    }
+    else outsideLoop=true;
+    System.out.println(sets);
+  }
 
+
+  private void matchingLists() {
+    ArrayList<Integer> two = new ArrayList<>();
+    while(numstarts>0) {
+      int last=0;
+      int first = starts.pop();
+      if(parser.getSymbol(userCom).equals(DOTIMES)) last = ends.pop();
+      else  last = ends.pollLast();
+      two.add(first);
+      two.add(last);
+      numends--;
+      numstarts--;
+      sets.add(two);
+      two = new ArrayList<>();
+    }
+  }
 
 
 
