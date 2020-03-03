@@ -222,8 +222,8 @@ public class Control {
       if (argument.size() >= argNum) {
         String arg = argument.pop();
         if(parser.getSymbol(arg).equals(VARIABLE)) {
+          variable = arg;
           if (variablesUsed.containsKey(arg)) {
-            variable = arg;
             args.push(variablesUsed.get(arg));
           }
           else args.push(arg);
