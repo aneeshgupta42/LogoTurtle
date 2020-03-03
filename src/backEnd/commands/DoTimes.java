@@ -5,6 +5,7 @@ import backEnd.commands.Command;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class DoTimes extends Command {
 
@@ -33,7 +34,7 @@ public class DoTimes extends Command {
   }
 
   public Map getVariablesCreated(){
-    Map map = new HashMap();
+    Map map = new TreeMap();
     map.put(key,val);
     return map;
   }

@@ -17,7 +17,7 @@ public abstract class Command {
   private String language;
   private String myCommand;
   private String commandReturn;
-  private Map c;
+  private Map<String, String> c;
   protected int numberOfArgs;
   private Control myControl;
   protected Boolean repeat = false;
@@ -37,7 +37,7 @@ public abstract class Command {
   public String commandValueReturn(){
     return commandReturn;
   }
-  public Map getVariablesCreated(){return c;}
+  public Map<String, String> getVariablesCreated(){return c;}
   public int getNumberOfArgs(){return numberOfArgs;}
   public int repeatCom(){return b;}
   public boolean runnable(){return repeat;}

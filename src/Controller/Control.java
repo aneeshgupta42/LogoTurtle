@@ -6,12 +6,10 @@ import frontEnd.ErrorBoxes;
 import frontEnd.Mover;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.SortedMap;
 import java.util.TreeMap;
 
 public class Control {
@@ -24,14 +22,14 @@ public class Control {
   private static final String LIST_START = "ListStart";
   private static final String STOREFUNCTION = "MakeUserInstruction";
 
-  private final Parser parser;
+  private Parser parser;
   private String language;
   private Deque<String> command;
   private Deque<String> argument;
   private String com;
   private String userCom;
   private String input;
-  private Map<String, String> variablesUsed = new TreeMap<>();
+  private Map<String, String> variablesUsed;
 
   private Mover myMover;
   private double turtleCol;
@@ -70,7 +68,6 @@ public class Control {
   Initializing a control (for reference storeLists is where all the data in lists is being passed)
    */
   public Control() {
-    parser = new Parser();
     lists = new StoreLists();
   }
 
@@ -110,6 +107,8 @@ public class Control {
   Calls the parser to start parsing the user input
    */
   public void parseCommand() {
+    parser = new Parser();
+    variablesUsed = new TreeMap();
     numstarts =0;
     numends =0;
     once = true;
@@ -139,10 +138,7 @@ public class Control {
       }
       coordinateCommands();
     }
-
   }
-
-
 
   /*
   Splits lines into words and categorizes them into two stacks
@@ -160,8 +156,8 @@ public class Control {
         }
       }
     }
- //   System.out.println("These are commands" + command);
- //   System.out.println("These are arguments" + argument);
+    System.out.println("These are commands" + command);
+    System.out.println("These are arguments" + argument);
 
   }
 
@@ -235,7 +231,7 @@ public class Control {
         else args.push(arg);
       }
       argNum--;
-   //   System.out.println("Num "+args +" "+ userCom);
+      System.out.println("Num "+args +" "+ userCom);
       checkIfCommandCanRun(argNum);
     }
   }
@@ -244,15 +240,15 @@ public class Control {
   Checks if you are not in the parsing of a list, and runs the command
    */
   public void runCommand() {
-  //  System.out.println("GotHere " + userCom +"  " + args);
+    System.out.println("GotHere " + userCom +"  " + args);
     if(trueFalseStatement){
       checkIfList();
-   //   System.out.println("The list can run " + canRun);
+      System.out.println("The list can run " + canRun);
       if(canRun) obtainCommand();
     }
     else {
       if (hasBeenStored == false) {
-  //      System.out.println("Variable storing " +hasBeenStored);
+        System.out.println("Variable storing " + hasBeenStored);
         obtainCommand();
       }
     }
@@ -284,7 +280,7 @@ This checks if you have entered into a list [ ]
   Passes arguments to the command class and grabs a user function if it exists.
    */
   private void obtainCommand() {
- //   System.out.println(com);
+    System.out.println(com);
     try {
       Class cls = Class.forName(com);
       Object objectCommand;
@@ -304,8 +300,8 @@ This checks if you have entered into a list [ ]
   public void createCommand(Command comm) {
 
     if (parser.getSymbol(userCom).equals(MAKE) || parser.getSymbol(userCom).equals(DOTIMES)) {
-      variablesUsed.putAll(comm.getVariablesCreated());
-    //  System.out.println("Variables "+ variablesUsed);
+      if(comm.getVariablesCreated()!=null) variablesUsed.putAll(comm.getVariablesCreated());
+      System.out.println("Variables "+ variablesUsed);
       if(!command.isEmpty()) {
         coordinateCommands();
       }
@@ -321,7 +317,7 @@ This checks if you have entered into a list [ ]
     if(parser.getSymbol(userCom).equals(IF)||parser.getSymbol(userCom).equals(IFELSE)){
       trueFalseStatement = true;
       logicStatement = comm.runnable();
-  //    System.out.println("Can the logic run " + logicStatement);
+      System.out.println("Can the logic run " + logicStatement);
       if(!command.isEmpty()) {
         coordinateCommands();
       }
@@ -329,7 +325,12 @@ This checks if you have entered into a list [ ]
 
     if(comm.repeatCom()!=0) {
       int loop = comm.repeatCom();
-      int i=0;
+      int i=1;
+      if(parser.getSymbol(userCom).equals(DOTIMES)){
+        System.out.println(variable);
+        repCount(loop, variable);
+      }
+      else repCount(i, ":repCount");
       findLists(input);
       if(outsideLoop==false ){  //if there are lists
         section = input.substring(first, end); //get the value inside brackets
@@ -342,38 +343,18 @@ This checks if you have entered into a list [ ]
   }
 
   private void recurseLoop(int loop, int i) {
-    if(loop==0){
-    //  if (outsideLoop) {
+    if(loop==1){
         input = saved;
         outsideLoop=false;
         findLists(input);
         section = input.substring(first, end);
         setCommand(section);
-        //parseText();
-    //  }
     }
-    if (loop >0) {
-    //  outsideLoop=true;//while the loop value should be repeating
+    if (loop >1) {
+      i++;
       parseText(); //parse the text for those commands
-   //   outside(loop); // call
       loop--; // subtract from that loop
       recurseLoop(loop,i); //repeat
-    }
-  }
-
-  public void outside(int loop) {
-    if(loop==0)recurseLoop(loop,0);
-    if (outsideLoop) {
-      input = saved;
-      findLists(input);
-      section = input.substring(first, end);
-      setCommand(section);
-      if (loop > 0) {
-        outsideLoop = false;
-        parseText();
-        loop--;
-        outside(loop);
-      }
     }
   }
 
