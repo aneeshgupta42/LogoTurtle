@@ -14,6 +14,7 @@ import java.util.Scanner;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,7 +23,9 @@ import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -73,7 +76,7 @@ public class UserInterface extends Application {
   private ResourceBundle myTextButtonResources;
   private ResourceBundle myTurtlePropertyResources;
   private Hyperlink linkVariable;
-  private Map<Integer, Mover> turtleMap = new HashMap();
+  private Map<Integer, Mover> turtleMap = new HashMap<>();
 
   private static final int FRAMES_PER_SECOND = 60;
   private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
@@ -117,8 +120,9 @@ public class UserInterface extends Application {
   private static final int NUM_TEXT_COLUMNS = 10;
   private static final int MOVE_SIZE = 50;
   private static int numOfMovers = 1;
-  private static List turtleList = new ArrayList();
-  private static OurComboBox turtleSelection;
+  //private static List<Integer> turtleList = new ArrayList<>();
+  private ObservableList<Integer> turtleList= FXCollections.observableArrayList(List.of());
+  //private static OurComboBox turtleSelection;
 
 
 
@@ -208,8 +212,6 @@ public class UserInterface extends Application {
     for (Object mover : turtleMap.values()) {
       Mover moverObject = (Mover) mover;
       root.getChildren().add(moverObject.getImage());
-
-
     }
     //root.getChildren().addAll(turtleMap.values());
     return new Scene(root);
@@ -218,11 +220,13 @@ public class UserInterface extends Application {
   private Node makeTurtlePropertiesWindow() {
     VBox box = new VBox();
     box.setPrefWidth(SIDEPANE_WIDTH);
+    OurComboBox turtleSelection = new OurComboBox("Select Turtle", "selectTurtle", this, FXCollections.observableList(turtleList));
+    turtleSelection.itemsProperty().bind(new SimpleObjectProperty<>(turtleList));
+    box.getChildren().add(new Label("Select Turtle:"));
+    box.getChildren().add(turtleSelection);
     for (String key : Collections.list(myTurtlePropertyResources.getKeys())) {
       box.getChildren().add(new OurButtons(myTurtlePropertyResources.getString(key), key, this));
     }
-    turtleSelection = new OurComboBox("Select Turtle", "selectTurtle", this, FXCollections.observableList(turtleList));
-    box.getChildren().add(turtleSelection);
     return box;
   }
 
@@ -477,6 +481,7 @@ public class UserInterface extends Application {
   }
 
   public void addTurtle() {
+    System.out.println("reached");
     numOfMovers++;
     Mover mover = new Mover(this);
     //moverImage = mover.displayMover(TURTLE);
@@ -484,7 +489,8 @@ public class UserInterface extends Application {
     turtleMap.put(numOfMovers, mover);
     root.getChildren().add(mover.getImage());
     turtleList.add(numOfMovers);
-    turtleSelection.updateItems(FXCollections.observableList(turtleList));
+    System.out.println(turtleList);
+    //turtleSelection.updateItems(FXCollections.observableArrayList(turtleList));
   }
 
   public void moveBackward() {
