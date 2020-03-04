@@ -4,8 +4,10 @@ import Controller.Control;
 import backEnd.ErrorHandler;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Scanner;
@@ -13,6 +15,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -39,6 +42,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 public class UserInterface extends Application {
+
   private Scene myScene;
   private Group display;
   private Stage myStage;
@@ -69,8 +73,7 @@ public class UserInterface extends Application {
   private ResourceBundle myTextButtonResources;
   private ResourceBundle myTurtlePropertyResources;
   private Hyperlink linkVariable;
-  private Map turtleMap;
-
+  private Map<Integer, Mover> turtleMap = new HashMap();
 
   private static final int FRAMES_PER_SECOND = 60;
   private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
@@ -86,7 +89,8 @@ public class UserInterface extends Application {
   private static final String RESOURCES = "resources.languages.";
   public static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
   private static final String DEFAULT_RESOURCE_FOLDER = "" + RESOURCES + "/";
-  public static final String STYLE_PROPERTIES_FILENAME = DEFAULT_RESOURCE_PACKAGE + "StyleComponents";
+  public static final String STYLE_PROPERTIES_FILENAME =
+      DEFAULT_RESOURCE_PACKAGE + "StyleComponents";
   private static final String XML_PROPERTIES_FILENAME = DEFAULT_RESOURCE_PACKAGE + "XMLTagNames";
   private static final String STYLESHEET = "default.css";
   private ResourceBundle styleResources;
@@ -110,9 +114,11 @@ public class UserInterface extends Application {
   private static final String TEXT_INPUT_PROMPT = "Enter Command";
   private static final int BUTTON_PANE_HEIGHT = 70;
   private static final int SIDEPANE_WIDTH = 300;
-  private static final int NUM_TEXT_COLUMNS= 10;
+  private static final int NUM_TEXT_COLUMNS = 10;
   private static final int MOVE_SIZE = 50;
   private static int numOfMovers = 1;
+  private static List turtleList = new ArrayList();
+  private static OurComboBox turtleSelection;
 
 
 
@@ -122,11 +128,11 @@ public class UserInterface extends Application {
     control = new Control();
     myLine = new Line();
     display = new Group();
-    turtleMap = new HashMap<Integer, Mover>();
+    //turtleMap = new ;
     myButtonResources = ResourceBundle.getBundle(ButtonResources);
     myComboBoxResources = ResourceBundle.getBundle(ComboBoxResources);
-    myColorPickerResources= ResourceBundle.getBundle(ColorPickerResources);
-    myInitialColorResources= ResourceBundle.getBundle(InitialColorResources);
+    myColorPickerResources = ResourceBundle.getBundle(ColorPickerResources);
+    myInitialColorResources = ResourceBundle.getBundle(InitialColorResources);
     myComboBoxOptionsResources = ResourceBundle.getBundle(ComboBoxOptionsResources);
     myTextButtonResources = ResourceBundle.getBundle(TextBoxButtonResources);
     myTurtlePropertyResources = ResourceBundle.getBundle(TurtlePropertyResources);
@@ -134,7 +140,7 @@ public class UserInterface extends Application {
   }
 
   @Override
-  public void start(Stage primaryStage){
+  public void start(Stage primaryStage) {
     myStage.setTitle(TITLE);
     UserInterface view = new UserInterface();
     myStage.setX(0);
@@ -149,7 +155,7 @@ public class UserInterface extends Application {
     animation.setCycleCount(Timeline.INDEFINITE);
     animation.getKeyFrames().add(frame);
     animation.play();
-    myStage.setOnCloseRequest(t->stopEverything());
+    myStage.setOnCloseRequest(t -> stopEverything());
   }
 
   private void step() {
@@ -157,13 +163,13 @@ public class UserInterface extends Application {
   }
 
   private void checkIfTurtleMovesOutOfBounds() {
-    if(myMover.getImage().getBoundsInParent().intersects(hbox.getBoundsInParent()) ){
+    if (myMover.getImage().getBoundsInParent().intersects(hbox.getBoundsInParent())) {
       hideMoverAndLine(myMover.getLine().getStartX(), hbox.getBoundsInParent().getMaxY());
     }
-    if(myMover.getImage().getBoundsInParent().intersects(commandWindow.getBoundsInParent())){
+    if (myMover.getImage().getBoundsInParent().intersects(commandWindow.getBoundsInParent())) {
       hideMoverAndLine(myMover.getLine().getStartX(), commandWindow.getBoundsInParent().getMinY());
     }
-    if(myMover.getImage().getBoundsInParent().intersects(tabPane.getBoundsInParent())){
+    if (myMover.getImage().getBoundsInParent().intersects(tabPane.getBoundsInParent())) {
       hideMoverAndLine(tabPane.getBoundsInParent().getMinX(), myMover.getLine().getStartY());
     }
   }
@@ -175,11 +181,15 @@ public class UserInterface extends Application {
     root.getChildren().add(line);
   }
 
+  public void setMyMover(Object mover) {
+    myMover = (Mover) mover;
+  }
+
   /**
    * Returns scene for the browser so it can be added to stage.
    */
 
-  private Scene makeScene () {
+  private Scene makeScene() {
     root = new BorderPane();
     hbox = addHBox();
     root.setTop(hbox);
@@ -187,14 +197,15 @@ public class UserInterface extends Application {
     root.setLeft(makeTurtlePropertiesWindow());
     root.setCenter(display_window);
     root.setRight(makeSideWindow());
-    for(int i=1; i<=numOfMovers; i++){
+    for (int i = 1; i <= numOfMovers; i++) {
       myMover = new Mover(this);
       //moverImage = myMover.displayMover(TURTLE);
       setMoverPosition(myMover.getImage());
       turtleMap.put(i, myMover);
+      turtleList.add(i);
     }
     //root.getChildren().addAll(moverImage);
-    for(Object mover: turtleMap.values()){
+    for (Object mover : turtleMap.values()) {
       Mover moverObject = (Mover) mover;
       root.getChildren().add(moverObject.getImage());
 
@@ -210,6 +221,8 @@ public class UserInterface extends Application {
     for (String key : Collections.list(myTurtlePropertyResources.getKeys())) {
       box.getChildren().add(new OurButtons(myTurtlePropertyResources.getString(key), key, this));
     }
+    turtleSelection = new OurComboBox("Select Turtle", "selectTurtle", this, FXCollections.observableList(turtleList));
+    box.getChildren().add(turtleSelection);
     return box;
   }
 
@@ -229,15 +242,19 @@ public class UserInterface extends Application {
       hbox.getChildren().add(new OurButtons(myButtonResources.getString(key), key, this));
     }
     for (String key : Collections.list(myComboBoxResources.getKeys())) {
-      hbox.getChildren().add(new OurComboBox(myComboBoxResources.getString(key), key, this, FXCollections
-          .observableArrayList(myComboBoxOptionsResources.getString(key+COMBO_OPTIONS).split(","))));
+      hbox.getChildren()
+          .add(new OurComboBox(myComboBoxResources.getString(key), key, this, FXCollections
+              .observableArrayList(
+                  myComboBoxOptionsResources.getString(key + COMBO_OPTIONS).split(","))));
     }
     for (String key : Collections.list(myColorPickerResources.getKeys())) {
-      hbox.getChildren().add(new OurLabeledColorPickers(myColorPickerResources.getString(key), key, this, myInitialColorResources.getString(key + COLOR_INITIAL)));
+      hbox.getChildren().add(
+          new OurLabeledColorPickers(myColorPickerResources.getString(key), key, this,
+              myInitialColorResources.getString(key + COLOR_INITIAL)));
     }
   }
 
-  private Node makeDisplayWindow(){
+  private Node makeDisplayWindow() {
     VBox vbox = new VBox();
     rectangle = new Rectangle(DISPLAY_WIDTH, DISPLAY_HEIGHT);
     rectangle.getStyleClass().add(RECTANGLE_STYLE);
@@ -248,8 +265,8 @@ public class UserInterface extends Application {
   }
 
   public void setMoverPosition(ImageView image) {
-    image.setX(DISPLAY_WIDTH/2-image.getBoundsInLocal().getWidth()/2 + SIDEPANE_WIDTH);
-    image.setY(BUTTON_PANE_HEIGHT + DISPLAY_HEIGHT/2-image.getBoundsInLocal().getHeight()/2);
+    image.setX(DISPLAY_WIDTH / 2 - image.getBoundsInLocal().getWidth() / 2 + SIDEPANE_WIDTH);
+    image.setY(BUTTON_PANE_HEIGHT + DISPLAY_HEIGHT / 2 - image.getBoundsInLocal().getHeight() / 2);
     image.setRotate(0);
     myMover.initializeLinePosition(image.getX(), image.getY(), image.getRotate());
     myMover.setMoverInitialCords(image.getX(), image.getY());
@@ -263,7 +280,7 @@ public class UserInterface extends Application {
     variables = new ScrollPane();
     userCommands = new ScrollPane();
     Tab tab1 = new Tab(HISTORY_TAB_TITLE, history);
-    Tab tab2 = new Tab(VARIABLE_TAB_TITLE , variables);
+    Tab tab2 = new Tab(VARIABLE_TAB_TITLE, variables);
     Tab tab3 = new Tab(COMMAND_TAB_TITLE, userCommands);
     tabPane.getTabs().add(tab1);
     tabPane.getTabs().add(tab2);
@@ -272,7 +289,7 @@ public class UserInterface extends Application {
     return tabPane;
   }
 
-  private Node makeCommandWindow(){
+  private Node makeCommandWindow() {
     HBox hbox = new HBox();
     hbox.setPrefWidth(DISPLAY_WIDTH);
     inputArea = new TextArea();
@@ -295,11 +312,10 @@ public class UserInterface extends Application {
 
   private void createStoredElementsTabs(VBox vbox, ScrollPane tab, Map map, boolean needValue) {
     vbox.getChildren().clear();
-    for(Object variable: map.keySet()) {
-      if(needValue) {
+    for (Object variable : map.keySet()) {
+      if (needValue) {
         linkVariable = new Hyperlink(variable.toString() + "=" + map.get(variable));
-      }
-      else{
+      } else {
         linkVariable = new Hyperlink(variable.toString());
       }
       linkVariable.getStyleClass().add(HYPERLINK_STYLE);
@@ -328,7 +344,7 @@ public class UserInterface extends Application {
     history.setContent(historyBox);
   }
 
-  private void stopEverything(){
+  private void stopEverything() {
     System.exit(1);
   }
 
@@ -337,14 +353,14 @@ public class UserInterface extends Application {
     Scanner scnr = new Scanner(file);
     //Reading each line of file using Scanner class
     int lineNumber = 0;
-    while(scnr.hasNextLine()){
+    while (scnr.hasNextLine()) {
       String line = scnr.nextLine();
-      myCommander.setText(myCommander.getText()+line+"\n");
+      myCommander.setText(myCommander.getText() + line + "\n");
       lineNumber++;
     }
   }
 
-  public String getText(){
+  public String getText() {
     return myText;
   }
 
@@ -360,11 +376,12 @@ public class UserInterface extends Application {
   public BorderPane getRoot() {
     return root;
   }
-  public void addNodeToRoot(Node object){
+
+  public void addNodeToRoot(Node object) {
     root.getChildren().add(object);
   }
 
-  private void createErrorDialog(Exception e){
+  private void createErrorDialog(Exception e) {
     ErrorBoxes ep = new ErrorBoxes(e);
   }
 
@@ -376,11 +393,11 @@ public class UserInterface extends Application {
     stage2.setWidth(1100);
     stage2.setHeight(500);
 
-    Image command= new Image(getClass().getClassLoader().getResourceAsStream(COMMAND_ONE));
+    Image command = new Image(getClass().getClassLoader().getResourceAsStream(COMMAND_ONE));
     ImageView commandOneIm = new ImageView(command);
     commandOneIm.setPreserveRatio(true);
     commandOneIm.setFitWidth(800);
-    Image commandTwo= new Image(getClass().getClassLoader().getResourceAsStream(COMMAND_TWO));
+    Image commandTwo = new Image(getClass().getClassLoader().getResourceAsStream(COMMAND_TWO));
     ImageView commandTwoIm = new ImageView(commandTwo);
     commandTwoIm.setPreserveRatio(true);
     commandTwoIm.setFitWidth(1000);
@@ -388,14 +405,14 @@ public class UserInterface extends Application {
     final VBox vbox = new VBox();
     vbox.setSpacing(5);
     vbox.setPadding(new Insets(10, 0, 0, 10));
-    vbox.getChildren().addAll(commandOneIm,commandTwoIm);
+    vbox.getChildren().addAll(commandOneIm, commandTwoIm);
     pane.setContent(vbox);
     pane.setFitToWidth(true);
     Scene scene = new Scene(pane);
     stage2.setScene(scene);
     stage2.show();
   }
-  
+
   public void resetDisplay() {
     root.getChildren().removeIf(object -> object instanceof Line);
     setMoverPosition(myMover.getImage());
@@ -407,7 +424,7 @@ public class UserInterface extends Application {
     String dataPath = System.getProperty("user.dir") + "/data/examples";
     fileChooser.setInitialDirectory(new File(dataPath));
     File selectedFile = fileChooser.showOpenDialog(myStage);
-    if(selectedFile!= null){
+    if (selectedFile != null) {
       try {
         scanFile(selectedFile);
       } catch (FileNotFoundException ex) {
@@ -420,7 +437,7 @@ public class UserInterface extends Application {
     control.setLanguage(language);
   }
 
-  public void setImage(String image){
+  public void setImage(String image) {
     double moverXPos = myMover.getImage().getX();
     double moverYPos = myMover.getImage().getY();
     double moverAngle = myMover.getMoverAngle();
@@ -434,22 +451,23 @@ public class UserInterface extends Application {
     root.getChildren().add(myMover.getImage());
   }
 
-  public void setBackgroundColor(Color color){
+  public void setBackgroundColor(Color color) {
     rectangle.setFill(color);
   }
-  public void setPenColor(Color color){
+
+  public void setPenColor(Color color) {
     myLine.setStroke(color);
     lineColor = color;
   }
 
-  public void setOnRun(){
+  public void setOnRun() {
     myText = inputArea.getText();
     String thistext = myText;
     control.setCommand(myText);
     control.passTurtle(myMover);
     control.parseCommand();
     inputArea.setText("");
-    if(myMover.objectMoved()) {
+    if (myMover.objectMoved()) {
       System.out.println("variables" + control.getVariables().keySet());
       setHistoryTab(historyBox, thistext);
       myMover.setObjectMoved(false);
@@ -458,32 +476,39 @@ public class UserInterface extends Application {
     createStoredElementsTabs(userCommandsBox, userCommands, control.getUserCommands(), false);
   }
 
-  public void addTurtle(){
+  public void addTurtle() {
     numOfMovers++;
     Mover mover = new Mover(this);
     //moverImage = mover.displayMover(TURTLE);
     setMoverPosition(mover.getImage());
     turtleMap.put(numOfMovers, mover);
     root.getChildren().add(mover.getImage());
+    turtleList.add(numOfMovers);
+    turtleSelection.updateItems(FXCollections.observableList(turtleList));
   }
 
-  public void moveBackward(){
+  public void moveBackward() {
     myMover.move(0, MOVE_SIZE, 0);
   }
 
-  public void moveForward(){
+  public void moveForward() {
     myMover.move(0, -MOVE_SIZE, 0);
   }
 
-  public void moveLeft(){
-    myMover.move(-MOVE_SIZE,0,  0);
+  public void moveLeft() {
+    myMover.move(-MOVE_SIZE, 0, 0);
   }
 
-  public void moveRight(){
-    myMover.move( MOVE_SIZE, 0, 0);
+  public void moveRight() {
+    myMover.move(MOVE_SIZE, 0, 0);
   }
 
-  public void setOnClear(){
+  public void setOnClear() {
     inputArea.setText("");
   }
-}
+
+  public void selectTurtle(String num) {
+    int number = Integer.parseInt(num);
+    setMyMover(turtleMap.get(number));
+    }
+  }

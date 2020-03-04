@@ -24,6 +24,10 @@ public class OurComboBox extends ComboBox {
     return new Label(text + "  ");
   }
 
+  public void updateItems(ObservableList items){
+    setItems(items);
+  }
+
   // make input field that calls Controller method using reflection as its action
   private Node makeInputAction (UserInterface target, String methodName) {
     TextField result = new TextField();
