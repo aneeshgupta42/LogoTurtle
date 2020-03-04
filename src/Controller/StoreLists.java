@@ -28,6 +28,7 @@ public class StoreLists {
     if(!line.equals("[") && !line.equals("]") )
       lines.add(line);
   }
+
   public void storeArg(LinkedList<String> arg) {
     for (String s:arg) {
       args.push(s);
@@ -45,20 +46,20 @@ public class StoreLists {
     function.put(functionName,func);
   }
 
-  public Deque getForArgs() {
+  public Deque<String> getForArgs() {
     return words;
   }
-  public Deque getCommands(){
+  public Deque<String> getCommands(){
     return lines;
   }
-  public Deque getArguments(){
+  public Deque<String> getArguments(){
     return args;
   }
-  public Map getFunction(){
+
+  public Map<String, String> getFunction(){
     return function;}
     public int getLength(){
       if(lines.size()>0) return lines.size();
       else return 1;
     }
-
 }
