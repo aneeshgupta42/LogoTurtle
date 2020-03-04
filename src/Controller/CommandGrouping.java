@@ -13,6 +13,12 @@ import java.util.TreeMap;
 
 public class CommandGrouping {
 
+  private static final String WHITESPACE = " ";
+  private static final String NEWLINE = "\n";
+  private static final String ARGUMENT = "Constant";
+  private static final String VARIABLE = "Variable";
+  private static final String CLASS_PATH = "backEnd.commands.";
+
   private Parser parser;
   private Control control;
   private String language;
@@ -40,21 +46,11 @@ public class CommandGrouping {
   private int end;
   private String variable;
   private boolean outsideLoop;
-  private boolean once;
   private String saved;
 
   private static final String IF = "If";
   private static final String IFELSE = "IfElse";
-  private static final String DOTIMES = "DoTimes";
-  private static final String MAKE = "MakeVariable";
-  private static final String FOR = "For";
-  private static final String WHITESPACE = " ";
-  private static final String NEWLINE = "\n";
-  private static final String ARGUMENT = "Constant";
-  private static final String VARIABLE = "Variable";
-  private static final String CLASS_PATH = "backEnd.commands.";
   private static final String LIST_END = "ListEnd";
-  private static final String LIST_START = "ListStart";
   private static final String STOREFUNCTION = "MakeUserInstruction";
 
 
@@ -82,8 +78,8 @@ public class CommandGrouping {
     args = new LinkedList<>();
     numstarts =0;
     numends =0;
-    once = true;
     canRun = true;
+    hasBeenStored = false;
     saved = control.getCommand();
     setCommand(input);
     setLanguage(language);
@@ -95,7 +91,6 @@ public class CommandGrouping {
     Splits text into lines
    */
   private void parseText() {
-    hasBeenStored = false;
     logicInt =0;
     //findLists(input);
     for (String line : input.split(NEWLINE)) {
@@ -105,7 +100,6 @@ public class CommandGrouping {
       System.out.println("These are commands" + command);
       System.out.println("These are arguments" + argument);
       coordinateCommands();
-
     }
   }
 
@@ -130,15 +124,9 @@ public class CommandGrouping {
   private void checkingTypeOfCommand(String word) {
     System.out.println(word);
     Map<String, String> map = lists.getFunction();
-    if(parser.getSymbol(word).equals(STOREFUNCTION)) storeFunction=true;
-    else if (map.keySet().contains(word) && input!=map.get(word) && hasBeenStored==false) {
+    if (map.keySet().contains(word) && input!=map.get(word)) {
       input = map.get(word);
       parseText();
-    }
-    else if(storeFunction){
-      lists.storeFunction(input);
-      storeFunction = false;
-      hasBeenStored = true;
     }
     else
       command.push(word);
@@ -152,7 +140,7 @@ public class CommandGrouping {
     int argNum = 0;
     if(!command.isEmpty()) {
       for (int i=0;i<command.size();i++) {
-        userCom = command.pop();
+        userCom = command.pollLast();
         makeClassPathToCommand(userCom);
         try {
           Class cls = Class.forName(com);
@@ -183,6 +171,7 @@ public class CommandGrouping {
    */
   private void checkIfCommandCanRun(int argNum) {
     if (argNum == 0) {
+      System.out.println(userCom);
       runCommand();
     } else {
       if (argument.size() >= argNum) {
@@ -247,7 +236,6 @@ This checks if you have entered into a list [ ]
       createCommand(commandGiven);
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException | ExceptionInInitializerError e) {
       //error is thrown above
-      System.out.println("err");
     }
   }
 
@@ -262,16 +250,25 @@ This checks if you have entered into a list [ ]
         coordinateCommands();
       }
     }
+
+    if(comm.storeCommands()) {
+      lists.storeFunction(input);
+      hasBeenStored = true;
+      parseText();
+      }
+
+
     saveVariables(comm);
     booleanLogic(comm);
     repeatTimes(comm);
+    if(!command.isEmpty()) coordinateCommands();
   }
 
   private void repeatTimes(Command comm) {
     if(comm.repeatCom()!=0) {
       int loop = comm.repeatCom();
       int i=1;
-      if(parser.getSymbol(userCom).equals(DOTIMES)){
+      if(variable!= null){
         System.out.println(variable);
         repCount(loop, variable);
       }
@@ -284,8 +281,6 @@ This checks if you have entered into a list [ ]
       }
 
     }
-
-    else if(!command.isEmpty()) coordinateCommands();
   }
 
   private void booleanLogic(Command comm) {
@@ -300,13 +295,15 @@ This checks if you have entered into a list [ ]
   }
 
   private void saveVariables(Command comm) {
-    if (parser.getSymbol(userCom).equals(MAKE) || parser.getSymbol(userCom).equals(DOTIMES)) {
-      if(comm.getVariablesCreated()!=null) variablesUsed.putAll(comm.getVariablesCreated());
-      System.out.println("Variables "+ variablesUsed);
-      if(!command.isEmpty()) {
-        coordinateCommands();
+  //  if (parser.getSymbol(userCom).equals(MAKE) || parser.getSymbol(userCom).equals(DOTIMES)) {
+      if(comm.getVariablesCreated()!=null) {
+        variablesUsed.putAll(comm.getVariablesCreated());
+        System.out.println("Variables "+ variablesUsed);
+        if(!command.isEmpty()) {
+          coordinateCommands();
+          //  }
+        }
       }
-    }
   }
 
   private void recurseLoop(int loop, int i) {
@@ -330,6 +327,7 @@ This checks if you have entered into a list [ ]
    */
   private void repCount(int loop, String s) {
     args.clear();
+    //what to do here
     userCom = "make";
     args.push(s);
     args.push(loop+"");
@@ -363,9 +361,9 @@ This checks if you have entered into a list [ ]
     ArrayList<Integer> set = new ArrayList<Integer>();
     if (sets.size() != 0) {
       set = sets.pop();
-      if (parser.getSymbol(userCom).equals(DOTIMES) || parser.getSymbol(userCom).equals(FOR)) {
-        set = sets.pop();
-     }
+ // WILL FIX    if (parser.getSymbol(userCom).equals(DOTIMES) || parser.getSymbol(userCom).equals(FOR)) {
+  //      set = sets.pop();
+  //   }
         first = set.get(0) + 1;
         end = set.get(1);
     }

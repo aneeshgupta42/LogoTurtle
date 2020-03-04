@@ -18,4 +18,9 @@ public class ListStart extends Command {
   public int repeatCom() {
     return 0;
   }
+
+  @Override
+  public boolean storeCommands() {
+    return super.storeCommands();
+  }
 }
