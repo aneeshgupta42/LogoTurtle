@@ -22,7 +22,6 @@ public class For extends Command {
 
   @Override
   public int repeatCom() {
-    System.out.println(start + " " + stop);
     return (stop-start);
   }
 }
