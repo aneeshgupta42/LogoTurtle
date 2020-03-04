@@ -32,23 +32,19 @@ public class CommandGrouping {
   private boolean logicStatement;
   private StoreLists lists;
   private boolean hasBeenStored = false;
-  private boolean canRun;
-  private int logicInt;
   private String section ="";
   private LinkedList<Integer> starts;
   private LinkedList<Integer> ends;
   private LinkedList<ArrayList<Integer>> sets;
   private int numstarts;
+  private int numends;
   private int first;
   private int end;
+  private int location;
   private String variable;
   private boolean outsideLoop;
   private String saved;
-
-  private static final String IF = "If";
-  private static final String IFELSE = "IfElse";
-  private static final String LIST_END = "ListEnd";
-
+  private Command myCommand;
 
   public CommandGrouping(){
     lists = new StoreLists();
@@ -72,7 +68,8 @@ public class CommandGrouping {
     argument = new LinkedList<>();
     args = new LinkedList<>();
     numstarts =0;
-    canRun = true;
+    numends =0;
+    location = 0;
     hasBeenStored = false;
     saved = control.getCommand();
     setCommand(input);
@@ -85,7 +82,6 @@ public class CommandGrouping {
     Splits text into lines
    */
   private void parseText() {
-    logicInt =0;
     logicStatement = true;
   //  findLists();
     for (String line : input.split(NEWLINE)) {
@@ -223,7 +219,7 @@ public class CommandGrouping {
   Calls the methods of a command to continue parsing logic
    */
   public void createCommand(Command comm) {
-
+    myCommand = comm;
     if(comm.commandValueReturn()!=null){
       argument.add(comm.commandValueReturn());
       if(!command.isEmpty()) {
@@ -265,33 +261,36 @@ public class CommandGrouping {
     if(comm.repeatCom()!=0) {
       int loop = comm.repeatCom();
       int i=1;
+      location ++;
       findLists();
         if (variable != null) {
-          System.out.println(variable);
+          System.out.println("if there is a var" + variable);
           repCount(loop, variable);
         } else repCount(i, ":repCount");
       if(outsideLoop==false ) {  //if there are lists
         section = input.substring(first, end); //get the value inside brackets
         setCommand(section);
+        System.out.println("this is what is being run " + section);
       }
-      recurseLoop(loop, i);
+      recurseLoop(comm, loop, i);
     }
   }
 
 
-  private void recurseLoop(int loop, int i) {
+  private void recurseLoop(Command comm, int loop, int i) {
     if(loop==1){
       input = saved;
       outsideLoop=false;
       findLists();
       section = input.substring(first, end);
       setCommand(section);
+      System.out.println("this is what is being run next " + section);
     }
     if (loop >1) {
       i++;
       parseText(); //parse the text for those commands
       loop--; // subtract from that loop
-      recurseLoop(loop,i); //repeat
+      recurseLoop(comm, loop,i); //repeat
     }
   }
 
@@ -308,9 +307,6 @@ public class CommandGrouping {
   }
 
 
-
-
-
   private void findLists() {
     ArrayList<Integer> two = new ArrayList<>();
     starts = new LinkedList<>();
@@ -324,6 +320,7 @@ public class CommandGrouping {
     int indextwo = input.indexOf("]");
     while (indextwo >= 0) {
       ends.push(indextwo);
+      numends ++;
       indextwo = input.indexOf("]", indextwo + 1);
     }
     matchingLists();
@@ -337,20 +334,19 @@ public class CommandGrouping {
       set = sets.pop();
       if(sets.size()>0){
         settwo = sets.pop();
-        System.out.println(settwo);
         if(set.get(1)+2 == settwo.get(0)){
           first = settwo.get(0)+1;
           end = settwo.get(1);
           sets.add(set);
         }
         else{
-          first = set.get(0)+1;
+          first = set.get(0)+2;
           end = set.get(1);
           sets.add(settwo);
         }
         }
       else{
-        first = set.get(0) + 1;
+        first = set.get(0) + 2;
         end = set.get(1);
       }
       System.out.println("these are the dimen "+first +" "+end);
