@@ -44,7 +44,7 @@ public class CommandGrouping {
   private String variable;
   private boolean outsideLoop;
   private String saved;
-  private Command myCommand;
+  private int total;
 
   public CommandGrouping(){
     lists = new StoreLists();
@@ -63,6 +63,7 @@ public class CommandGrouping {
   */
   public void parseCommand() {
     parser = new Parser();
+    total =0;
     variablesUsed = new TreeMap();
     command = new LinkedList<>();
     argument = new LinkedList<>();
@@ -219,7 +220,6 @@ public class CommandGrouping {
   Calls the methods of a command to continue parsing logic
    */
   public void createCommand(Command comm) {
-    myCommand = comm;
     if(comm.commandValueReturn()!=null){
       argument.add(comm.commandValueReturn());
       if(!command.isEmpty()) {
@@ -259,15 +259,17 @@ public class CommandGrouping {
 
   private void repeatTimes(Command comm) {
     if(comm.repeatCom()!=0) {
+      total = comm.repeatCom();
       int loop = comm.repeatCom();
       int i=1;
-      location ++;
+      System.out.println(location);
       findLists();
         if (variable != null) {
           System.out.println("if there is a var" + variable);
           repCount(loop, variable);
         } else repCount(i, ":repCount");
-      if(outsideLoop==false ) {  //if there are lists
+      if(outsideLoop==false ) {
+        System.out.println(loop);
         section = input.substring(first, end); //get the value inside brackets
         setCommand(section);
         System.out.println("this is what is being run " + section);
@@ -281,6 +283,7 @@ public class CommandGrouping {
     if(loop==1){
       input = saved;
       outsideLoop=false;
+      location ++;
       findLists();
       section = input.substring(first, end);
       setCommand(section);
@@ -334,19 +337,24 @@ public class CommandGrouping {
       set = sets.pop();
       if(sets.size()>0){
         settwo = sets.pop();
+        if(total==location){
+          set = sets.pop();
+          System.out.println("got here "+set);
+          location=0;
+        }
         if(set.get(1)+2 == settwo.get(0)){
           first = settwo.get(0)+1;
           end = settwo.get(1);
           sets.add(set);
         }
         else{
-          first = set.get(0)+2;
+          first = set.get(0)+1;
           end = set.get(1);
           sets.add(settwo);
         }
         }
       else{
-        first = set.get(0) + 2;
+        first = set.get(0) + 1;
         end = set.get(1);
       }
       System.out.println("these are the dimen "+first +" "+end);
@@ -363,15 +371,11 @@ public class CommandGrouping {
     while(numstarts>0) {
       int first = starts.pollLast();
       int last = ends.pollLast();
-      System.out.println("Matching " + first + " with " + last);
       for (int whichend : starts) {
         if (whichend < last) {
           int store = last;
           last = ends.pollLast();
           ends.push(store);
-          System.out.println("added this " + store);
-          System.out.println("get next end " + last);
-          System.out.println("this is what ends is now " + ends);
         }
       }
       numstarts--;
