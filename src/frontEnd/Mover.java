@@ -17,7 +17,7 @@ import javafx.util.Duration;
 
 public class Mover implements Update {
 
-  ImageView myMover;
+  ImageView moverImage;
   private double moverAngle;
   private boolean penDown;
   private boolean moverVisible = true;
@@ -31,6 +31,7 @@ public class Mover implements Update {
   private double moverCenterYPos;
   Line myLine;
   UserInterface myView;
+  private static final String TURTLE = "turtle.png";
 
   public Mover(UserInterface view) {
     myView = view;
@@ -38,12 +39,17 @@ public class Mover implements Update {
     penDown = true;
     moverVisible = true;
     distanceSoFar = 0;
+    moverImage = changeMoverDisplay(TURTLE);
   }
 
-  public Node displayMover(String imagePath) {
+  public ImageView changeMoverDisplay(String imagePath) {
     Image turtle = new Image(getClass().getClassLoader().getResourceAsStream(imagePath));
-    myMover = new ImageView(turtle);
-    return myMover;
+    moverImage = new ImageView(turtle);
+    return moverImage;
+  }
+
+  public ImageView getImage(){
+    return moverImage;
   }
 
   public void initializeLinePosition(double x, double y, double angle) {
@@ -53,10 +59,10 @@ public class Mover implements Update {
   }
 
   public void move(double x, double y, double angle) {
-    moverStartingXPos = myMover.getX();
-    moverStartingYPos = myMover.getY();
-    Animation animation = makeAnimation(myMover, x, y);
-    Animation rotate = makeRotate(myMover, angle);
+    moverStartingXPos = moverImage.getX();
+    moverStartingYPos = moverImage.getY();
+    Animation animation = makeAnimation(moverImage, x, y);
+    Animation rotate = makeRotate(moverImage, angle);
     //myView.addAnimation(animation);
     if (x != 0 | y != 0) {
       animation.play();
@@ -65,8 +71,8 @@ public class Mover implements Update {
       rotate.play();
     }
     //animation.play();
-    myMover.setX(myMover.getX() + x);
-    myMover.setY(myMover.getY() + y);
+    moverImage.setX(moverImage.getX() + x);
+    moverImage.setY(moverImage.getY() + y);
     //  System.out.println("hey" + turtleStartingYPos + " " + myTurtle.getY());
     //myTurtle.setRotate(turtleAngle + angle);
     moverAngle = moverAngle + angle;
@@ -87,7 +93,7 @@ public class Mover implements Update {
   private Animation makeAnimation (Node agent, double x, double y) {
     // create something to follow
     Path path = new Path();
-    path.getElements().addAll(new MoveTo(moverStartingXPos + myMover.getBoundsInLocal().getWidth()/2, moverStartingYPos+ myMover.getBoundsInLocal().getHeight()/2), new LineTo(moverStartingXPos + myMover.getBoundsInLocal().getWidth()/2+ x,moverStartingYPos + myMover.getBoundsInLocal().getHeight()/2+ y));
+    path.getElements().addAll(new MoveTo(moverStartingXPos + moverImage.getBoundsInLocal().getWidth()/2, moverStartingYPos+ moverImage.getBoundsInLocal().getHeight()/2), new LineTo(moverStartingXPos + moverImage.getBoundsInLocal().getWidth()/2+ x,moverStartingYPos + moverImage.getBoundsInLocal().getHeight()/2+ y));
     // create an animation where the shape follows a path
     PathTransition pt = new PathTransition(Duration.seconds(2), path, agent);
     System.out.println(pt);
@@ -107,11 +113,11 @@ public class Mover implements Update {
     myLine=line;
     myLine.setStroke(myView.getLineColor());
     //myView.setLine(line);
-    line.setStartX(moverStartingXPos+ myMover.getBoundsInLocal().getWidth()/2);
-    line.setStartY(moverStartingYPos + myMover.getBoundsInLocal().getHeight());
+    line.setStartX(moverStartingXPos+ moverImage.getBoundsInLocal().getWidth()/2);
+    line.setStartY(moverStartingYPos + moverImage.getBoundsInLocal().getHeight());
  //   System.out.println("yo" + turtleStartingYPos + " " + myTurtle.getY());
-    line.setEndX(moverStartingXPos + x+ myMover.getBoundsInLocal().getWidth()/2);
-    line.setEndY(moverStartingYPos + y+ myMover.getBoundsInLocal().getHeight());
+    line.setEndX(moverStartingXPos + x+ moverImage.getBoundsInLocal().getWidth()/2);
+    line.setEndY(moverStartingYPos + y+ moverImage.getBoundsInLocal().getHeight());
     myView.addNodeToRoot(myLine);
   }
 
@@ -121,11 +127,11 @@ public class Mover implements Update {
 
   //get turtle position
   public double getMoverCol(){
-    return myMover.getX();
+    return moverImage.getX();
   }
 
   public double getMoverRow(){
-    return myMover.getY();
+    return moverImage.getY();
   }
 
   public double getMoverAngle(){
@@ -144,8 +150,8 @@ public class Mover implements Update {
   }
 
   public void resetTurtle(){
-    myMover.setRotate(0);
-    myView.setMoverPosition(myMover);
+    moverImage.setRotate(0);
+    myView.setMoverPosition(moverImage);
   }
 
   public void eraseLines(){
@@ -160,7 +166,7 @@ public class Mover implements Update {
 
   public void moverVisible(boolean visible){
     this.moverVisible = visible;
-    myMover.setVisible(this.moverVisible);
+    moverImage.setVisible(this.moverVisible);
   }
 
   public boolean isPenDown() {
