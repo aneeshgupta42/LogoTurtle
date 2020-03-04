@@ -47,6 +47,7 @@ public class CommandGrouping {
   private String variable;
   private boolean outsideLoop;
   private String saved;
+  private boolean obtainCom;
 
   private static final String IF = "If";
   private static final String IFELSE = "IfElse";
@@ -140,7 +141,7 @@ public class CommandGrouping {
     int argNum = 0;
     if(!command.isEmpty()) {
       for (int i=0;i<command.size();i++) {
-        userCom = command.pollLast();
+        userCom = command.pop();
         makeClassPathToCommand(userCom);
         try {
           Class cls = Class.forName(com);
@@ -150,7 +151,7 @@ public class CommandGrouping {
           Command commandGiven = (Command) objectCommand;
           argNum = commandGiven.getNumberOfArgs();
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
-          ErrorBoxes box = new ErrorBoxes(new ErrorHandler("InvalidCommand"));
+          coordinateCommands();
         }
         args.clear();
         checkIfCommandCanRun(argNum);
@@ -179,7 +180,7 @@ public class CommandGrouping {
         if(parser.getSymbol(arg).equals(VARIABLE)) {
           variable = arg;
           if (variablesUsed.containsKey(arg)) {
-            args.push(variablesUsed.get(arg));
+            args.add(variablesUsed.get(arg));
           }
           else args.push(arg);
         }
@@ -235,7 +236,7 @@ This checks if you have entered into a list [ ]
       Command commandGiven = (Command) objectCommand;
       createCommand(commandGiven);
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException | ExceptionInInitializerError e) {
-      //error is thrown above
+      ErrorBoxes box = new ErrorBoxes(new ErrorHandler("InvalidCommand"));
     }
   }
 
