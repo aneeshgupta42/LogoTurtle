@@ -42,7 +42,7 @@ public class DoTimes extends Command {
   @Override
   public int repeatCom() {
     repetition = Integer.parseInt(val);
-    return repetition-1;
+    return repetition;
   }
 
 

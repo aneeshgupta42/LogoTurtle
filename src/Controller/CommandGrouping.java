@@ -87,7 +87,7 @@ public class CommandGrouping {
    */
   private void parseText() {
     logicInt =0;
-    //findLists(input);
+    findLists();
     for (String line : input.split(NEWLINE)) {
       if(!line.contains("#") && !line.isEmpty()){
         organizeInStacks(line);
@@ -262,18 +262,17 @@ This checks if you have entered into a list [ ]
     if(comm.repeatCom()!=0) {
       int loop = comm.repeatCom();
       int i=1;
-      if(variable!= null){
-        System.out.println(variable);
-        repCount(loop, variable);
-      }
-      else repCount(i, ":repCount");
       findLists();
-      if(outsideLoop==false ){  //if there are lists
+      //set command to that set of values
+        if (variable != null) {
+          System.out.println(variable);
+          repCount(loop, variable);
+        } else repCount(i, ":repCount");
+      if(outsideLoop==false ) {  //if there are lists
         section = input.substring(first, end); //get the value inside brackets
-        setCommand(section); //set command to that set of values
-        recurseLoop(loop, i);
+        setCommand(section);
       }
-
+      recurseLoop(loop, i);
     }
   }
 
@@ -289,13 +288,11 @@ This checks if you have entered into a list [ ]
   }
 
   private void saveVariables(Command comm) {
-  //  if (parser.getSymbol(userCom).equals(MAKE) || parser.getSymbol(userCom).equals(DOTIMES)) {
       if(comm.getVariablesCreated()!=null) {
         variablesUsed.putAll(comm.getVariablesCreated());
         System.out.println("Variables "+ variablesUsed);
         if(!command.isEmpty()) {
           coordinateCommands();
-          //  }
         }
       }
   }
@@ -352,13 +349,29 @@ This checks if you have entered into a list [ ]
 
   private void organizeListPairs() {
     ArrayList<Integer> set = new ArrayList<Integer>();
+    ArrayList<Integer> settwo = new ArrayList<Integer>();
     if (sets.size() != 0) {
       set = sets.pop();
- // WILL FIX    if (parser.getSymbol(userCom).equals(DOTIMES) || parser.getSymbol(userCom).equals(FOR)) {
-  //      set = sets.pop();
-  //   }
+      System.out.println(set);
+      if(sets.size()>0){
+        settwo = sets.pop();
+        System.out.println(settwo);
+        if(set.get(1)+2 == settwo.get(0)){
+          first = settwo.get(0)+1;
+          end = settwo.get(1);
+          sets.add(set);
+        }
+        else{
+          first = set.get(0)+1;
+          end = set.get(1);
+          sets.add(settwo);
+        }
+        }
+      else{
         first = set.get(0) + 1;
         end = set.get(1);
+      }
+      System.out.println("these are the dimen "+first +" "+end);
     }
     else outsideLoop=true;
   }
@@ -372,7 +385,6 @@ This checks if you have entered into a list [ ]
       int last = ends.pollLast();
       System.out.println("Matching "+first + " with " + last);
       for (int next: starts) {
-        System.out.println("Compare " + next);
         if (next < last) {
           int store = last;
           last = ends.pollLast();
