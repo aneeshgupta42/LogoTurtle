@@ -32,7 +32,6 @@ public class CommandGrouping {
   private boolean logicStatement;
   private StoreLists lists;
   private boolean hasBeenStored = false;
-  private boolean trueFalseStatement;
   private boolean canRun;
   private int logicInt;
   private String section ="";
@@ -87,7 +86,8 @@ public class CommandGrouping {
    */
   private void parseText() {
     logicInt =0;
-    findLists();
+    logicStatement = true;
+  //  findLists();
     for (String line : input.split(NEWLINE)) {
       if(!line.contains("#") && !line.isEmpty()){
         organizeInStacks(line);
@@ -191,30 +191,15 @@ public class CommandGrouping {
    */
   public void runCommand() {
     System.out.println("GotHere " + userCom +"  " + args);
-    if(trueFalseStatement){
-     checkIfList();
-      if(canRun) obtainCommand(); //NEED TO FIX
-    }
-    else {
       if (hasBeenStored == false) {
-        System.out.println("Variable storing " + hasBeenStored);
+        if(!logicStatement) {
+          findLists();
+          input = input.substring(end);
+          parseText();
+        }
         obtainCommand();
-      }
+        System.out.println("Variable storing " + hasBeenStored);
     }
-  }
-
-  /*
-This checks if you have entered into a list [ ]
- */
-  private void checkIfList() {
-    if(parser.getSymbol(userCom).equals(LIST_END)){
-      logicInt++;
-      System.out.println(logicInt);
-    }
-    if (logicInt>=2){
-      canRun = !logicStatement;
-    }
-    else  canRun = logicStatement;
   }
 
   /*
@@ -245,17 +230,35 @@ This checks if you have entered into a list [ ]
         coordinateCommands();
       }
     }
-
     if(comm.storeCommands()) {
       lists.storeFunction(input);
       hasBeenStored = true;
       parseText();
       }
-
     saveVariables(comm);
     booleanLogic(comm);
     repeatTimes(comm);
     if(!command.isEmpty()) coordinateCommands();
+  }
+
+  private void booleanLogic(Command comm) {
+    if(comm.runnable()!=-100) {
+      logicStatement = comm.runnable()!=0;
+      System.out.println("Can the logic run " + logicStatement);
+      if (!command.isEmpty()) {
+        coordinateCommands();
+      }
+    }
+  }
+
+  private void saveVariables(Command comm) {
+    if(comm.getVariablesCreated()!=null) {
+      variablesUsed.putAll(comm.getVariablesCreated());
+      System.out.println("Variables "+ variablesUsed);
+      if(!command.isEmpty()) {
+        coordinateCommands();
+      }
+    }
   }
 
   private void repeatTimes(Command comm) {
@@ -263,7 +266,6 @@ This checks if you have entered into a list [ ]
       int loop = comm.repeatCom();
       int i=1;
       findLists();
-      //set command to that set of values
         if (variable != null) {
           System.out.println(variable);
           repCount(loop, variable);
@@ -276,26 +278,6 @@ This checks if you have entered into a list [ ]
     }
   }
 
-  private void booleanLogic(Command comm) {
-    if(parser.getSymbol(userCom).equals(IF)||parser.getSymbol(userCom).equals(IFELSE)){
-      trueFalseStatement = true;
-      logicStatement = comm.runnable();
-      System.out.println("Can the logic run " + logicStatement);
-      if(!command.isEmpty()) {
-        coordinateCommands();
-      }
-    }
-  }
-
-  private void saveVariables(Command comm) {
-      if(comm.getVariablesCreated()!=null) {
-        variablesUsed.putAll(comm.getVariablesCreated());
-        System.out.println("Variables "+ variablesUsed);
-        if(!command.isEmpty()) {
-          coordinateCommands();
-        }
-      }
-  }
 
   private void recurseLoop(int loop, int i) {
     if(loop==1){
@@ -318,13 +300,14 @@ This checks if you have entered into a list [ ]
    */
   private void repCount(int loop, String s) {
     args.clear();
-    //what to do here
     userCom = "make";
     args.push(s);
     args.push(loop+"");
     makeClassPathToCommand(userCom);
     obtainCommand();
   }
+
+
 
 
 
@@ -352,7 +335,6 @@ This checks if you have entered into a list [ ]
     ArrayList<Integer> settwo = new ArrayList<Integer>();
     if (sets.size() != 0) {
       set = sets.pop();
-      System.out.println(set);
       if(sets.size()>0){
         settwo = sets.pop();
         System.out.println(settwo);
@@ -380,16 +362,19 @@ This checks if you have entered into a list [ ]
   private void matchingLists() {
     sets = new LinkedList<ArrayList<Integer>>();
     ArrayList<Integer> two = new ArrayList<>();
+    System.out.println(starts);
+    System.out.println(ends);
     while(numstarts>0) {
       int first = starts.pollLast();
       int last = ends.pollLast();
-      System.out.println("Matching "+first + " with " + last);
-      for (int next: starts) {
-        if (next < last) {
+      System.out.println("Matching " + first + " with " + last);
+      for (int whichend : starts) {
+        if (whichend < last) {
           int store = last;
           last = ends.pollLast();
-          System.out.println("get next end " + last);
           ends.push(store);
+          System.out.println("added this " + store);
+          System.out.println("get next end " + last);
           System.out.println("this is what ends is now " + ends);
         }
       }
@@ -401,10 +386,5 @@ This checks if you have entered into a list [ ]
     }
     System.out.println(sets);
   }
-
-
-
-
-
 
 }

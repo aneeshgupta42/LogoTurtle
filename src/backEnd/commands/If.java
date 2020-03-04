@@ -19,8 +19,8 @@ public class If extends Command {
   }
 
   @Override
-  public boolean runnable() {
-    return check != 0.0;
+  public double runnable() {
+    return check;
   }
 
   @Override
