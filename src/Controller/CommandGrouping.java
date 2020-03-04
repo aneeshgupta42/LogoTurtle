@@ -30,7 +30,6 @@ public class CommandGrouping {
   private Map<String, String> variablesUsed;
   private LinkedList<String> args;
   private boolean logicStatement;
-  private boolean storeFunction;
   private StoreLists lists;
   private boolean hasBeenStored = false;
   private boolean trueFalseStatement;
@@ -41,19 +40,15 @@ public class CommandGrouping {
   private LinkedList<Integer> ends;
   private LinkedList<ArrayList<Integer>> sets;
   private int numstarts;
-  private int numends;
   private int first;
   private int end;
   private String variable;
   private boolean outsideLoop;
   private String saved;
-  private boolean obtainCom;
 
   private static final String IF = "If";
   private static final String IFELSE = "IfElse";
   private static final String LIST_END = "ListEnd";
-  private static final String STOREFUNCTION = "MakeUserInstruction";
-
 
 
   public CommandGrouping(){
@@ -78,7 +73,6 @@ public class CommandGrouping {
     argument = new LinkedList<>();
     args = new LinkedList<>();
     numstarts =0;
-    numends =0;
     canRun = true;
     hasBeenStored = false;
     saved = control.getCommand();
@@ -258,7 +252,6 @@ This checks if you have entered into a list [ ]
       parseText();
       }
 
-
     saveVariables(comm);
     booleanLogic(comm);
     repeatTimes(comm);
@@ -351,7 +344,6 @@ This checks if you have entered into a list [ ]
     int indextwo = input.indexOf("]");
     while (indextwo >= 0) {
       ends.push(indextwo);
-      numends++;
       indextwo = input.indexOf("]", indextwo + 1);
     }
     matchingLists();
