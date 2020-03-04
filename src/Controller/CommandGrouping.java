@@ -89,8 +89,6 @@ public class CommandGrouping {
       if(!line.contains("#") && !line.isEmpty()){
         organizeInStacks(line);
       }
-      System.out.println("These are commands" + command);
-      System.out.println("These are arguments" + argument);
       coordinateCommands();
     }
   }
@@ -274,12 +272,12 @@ public class CommandGrouping {
         setCommand(section);
         System.out.println("this is what is being run " + section);
       }
-      recurseLoop(comm, loop, i);
+      recurseLoop(loop, i);
     }
   }
 
 
-  private void recurseLoop(Command comm, int loop, int i) {
+  private void recurseLoop(int loop, int i) {
     if(loop==1){
       input = saved;
       outsideLoop=false;
@@ -293,7 +291,7 @@ public class CommandGrouping {
       i++;
       parseText(); //parse the text for those commands
       loop--; // subtract from that loop
-      recurseLoop(comm, loop,i); //repeat
+      recurseLoop(loop,i); //repeat
     }
   }
 
@@ -337,10 +335,12 @@ public class CommandGrouping {
       set = sets.pop();
       if(sets.size()>0){
         settwo = sets.pop();
-        if(total==location){
+        if(sets.size()>0){
+        if(total==location) {
           set = sets.pop();
-          System.out.println("got here "+set);
-          location=0;
+          System.out.println("got here " + set);
+          location = 0;
+        }
         }
         if(set.get(1)+2 == settwo.get(0)){
           first = settwo.get(0)+1;
@@ -349,13 +349,13 @@ public class CommandGrouping {
         }
         else{
           first = set.get(0)+1;
-          end = set.get(1);
+          end = set.get(1) ;
           sets.add(settwo);
         }
         }
       else{
         first = set.get(0) + 1;
-        end = set.get(1);
+        end = set.get(1) ;
       }
       System.out.println("these are the dimen "+first +" "+end);
     }
