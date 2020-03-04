@@ -29,6 +29,7 @@ public class Mover implements Update {
   private double moverStartingYPos;
   private double moverCenterXPos;
   private double moverCenterYPos;
+  private double lineThickness;
   Line myLine;
   UserInterface myView;
   private static final String TURTLE = "turtle.png";
@@ -80,6 +81,7 @@ public class Mover implements Update {
       drawPen(x, y);
     }
     objectMoved = true;
+    myView.setMoverX(moverImage.getX());
   }
 
   public boolean objectMoved() {
@@ -112,6 +114,7 @@ public class Mover implements Update {
     Line line = new Line();
     myLine=line;
     myLine.setStroke(myView.getLineColor());
+    myLine.setStrokeWidth(myView.getLineWidth());
     //myView.setLine(line);
     line.setStartX(moverStartingXPos+ moverImage.getBoundsInLocal().getWidth()/2);
     line.setStartY(moverStartingYPos + moverImage.getBoundsInLocal().getHeight());
@@ -123,6 +126,10 @@ public class Mover implements Update {
 
   public Line getLine(){
     return myLine;
+  }
+
+  public void changeThickness(double thickness){
+    myLine.setStrokeWidth(thickness);
   }
 
   //get turtle position
@@ -167,6 +174,10 @@ public class Mover implements Update {
   public void moverVisible(boolean visible){
     this.moverVisible = visible;
     moverImage.setVisible(this.moverVisible);
+  }
+
+  public void changeVisible(){
+    moverVisible = !moverVisible;
   }
 
   public boolean isPenDown() {

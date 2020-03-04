@@ -4,7 +4,6 @@ import Controller.Control;
 import backEnd.ErrorHandler;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +13,12 @@ import java.util.Scanner;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,7 +27,6 @@ import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -43,6 +46,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import javafx.util.converter.DoubleStringConverter;
+import javafx.util.converter.NumberStringConverter;
 
 public class UserInterface extends Application {
 
@@ -53,7 +58,6 @@ public class UserInterface extends Application {
   private Control control;
   private Rectangle rectangle;
   private Line myLine;
-  //private ImageView myMover.getImage();
   private HBox hbox;
   private ScrollPane history;
   private ScrollPane variables;
@@ -77,7 +81,6 @@ public class UserInterface extends Application {
   private ResourceBundle myTurtlePropertyResources;
   private Hyperlink linkVariable;
   private Map<Integer, Mover> turtleMap = new HashMap<>();
-
   private static final int FRAMES_PER_SECOND = 60;
   private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
   private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
@@ -121,8 +124,18 @@ public class UserInterface extends Application {
   private static final int MOVE_SIZE = 50;
   private static int numOfMovers = 1;
   //private static List<Integer> turtleList = new ArrayList<>();
-  private ObservableList<Integer> turtleList= FXCollections.observableArrayList(List.of());
+  private ObservableList<Integer> turtleList = FXCollections.observableArrayList(List.of());
   //private static OurComboBox turtleSelection;
+  private static double moverX = 0;
+  private double lineWidth = 2;
+  private VBox turtlebox;
+  Label xPositionLabel = new Label();
+  Label yPositionLabel = new Label();
+  Label moverIDLabel = new Label();
+  private static double xcenter;
+  private static double ycenter;
+  private int moverID;
+
 
 
 
@@ -132,7 +145,6 @@ public class UserInterface extends Application {
     control = new Control();
     myLine = new Line();
     display = new Group();
-    //turtleMap = new ;
     myButtonResources = ResourceBundle.getBundle(ButtonResources);
     myComboBoxResources = ResourceBundle.getBundle(ComboBoxResources);
     myColorPickerResources = ResourceBundle.getBundle(ColorPickerResources);
@@ -160,10 +172,21 @@ public class UserInterface extends Application {
     animation.getKeyFrames().add(frame);
     animation.play();
     myStage.setOnCloseRequest(t -> stopEverything());
+
   }
 
   private void step() {
-    //checkIfTurtleMovesOutOfBounds();
+    checkIfTurtleMovesOutOfBounds();
+    updateDisplay();
+
+  }
+
+  private void updateDisplay() {
+    moverIDLabel.setText("Mover ID: " + moverID);
+    xPositionLabel.setText("X-Position: " + (myMover.getMoverCol()-xcenter));
+    yPositionLabel.setText("Y-Position: " + (myMover.getMoverRow()-ycenter));
+    //label.se(""+ myMover.getMoverCol());
+
   }
 
   private void checkIfTurtleMovesOutOfBounds() {
@@ -179,7 +202,7 @@ public class UserInterface extends Application {
   }
 
   private void hideMoverAndLine(double endX, double endY) {
-    myMover.moverVisible(false);
+    myMover.changeVisible();
     root.getChildren().remove(myMover.getLine());
     Line line = new Line(myMover.getLine().getStartX(), myMover.getLine().getStartY(), endX, endY);
     root.getChildren().add(line);
@@ -203,6 +226,7 @@ public class UserInterface extends Application {
     root.setRight(makeSideWindow());
     for (int i = 1; i <= numOfMovers; i++) {
       myMover = new Mover(this);
+      moverID = i;
       //moverImage = myMover.displayMover(TURTLE);
       setMoverPosition(myMover.getImage());
       turtleMap.put(i, myMover);
@@ -218,16 +242,32 @@ public class UserInterface extends Application {
   }
 
   private Node makeTurtlePropertiesWindow() {
-    VBox box = new VBox();
-    box.setPrefWidth(SIDEPANE_WIDTH);
-    OurComboBox turtleSelection = new OurComboBox("Select Turtle", "selectTurtle", this, FXCollections.observableList(turtleList));
+    turtlebox = new VBox();
+    turtlebox.setSpacing(10);
+    turtlebox.setPrefWidth(SIDEPANE_WIDTH);
+    VBox buttons = new VBox();
+    OurComboBox turtleSelection = new OurComboBox("Select Turtle", "selectTurtle", this,
+        FXCollections.observableList(turtleList));
     turtleSelection.itemsProperty().bind(new SimpleObjectProperty<>(turtleList));
-    box.getChildren().add(new Label("Select Turtle:"));
-    box.getChildren().add(turtleSelection);
+    buttons.getChildren().add(new Label("Select Turtle:"));
+    buttons.getChildren().add(turtleSelection);
     for (String key : Collections.list(myTurtlePropertyResources.getKeys())) {
-      box.getChildren().add(new OurButtons(myTurtlePropertyResources.getString(key), key, this));
+      buttons.getChildren()
+          .add(new OurButtons(myTurtlePropertyResources.getString(key), key, this));
     }
-    return box;
+    VBox propertiesBox = new VBox();
+    Label moverProperties = new Label("Mover Properties:");
+    //int position = 0;
+    //Label position = new Label();
+    //position.textProperty().bind(new SimpleDoubleProperty(moverX).asString());
+    //IntegerProperty property = new SimpleIntegerProperty((int) moverX);
+    //DoubleStringConverter convertor = new DoubleStringConverter();
+    ///position.textProperty().bind(property, new NumberStringConverter());
+    //DoubleProperty x = new SimpleDoubleProperty(moverX);
+    //x.addListener((ChangeListener<Double>)c ->position.setText(myWords.get(myWords.size() - 1)));
+    propertiesBox.getChildren().addAll(moverProperties, moverIDLabel, xPositionLabel, yPositionLabel);
+    turtlebox.getChildren().addAll(buttons, propertiesBox);
+    return turtlebox;
   }
 
   //fix numbers
@@ -269,8 +309,10 @@ public class UserInterface extends Application {
   }
 
   public void setMoverPosition(ImageView image) {
-    image.setX(DISPLAY_WIDTH / 2 - image.getBoundsInLocal().getWidth() / 2 + SIDEPANE_WIDTH);
-    image.setY(BUTTON_PANE_HEIGHT + DISPLAY_HEIGHT / 2 - image.getBoundsInLocal().getHeight() / 2);
+    xcenter = DISPLAY_WIDTH / 2 - image.getBoundsInLocal().getWidth() / 2 + SIDEPANE_WIDTH;
+    image.setX(xcenter);
+    ycenter = BUTTON_PANE_HEIGHT + DISPLAY_HEIGHT / 2 - image.getBoundsInLocal().getHeight() / 2;
+    image.setY(ycenter);
     image.setRotate(0);
     myMover.initializeLinePosition(image.getX(), image.getY(), image.getRotate());
     myMover.setMoverInitialCords(image.getX(), image.getY());
@@ -385,6 +427,11 @@ public class UserInterface extends Application {
     root.getChildren().add(object);
   }
 
+  public void setMoverX(double x) {
+    moverX = x;
+    System.out.println("x " + x);
+  }
+
   private void createErrorDialog(Exception e) {
     ErrorBoxes ep = new ErrorBoxes(e);
   }
@@ -419,8 +466,10 @@ public class UserInterface extends Application {
 
   public void resetDisplay() {
     root.getChildren().removeIf(object -> object instanceof Line);
-    setMoverPosition(myMover.getImage());
-    myMover.moverVisible(true);
+    for(Mover mover : turtleMap.values()) {
+      setMoverPosition(mover.getImage());
+      mover.moverVisible(true);
+    }
   }
 
   public void selectFileScreen() {
@@ -462,6 +511,7 @@ public class UserInterface extends Application {
   public void setPenColor(Color color) {
     myLine.setStroke(color);
     lineColor = color;
+    lineWidth = 10;
   }
 
   public void setOnRun() {
@@ -502,11 +552,11 @@ public class UserInterface extends Application {
   }
 
   public void moveLeft() {
-    myMover.move(-MOVE_SIZE, 0, 0);
+    myMover.move(0, 0, -90);
   }
 
   public void moveRight() {
-    myMover.move(MOVE_SIZE, 0, 0);
+    myMover.move(0, 0, 90);
   }
 
   public void setOnClear() {
@@ -516,5 +566,10 @@ public class UserInterface extends Application {
   public void selectTurtle(String num) {
     int number = Integer.parseInt(num);
     setMyMover(turtleMap.get(number));
-    }
+    moverID = number;
   }
+
+  public double getLineWidth() {
+    return lineWidth;
+  }
+}
