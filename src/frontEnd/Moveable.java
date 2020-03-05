@@ -30,6 +30,8 @@ public interface Moveable {
 
     double getThickness();
 
+    int getCurrentImageIndex();
+
     double getMoverCol();
 
     double getMoverRow();

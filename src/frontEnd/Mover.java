@@ -46,6 +46,7 @@ public class Mover implements Moveable {
   private double degreesInCircle = 360;
   private ResourceBundle myComboBoxOptionsResources;
   private static final String ComboBoxOptionsResources = "resources.UIActions.ComboBoxOptions";
+  private int currentImageIndex;
 
   public Mover(UserInterface view) {
     System.out.print(this);
@@ -56,6 +57,7 @@ public class Mover implements Moveable {
     moverVisible = true;
     distanceSoFar = 0;
     moverImage = changeMoverDisplay(defaultImage);
+    currentImageIndex = 1;
     /*moverImage.setOnMouseClicked(e -> {
       handleKeyInput();
     });*/
@@ -90,8 +92,12 @@ public class Mover implements Moveable {
     return moverImage;
   }
 
+  public void setImageIndex(int currIndex){
+    currentImageIndex = currIndex;
+  }
   public void setDefaultImage(String image){
     defaultImage = myComboBoxOptionsResources.getString(image);
+    currentImageIndex = 1;
   }
 
   public ImageView getImage(){
@@ -201,6 +207,10 @@ public class Mover implements Moveable {
 
   public double getThickness(){
     return lineThickness;
+  }
+
+  public int getCurrentImageIndex() {
+    return currentImageIndex;
   }
 
   public void setThickness(double thickness){

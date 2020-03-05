@@ -555,7 +555,8 @@ public class UserInterface extends Application implements Viewable {
     double moverAngle = myMover.getMoverAngle();
     root.getChildren().remove(myMover.getImage());
     String path = myComboBoxOptionsResources.getString(image);
-    currImageIndex = imageOptions.indexOf(image);
+    currImageIndex = imageOptions.indexOf(image)+1;
+    myMover.setImageIndex(currImageIndex);
     myMover.changeMoverDisplay(path);
     //)= (ImageView) myMover.changeMoverDisplay(path);
     myMover.getImage().setX(moverXPos);
@@ -568,6 +569,7 @@ public class UserInterface extends Application implements Viewable {
   public void setImageIndex(int index) {
     String image = imageOptions.get(index-1);
     currImageIndex = index;
+    myMover.setImageIndex(currImageIndex);
     setImage(image);
   }
 
@@ -692,8 +694,8 @@ public class UserInterface extends Application implements Viewable {
   @Override
   public void setDefaultImage(String image) {
     myMover.setDefaultImage(image);
-
   }
+
   @Override
   public void changePenPosition(){
     myMover.setPen(!myMover.getPen());

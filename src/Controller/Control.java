@@ -17,7 +17,7 @@ public class Control {
   private CommandGrouping commandGrouping;
   private String language;
   private String input;
-  private Viewable view;
+  private UserInterface view;
   private Map<String,String> variablesUsed = new TreeMap<>();
   private Map<String,String> functionsUsed = new TreeMap<>();
   private StoreLists lists;
@@ -27,7 +27,7 @@ public class Control {
   /*
   Initializing a control (for reference storeLists is where all the data in lists is being passed)
    */
-  public Control(Viewable UI) {
+  public Control(UserInterface UI) {
     view = UI;
     commandGrouping = new CommandGrouping(this);
   }
@@ -124,7 +124,7 @@ public class Control {
   }
 
   public int getShape(){
-    return view.getCurrentImageIndex();
+    return myMover.getCurrentImageIndex();
   }
 }
 
