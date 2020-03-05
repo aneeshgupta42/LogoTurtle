@@ -6,7 +6,7 @@ import java.util.LinkedList;
 public class If extends Command {
 
   private final int number =1;
-  private int check;
+  private double check;
   public If(){
     super();
     super.numberOfArgs=number;
@@ -14,12 +14,13 @@ public class If extends Command {
 
   public If(LinkedList<String> varargs, Control control){
     super(varargs, control);
-    check = Integer.parseInt(varargs.get(0));
+    check = Double.parseDouble(varargs.get(0));
+    System.out.println(check);
   }
 
   @Override
-  public boolean runnable() {
-    return check != 0;
+  public double runnable() {
+    return check;
   }
 
   @Override

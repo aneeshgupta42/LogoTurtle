@@ -24,6 +24,10 @@ public class OurComboBox extends ComboBox {
     return new Label(text + "  ");
   }
 
+  public void updateItems(ObservableList items){
+    setItems(items);
+  }
+
   // make input field that calls Controller method using reflection as its action
   private Node makeInputAction (UserInterface target, String methodName) {
     TextField result = new TextField();
@@ -46,8 +50,10 @@ public class OurComboBox extends ComboBox {
     EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
+        System.out.println(target + " " + getValue().toString());
         try {
           Method m = target.getClass().getDeclaredMethod(methodName,String.class);
+          System.out.println("method " + m);
           try {
             m.invoke(target, getValue().toString());
           } catch (IllegalAccessException | InvocationTargetException e) {
