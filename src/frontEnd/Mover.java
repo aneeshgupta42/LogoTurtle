@@ -1,12 +1,20 @@
 package frontEnd;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Collections;
+import java.util.ResourceBundle;
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.LineTo;
@@ -29,18 +37,46 @@ public class Mover implements Update {
   private double moverStartingYPos;
   private double moverCenterXPos;
   private double moverCenterYPos;
-  private double lineThickness;
+  private double lineThickness = 2;
   Line myLine;
   UserInterface myView;
   private static final String TURTLE = "turtle.png";
+  private boolean moverActive = true;
+  private static final String LabelResources = "resources.UIActions.LabelActions";
+  private ResourceBundle myLabelPropertyResources;
+  private double degreesInCircle = 360;
 
   public Mover(UserInterface view) {
+    System.out.print(this);
+
     myView = view;
     // do we want this to start as true?
     penDown = true;
     moverVisible = true;
     distanceSoFar = 0;
     moverImage = changeMoverDisplay(TURTLE);
+    moverImage.setOnMouseClicked(e -> {
+      handleKeyInput();
+    });
+    myLabelPropertyResources = ResourceBundle.getBundle(LabelResources);
+  }
+
+  private void handleKeyInput(){
+    //System.out.println("yo");
+    //moverVisible=!moverVisible;
+    //moverImage.setVisible(moverVisible);
+    //System.out.println(moverVisible);
+    if(moverActive) {
+      ColorAdjust colorAdjustGrayscale = new ColorAdjust();
+      colorAdjustGrayscale.setSaturation(-1);
+      moverImage.setEffect(colorAdjustGrayscale);
+    }
+    else{
+      ColorAdjust colorAdjustGrayscale = new ColorAdjust();
+      colorAdjustGrayscale.setSaturation(0);
+      moverImage.setEffect(colorAdjustGrayscale);
+    }
+    moverActive = !moverActive;
   }
 
   public ImageView changeMoverDisplay(String imagePath) {
@@ -60,30 +96,41 @@ public class Mover implements Update {
   }
 
   public void move(double x, double y, double angle) {
-    moverStartingXPos = moverImage.getX();
-    moverStartingYPos = moverImage.getY();
-    Animation animation = makeAnimation(moverImage, x, y);
-    Animation rotate = makeRotate(moverImage, angle);
-    //myView.addAnimation(animation);
-    if (x != 0 | y != 0) {
-      animation.play();
+    if (moverActive) {
+      moverStartingXPos = moverImage.getX();
+      moverStartingYPos = moverImage.getY();
+      Animation animation = makeAnimation(moverImage, x, y);
+      Animation rotate = makeRotate(moverImage, angle);
+      //myView.addAnimation(animation);
+      if (x != 0 | y != 0) {
+        animation.play();
+      }
+      if (angle != 0) {
+        rotate.play();
+      }
+      //animation.play();
+      moverImage.setX(moverImage.getX() + x);
+      moverImage.setY(moverImage.getY() + y);
+      //  System.out.println("hey" + turtleStartingYPos + " " + myTurtle.getY());
+      //myTurtle.setRotate(turtleAngle + angle);
+      moverAngle = moverAngle + angle;
+      if (penDown) {
+        drawPen(x, y);
+      }
+      objectMoved = true;
+      myView.setMoverX(moverImage.getX());
+      updateLabels();
     }
-    if (angle != 0) {
-      rotate.play();
-    }
-    //animation.play();
-    moverImage.setX(moverImage.getX() + x);
-    moverImage.setY(moverImage.getY() + y);
-    //  System.out.println("hey" + turtleStartingYPos + " " + myTurtle.getY());
-    //myTurtle.setRotate(turtleAngle + angle);
-    moverAngle = moverAngle + angle;
-    if (penDown) {
-      drawPen(x, y);
-    }
-    objectMoved = true;
-    myView.setMoverX(moverImage.getX());
   }
 
+  public void updateLabels() {
+      for (String key : Collections.list(myLabelPropertyResources.getKeys())) {
+        PropertyLabel plabel = new PropertyLabel(myLabelPropertyResources.getString(key), key,
+            myView);
+        PropertyLabel propertyLabel = (PropertyLabel) myView.getPropertyLabelMap().get(key);
+        propertyLabel.setAmount(key, myView);
+      }
+    }
   public boolean objectMoved() {
     return objectMoved;
   }
@@ -105,7 +152,7 @@ public class Mover implements Update {
   private Animation makeRotate (Node agent, double angle) {
     RotateTransition rt = new RotateTransition(Duration.seconds(2), agent);
     rt.setFromAngle(moverAngle);
-    rt.setToAngle(moverAngle+ angle);
+    rt.setToAngle(moverAngle + angle);
     rt.setNode(agent);
     return new SequentialTransition(agent, rt);
   }
@@ -114,7 +161,8 @@ public class Mover implements Update {
     Line line = new Line();
     myLine=line;
     myLine.setStroke(myView.getLineColor());
-    myLine.setStrokeWidth(myView.getLineWidth());
+    ///myLine.setStrokeWidth(myView.getLineWidth());
+    myLine.setStrokeWidth(lineThickness);
     //myView.setLine(line);
     line.setStartX(moverStartingXPos+ moverImage.getBoundsInLocal().getWidth()/2);
     line.setStartY(moverStartingYPos + moverImage.getBoundsInLocal().getHeight());
@@ -130,6 +178,15 @@ public class Mover implements Update {
 
   public void changeThickness(double thickness){
     myLine.setStrokeWidth(thickness);
+    lineThickness = thickness;
+  }
+
+  public double getThickness(){
+    return lineThickness;
+  }
+
+  public void setThickness(double thickness){
+    lineThickness = thickness;
   }
 
   //get turtle position
@@ -142,6 +199,11 @@ public class Mover implements Update {
   }
 
   public double getMoverAngle(){
+    if(moverAngle>=degreesInCircle){
+      moverAngle = moverAngle-degreesInCircle;
+    }
+    else if (moverAngle<=-degreesInCircle)
+      moverAngle = moverAngle+degreesInCircle;
     return moverAngle;
   }
 

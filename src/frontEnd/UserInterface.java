@@ -15,6 +15,7 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -79,6 +80,7 @@ public class UserInterface extends Application {
   private ResourceBundle myComboBoxOptionsResources;
   private ResourceBundle myTextButtonResources;
   private ResourceBundle myTurtlePropertyResources;
+  private ResourceBundle myLabelPropertyResources;
   private Hyperlink linkVariable;
   private Map<Integer, Mover> turtleMap = new HashMap<>();
   private static final int FRAMES_PER_SECOND = 60;
@@ -108,6 +110,7 @@ public class UserInterface extends Application {
   private static final String ComboBoxOptionsResources = "resources.UIActions.ComboBoxOptions";
   private static final String TextBoxButtonResources = "resources.UIActions.TextButtonActions";
   private static final String TurtlePropertyResources = "resources.UIActions.TurtlePropertyActions";
+  private static final String LabelResources = "resources.UIActions.LabelActions";
   private static final String DEFAULT_LANGUAGE = "English";
   private static final String RECTANGLE_STYLE = "rectangle";
   private static final String HBOX_STYLE = "hbox";
@@ -134,8 +137,10 @@ public class UserInterface extends Application {
   Label moverIDLabel = new Label();
   private static double xcenter;
   private static double ycenter;
-  private int moverID;
-
+  private int moverID = 1;
+  private double defaultMoveAmount = 50;
+  private double defaultTurnAmount = 90;
+  private Map<String, PropertyLabel> propertyLabelMap= new HashMap<>();
 
 
 
@@ -152,6 +157,7 @@ public class UserInterface extends Application {
     myComboBoxOptionsResources = ResourceBundle.getBundle(ComboBoxOptionsResources);
     myTextButtonResources = ResourceBundle.getBundle(TextBoxButtonResources);
     myTurtlePropertyResources = ResourceBundle.getBundle(TurtlePropertyResources);
+    myLabelPropertyResources = ResourceBundle.getBundle(LabelResources);
     control.setLanguage(DEFAULT_LANGUAGE);
   }
 
@@ -177,17 +183,14 @@ public class UserInterface extends Application {
 
   private void step() {
     checkIfTurtleMovesOutOfBounds();
-    updateDisplay();
-
+    //updateDisplay();
   }
 
-  private void updateDisplay() {
+  /*private void updateDisplay() {
     moverIDLabel.setText("Mover ID: " + moverID);
     xPositionLabel.setText("X-Position: " + (myMover.getMoverCol()-xcenter));
     yPositionLabel.setText("Y-Position: " + (myMover.getMoverRow()-ycenter));
-    //label.se(""+ myMover.getMoverCol());
-
-  }
+  }*/
 
   private void checkIfTurtleMovesOutOfBounds() {
     if (myMover.getImage().getBoundsInParent().intersects(hbox.getBoundsInParent())) {
@@ -265,10 +268,18 @@ public class UserInterface extends Application {
     ///position.textProperty().bind(property, new NumberStringConverter());
     //DoubleProperty x = new SimpleDoubleProperty(moverX);
     //x.addListener((ChangeListener<Double>)c ->position.setText(myWords.get(myWords.size() - 1)));
-    propertiesBox.getChildren().addAll(moverProperties, moverIDLabel, xPositionLabel, yPositionLabel);
+    propertiesBox.getChildren().add(moverProperties);
+    for (String key : Collections.list(myLabelPropertyResources.getKeys())) {
+      PropertyLabel plabel = new PropertyLabel(myLabelPropertyResources.getString(key), key, this);
+      propertiesBox.getChildren().add(plabel);
+      propertyLabelMap.put(key, plabel);
+    }
     turtlebox.getChildren().addAll(buttons, propertiesBox);
+    //PropertyLabel label = new PropertyLabel("promptText", "methodname", this);
+    //turtlebox.getChildren().add(label);
     return turtlebox;
   }
+
 
   //fix numbers
   public HBox addHBox() {
@@ -432,6 +443,10 @@ public class UserInterface extends Application {
     System.out.println("x " + x);
   }
 
+  public Map getPropertyLabelMap(){
+    return propertyLabelMap;
+  }
+
   private void createErrorDialog(Exception e) {
     ErrorBoxes ep = new ErrorBoxes(e);
   }
@@ -469,6 +484,7 @@ public class UserInterface extends Application {
     for(Mover mover : turtleMap.values()) {
       setMoverPosition(mover.getImage());
       mover.moverVisible(true);
+      mover.updateLabels();
     }
   }
 
@@ -517,9 +533,7 @@ public class UserInterface extends Application {
   public void setOnRun() {
     myText = inputArea.getText();
     String thistext = myText;
-    control.setCommand(myText);
-    control.passTurtle(myMover);
-    control.parseCommand();
+    sendInfoToControl(myText);
     inputArea.setText("");
     if (myMover.objectMoved()) {
       System.out.println("variables" + control.getVariables().keySet());
@@ -528,6 +542,12 @@ public class UserInterface extends Application {
     }
     createStoredElementsTabs(variablesBox, variables, control.getVariables(), true);
     createStoredElementsTabs(userCommandsBox, userCommands, control.getUserCommands(), false);
+  }
+
+  private void sendInfoToControl(String myText) {
+    control.setCommand(myText);
+    control.passTurtle(myMover);
+    control.parseCommand();
   }
 
   public void addTurtle() {
@@ -544,19 +564,19 @@ public class UserInterface extends Application {
   }
 
   public void moveBackward() {
-    myMover.move(0, MOVE_SIZE, 0);
+    sendInfoToControl("fd " + (-defaultMoveAmount));
   }
 
   public void moveForward() {
-    myMover.move(0, -MOVE_SIZE, 0);
+    sendInfoToControl("fd " + defaultMoveAmount);
   }
 
   public void moveLeft() {
-    myMover.move(0, 0, -90);
+    sendInfoToControl("lt " + defaultTurnAmount);
   }
 
   public void moveRight() {
-    myMover.move(0, 0, 90);
+    sendInfoToControl("rt " + defaultTurnAmount);
   }
 
   public void setOnClear() {
@@ -567,9 +587,27 @@ public class UserInterface extends Application {
     int number = Integer.parseInt(num);
     setMyMover(turtleMap.get(number));
     moverID = number;
+    myMover.updateLabels();
   }
 
   public double getLineWidth() {
     return lineWidth;
+  }
+  public double getXPosition(){
+    return myMover.getMoverCol()-xcenter;
+  }
+  public double getYPosition(){
+    return myMover.getMoverRow()-ycenter;
+  }
+  public double getMoverID(){
+    System.out.println("ID" + moverID);
+    return moverID;
+  }
+  public double getAngle(){
+    return myMover.getMoverAngle();
+  }
+
+  public double getlineThickness(){
+    return myMover.getThickness();
   }
 }
