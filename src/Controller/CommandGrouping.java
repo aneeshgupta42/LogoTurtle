@@ -8,6 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -21,6 +22,7 @@ public class CommandGrouping {
 
   private Parser parser;
   private Control control;
+  private List<ListGroups> groupsList;
   private String language;
   private Deque<String> command;
   private Deque<String> argument;
@@ -45,6 +47,7 @@ public class CommandGrouping {
   private boolean outsideLoop;
   private String saved;
   private int total;
+  private int index;
 
   public CommandGrouping(){
     lists = new StoreLists();
@@ -72,6 +75,7 @@ public class CommandGrouping {
     numends =0;
     location = 0;
     hasBeenStored = false;
+    groupsList = new ArrayList<ListGroups>();
     saved = control.getCommand();
     setCommand(input);
     setLanguage(language);
@@ -83,8 +87,13 @@ public class CommandGrouping {
     Splits text into lines
    */
   private void parseText() {
+    for(int i=0;i<groupsList.size();i++){
+      System.out.println("These are the groups "+groupsList.get(i).getMyList());
+      System.out.println("Can they be run: " + groupsList.get(i).canBeRun());
+    }
+    System.out.println("HERE WE FIND LISTS");
+    findLists();
     logicStatement = true;
-  //  findLists();
     for (String line : input.split(NEWLINE)) {
       if(!line.contains("#") && !line.isEmpty()){
         organizeInStacks(line);
@@ -236,7 +245,7 @@ public class CommandGrouping {
   }
 
   private void booleanLogic(Command comm) {
-    if(comm.runnable()!=-100) {
+    if(comm.runnable()!=-100) {  //fix this
       logicStatement = comm.runnable()!=0;
       System.out.println("Can the logic run " + logicStatement);
       if (!command.isEmpty()) {
@@ -257,41 +266,35 @@ public class CommandGrouping {
 
   private void repeatTimes(Command comm) {
     if(comm.repeatCom()!=0) {
-      total = comm.repeatCom();
       int loop = comm.repeatCom();
-      int i=1;
-      System.out.println(location);
-      findLists();
-        if (variable != null) {
-          System.out.println("if there is a var" + variable);
-          repCount(loop, variable);
-        } else repCount(i, ":repCount");
-      if(outsideLoop==false ) {
-        System.out.println(loop);
-        section = input.substring(first, end); //get the value inside brackets
-        setCommand(section);
-        System.out.println("this is what is being run " + section);
+      System.out.println(groupsList.size());
+        for(int j=0;j<groupsList.size();j++){
+          if(groupsList.get(j).canBeRun()){
+            section = groupsList.get(j).getMyList(); //get the value inside brackets
+            setCommand(section);
+            index =j;
+          }
+        }
+      recurseLoop(loop);
       }
-      recurseLoop(loop, i);
-    }
   }
 
 
-  private void recurseLoop(int loop, int i) {
+  private void recurseLoop(int loop) {
     if(loop==1){
-      input = saved;
-      outsideLoop=false;
-      location ++;
-      findLists();
-      section = input.substring(first, end);
-      setCommand(section);
-      System.out.println("this is what is being run next " + section);
+     groupsList.get(index).cannotBeRun();
+      for(int x=0;x<groupsList.size();x++) {
+        if(groupsList.get(x).canBeRun()) {
+          section = groupsList.get(x).getMyList();
+          setCommand(section);
+          break;
+        }
+      }
     }
-    if (loop >1) {
-      i++;
-      parseText(); //parse the text for those commands
-      loop--; // subtract from that loop
-      recurseLoop(loop,i); //repeat
+    if(loop>1){
+      parseText();
+      loop--;
+      recurseLoop(loop);
     }
   }
 
@@ -330,44 +333,17 @@ public class CommandGrouping {
 
   private void organizeListPairs() {
     ArrayList<Integer> set = new ArrayList<Integer>();
-    ArrayList<Integer> settwo = new ArrayList<Integer>();
     if (sets.size() != 0) {
       set = sets.pop();
-      if(sets.size()>0){
-        settwo = sets.pop();
-        if(sets.size()>0){
-        if(total==location) {
-          set = sets.pop();
-          System.out.println("got here " + set);
-          location = 0;
-        }
-        }
-        if(set.get(1)+2 == settwo.get(0)){
-          first = settwo.get(0)+1;
-          end = settwo.get(1);
-          sets.add(set);
-        }
-        else{
-          first = set.get(0)+1;
-          end = set.get(1) ;
-          sets.add(settwo);
-        }
-        }
-      else{
-        first = set.get(0) + 1;
-        end = set.get(1) ;
-      }
-      System.out.println("these are the dimen "+first +" "+end);
-    }
-    else outsideLoop=true;
-  }
+        first = set.get(0);
+        end = set.get(1);
+        groupsList.add(new ListGroups(input.substring(first, end)));
+    }}
 
 
   private void matchingLists() {
     sets = new LinkedList<ArrayList<Integer>>();
     ArrayList<Integer> two = new ArrayList<>();
-    System.out.println(starts);
-    System.out.println(ends);
     while(numstarts>0) {
       int first = starts.pollLast();
       int last = ends.pollLast();
@@ -379,12 +355,13 @@ public class CommandGrouping {
         }
       }
       numstarts--;
-      two.add(first);
-      two.add(last);
+      two.add(first+1);
+      two.add(last-1);
+      //groupsList.add(new ListGroups(input.substring(first+1,last-1)));
       sets.add(two);
       two = new ArrayList<>();
     }
-    System.out.println(sets);
+    System.out.println("Here are the sets " + sets);
   }
 
 }
