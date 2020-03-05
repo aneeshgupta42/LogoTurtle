@@ -552,19 +552,10 @@ public class UserInterface extends Application implements Viewable {
   }
 
   public void setImageIndex(int index) {
-    double moverXPos = myMover.getImage().getX();
-    double moverYPos = myMover.getImage().getY();
-    double moverAngle = myMover.getMoverAngle();
-    root.getChildren().remove(myMover.getImage());
-    String[] options = myComboBoxOptionsResources.getStringArray("setImageOptions");
-    System.out.println("OPTIONS!!!: " + options);
-    String path = myComboBoxOptionsResources.getString(options[index-1]);
-    myMover.changeMoverDisplay(path);
-    //)= (ImageView) myMover.changeMoverDisplay(path);
-    myMover.getImage().setX(moverXPos);
-    myMover.getImage().setY(moverYPos);
-    myMover.getImage().setRotate(moverAngle);
-    root.getChildren().add(myMover.getImage());
+    String optionsString = myComboBoxOptionsResources.getString("setImageOptions");
+    String[] options = optionsString.split(",");
+    String image = options[index-1];
+    setImage(image);
   }
 
   public double getmoverID(){
