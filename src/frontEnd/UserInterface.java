@@ -129,7 +129,7 @@ public class UserInterface extends Application {
   public UserInterface() {
     myStage = new Stage();
     myMover = new Mover(this);
-    control = new Control();
+    control = new Control(this);
     myLine = new Line();
     display = new Group();
     //turtleMap = new ;

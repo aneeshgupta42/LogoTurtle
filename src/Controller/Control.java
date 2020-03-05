@@ -4,6 +4,8 @@ import backEnd.ErrorHandler;
 import backEnd.commands.Command;
 import frontEnd.ErrorBoxes;
 import frontEnd.Mover;
+import frontEnd.UserInterface;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ public class Control {
   private CommandGrouping commandGrouping;
   private String language;
   private String input;
+  private UserInterface view;
   private Map<String,String> variablesUsed = new TreeMap<>();
   private StoreLists lists;
 
@@ -30,7 +33,8 @@ public class Control {
   /*
   Initializing a control (for reference storeLists is where all the data in lists is being passed)
    */
-  public Control() {
+  public Control(UserInterface UI) {
+    view = UI;
     commandGrouping = new CommandGrouping(this);
   }
 
@@ -52,6 +56,7 @@ public class Control {
     input = command;
     commandGrouping.setCommand(command);
   }
+
   public void setLanguage(String lang) {
     language = lang;
     commandGrouping.setLanguage(lang);
