@@ -20,7 +20,6 @@ public class Control {
   private double turtleRow;
   private double turtleAngle;
   private CommandGrouping commandGrouping;
-  private String language;
   private String input;
   private Map<String,String> variablesUsed = new TreeMap<>();
   private Map<String,String> functionsUsed = new TreeMap<>();
@@ -48,7 +47,6 @@ public class Control {
     commandGrouping.setCommand(command);
   }
   public void setLanguage(String lang) {
-    language = lang;
     commandGrouping.setLanguage(lang);
   }
 
