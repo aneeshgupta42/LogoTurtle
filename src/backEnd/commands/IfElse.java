@@ -26,5 +26,3 @@ public class IfElse extends Command{
     return 0;
   }
 }
-
-//trying to fict
