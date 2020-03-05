@@ -22,6 +22,7 @@ import javafx.util.Duration;
 
 public class Mover implements Update {
 
+  private static double moverID;
   ImageView moverImage;
   private double moverAngle;
   private boolean penDown;
@@ -46,15 +47,17 @@ public class Mover implements Update {
   private double degreesInCircle = 360;
   private ResourceBundle myComboBoxOptionsResources;
   private static final String ComboBoxOptionsResources = "resources.UIActions.ComboBoxOptions";
+  private static double initialX;
+  private static double initialY;
 
-  public Mover(UserInterface view) {
+  public Mover(UserInterface view, double ID) {
     System.out.print(this);
-
     myView = view;
     // do we want this to start as true?
     penDown = true;
     moverVisible = true;
     distanceSoFar = 0;
+    moverID = ID;
     moverImage = changeMoverDisplay(defaultImage);
     /*moverImage.setOnMouseClicked(e -> {
       handleKeyInput();
@@ -96,6 +99,10 @@ public class Mover implements Update {
 
   public ImageView getImage(){
     return moverImage;
+  }
+
+  public Double getMoverID(){
+    return moverID;
   }
 
   public void initializeLinePosition(double x, double y, double angle) {
@@ -195,6 +202,13 @@ public class Mover implements Update {
     updateLabels();
   }
 
+  public double getXPosition(){
+    return moverImage.getX()-initialX;
+  }
+  public double getYPosition() {
+    return moverImage.getY() - initialY;
+  }
+
   public Color getLineColor(){
     return lineColor;
   }
@@ -254,7 +268,7 @@ public class Mover implements Update {
 
   public void resetTurtle(){
     moverImage.setRotate(0);
-    myView.setMoverPosition(moverImage);
+    setInitialMoverPosition(initialX, initialY);
   }
 
   public void eraseLines(){
@@ -282,6 +296,16 @@ public class Mover implements Update {
 
   public boolean isMoverVisible() {
     return moverVisible;
+  }
+
+  public void setInitialMoverPosition(double xcenter, double ycenter) {
+    initialX = xcenter;
+    initialY = ycenter;
+    moverImage.setX(xcenter);
+    moverImage.setY(ycenter);
+    moverImage.setRotate(0);
+    initializeLinePosition(moverImage.getX(), moverImage.getY(), moverImage.getRotate());
+    setMoverInitialCords(moverImage.getX(), moverImage.getY());
   }
 
   @Override

@@ -26,6 +26,7 @@ public class ButtonAction {
   private static final String COMMAND_ONE = "viewboc.png";
   private static final String COMMAND_TWO = "viewbox.png";
   private Mover myMover;
+  private DisplayWindow displayWindow;
   private Map<Double, Mover> turtleMap;
   private BorderPane myRoot;
   private TextArea myCommander;
@@ -42,6 +43,7 @@ public class ButtonAction {
     myCommander = myView.getCommander();
     control = myView.getControl();
     rectangle = myView.getRectangle();
+    displayWindow = myView.getDisplayWindow();
   }
 
   public void displayHelpScreen() {
@@ -95,26 +97,25 @@ public class ButtonAction {
   public void setImage(String image) {
     //String path =myView.getResource().getString(image);
     //myMover.changeMoverDisplay(path);
-    double moverXPos = myView.getMover().getImage().getX();
-    double moverYPos = myView.getMover().getImage().getY();
-    double moverAngle =myView.getMover().getMoverAngle();
-    myView.removeNodeFromRoot(myView.getMover().getImage());
+    double moverXPos = getMover().getImage().getX();
+    double moverYPos = getMover().getImage().getY();
+    double moverAngle =getMover().getMoverAngle();
+    myView.removeNodeFromRoot(getMover().getImage());
     String path = myView.getResource().getString(image);
-    myView.getMover().changeMoverDisplay(path);
+    getMover().changeMoverDisplay(path);
     //)= (ImageView) myMover.changeMoverDisplay(path);
-    myView.getMover().getImage().setX(moverXPos);
-    myView.getMover().getImage().setY(moverYPos);
-    myView.getMover().getImage().setRotate(moverAngle);
-    myView.addNodeToRoot(myView.getMover().getImage());
+    getMover().getImage().setX(moverXPos);
+    getMover().getImage().setY(moverYPos);
+    getMover().getImage().setRotate(moverAngle);
+    myView.addNodeToRoot(getMover().getImage());
   }
 
   public void setBackgroundColor(Color color) {
-    myView.setBackgroundColor(color);
-    //rectangle.setFill(color);
+    displayWindow.setBackgroundColor(color);
   }
 
   public void setPenColor(Color color) {
-    myMover.setLineColor(color);
+    getMover().setLineColor(color);
   }
 
   public void setOnRun() {
@@ -192,43 +193,45 @@ public class ButtonAction {
   }
 
   public double getLineWidth() {
-    return myView.getLineWidth();
+    return getMover().getThickness();
   }
+
   public double getXPosition(){
-    //return myMover.getMoverCol()-xcenter;
-    return myView.getXPosition();
+    return getMover().getXPosition();
   }
   public double getYPosition(){
-    //return myMover.getMoverRow()-ycenter;
-    return myView.getYPosition();
+    return getMover().getYPosition();
   }
   public double getMoverID(){
-    //System.out.println("ID" + moverID);
-    return myView.getmoverID();
+    return getMover().getMoverID();
   }
 
   public double getAngle(){
-    return myView.getAngle();
-    //return myMover.getMoverAngle();
+    return getMover().getMoverAngle();
   }
 
   public double getLineThickness(){
-    return myMover.getThickness();
+    return getMover().getThickness();
   }
 
   public String getPenPosition(){
-    return myMover.getPenPosition();
+    return getMover().getPenPosition();
   }
   public void setDefaultImage(String image) {
-    myMover.setDefaultImage(image);
+    getMover().setDefaultImage(image);
 
   }
   public void changePenPosition(){
-    myMover.setPen(!myMover.getPen());
+    getMover().setPen(!getMover().getPen());
   }
+
   public Color getLineColor() {
-    return myMover.getLineColor();
+    return getMover().getLineColor();
   }
 
-
+  private Mover getMover(){
+    return myView.getMover();
+  }
 }
+
+
