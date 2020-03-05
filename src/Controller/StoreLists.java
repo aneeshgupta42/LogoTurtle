@@ -27,10 +27,10 @@ public class StoreLists {
     String func ="";
     LinkedList<String> words = new LinkedList();
     for(String lines :line.split("\n")){
-    for (String word : lines.split(" ")) {
-         words.add(word);
+      for (String word : lines.split(" ")) {
+        words.add(word);
+      }
     }
-   }
     String functionName = words.get(words.indexOf("to")+1);
     for (String word: words){
       if (!word.equals("to") && !word.equals(functionName)) {
@@ -43,5 +43,4 @@ public class StoreLists {
   public Map getFunction(){
     return function;}
   public String getFunctionName(){return functionName;}
-
 }
