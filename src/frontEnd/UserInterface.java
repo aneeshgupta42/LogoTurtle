@@ -2,6 +2,10 @@ package frontEnd;
 
 import Controller.Control;
 import backEnd.ErrorHandler;
+import frontEnd.ButtonsBoxesandLabels.OurButtons;
+import frontEnd.ButtonsBoxesandLabels.OurComboBox;
+import frontEnd.ButtonsBoxesandLabels.OurLabeledColorPickers;
+import frontEnd.ButtonsBoxesandLabels.PropertyLabel;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -14,13 +18,7 @@ import java.util.Scanner;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -30,7 +28,6 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Hyperlink;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -44,15 +41,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import javafx.util.converter.DoubleStringConverter;
-import javafx.util.converter.NumberStringConverter;
 
 public class UserInterface extends Application {
-
   private Scene myScene;
   private Group display;
   private Stage myStage;
@@ -84,7 +79,7 @@ public class UserInterface extends Application {
   private ResourceBundle myLabelPropertyResources;
   private ResourceBundle myMoverPropertiesDropDownResources;
   private Hyperlink linkVariable;
-  private Map<Integer, Mover> turtleMap = new HashMap<>();
+  private Map<Double, Mover> turtleMap = new HashMap<>();
   private static final int FRAMES_PER_SECOND = 60;
   private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
   private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
@@ -128,23 +123,18 @@ public class UserInterface extends Application {
   private static final int SIDEPANE_WIDTH = 300;
   private static final int NUM_TEXT_COLUMNS = 10;
   private static final int MOVE_SIZE = 50;
-  private static int numOfMovers = 1;
-  //private static List<Integer> turtleList = new ArrayList<>();
-  private ObservableList<Integer> turtleList = FXCollections.observableArrayList(List.of());
-  //private static OurComboBox turtleSelection;
+  private static double numOfMovers = 1;
+  private ObservableList<Double> turtleList = FXCollections.observableArrayList(List.of());
   private static double moverX = 0;
   private double lineWidth = 2;
   private VBox turtlebox;
-  Label xPositionLabel = new Label();
-  Label yPositionLabel = new Label();
-  Label moverIDLabel = new Label();
   private static double xcenter;
   private static double ycenter;
-  private int moverID = 1;
-  private double defaultMoveAmount = 50;
-  private double defaultTurnAmount = 90;
+  private double moverID = 1;
   private Map<String, PropertyLabel> propertyLabelMap= new HashMap<>();
   private List<OurLabeledColorPickers> penResources = new ArrayList<>();
+  private List<OurComboBox> imageResources = new ArrayList<>();
+  private ButtonAction myButtonAction;
 
 
 
@@ -154,6 +144,7 @@ public class UserInterface extends Application {
     control = new Control();
     myLine = new Line();
     display = new Group();
+    myButtonAction = new ButtonAction(this);
     myButtonResources = ResourceBundle.getBundle(ButtonResources);
     myComboBoxResources = ResourceBundle.getBundle(ComboBoxResources);
     myColorPickerResources = ResourceBundle.getBundle(ColorPickerResources);
@@ -188,14 +179,7 @@ public class UserInterface extends Application {
 
   private void step() {
     checkIfTurtleMovesOutOfBounds();
-    //updateDisplay();
   }
-
-  /*private void updateDisplay() {
-    moverIDLabel.setText("Mover ID: " + moverID);
-    xPositionLabel.setText("X-Position: " + (myMover.getMoverCol()-xcenter));
-    yPositionLabel.setText("Y-Position: " + (myMover.getMoverRow()-ycenter));
-  }*/
 
   private void checkIfTurtleMovesOutOfBounds() {
     if (myMover.getImage().getBoundsInParent().intersects(hbox.getBoundsInParent())) {
@@ -232,7 +216,7 @@ public class UserInterface extends Application {
     root.setLeft(makeTurtlePropertiesWindow());
     root.setCenter(display_window);
     root.setRight(makeSideWindow());
-    for (int i = 1; i <= numOfMovers; i++) {
+    for (double i = 1; i <= numOfMovers; i++) {
       myMover = new Mover(this);
       moverID = i;
       //moverImage = myMover.displayMover(TURTLE);
@@ -255,13 +239,15 @@ public class UserInterface extends Application {
     turtlebox.setPrefWidth(SIDEPANE_WIDTH);
     VBox buttons = new VBox();
     for (String key : Collections.list(myMoverPropertiesDropDownResources.getKeys())) {
-      buttons.getChildren().add(new OurComboBox(myMoverPropertiesDropDownResources.getString(key), key, this, FXCollections
+      OurComboBox comboBox = new OurComboBox(myMoverPropertiesDropDownResources.getString(key), key, myButtonAction, FXCollections
           .observableArrayList(
-              myComboBoxOptionsResources.getString(key + COMBO_OPTIONS).split(","))));
+              myComboBoxOptionsResources.getString(key + COMBO_OPTIONS).split(",")));
+      buttons.getChildren().add(comboBox);
+      imageResources.add(comboBox);
     }
     for (String key : Collections.list(myColorPickerResources.getKeys())) {
       if (key.startsWith("setPen")) {
-        OurLabeledColorPickers colorPicker = new OurLabeledColorPickers(myColorPickerResources.getString(key), key, this,
+        OurLabeledColorPickers colorPicker = new OurLabeledColorPickers(myColorPickerResources.getString(key), key, myButtonAction,
             myInitialColorResources.getString(key + COLOR_INITIAL));
         buttons.getChildren().add(colorPicker);
         penResources.add(colorPicker);
@@ -269,32 +255,25 @@ public class UserInterface extends Application {
     }
     for (String key : Collections.list(myTurtlePropertyResources.getKeys())) {
       buttons.getChildren()
-          .add(new OurButtons(myTurtlePropertyResources.getString(key), key, this));
+          .add(new OurButtons(myTurtlePropertyResources.getString(key), key, myButtonAction));
     }
-    OurComboBox turtleSelection = new OurComboBox("Select Turtle", "selectTurtle", this,
+    VBox propertiesBox = new VBox();
+    OurComboBox turtleSelection = new OurComboBox("Select Mover", "selectTurtle", myButtonAction,
         FXCollections.observableList(turtleList));
     turtleSelection.getBox().itemsProperty().bind(new SimpleObjectProperty<>(turtleList));
-    buttons.getChildren().add(turtleSelection);
-    VBox propertiesBox = new VBox();
-    Label moverProperties = new Label("Mover Properties:");
-    //int position = 0;
-    //Label position = new Label();
-    //position.textProperty().bind(new SimpleDoubleProperty(moverX).asString());
-    //IntegerProperty property = new SimpleIntegerProperty((int) moverX);
-    //DoubleStringConverter convertor = new DoubleStringConverter();
-    ///position.textProperty().bind(property, new NumberStringConverter());
-    //DoubleProperty x = new SimpleDoubleProperty(moverX);
-    //x.addListener((ChangeListener<Double>)c ->position.setText(myWords.get(myWords.size() - 1)));
-    propertiesBox.getChildren().add(moverProperties);
+    Text moverProperties = new Text("Properties of Mover: ");
+    propertiesBox.getChildren().addAll(turtleSelection,moverProperties);
     for (String key : Collections.list(myLabelPropertyResources.getKeys())) {
-      PropertyLabel plabel = new PropertyLabel(myLabelPropertyResources.getString(key), key, this);
+      PropertyLabel plabel = new PropertyLabel(myLabelPropertyResources.getString(key), key, myButtonAction);
       propertiesBox.getChildren().add(plabel);
       propertyLabelMap.put(key, plabel);
     }
     turtlebox.getChildren().addAll(buttons, propertiesBox);
-    //PropertyLabel label = new PropertyLabel("promptText", "methodname", this);
-    //turtlebox.getChildren().add(label);
     return turtlebox;
+  }
+
+  public ButtonAction getButtonAction(){
+    return myButtonAction;
   }
 
 
@@ -311,18 +290,18 @@ public class UserInterface extends Application {
 
   private void addButtons(HBox hbox) {
     for (String key : Collections.list(myButtonResources.getKeys())) {
-      hbox.getChildren().add(new OurButtons(myButtonResources.getString(key), key, this));
+      hbox.getChildren().add(new OurButtons(myButtonResources.getString(key), key, myButtonAction));
     }
     for (String key : Collections.list(myComboBoxResources.getKeys())) {
       hbox.getChildren()
-          .add(new OurComboBox(myComboBoxResources.getString(key), key, this, FXCollections
+          .add(new OurComboBox(myComboBoxResources.getString(key), key, myButtonAction, FXCollections
               .observableArrayList(
                   myComboBoxOptionsResources.getString(key + COMBO_OPTIONS).split(","))));
     }
     for (String key : Collections.list(myColorPickerResources.getKeys())) {
       if (key.startsWith("setBackground")) {
         hbox.getChildren().add(
-            new OurLabeledColorPickers(myColorPickerResources.getString(key), key, this,
+            new OurLabeledColorPickers(myColorPickerResources.getString(key), key, myButtonAction,
                 myInitialColorResources.getString(key + COLOR_INITIAL)));
       }
     }
@@ -346,6 +325,14 @@ public class UserInterface extends Application {
     image.setRotate(0);
     myMover.initializeLinePosition(image.getX(), image.getY(), image.getRotate());
     myMover.setMoverInitialCords(image.getX(), image.getY());
+  }
+
+  public Mover getMover(){
+    return myMover;
+  }
+
+  public Map getTurtleMap(){
+    return turtleMap;
   }
 
   private Node makeSideWindow() {
@@ -378,7 +365,7 @@ public class UserInterface extends Application {
     inputArea.setMaxHeight(TEXTBOX_HEIGHT);
     VBox vbox = new VBox();
     for (String key : Collections.list(myTextButtonResources.getKeys())) {
-      vbox.getChildren().add(new OurButtons(myTextButtonResources.getString(key), key, this));
+      vbox.getChildren().add(new OurButtons(myTextButtonResources.getString(key), key, myButtonAction));
     }
     vbox.setMinWidth(COMMAND_CONTROLS_WIDTH);
     hbox.getChildren().addAll(inputArea, vbox);
@@ -424,8 +411,12 @@ public class UserInterface extends Application {
     System.exit(1);
   }
 
+  public Stage getStage(){
+    return myStage;
+  }
 
-  private void scanFile(File file) throws FileNotFoundException {
+
+  void scanFile(File file) throws FileNotFoundException {
     Scanner scnr = new Scanner(file);
     //Reading each line of file using Scanner class
     int lineNumber = 0;
@@ -438,6 +429,18 @@ public class UserInterface extends Application {
 
   public String getText() {
     return myText;
+  }
+
+  public TextArea getCommander(){
+    return myCommander;
+  }
+
+  public Control getControl(){
+    return control;
+  }
+
+  public Rectangle getRectangle(){
+    return rectangle;
   }
 
 
@@ -457,6 +460,10 @@ public class UserInterface extends Application {
     root.getChildren().add(object);
   }
 
+  public void removeNodeFromRoot(Node object){
+    root.getChildren().remove(object);
+  }
+
   public void setMoverX(double x) {
     moverX = x;
     System.out.println("x " + x);
@@ -464,6 +471,10 @@ public class UserInterface extends Application {
 
   public Map getPropertyLabelMap(){
     return propertyLabelMap;
+  }
+
+  public ResourceBundle getResource(){
+    return myComboBoxOptionsResources;
   }
 
   private void createErrorDialog(Exception e) {
@@ -507,6 +518,7 @@ public class UserInterface extends Application {
     }
   }
 
+
   public void selectFileScreen() {
     FileChooser fileChooser = new FileChooser();
     String dataPath = System.getProperty("user.dir") + "/data/examples";
@@ -537,6 +549,10 @@ public class UserInterface extends Application {
     myMover.getImage().setY(moverYPos);
     myMover.getImage().setRotate(moverAngle);
     root.getChildren().add(myMover.getImage());
+  }
+
+  public double getmoverID(){
+    return moverID;
   }
 
   public void setBackgroundColor(Color color) {
@@ -578,7 +594,6 @@ public class UserInterface extends Application {
         control.parseCommand();
       }
     }
-
   }
 
   public void addTurtle() {
@@ -594,32 +609,20 @@ public class UserInterface extends Application {
     //turtleSelection.updateItems(FXCollections.observableArrayList(turtleList));
   }
 
-  public void moveBackward() {
-    sendInfoToControl("fd " + (-defaultMoveAmount));
-  }
-
-  public void moveForward() {
-    sendInfoToControl("fd " + defaultMoveAmount);
-  }
-
-  public void moveLeft() {
-    sendInfoToControl("lt " + defaultTurnAmount);
-  }
-
-  public void moveRight() {
-    sendInfoToControl("rt " + defaultTurnAmount);
-  }
-
   public void setOnClear() {
     inputArea.setText("");
   }
 
   public void selectTurtle(String num) {
-    int number = Integer.parseInt(num);
+    Double number = Double.parseDouble(num);
     setMyMover(turtleMap.get(number));
     moverID = number;
     for(OurLabeledColorPickers label: penResources){
       label.setInitialColor(myMover.getLineColor());
+    }
+    for(OurComboBox boximage : imageResources){
+      //boximage.setValue(myMover.getImage());
+
     }
     myMover.updateLabels();
   }

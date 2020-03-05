@@ -1,5 +1,7 @@
-package frontEnd;
+package frontEnd.ButtonsBoxesandLabels;
 
+import frontEnd.ButtonAction;
+import frontEnd.UserInterface;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import javafx.collections.ObservableList;
@@ -7,7 +9,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
@@ -15,7 +16,7 @@ import javafx.scene.text.Text;
 public class OurComboBox extends HBox {
   private ComboBox box;
 
-  public OurComboBox(String promptText, String methodName, UserInterface target, ObservableList items){
+  public OurComboBox(String promptText, String methodName, ButtonAction target, ObservableList items){
     box = new ComboBox();
     box.setItems(items);
     box.setPromptText(promptText);
@@ -37,6 +38,10 @@ public class OurComboBox extends HBox {
   private Node makePrompt (String text) {
     System.out.println(text);
     return new Text(text + ": ");
+  }
+
+  public void setValue(Object object){
+    box.setValue(object);
 
   }
 
@@ -58,7 +63,7 @@ public class OurComboBox extends HBox {
     return result;
   }
 
-  private EventHandler<ActionEvent> Result(String methodName, UserInterface target) {
+  private EventHandler<ActionEvent> Result(String methodName, ButtonAction target) {
     EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {

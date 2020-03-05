@@ -1,12 +1,11 @@
-package frontEnd;
+package frontEnd.ButtonsBoxesandLabels;
 
+import frontEnd.ButtonAction;
+import frontEnd.Display;
 import java.lang.reflect.InvocationTargetException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import java.lang.reflect.Method;
 
 /**
@@ -18,7 +17,7 @@ public class OurButtons extends Button implements Display {
   /**
    * Create input with given label and method to call on the given Controller.
    */
-  public OurButtons(String promptText, String methodName, UserInterface target) {
+  public OurButtons(String promptText, String methodName, ButtonAction target) {
     setText(promptText);
     EventHandler<ActionEvent> whathappened = Result(methodName, target);
     setOnAction(whathappened);
@@ -28,7 +27,7 @@ public class OurButtons extends Button implements Display {
         //makeInputAction(target, methodName);
   }
 
-  private EventHandler<ActionEvent> Result(String methodName, UserInterface target) {
+  private EventHandler<ActionEvent> Result(String methodName, ButtonAction target) {
     EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {

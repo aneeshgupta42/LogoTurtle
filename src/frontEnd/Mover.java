@@ -1,20 +1,16 @@
 package frontEnd;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import frontEnd.ButtonsBoxesandLabels.PropertyLabel;
 import java.util.Collections;
 import java.util.ResourceBundle;
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -139,9 +135,9 @@ public class Mover implements Update {
   public void updateLabels() {
       for (String key : Collections.list(myLabelPropertyResources.getKeys())) {
         PropertyLabel plabel = new PropertyLabel(myLabelPropertyResources.getString(key), key,
-            myView);
+            myView.getButtonAction());
         PropertyLabel propertyLabel = (PropertyLabel) myView.getPropertyLabelMap().get(key);
-        propertyLabel.setAmount(key, myView);
+        propertyLabel.setAmount(key, myView.getButtonAction());
       }
     }
   public boolean objectMoved() {
