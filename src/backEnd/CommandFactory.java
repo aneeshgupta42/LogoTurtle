@@ -8,23 +8,25 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 
 public class CommandFactory {
-    public CommandFactory()
     private Command commandGiven;
+    private Control myControl;
 
-    public Command initializeCommand(String commandName) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        Class cls = Class.forName(commandName);
-        Object objectCommand;
-        Constructor constructor = cls.getConstructor();
-        objectCommand = constructor.newInstance();
-        commandGiven = (Command) objectCommand;
-        return commandGiven;
+    public CommandFactory(Control control){
+        myControl = control;
     }
 
-    public Command generateCommand(String commandName, LinkedList<String> args, Control control) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public int getNumArgs(String commandName) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         Class cls = Class.forName(commandName);
-        Object objectCommand;
+        Constructor constructor = cls.getConstructor();
+        Object objectCommand = constructor.newInstance();
+        commandGiven = (Command) objectCommand;
+        return commandGiven.getNumberOfArgs();
+    }
+
+    public Command generateCommand(String commandName, LinkedList<String> args) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        Class cls = Class.forName(commandName);
         Constructor constructor = cls.getConstructor(LinkedList.class, Control.class);
-        objectCommand = constructor.newInstance((Object) args, (Object) control);
+        Object objectCommand = constructor.newInstance((Object) args, (Object) myControl);
         commandGiven = (Command) objectCommand;
         return commandGiven;
     }
@@ -33,5 +35,4 @@ public class CommandFactory {
     private void NameLogic(){
 
     }
-    argNum = commandGiven.getNumberOfArgs();
 }
