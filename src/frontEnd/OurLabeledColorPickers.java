@@ -28,7 +28,10 @@ public class OurLabeledColorPickers extends HBox {
   private Node makePrompt (String text) {
     System.out.println(text);
     return new Text(text + ": ");
+  }
 
+  public void setInitialColor(Color color){
+    colors.setValue(color);
   }
 
 

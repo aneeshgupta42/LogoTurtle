@@ -9,23 +9,35 @@ import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 
-public class OurComboBox extends ComboBox {
+public class OurComboBox extends HBox {
+  private ComboBox box;
 
   public OurComboBox(String promptText, String methodName, UserInterface target, ObservableList items){
-    setItems(items);
-    setPromptText(promptText);
+    box = new ComboBox();
+    box.setItems(items);
+    box.setPromptText(promptText);
+    getChildren().addAll(makePrompt(promptText), box);
     EventHandler<ActionEvent> whathappened = Result(methodName, target);
-    setOnAction(whathappened);
+    box.setOnAction(whathappened);
   }
 
   // make input prompt, very basic for now but could be much more involved in general
-  private Node makePrompt (String text) {
-    return new Label(text + "  ");
-  }
 
   public void updateItems(ObservableList items){
-    setItems(items);
+    box.setItems(items);
+  }
+
+  public ComboBox getBox(){
+    return box;
+  }
+
+  private Node makePrompt (String text) {
+    System.out.println(text);
+    return new Text(text + ": ");
+
   }
 
   // make input field that calls Controller method using reflection as its action
@@ -50,12 +62,12 @@ public class OurComboBox extends ComboBox {
     EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
-        System.out.println(target + " " + getValue().toString());
+        //System.out.println(target + " " + box.getValue().toString());
         try {
           Method m = target.getClass().getDeclaredMethod(methodName,String.class);
-          System.out.println("method " + m);
+          //System.out.println("method " + m);
           try {
-            m.invoke(target, getValue().toString());
+            m.invoke(target, box.getValue().toString());
           } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
           }
