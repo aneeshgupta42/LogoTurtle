@@ -216,12 +216,12 @@ public class Mover implements Update {
     return moverImage.getY();
   }
 
-  public double getMoverAngle(){
-    if(moverAngle>=degreesInCircle){
-      moverAngle = moverAngle-degreesInCircle;
+  public double getMoverAngle() {
+    if (moverAngle >= degreesInCircle) {
+      moverAngle = moverAngle - degreesInCircle;
+    } else if (moverAngle <= -degreesInCircle) {
+      moverAngle = moverAngle + degreesInCircle;
     }
-    else if (moverAngle<=-degreesInCircle)
-      moverAngle = moverAngle+degreesInCircle;
     return moverAngle;
   }
 

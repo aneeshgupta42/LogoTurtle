@@ -163,6 +163,7 @@ public class ButtonAction {
   }
 
   public void moveForward() {
+    myView.sendInfoToControl("fd " + defaultMoveAmount);
     sendInfoToControl("fd " + defaultMoveAmount);
   }
 
@@ -205,8 +206,10 @@ public class ButtonAction {
     //System.out.println("ID" + moverID);
     return myView.getmoverID();
   }
+
   public double getAngle(){
-    return myMover.getMoverAngle();
+    return myView.getAngle();
+    //return myMover.getMoverAngle();
   }
 
   public double getLineThickness(){
