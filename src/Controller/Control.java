@@ -31,17 +31,16 @@ public class Control {
   Initializing a control (for reference storeLists is where all the data in lists is being passed)
    */
   public Control() {
-    commandGrouping = new CommandGrouping();
-    commandGrouping.setControl(this);
+    commandGrouping = new CommandGrouping(this);
   }
 
 
-  public Map getVariables() {
+  public Map<String,String> getVariables() {
     return variablesUsed;
   }
-  public Map getUserCommands() {return new TreeMap();}
+  public Map<String,String> getUserCommands() {return new TreeMap<>();}
 
-  public void setVariables(Map saved) {
+  public void setVariables(Map<String,String> saved) {
     variablesUsed = saved;
   }
 

@@ -1,5 +1,6 @@
 package Controller;
 
+import backEnd.CommandFactory;
 import backEnd.ErrorHandler;
 import backEnd.commands.Command;
 import frontEnd.ErrorBoxes;
@@ -24,6 +25,7 @@ public class CommandGrouping {
   private Control control;
   private List<ListGroups> groupsList;
   private String language;
+  private CommandFactory commandFactory;
   private Deque<String> command;
   private Deque<String> argument;
   private String com;
@@ -49,8 +51,11 @@ public class CommandGrouping {
   private int total;
   private int index;
 
-  public CommandGrouping(){
+  public CommandGrouping(Control myControl)
+  {
     lists = new StoreLists();
+    control = myControl;
+    commandFactory = new CommandFactory(control);
   }
 
   public void setControl(Control c){control = c;}
@@ -142,12 +147,7 @@ public class CommandGrouping {
         userCom = command.pop();
         makeClassPathToCommand(userCom);
         try {
-          Class cls = Class.forName(com);
-          Object objectCommand;
-          Constructor constructor = cls.getConstructor();
-          objectCommand = constructor.newInstance();
-          Command commandGiven = (Command) objectCommand;
-          argNum = commandGiven.getNumberOfArgs();
+          argNum = commandFactory.getNumArgs(com);
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
           coordinateCommands();
         }
@@ -195,7 +195,7 @@ public class CommandGrouping {
    */
   public void runCommand() {
     System.out.println("GotHere " + userCom +"  " + args);
-      if (hasBeenStored == false) {
+      if (!hasBeenStored) {
         if(!logicStatement) {
           findLists();
           input = input.substring(end);
@@ -212,11 +212,7 @@ public class CommandGrouping {
   private void obtainCommand() {
     System.out.println(com);
     try {
-      Class cls = Class.forName(com);
-      Object objectCommand;
-      Constructor constructor = cls.getConstructor(LinkedList.class, Control.class);
-      objectCommand = constructor.newInstance((Object) args, (Object) control);
-      Command commandGiven = (Command) objectCommand;
+      Command commandGiven = commandFactory.generateCommand(com, args);
       createCommand(commandGiven);
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException | ExceptionInInitializerError e) {
       ErrorBoxes box = new ErrorBoxes(new ErrorHandler("InvalidCommand"));
