@@ -79,7 +79,7 @@ public class UserInterface extends Application {
   private ResourceBundle myLabelPropertyResources;
   private ResourceBundle myMoverPropertiesDropDownResources;
   private Hyperlink linkVariable;
-  private Map<Double, Mover> turtleMap = new HashMap<>();
+
   private static final int FRAMES_PER_SECOND = 60;
   private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
   private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
@@ -120,23 +120,8 @@ public class UserInterface extends Application {
   private static final String COMMAND_TAB_TITLE = "User Commands";
   private static final String TEXT_INPUT_PROMPT = "Enter Command";
   private static final int BUTTON_PANE_HEIGHT = 70;
-  private static final int SIDEPANE_WIDTH = 300;
-  private static final int NUM_TEXT_COLUMNS = 10;
-  private static final int MOVE_SIZE = 50;
-  private static double numOfMovers = 1;
-  private ObservableList<Double> turtleList = FXCollections.observableArrayList(List.of());
-  private static double moverX = 0;
-  private double lineWidth = 2;
-  private VBox turtlebox;
-  private static double xcenter;
-  private static double ycenter;
-  private double moverID = 1;
-  private Map<String, PropertyLabel> propertyLabelMap= new HashMap<>();
-  private List<OurLabeledColorPickers> penResources = new ArrayList<>();
-  private List<OurComboBox> imageResources = new ArrayList<>();
-  private ButtonAction myButtonAction;
-
-
+  private static final int TABPANE_WIDTH = 300;
+  private static final int NUM_TEXT_COLUMNS= 10;
 
   public UserInterface() {
     myStage = new Stage();
