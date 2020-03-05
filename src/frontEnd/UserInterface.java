@@ -39,7 +39,6 @@ import java.awt.Dimension;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
-
 public class UserInterface extends Application {
   private Scene myScene;
   private Group display;
@@ -72,7 +71,6 @@ public class UserInterface extends Application {
   private ResourceBundle myComboBoxOptionsResources;
   private ResourceBundle myTextButtonResources;
   private Hyperlink linkVariable;
-
 
   private static final int FRAMES_PER_SECOND = 60;
   private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
@@ -111,10 +109,6 @@ public class UserInterface extends Application {
   private static final int TABPANE_WIDTH = 300;
   private static final int NUM_TEXT_COLUMNS= 10;
 
-
-
-
-
   public UserInterface() {
     myStage = new Stage();
     myMover = new Mover(this);
@@ -130,7 +124,6 @@ public class UserInterface extends Application {
     control.setLanguage(DEFAULT_LANGUAGE);
 
   }
-
 
   @Override
   public void start(Stage primaryStage){
