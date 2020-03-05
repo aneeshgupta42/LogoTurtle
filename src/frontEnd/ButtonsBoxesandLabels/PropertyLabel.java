@@ -1,17 +1,14 @@
-package frontEnd;
+package frontEnd.ButtonsBoxesandLabels;
 
+import frontEnd.ButtonAction;
+import frontEnd.Display;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ResourceBundle;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import java.lang.reflect.Method;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
@@ -33,7 +30,7 @@ public class PropertyLabel extends HBox implements Display {
   /**
    * Create input with given label and method to call on the given Controller.
    */
-  public PropertyLabel(String promptText, String methodName, UserInterface target) {
+  public PropertyLabel(String promptText, String methodName, ButtonAction target) {
     label = new Label();
     setAmount(methodName, target);
     bindLabel(amountDue);
@@ -53,7 +50,7 @@ public class PropertyLabel extends HBox implements Display {
 
   }
 
-  public void setAmount(String methodName, UserInterface target) {
+  public void setAmount(String methodName, ButtonAction target) {
     try {
       Method m = target.getClass().getDeclaredMethod(methodName);
       try {
@@ -82,7 +79,7 @@ public class PropertyLabel extends HBox implements Display {
   // Define a getter for the property itself
   public StringProperty amountDueProperty() {return amountDue;}
 
-  private EventHandler<ActionEvent> Result(String methodName, UserInterface target) {
+  private EventHandler<ActionEvent> Result(String methodName, ButtonAction target) {
     EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
