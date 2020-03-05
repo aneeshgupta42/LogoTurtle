@@ -53,6 +53,8 @@ public interface Viewable{
 
     void setImageIndex(int index);
 
+    int getCurrentImageIndex();
+
     double getmoverID();
 
     void setBackgroundColor(Color color);

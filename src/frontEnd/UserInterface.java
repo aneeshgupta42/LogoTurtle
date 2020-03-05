@@ -8,13 +8,8 @@ import frontEnd.ButtonsBoxesandLabels.OurLabeledColorPickers;
 import frontEnd.ButtonsBoxesandLabels.PropertyLabel;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.Scanner;
+import java.util.*;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -135,6 +130,8 @@ public class UserInterface extends Application implements Viewable {
   private List<OurLabeledColorPickers> penResources = new ArrayList<>();
   private List<OurComboBox> imageResources = new ArrayList<>();
   private ButtonAction myButtonAction;
+  List<String> imageOptions;
+  private int currImageIndex;
 
 
 
@@ -155,6 +152,8 @@ public class UserInterface extends Application implements Viewable {
     myLabelPropertyResources = ResourceBundle.getBundle(LabelResources);
     myMoverPropertiesDropDownResources = ResourceBundle.getBundle(MoverPropertiesDropDownResources);
     control.setLanguage(DEFAULT_LANGUAGE);
+    String optionsString = myComboBoxOptionsResources.getString("setImageOptions");
+    imageOptions = Arrays.asList(optionsString.split(","));
   }
 
   @Override
@@ -556,6 +555,7 @@ public class UserInterface extends Application implements Viewable {
     double moverAngle = myMover.getMoverAngle();
     root.getChildren().remove(myMover.getImage());
     String path = myComboBoxOptionsResources.getString(image);
+    currImageIndex = imageOptions.indexOf(image);
     myMover.changeMoverDisplay(path);
     //)= (ImageView) myMover.changeMoverDisplay(path);
     myMover.getImage().setX(moverXPos);
@@ -566,10 +566,13 @@ public class UserInterface extends Application implements Viewable {
 
   @Override
   public void setImageIndex(int index) {
-    String optionsString = myComboBoxOptionsResources.getString("setImageOptions");
-    String[] options = optionsString.split(",");
-    String image = options[index-1];
+    String image = imageOptions.get(index-1);
+    currImageIndex = index;
     setImage(image);
+  }
+
+  public int getCurrentImageIndex(){
+    return currImageIndex;
   }
 
   @Override

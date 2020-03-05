@@ -122,5 +122,9 @@ public class Control {
   public void setShape(int choice){
     view.setImageIndex(choice);
   }
+
+  public int getShape(){
+    return view.getCurrentImageIndex();
+  }
 }
 
