@@ -26,6 +26,7 @@ public class Control {
   private String input;
   private UserInterface view;
   private Map<String,String> variablesUsed = new TreeMap<>();
+  private Map<String,String> functionsUsed = new TreeMap<>();
   private StoreLists lists;
 
 
@@ -38,16 +39,10 @@ public class Control {
     commandGrouping = new CommandGrouping(this);
   }
 
-
   public Map<String,String> getVariables() {
     return variablesUsed;
   }
-  public Map<String,String> getUserCommands() {return new TreeMap<>();}
-
-  public void setVariables(Map<String,String> saved) {
-    variablesUsed = saved;
-  }
-
+  public Map<String,String> getUserCommands() {return functionsUsed;}
   public String getCommand() {
     return input;
   }
@@ -64,6 +59,8 @@ public class Control {
 
   public void parseCommand(){
     commandGrouping.parseCommand();
+    variablesUsed.putAll(commandGrouping.setVariables());
+    functionsUsed.putAll(commandGrouping.setFunctions());
   }
 
 

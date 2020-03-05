@@ -16,8 +16,8 @@ public class ListGroups {
     return myList;
   }
 
-  public void cannotBeRun(){
-    canBeRun = false;
+  public void cannotBeRun(Boolean canIt){
+    canBeRun = !canIt;
   }
 
   public boolean canBeRun(){
