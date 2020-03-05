@@ -19,6 +19,10 @@ public class CommandGrouping {
   private static final String ARGUMENT = "Constant";
   private static final String VARIABLE = "Variable";
   private static final String CLASS_PATH = "backEnd.commands.";
+  private static final String repCount = ":repCount";
+  private static final String make = "make";
+  private static final String listStart = "[";
+  private static final String listEnd = "]";
 
   private Parser parser;
   private Control control;
@@ -39,15 +43,11 @@ public class CommandGrouping {
   private LinkedList<Integer> ends;
   private LinkedList<ArrayList<Integer>> sets;
   private int numstarts;
-  private int numends;
   private int first;
   private int end;
-  private int location;
-  private String variable;
-  private boolean outsideLoop;
-  private String saved;
   private int total;
   private int index;
+  private String variable;
 
   public CommandGrouping(){
     lists = new StoreLists();
@@ -66,17 +66,12 @@ public class CommandGrouping {
   */
   public void parseCommand() {
     parser = new Parser();
-    total =0;
     variablesUsed = new TreeMap();
     command = new LinkedList<>();
     argument = new LinkedList<>();
     args = new LinkedList<>();
-    numstarts =0;
-    numends =0;
-    location = 0;
     hasBeenStored = false;
     groupsList = new ArrayList<ListGroups>();
-    saved = control.getCommand();
     setCommand(input);
     setLanguage(language);
     parser.addPatterns(language);
@@ -87,11 +82,6 @@ public class CommandGrouping {
     Splits text into lines
    */
   private void parseText() {
-    for(int i=0;i<groupsList.size();i++){
-      System.out.println("These are the groups "+groupsList.get(i).getMyList());
-      System.out.println("Can they be run: " + groupsList.get(i).canBeRun());
-    }
-    System.out.println("HERE WE FIND LISTS");
     logicStatement = true;
     for (String line : input.split(NEWLINE)) {
       if(!line.contains("#") && !line.isEmpty()){
@@ -269,6 +259,9 @@ public class CommandGrouping {
       total++;
       findLists();
       int loop = comm.repeatCom();
+      if (variable != null) {
+        repCount(loop, variable);
+      } else repCount(loop, repCount);
       for(int j=0;j<groupsList.size();j++){
         if(groupsList.get(j).canBeRun()){
           section = groupsList.get(j).getMyList(); //get the value inside brackets
@@ -301,59 +294,12 @@ public class CommandGrouping {
       recurseLoop(loop);
     }
   }
-
-
-
-
- /* private void repeatTimes(Command comm) {
-    if(comm.repeatCom()!=0) {
-      findLists();
-      total ++;
-      int loop = comm.repeatCom();
-        for(int j=0;j<groupsList.size();j++){
-          System.out.println("entered loop");
-          if(groupsList.get(j).canBeRun()){
-            section = groupsList.get(j).getMyList(); //get the value inside brackets
-            System.out.println("This is running "+section);
-            setCommand(section);
-            index =j;
-            break;
-          }
-        }
-      System.out.println("This is what section is for recurse "+section);
-      recurseLoop(loop);
-      groupsList.get(index).cannotBeRun(true);
-      System.out.println("done with recurse");
-      }
-    if (!command.isEmpty()) {
-      coordinateCommands();
-    }
-  }*/
-
-
-  /*private void recurseLoop(int loop) {
-    if(loop==0){
-          for(int i=groupsList.size()-1;i>0;i--){
-            if(groupsList.get(i).canBeRun()){
-            section = groupsList.get(i).getMyList();
-            setCommand(section);
-           }
-          }
-      }
-    if(loop>0){
-      parseText();
-      System.out.println("This is circling "+section + "times" + loop);
-      loop--;
-      recurseLoop(loop);
-    }
-  }*/
-
   /*
   Makes variables for the repetitions of loops
    */
   private void repCount(int loop, String s) {
     args.clear();
-    userCom = "make";
+    userCom = make;
     args.push(s);
     args.push(loop+"");
     makeClassPathToCommand(userCom);
@@ -362,20 +308,18 @@ public class CommandGrouping {
 
 
   private void findLists() {
-    ArrayList<Integer> two = new ArrayList<>();
     starts = new LinkedList<>();
     ends = new LinkedList<>();
-    int index = input.indexOf("[");
+    int index = input.indexOf(listStart);
     while (index >= 0) {
       starts.push(index);
       numstarts++;
-      index = input.indexOf("[", index + 1);
+      index = input.indexOf(listStart, index + 1);
     }
-    int indextwo = input.indexOf("]");
+    int indextwo = input.indexOf(listEnd);
     while (indextwo >= 0) {
       ends.push(indextwo);
-      numends ++;
-      indextwo = input.indexOf("]", indextwo + 1);
+      indextwo = input.indexOf(listEnd, indextwo + 1);
     }
     matchingLists();
     organizeListPairs();
@@ -397,34 +341,26 @@ public class CommandGrouping {
     while(numstarts>0) {
       int first = starts.pollLast();
       int last = ends.pollLast();
-      for (int whichend : starts) {
-        if (whichend < last) {
+      for (int whichEnd : starts) {
+        if (whichEnd < last) {
           int store = last;
           last = ends.pollLast();
           ends.push(store);
         }
       }
       numstarts--;
-     /* if(total==0){
-        two.add(0);
-        two.add(input.length());
-        sets.add(two);
-        two = new ArrayList<>();
-      }*/
       two.add(first+1);
       two.add(last-1);
-     // groupsList.add(new ListGroups(input.substring(first+1,last-1)));
       sets.add(two);
       two = new ArrayList<>();
     }
     if(total ==1){
-      two.add(0);
-      two.add(input.length());
-      sets.add(two);
-     // groupsList.add(new ListGroups(input.substring(0,input.length())));
-      two = new ArrayList<>();
+      if(sets.size()!=1){
+        two.add(0);
+        two.add(input.length());
+        sets.add(two);
+      }
     }
-    System.out.println("Here are the sets " + sets);
   }
 
 }

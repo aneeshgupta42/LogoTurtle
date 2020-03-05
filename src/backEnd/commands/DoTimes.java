@@ -41,8 +41,8 @@ public class DoTimes extends Command {
 
   @Override
   public int repeatCom() {
-    repetition = Integer.parseInt(val);
-    return repetition;
+    repetition = (int)Double.parseDouble(val);
+    return repetition-1;
   }
 
 
