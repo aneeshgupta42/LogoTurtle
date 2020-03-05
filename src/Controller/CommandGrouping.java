@@ -266,8 +266,8 @@ public class CommandGrouping {
 
   private void repeatTimes(Command comm) {
     if(comm.repeatCom()!=0) {
-      findLists();
       total++;
+      findLists();
       int loop = comm.repeatCom();
       for(int j=0;j<groupsList.size();j++){
         if(groupsList.get(j).canBeRun()){
@@ -417,7 +417,7 @@ public class CommandGrouping {
       sets.add(two);
       two = new ArrayList<>();
     }
-    if(total ==0){
+    if(total ==1){
       two.add(0);
       two.add(input.length());
       sets.add(two);
