@@ -9,35 +9,19 @@ import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
 
-public class OurComboBox extends HBox {
-  private ComboBox box;
+public class OurComboBox extends ComboBox {
 
   public OurComboBox(String promptText, String methodName, UserInterface target, ObservableList items){
-    box = new ComboBox();
-    box.setItems(items);
-    box.setPromptText(promptText);
-    getChildren().addAll(makePrompt(promptText), box);
+    setItems(items);
+    setPromptText(promptText);
     EventHandler<ActionEvent> whathappened = Result(methodName, target);
-    box.setOnAction(whathappened);
+    setOnAction(whathappened);
   }
 
   // make input prompt, very basic for now but could be much more involved in general
-
-  public void updateItems(ObservableList items){
-    box.setItems(items);
-  }
-
-  public ComboBox getBox(){
-    return box;
-  }
-
   private Node makePrompt (String text) {
-    System.out.println(text);
-    return new Text(text + ": ");
-
+    return new Label(text + "  ");
   }
 
   // make input field that calls Controller method using reflection as its action
@@ -62,12 +46,10 @@ public class OurComboBox extends HBox {
     EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
-        //System.out.println(target + " " + box.getValue().toString());
         try {
           Method m = target.getClass().getDeclaredMethod(methodName,String.class);
-          //System.out.println("method " + m);
           try {
-            m.invoke(target, box.getValue().toString());
+            m.invoke(target, getValue().toString());
           } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
           }

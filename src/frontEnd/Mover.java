@@ -1,22 +1,13 @@
 package frontEnd;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.ResourceBundle;
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
@@ -26,7 +17,7 @@ import javafx.util.Duration;
 
 public class Mover implements Update {
 
-  ImageView moverImage;
+  ImageView myMover;
   private double moverAngle;
   private boolean penDown;
   private boolean moverVisible = true;
@@ -38,68 +29,21 @@ public class Mover implements Update {
   private double moverStartingYPos;
   private double moverCenterXPos;
   private double moverCenterYPos;
-  private double lineThickness = 2;
-  private Color lineColor = Color.BLACK;
   Line myLine;
   UserInterface myView;
-  private static final String TURTLE = "turtle.png";
-  private static String defaultImage = TURTLE;
-  private boolean moverActive = true;
-  private static final String LabelResources = "resources.UIActions.LabelActions";
-  private ResourceBundle myLabelPropertyResources;
-  private double degreesInCircle = 360;
-  private ResourceBundle myComboBoxOptionsResources;
-  private static final String ComboBoxOptionsResources = "resources.UIActions.ComboBoxOptions";
 
   public Mover(UserInterface view) {
-    System.out.print(this);
-
     myView = view;
     // do we want this to start as true?
     penDown = true;
     moverVisible = true;
     distanceSoFar = 0;
-    moverImage = changeMoverDisplay(defaultImage);
-    /*moverImage.setOnMouseClicked(e -> {
-      handleKeyInput();
-    });*/
-    myLabelPropertyResources = ResourceBundle.getBundle(LabelResources);
-    myComboBoxOptionsResources = ResourceBundle.getBundle(ComboBoxOptionsResources);
   }
 
-  private void handleKeyInput(){
-    //System.out.println("yo");
-    //moverVisible=!moverVisible;
-    //moverImage.setVisible(moverVisible);
-    //System.out.println(moverVisible);
-    if(moverActive) {
-      ColorAdjust colorAdjustGrayscale = new ColorAdjust();
-      colorAdjustGrayscale.setSaturation(-1);
-      moverImage.setEffect(colorAdjustGrayscale);
-    }
-    else{
-      ColorAdjust colorAdjustGrayscale = new ColorAdjust();
-      colorAdjustGrayscale.setSaturation(0);
-      moverImage.setEffect(colorAdjustGrayscale);
-    }
-    moverActive = !moverActive;
-  }
-
-  public ImageView changeMoverDisplay(String imagePath) {
+  public Node displayMover(String imagePath) {
     Image turtle = new Image(getClass().getClassLoader().getResourceAsStream(imagePath));
-    moverImage = new ImageView(turtle);
-    moverImage.setOnMouseClicked(e -> {
-      handleKeyInput();
-    });
-    return moverImage;
-  }
-
-  public void setDefaultImage(String image){
-    defaultImage = myComboBoxOptionsResources.getString(image);
-  }
-
-  public ImageView getImage(){
-    return moverImage;
+    myMover = new ImageView(turtle);
+    return myMover;
   }
 
   public void initializeLinePosition(double x, double y, double angle) {
@@ -109,41 +53,29 @@ public class Mover implements Update {
   }
 
   public void move(double x, double y, double angle) {
-    if (moverActive) {
-      moverStartingXPos = moverImage.getX();
-      moverStartingYPos = moverImage.getY();
-      Animation animation = makeAnimation(moverImage, x, y);
-      Animation rotate = makeRotate(moverImage, angle);
-      //myView.addAnimation(animation);
-      if (x != 0 | y != 0) {
-        animation.play();
-      }
-      if (angle != 0) {
-        rotate.play();
-      }
-      //animation.play();
-      moverImage.setX(moverImage.getX() + x);
-      moverImage.setY(moverImage.getY() + y);
-      //  System.out.println("hey" + turtleStartingYPos + " " + myTurtle.getY());
-      //myTurtle.setRotate(turtleAngle + angle);
-      moverAngle = moverAngle + angle;
-      if (penDown) {
-        drawPen(x, y);
-      }
-      objectMoved = true;
-      myView.setMoverX(moverImage.getX());
-      updateLabels();
+    moverStartingXPos = myMover.getX();
+    moverStartingYPos = myMover.getY();
+    Animation animation = makeAnimation(myMover, x, y);
+    Animation rotate = makeRotate(myMover, angle);
+    //myView.addAnimation(animation);
+    if (x != 0 | y != 0) {
+      animation.play();
     }
+    if (angle != 0) {
+      rotate.play();
+    }
+    //animation.play();
+    myMover.setX(myMover.getX() + x);
+    myMover.setY(myMover.getY() + y);
+    //  System.out.println("hey" + turtleStartingYPos + " " + myTurtle.getY());
+    //myTurtle.setRotate(turtleAngle + angle);
+    moverAngle = moverAngle + angle;
+    if (penDown) {
+      drawPen(x, y);
+    }
+    objectMoved = true;
   }
 
-  public void updateLabels() {
-      for (String key : Collections.list(myLabelPropertyResources.getKeys())) {
-        PropertyLabel plabel = new PropertyLabel(myLabelPropertyResources.getString(key), key,
-            myView);
-        PropertyLabel propertyLabel = (PropertyLabel) myView.getPropertyLabelMap().get(key);
-        propertyLabel.setAmount(key, myView);
-      }
-    }
   public boolean objectMoved() {
     return objectMoved;
   }
@@ -155,7 +87,7 @@ public class Mover implements Update {
   private Animation makeAnimation (Node agent, double x, double y) {
     // create something to follow
     Path path = new Path();
-    path.getElements().addAll(new MoveTo(moverStartingXPos + moverImage.getBoundsInLocal().getWidth()/2, moverStartingYPos+ moverImage.getBoundsInLocal().getHeight()/2), new LineTo(moverStartingXPos + moverImage.getBoundsInLocal().getWidth()/2+ x,moverStartingYPos + moverImage.getBoundsInLocal().getHeight()/2+ y));
+    path.getElements().addAll(new MoveTo(moverStartingXPos + myMover.getBoundsInLocal().getWidth()/2, moverStartingYPos+ myMover.getBoundsInLocal().getHeight()/2), new LineTo(moverStartingXPos + myMover.getBoundsInLocal().getWidth()/2+ x,moverStartingYPos + myMover.getBoundsInLocal().getHeight()/2+ y));
     // create an animation where the shape follows a path
     PathTransition pt = new PathTransition(Duration.seconds(2), path, agent);
     System.out.println(pt);
@@ -165,7 +97,7 @@ public class Mover implements Update {
   private Animation makeRotate (Node agent, double angle) {
     RotateTransition rt = new RotateTransition(Duration.seconds(2), agent);
     rt.setFromAngle(moverAngle);
-    rt.setToAngle(moverAngle + angle);
+    rt.setToAngle(moverAngle+ angle);
     rt.setNode(agent);
     return new SequentialTransition(agent, rt);
   }
@@ -173,15 +105,13 @@ public class Mover implements Update {
   private void drawPen(double x, double y) {
     Line line = new Line();
     myLine=line;
-    myLine.setStroke(lineColor);
-    ///myLine.setStrokeWidth(myView.getLineWidth());
-    myLine.setStrokeWidth(lineThickness);
+    myLine.setStroke(myView.getLineColor());
     //myView.setLine(line);
-    line.setStartX(moverStartingXPos+ moverImage.getBoundsInLocal().getWidth()/2);
-    line.setStartY(moverStartingYPos + moverImage.getBoundsInLocal().getHeight());
+    line.setStartX(moverStartingXPos+ myMover.getBoundsInLocal().getWidth()/2);
+    line.setStartY(moverStartingYPos + myMover.getBoundsInLocal().getHeight());
  //   System.out.println("yo" + turtleStartingYPos + " " + myTurtle.getY());
-    line.setEndX(moverStartingXPos + x+ moverImage.getBoundsInLocal().getWidth()/2);
-    line.setEndY(moverStartingYPos + y+ moverImage.getBoundsInLocal().getHeight());
+    line.setEndX(moverStartingXPos + x+ myMover.getBoundsInLocal().getWidth()/2);
+    line.setEndY(moverStartingYPos + y+ myMover.getBoundsInLocal().getHeight());
     myView.addNodeToRoot(myLine);
   }
 
@@ -189,64 +119,21 @@ public class Mover implements Update {
     return myLine;
   }
 
-  public void changeThickness(double thickness){
-    myLine.setStrokeWidth(thickness);
-    lineThickness = thickness;
-  }
-
-  public void setLineColor(Color color){
-    lineColor = color;
-    updateLabels();
-  }
-
-  public Color getLineColor(){
-    return lineColor;
-  }
-
-  public double getThickness(){
-    return lineThickness;
-  }
-
-  public void setThickness(double thickness){
-    lineThickness = thickness;
-  }
-
   //get turtle position
   public double getMoverCol(){
-    return moverImage.getX();
+    return myMover.getX();
   }
 
   public double getMoverRow(){
-    return moverImage.getY();
+    return myMover.getY();
   }
 
   public double getMoverAngle(){
-    if(moverAngle>=degreesInCircle){
-      moverAngle = moverAngle-degreesInCircle;
-    }
-    else if (moverAngle<=-degreesInCircle)
-      moverAngle = moverAngle+degreesInCircle;
     return moverAngle;
   }
 
   public void setPen(boolean bool){
     penDown=bool;
-    updateLabels();
-  }
-
-  public boolean getPen(){
-    return penDown;
-  }
-  public boolean getActive(){
-    return moverActive;
-  }
-
-  public String getPenPosition(){
-    String ret = "up";
-    if(penDown){
-      ret = "down";
-    }
-    return ret;
   }
 
   public void updateDistanceSoFar(int d){
@@ -257,8 +144,8 @@ public class Mover implements Update {
   }
 
   public void resetTurtle(){
-    moverImage.setRotate(0);
-    myView.setMoverPosition(moverImage);
+    myMover.setRotate(0);
+    myView.setMoverPosition(myMover);
   }
 
   public void eraseLines(){
@@ -273,11 +160,7 @@ public class Mover implements Update {
 
   public void moverVisible(boolean visible){
     this.moverVisible = visible;
-    moverImage.setVisible(this.moverVisible);
-  }
-
-  public void changeVisible(){
-    moverVisible = !moverVisible;
+    myMover.setVisible(this.moverVisible);
   }
 
   public boolean isPenDown() {
