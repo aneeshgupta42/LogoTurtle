@@ -17,11 +17,6 @@ public class MakeUserInstruction extends Command {
   }
 
   @Override
-  public boolean storeCommands() {
-    return true;
-  }
-
-  @Override
   public int repeatCom() {
     return 0;
   }
