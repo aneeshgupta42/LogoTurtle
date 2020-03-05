@@ -16,6 +16,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
@@ -38,13 +39,17 @@ public class Mover implements Update {
   private double moverCenterXPos;
   private double moverCenterYPos;
   private double lineThickness = 2;
+  private Color lineColor = Color.BLACK;
   Line myLine;
   UserInterface myView;
   private static final String TURTLE = "turtle.png";
+  private static String defaultImage = TURTLE;
   private boolean moverActive = true;
   private static final String LabelResources = "resources.UIActions.LabelActions";
   private ResourceBundle myLabelPropertyResources;
   private double degreesInCircle = 360;
+  private ResourceBundle myComboBoxOptionsResources;
+  private static final String ComboBoxOptionsResources = "resources.UIActions.ComboBoxOptions";
 
   public Mover(UserInterface view) {
     System.out.print(this);
@@ -54,11 +59,12 @@ public class Mover implements Update {
     penDown = true;
     moverVisible = true;
     distanceSoFar = 0;
-    moverImage = changeMoverDisplay(TURTLE);
-    moverImage.setOnMouseClicked(e -> {
+    moverImage = changeMoverDisplay(defaultImage);
+    /*moverImage.setOnMouseClicked(e -> {
       handleKeyInput();
-    });
+    });*/
     myLabelPropertyResources = ResourceBundle.getBundle(LabelResources);
+    myComboBoxOptionsResources = ResourceBundle.getBundle(ComboBoxOptionsResources);
   }
 
   private void handleKeyInput(){
@@ -82,7 +88,14 @@ public class Mover implements Update {
   public ImageView changeMoverDisplay(String imagePath) {
     Image turtle = new Image(getClass().getClassLoader().getResourceAsStream(imagePath));
     moverImage = new ImageView(turtle);
+    moverImage.setOnMouseClicked(e -> {
+      handleKeyInput();
+    });
     return moverImage;
+  }
+
+  public void setDefaultImage(String image){
+    defaultImage = myComboBoxOptionsResources.getString(image);
   }
 
   public ImageView getImage(){
@@ -160,7 +173,7 @@ public class Mover implements Update {
   private void drawPen(double x, double y) {
     Line line = new Line();
     myLine=line;
-    myLine.setStroke(myView.getLineColor());
+    myLine.setStroke(lineColor);
     ///myLine.setStrokeWidth(myView.getLineWidth());
     myLine.setStrokeWidth(lineThickness);
     //myView.setLine(line);
@@ -179,6 +192,15 @@ public class Mover implements Update {
   public void changeThickness(double thickness){
     myLine.setStrokeWidth(thickness);
     lineThickness = thickness;
+  }
+
+  public void setLineColor(Color color){
+    lineColor = color;
+    updateLabels();
+  }
+
+  public Color getLineColor(){
+    return lineColor;
   }
 
   public double getThickness(){
@@ -209,6 +231,22 @@ public class Mover implements Update {
 
   public void setPen(boolean bool){
     penDown=bool;
+    updateLabels();
+  }
+
+  public boolean getPen(){
+    return penDown;
+  }
+  public boolean getActive(){
+    return moverActive;
+  }
+
+  public String getPenPosition(){
+    String ret = "up";
+    if(penDown){
+      ret = "down";
+    }
+    return ret;
   }
 
   public void updateDistanceSoFar(int d){

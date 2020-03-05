@@ -4,6 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ResourceBundle;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -21,7 +23,8 @@ import javafx.scene.text.Text;
  * @author Robert C. Duvall
  */
 public class PropertyLabel extends HBox implements Display {
-  private DoubleProperty amountDue = new SimpleDoubleProperty();
+  //private DoubleProperty amountDue = new SimpleDoubleProperty();
+  private StringProperty amountDue = new SimpleStringProperty();
   private Label label;
 
 
@@ -55,7 +58,7 @@ public class PropertyLabel extends HBox implements Display {
       Method m = target.getClass().getDeclaredMethod(methodName);
       try {
         Object value = m.invoke(target);
-        amountDue.set((double) value);
+        amountDue.set(""+ value);
         System.out.println("value" + value);
       } catch (IllegalAccessException | InvocationTargetException e) {
         e.printStackTrace();
@@ -66,18 +69,18 @@ public class PropertyLabel extends HBox implements Display {
     }
   }
 
-  private void bindLabel(DoubleProperty dp){
+  private void bindLabel(StringProperty dp){
     //Label label = new Label();
-    label.textProperty().bind(dp.asString());
+    label.textProperty().bind(dp);
 
   }
-  public final double getAmountDue(){return amountDue.get();}
+  public final String getAmountDue(){return amountDue.get();}
 
   // Define a setter for the property's value
-  public final void setAmountDue(double value){amountDue.set(value);}
+  public final void setAmountDue(String value){amountDue.set((value));}
 
   // Define a getter for the property itself
-  public DoubleProperty amountDueProperty() {return amountDue;}
+  public StringProperty amountDueProperty() {return amountDue;}
 
   private EventHandler<ActionEvent> Result(String methodName, UserInterface target) {
     EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
