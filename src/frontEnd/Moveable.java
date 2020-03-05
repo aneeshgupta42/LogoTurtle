@@ -66,6 +66,4 @@ public interface Moveable {
     double getMoverCenterXPos();
 
     double getMoverCenterYPos();
-
-
 }

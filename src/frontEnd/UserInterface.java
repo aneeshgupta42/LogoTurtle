@@ -47,7 +47,7 @@ import javafx.stage.Stage;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
-public class UserInterface extends Application {
+public class UserInterface extends Application implements Viewable {
   private Scene myScene;
   private Group display;
   private Stage myStage;
@@ -543,6 +543,22 @@ public class UserInterface extends Application {
     double moverAngle = myMover.getMoverAngle();
     root.getChildren().remove(myMover.getImage());
     String path = myComboBoxOptionsResources.getString(image);
+    myMover.changeMoverDisplay(path);
+    //)= (ImageView) myMover.changeMoverDisplay(path);
+    myMover.getImage().setX(moverXPos);
+    myMover.getImage().setY(moverYPos);
+    myMover.getImage().setRotate(moverAngle);
+    root.getChildren().add(myMover.getImage());
+  }
+
+  public void setImageIndex(int index) {
+    double moverXPos = myMover.getImage().getX();
+    double moverYPos = myMover.getImage().getY();
+    double moverAngle = myMover.getMoverAngle();
+    root.getChildren().remove(myMover.getImage());
+    String[] options = myComboBoxOptionsResources.getStringArray("setImageOptions");
+    System.out.println("OPTIONS!!!: " + options);
+    String path = myComboBoxOptionsResources.getString(options[index-1]);
     myMover.changeMoverDisplay(path);
     //)= (ImageView) myMover.changeMoverDisplay(path);
     myMover.getImage().setX(moverXPos);

@@ -1,17 +1,7 @@
 package Controller;
 
-import backEnd.ErrorHandler;
-import backEnd.commands.Command;
-import frontEnd.ErrorBoxes;
 import frontEnd.Moveable;
-import frontEnd.Mover;
 import frontEnd.UserInterface;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -125,6 +115,10 @@ public class Control {
 
   public double getTurtleRelativeYPos() {
     return myMover.getMoverCenterYPos() - turtleRow;
+  }
+
+  public void setShape(int choice){
+    view.setImageIndex(choice);
   }
 }
 
