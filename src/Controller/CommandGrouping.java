@@ -87,7 +87,6 @@ public class CommandGrouping {
     Splits text into lines
    */
   private void parseText() {
-    //findLists();
     for(int i=0;i<groupsList.size();i++){
       System.out.println("These are the groups "+groupsList.get(i).getMyList());
       System.out.println("Can they be run: " + groupsList.get(i).canBeRun());
@@ -268,6 +267,48 @@ public class CommandGrouping {
   private void repeatTimes(Command comm) {
     if(comm.repeatCom()!=0) {
       findLists();
+      total++;
+      int loop = comm.repeatCom();
+      for(int j=0;j<groupsList.size();j++){
+        if(groupsList.get(j).canBeRun()){
+          section = groupsList.get(j).getMyList(); //get the value inside brackets
+          setCommand(section);
+          index =j;
+        }
+      }
+      recurseLoop(loop);
+    }
+    else{
+      coordinateCommands();
+    }
+  }
+
+
+  private void recurseLoop(int loop) {
+    if(loop==1){
+      groupsList.get(index).cannotBeRun(true);
+      for(int x=0;x<groupsList.size();x++) {
+        if(groupsList.get(x).canBeRun()) {
+          section = groupsList.get(x).getMyList();
+          setCommand(section);
+          break;
+        }
+      }
+    }
+    if(loop>1){
+      parseText();
+      loop--;
+      recurseLoop(loop);
+    }
+  }
+
+
+
+
+ /* private void repeatTimes(Command comm) {
+    if(comm.repeatCom()!=0) {
+      findLists();
+      total ++;
       int loop = comm.repeatCom();
         for(int j=0;j<groupsList.size();j++){
           System.out.println("entered loop");
@@ -276,38 +317,36 @@ public class CommandGrouping {
             System.out.println("This is running "+section);
             setCommand(section);
             index =j;
-            groupsList.get(index).cannotBeRun();
             break;
           }
         }
       System.out.println("This is what section is for recurse "+section);
       recurseLoop(loop);
+      groupsList.get(index).cannotBeRun(true);
       System.out.println("done with recurse");
       }
     if (!command.isEmpty()) {
       coordinateCommands();
     }
-  }
+  }*/
 
 
-  private void recurseLoop(int loop) {
-    if(loop==1){
-          for(int i=0;i<groupsList.size();i++){
+  /*private void recurseLoop(int loop) {
+    if(loop==0){
+          for(int i=groupsList.size()-1;i>0;i--){
             if(groupsList.get(i).canBeRun()){
             section = groupsList.get(i).getMyList();
             setCommand(section);
-            total = i;
-            break;
            }
           }
       }
-    if(loop>1){
+    if(loop>0){
       parseText();
       System.out.println("This is circling "+section + "times" + loop);
       loop--;
       recurseLoop(loop);
     }
-  }
+  }*/
 
   /*
   Makes variables for the repetitions of loops
@@ -366,10 +405,23 @@ public class CommandGrouping {
         }
       }
       numstarts--;
+     /* if(total==0){
+        two.add(0);
+        two.add(input.length());
+        sets.add(two);
+        two = new ArrayList<>();
+      }*/
       two.add(first+1);
       two.add(last-1);
-      //groupsList.add(new ListGroups(input.substring(first+1,last-1)));
+     // groupsList.add(new ListGroups(input.substring(first+1,last-1)));
       sets.add(two);
+      two = new ArrayList<>();
+    }
+    if(total ==0){
+      two.add(0);
+      two.add(input.length());
+      sets.add(two);
+     // groupsList.add(new ListGroups(input.substring(0,input.length())));
       two = new ArrayList<>();
     }
     System.out.println("Here are the sets " + sets);
