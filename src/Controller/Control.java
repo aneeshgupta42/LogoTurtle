@@ -3,6 +3,7 @@ package Controller;
 import backEnd.ErrorHandler;
 import backEnd.commands.Command;
 import frontEnd.ErrorBoxes;
+import frontEnd.Moveable;
 import frontEnd.Mover;
 import frontEnd.UserInterface;
 
@@ -17,7 +18,7 @@ import java.util.TreeMap;
 public class Control {
 
 
-  private Mover myMover;
+  private Moveable myMover;
   private double turtleCol;
   private double turtleRow;
   private double turtleAngle;
@@ -63,9 +64,7 @@ public class Control {
     functionsUsed.putAll(commandGrouping.setFunctions());
   }
 
-
-
-  public void passTurtle(Mover mover) {
+  public void passTurtle(Moveable mover) {
     myMover = mover;
     turtleRow = myMover.getMoverRow();
     turtleCol = myMover.getMoverCol();
@@ -118,10 +117,6 @@ public class Control {
     } else {
       myMover.resetTurtle();
     }
-  }
-
-  public Mover getTurtle() {
-    return myMover;
   }
 
   public double getTurtleRelativeXPos() {

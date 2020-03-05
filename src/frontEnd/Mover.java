@@ -20,7 +20,7 @@ import javafx.scene.shape.Path;
 import javafx.util.Duration;
 
 
-public class Mover implements Update {
+public class Mover implements Moveable {
 
   ImageView moverImage;
   private double moverAngle;
@@ -282,21 +282,6 @@ public class Mover implements Update {
 
   public boolean isMoverVisible() {
     return moverVisible;
-  }
-
-  @Override
-  public int locationXUpdate(int changeInXPos) {
-    return 0;
-  }
-
-  @Override
-  public int locationYUpdate(int changeInYPos) {
-    return 0;
-  }
-
-  @Override
-  public int orientationUpdate(int changeInAngle) {
-    return 0;
   }
 
   public void setMoverInitialCords(double initialX, double initialY) {
