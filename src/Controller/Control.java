@@ -32,6 +32,10 @@ public class Control {
   private double turtleCol;
   private double turtleRow;
   private double turtleAngle;
+  private CommandGrouping commandGrouping;
+  private String input;
+  private Map<String,String> variablesUsed = new TreeMap<>();
+  private Map<String,String> functionsUsed = new TreeMap<>();
   private StoreLists lists;
   private boolean checkingIfLoopInt = false;
   private Command userfunction;
@@ -89,7 +93,7 @@ public class Control {
   Sets language to be used
  */
   public void setLanguage(String lang) {
-    language = lang;
+    commandGrouping.setLanguage(lang);
   }
 
   /*
