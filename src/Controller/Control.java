@@ -2,6 +2,8 @@ package Controller;
 
 import frontEnd.Moveable;
 import frontEnd.UserInterface;
+import frontEnd.Viewable;
+
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -15,7 +17,7 @@ public class Control {
   private CommandGrouping commandGrouping;
   private String language;
   private String input;
-  private UserInterface view;
+  private Viewable view;
   private Map<String,String> variablesUsed = new TreeMap<>();
   private Map<String,String> functionsUsed = new TreeMap<>();
   private StoreLists lists;
@@ -25,7 +27,7 @@ public class Control {
   /*
   Initializing a control (for reference storeLists is where all the data in lists is being passed)
    */
-  public Control(UserInterface UI) {
+  public Control(Viewable UI) {
     view = UI;
     commandGrouping = new CommandGrouping(this);
   }

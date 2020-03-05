@@ -200,6 +200,7 @@ public class UserInterface extends Application implements Viewable {
     root.getChildren().add(line);
   }
 
+  @Override
   public void setMyMover(Object mover) {
     myMover = (Mover) mover;
   }
@@ -272,12 +273,14 @@ public class UserInterface extends Application implements Viewable {
     return turtlebox;
   }
 
+  @Override
   public ButtonAction getButtonAction(){
     return myButtonAction;
   }
 
 
   //fix numbers
+  @Override
   public HBox addHBox() {
     HBox buttonPane = new HBox();
     buttonPane.getStyleClass().add(HBOX_STYLE);
@@ -317,6 +320,7 @@ public class UserInterface extends Application implements Viewable {
     return display;
   }
 
+  @Override
   public void setMoverPosition(ImageView image) {
     xcenter = DISPLAY_WIDTH / 2 - image.getBoundsInLocal().getWidth() / 2 + SIDEPANE_WIDTH;
     image.setX(xcenter);
@@ -327,10 +331,12 @@ public class UserInterface extends Application implements Viewable {
     myMover.setMoverInitialCords(image.getX(), image.getY());
   }
 
+  @Override
   public Mover getMover(){
     return myMover;
   }
 
+  @Override
   public Map getTurtleMap(){
     return turtleMap;
   }
@@ -427,31 +433,33 @@ public class UserInterface extends Application implements Viewable {
     }
   }
 
+  @Override
   public String getText() {
     return myText;
   }
 
+  @Override
   public TextArea getCommander(){
     return myCommander;
   }
 
+  @Override
   public Control getControl(){
     return control;
   }
 
+  @Override
   public Rectangle getRectangle(){
     return rectangle;
   }
 
 
-  public static void main(String[] args) {
-    launch(args);
-  }
-
+  @Override
   public Color getLineColor() {
     return myMover.getLineColor();
   }
 
+  @Override
   public BorderPane getRoot() {
     return root;
   }
@@ -464,11 +472,13 @@ public class UserInterface extends Application implements Viewable {
     root.getChildren().remove(object);
   }
 
+  @Override
   public void setMoverX(double x) {
     moverX = x;
     System.out.println("x " + x);
   }
 
+  @Override
   public Map getPropertyLabelMap(){
     return propertyLabelMap;
   }
@@ -509,6 +519,7 @@ public class UserInterface extends Application implements Viewable {
     stage2.show();
   }
 
+  @Override
   public void resetDisplay() {
     root.getChildren().removeIf(object -> object instanceof Line);
     for(Mover mover : turtleMap.values()) {
@@ -533,10 +544,12 @@ public class UserInterface extends Application implements Viewable {
     }
   }
 
+  @Override
   public void setLanguage(String language) {
     control.setLanguage(language);
   }
 
+  @Override
   public void setImage(String image) {
     double moverXPos = myMover.getImage().getX();
     double moverYPos = myMover.getImage().getY();
@@ -551,6 +564,7 @@ public class UserInterface extends Application implements Viewable {
     root.getChildren().add(myMover.getImage());
   }
 
+  @Override
   public void setImageIndex(int index) {
     String optionsString = myComboBoxOptionsResources.getString("setImageOptions");
     String[] options = optionsString.split(",");
@@ -558,14 +572,17 @@ public class UserInterface extends Application implements Viewable {
     setImage(image);
   }
 
+  @Override
   public double getmoverID(){
     return moverID;
   }
 
+  @Override
   public void setBackgroundColor(Color color) {
     rectangle.setFill(color);
   }
 
+  @Override
   public void setPenColor(Color color) {
     //myLine.setStroke(color);
     //lineColor = color;
@@ -573,6 +590,7 @@ public class UserInterface extends Application implements Viewable {
     //myMover.updateLabels();
   }
 
+  @Override
   public void setPen(String position){
 
   }
@@ -603,6 +621,7 @@ public class UserInterface extends Application implements Viewable {
     }
   }
 
+  @Override
   public void addTurtle() {
     System.out.println("reached");
     numOfMovers++;
@@ -616,10 +635,12 @@ public class UserInterface extends Application implements Viewable {
     //turtleSelection.updateItems(FXCollections.observableArrayList(turtleList));
   }
 
+  @Override
   public void setOnClear() {
     inputArea.setText("");
   }
 
+  @Override
   public void selectTurtle(String num) {
     Double number = Double.parseDouble(num);
     setMyMover(turtleMap.get(number));
@@ -634,34 +655,43 @@ public class UserInterface extends Application implements Viewable {
     myMover.updateLabels();
   }
 
+  @Override
   public double getLineWidth() {
     return lineWidth;
   }
+  @Override
   public double getXPosition(){
     return myMover.getMoverCol()-xcenter;
   }
+  @Override
   public double getYPosition(){
     return myMover.getMoverRow()-ycenter;
   }
+  @Override
   public double getMoverID(){
     System.out.println("ID" + moverID);
     return moverID;
   }
+  @Override
   public double getAngle(){
     return myMover.getMoverAngle();
   }
 
+  @Override
   public double getLineThickness(){
     return myMover.getThickness();
   }
 
+  @Override
   public String getPenPosition(){
     return myMover.getPenPosition();
   }
+  @Override
   public void setDefaultImage(String image) {
     myMover.setDefaultImage(image);
 
   }
+  @Override
   public void changePenPosition(){
     myMover.setPen(!myMover.getPen());
   }
