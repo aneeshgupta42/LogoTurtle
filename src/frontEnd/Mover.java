@@ -20,7 +20,7 @@ import javafx.scene.shape.Path;
 import javafx.util.Duration;
 
 
-public class Mover implements Moveable {
+public class Mover {
 
   private static double moverID;
   ImageView moverImage;
@@ -47,6 +47,8 @@ public class Mover implements Moveable {
   private double degreesInCircle = 360;
   private ResourceBundle myComboBoxOptionsResources;
   private static final String ComboBoxOptionsResources = "resources.UIActions.ComboBoxOptions";
+  private static double initialX;
+  private static double initialY;
   private int currentImageIndex;
 
   public Mover(UserInterface view, double ID) {
@@ -58,7 +60,6 @@ public class Mover implements Moveable {
     distanceSoFar = 0;
     moverID = ID;
     moverImage = changeMoverDisplay(defaultImage);
-    currentImageIndex = 1;
     /*moverImage.setOnMouseClicked(e -> {
       handleKeyInput();
     });*/
@@ -96,12 +97,8 @@ public class Mover implements Moveable {
     return moverImage;
   }
 
-  public void setImageIndex(int currIndex){
-    currentImageIndex = currIndex;
-  }
   public void setDefaultImage(String image){
     defaultImage = myComboBoxOptionsResources.getString(image);
-    currentImageIndex = 1;
   }
 
   public ImageView getImage(){
@@ -146,13 +143,13 @@ public class Mover implements Moveable {
   }
 
   public void updateLabels() {
-      for (String key : Collections.list(myLabelPropertyResources.getKeys())) {
-        PropertyLabel plabel = new PropertyLabel(myLabelPropertyResources.getString(key), key,
-            myView.getButtonAction());
-        PropertyLabel propertyLabel = (PropertyLabel) myView.getPropertyLabelMap().get(key);
-        propertyLabel.setAmount(key, myView.getButtonAction());
-      }
+    for (String key : Collections.list(myLabelPropertyResources.getKeys())) {
+      PropertyLabel plabel = new PropertyLabel(myLabelPropertyResources.getString(key), key,
+          myView.getButtonAction());
+      PropertyLabel propertyLabel = (PropertyLabel) myView.getPropertyLabelMap().get(key);
+      propertyLabel.setAmount(key, myView.getButtonAction());
     }
+  }
   public boolean objectMoved() {
     return objectMoved;
   }
@@ -188,7 +185,7 @@ public class Mover implements Moveable {
     //myView.setLine(line);
     line.setStartX(moverStartingXPos+ moverImage.getBoundsInLocal().getWidth()/2);
     line.setStartY(moverStartingYPos + moverImage.getBoundsInLocal().getHeight());
- //   System.out.println("yo" + turtleStartingYPos + " " + myTurtle.getY());
+    //   System.out.println("yo" + turtleStartingYPos + " " + myTurtle.getY());
     line.setEndX(moverStartingXPos + x+ moverImage.getBoundsInLocal().getWidth()/2);
     line.setEndY(moverStartingYPos + y+ moverImage.getBoundsInLocal().getHeight());
     myView.addNodeToRoot(myLine);
@@ -221,10 +218,6 @@ public class Mover implements Moveable {
 
   public double getThickness(){
     return lineThickness;
-  }
-
-  public int getCurrentImageIndex() {
-    return currentImageIndex;
   }
 
   public void setThickness(double thickness){
@@ -270,7 +263,7 @@ public class Mover implements Moveable {
   }
 
   public void updateDistanceSoFar(int d){
-      distanceSoFar += d;
+    distanceSoFar += d;
   }
   public int getDistanceSoFar(){
     return distanceSoFar;
@@ -319,21 +312,6 @@ public class Mover implements Moveable {
     updateLabels();
   }
 
-
-  @Override
-  public int locationXUpdate(int changeInXPos) {
-    return 0;
-  }
-
-  @Override
-  public int locationYUpdate(int changeInYPos) {
-    return 0;
-  }
-
-  @Override
-  public int orientationUpdate(int changeInAngle) {
-    return 0;
-  }
 
   public void setMoverInitialCords(double initialX, double initialY) {
     this.moverCenterXPos = initialX;

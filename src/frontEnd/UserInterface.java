@@ -8,7 +8,6 @@ import frontEnd.ButtonsBoxesandLabels.PropertyLabel;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -36,11 +35,11 @@ import javafx.stage.Stage;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
-public class UserInterface extends Application implements Viewable {
+public class UserInterface extends Application {
   private Scene myScene;
   private Group display;
   private Stage myStage;
-  private Mover myMover;
+  private frontEnd.Mover myMover;
   private Control control;
   private Rectangle rectangle;
   private Line myLine;
@@ -58,17 +57,9 @@ public class UserInterface extends Application implements Viewable {
   VBox historyBox = new VBox();
   VBox variablesBox = new VBox();
   VBox userCommandsBox = new VBox();
-  private ResourceBundle myButtonResources;
-  private ResourceBundle myComboBoxResources;
-  private ResourceBundle myColorPickerResources;
-  private ResourceBundle myInitialColorResources;
   private ResourceBundle myComboBoxOptionsResources;
-  private ResourceBundle myTextButtonResources;
-  private ResourceBundle myTurtlePropertyResources;
-  private ResourceBundle myLabelPropertyResources;
-  private ResourceBundle myMoverPropertiesDropDownResources;
   private Hyperlink linkVariable;
-  private Map<Double, Mover> turtleMap = new HashMap<>();
+  private Map<Double, Moveable> turtleMap = new HashMap<>();
   private static final int FRAMES_PER_SECOND = 60;
   private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
   private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
@@ -88,15 +79,7 @@ public class UserInterface extends Application implements Viewable {
   private static final String XML_PROPERTIES_FILENAME = DEFAULT_RESOURCE_PACKAGE + "XMLTagNames";
   private static final String STYLESHEET = "default.css";
   private ResourceBundle styleResources;
-  private static final String ButtonResources = "resources.UIActions.ButtonActions";
-  private static final String ComboBoxResources = "resources.UIActions.ComboBoxActions";
-  private static final String ColorPickerResources = "resources.UIActions.ColorPickerActions";
-  private static final String InitialColorResources = "resources.UIActions.InitialColors";
   private static final String ComboBoxOptionsResources = "resources.UIActions.ComboBoxOptions";
-  private static final String TextBoxButtonResources = "resources.UIActions.TextButtonActions";
-  private static final String TurtlePropertyResources = "resources.UIActions.TurtlePropertyActions";
-  private static final String LabelResources = "resources.UIActions.LabelActions";
-  private static final String MoverPropertiesDropDownResources = "resources.UIActions.MoverPropertiesDropDown";
   private static final String DEFAULT_LANGUAGE = "English";
   private static final String HYPERLINK_STYLE = "hyper-link";
   private static final int BUTTON_PANE_HEIGHT = 70;
@@ -112,30 +95,25 @@ public class UserInterface extends Application implements Viewable {
   private List<OurLabeledColorPickers> penResources = new ArrayList<>();
   private List<OurComboBox> imageResources = new ArrayList<>();
   private ButtonAction myButtonAction;
+  private static final double initialMoverID = 1;
+  private static DisplayWindow displayWindow;
+  private static MoverPropertiesWindow myPropertyWindow;
   List<String> imageOptions;
   private int currImageIndex;
 
 
-
   public UserInterface() {
     myStage = new Stage();
-    myMover = new Mover(this);
+    myMover = new frontEnd.Mover(this, initialMoverID);
     control = new Control(this);
     myLine = new Line();
     display = new Group();
     myButtonAction = new ButtonAction(this);
-    myButtonResources = ResourceBundle.getBundle(ButtonResources);
-    myComboBoxResources = ResourceBundle.getBundle(ComboBoxResources);
-    myColorPickerResources = ResourceBundle.getBundle(ColorPickerResources);
-    myInitialColorResources = ResourceBundle.getBundle(InitialColorResources);
     myComboBoxOptionsResources = ResourceBundle.getBundle(ComboBoxOptionsResources);
-    myTextButtonResources = ResourceBundle.getBundle(TextBoxButtonResources);
-    myTurtlePropertyResources = ResourceBundle.getBundle(TurtlePropertyResources);
-    myLabelPropertyResources = ResourceBundle.getBundle(LabelResources);
-    myMoverPropertiesDropDownResources = ResourceBundle.getBundle(MoverPropertiesDropDownResources);
-    control.setLanguage(DEFAULT_LANGUAGE);
+    myButtonAction.setLanguage(DEFAULT_LANGUAGE);
     String optionsString = myComboBoxOptionsResources.getString("setImageOptions");
     imageOptions = Arrays.asList(optionsString.split(","));
+
   }
 
   @Override
@@ -172,7 +150,7 @@ public class UserInterface extends Application implements Viewable {
     xcenter = DISPLAY_WIDTH / 2 - myMover.getImage().getBoundsInLocal().getWidth() / 2 + SIDEPANE_WIDTH;
     ycenter = BUTTON_PANE_HEIGHT + DISPLAY_HEIGHT / 2 - myMover.getImage().getBoundsInLocal().getHeight() / 2;
     for (double i = 1; i <= numOfMovers; i++) {
-      myMover = new Mover(this, i);
+      myMover = new frontEnd.Mover(this, i);
       myMover.setInitialMoverPosition();
       turtleMap.put(i, myMover);
       turtleList.add(i);
@@ -204,25 +182,22 @@ public class UserInterface extends Application implements Viewable {
     root.getChildren().add(line);
   }
 
-  @Override
   public void setMyMover(Object mover) {
-    myMover = (Mover) mover;
+    myMover = (frontEnd.Mover) mover;
   }
 
   public ObservableList<Double> getTurtleList(){
     return turtleList;
   }
 
-  @Override
   public ButtonAction getButtonAction(){
     return myButtonAction;
   }
 
-  public Mover getMover(){
+  public frontEnd.Mover getMover(){
     return myMover;
   }
 
-  @Override
   public Map getTurtleMap(){
     return turtleMap;
   }
@@ -278,12 +253,10 @@ public class UserInterface extends Application implements Viewable {
     return myCommander;
   }
 
-  @Override
   public Control getControl(){
     return control;
   }
 
-  @Override
   public Rectangle getRectangle(){
     return rectangle;
   }
@@ -312,7 +285,7 @@ public class UserInterface extends Application implements Viewable {
     ErrorBoxes ep = new ErrorBoxes(e);
   }
 
-  public void addToMap(Double doub, Mover mover){
+  public void addToMap(Double doub, Moveable mover){
     turtleMap.put(doub, mover);
   }
 

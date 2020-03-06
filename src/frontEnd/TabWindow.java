@@ -8,25 +8,27 @@ import javafx.scene.control.TabPane.TabClosingPolicy;
 
 public class TabWindow extends TabPane{
   private static final int TAB_PANE_WIDTH = 300;
-  private static final String HISTORY_TAB_TITLE = "History";
-  private static final String VARIABLE_TAB_TITLE = "Variables";
-  private static final String COMMAND_TAB_TITLE = "User Commands";
+  private CommandWindow myCommandWindow;
 
-  public TabWindow(){
+  public TabWindow(CommandWindow commandWindow){
+    myCommandWindow = commandWindow;
     makeTabWindow();
   }
   private void makeTabWindow() {
     setMinWidth(TAB_PANE_WIDTH);
     setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
-    ScrollPane history = new ScrollPane(); ////here or at the top?
+    /*ScrollPane history = new ScrollPane();
     ScrollPane variables = new ScrollPane();
     ScrollPane userCommands = new ScrollPane();
-    Tab tab1 = new Tab(HISTORY_TAB_TITLE, history);
-    Tab tab2 = new Tab(VARIABLE_TAB_TITLE, variables);
-    Tab tab3 = new Tab(COMMAND_TAB_TITLE, userCommands);
-    getTabs().add(tab1);
-    getTabs().add(tab2);
-    getTabs().add(tab3);
+    Tab historyTab = new Tab(HISTORY_TAB_TITLE, history);
+    Tab variableTab = new Tab(COMMAND_TAB_TITLE, userCommands);
+    Tab commandTab = new Tab(VARIABLE_TAB_TITLE, variables);*/
+    HistoryTab historyTab = new HistoryTab();
+    VariableTab variableTab = new VariableTab(myCommandWindow);
+    CommandTab commandTab = new CommandTab(myCommandWindow);
+    getTabs().add(historyTab);
+    getTabs().add(variableTab);
+    getTabs().add(commandTab);
   }
 
 }
