@@ -142,8 +142,6 @@ public class CommandExecutor {
         organizeInLists(line);
       }
       if (!commandList.isEmpty()) {
-        System.out.println(commandList);
-        System.out.println(argumentList);
         coordinateCommands();
       }
     }

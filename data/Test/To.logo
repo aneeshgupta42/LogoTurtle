@@ -1,12 +1,7 @@
-set :count 12
-
-to dash [ ]
-[
-  repeat :count 
-  [
-    pu fd 10 pd fd 10
-  ]
+to pizza [ :bake 50 ]
+ [
+fd :bake
+rt 60
 ]
 
-
-dash
+pizza
