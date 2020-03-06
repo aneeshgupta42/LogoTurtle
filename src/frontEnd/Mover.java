@@ -20,7 +20,7 @@ import javafx.scene.shape.Path;
 import javafx.util.Duration;
 
 
-public class Mover {
+public class Mover implements Moveable{
 
   private static double moverID;
   ImageView moverImage;
@@ -220,6 +220,11 @@ public class Mover {
     return lineThickness;
   }
 
+  @Override
+  public int getCurrentImageIndex() {
+    return 0;
+  }
+
   public void setThickness(double thickness){
     lineThickness = thickness;
   }
@@ -267,6 +272,11 @@ public class Mover {
   }
   public int getDistanceSoFar(){
     return distanceSoFar;
+  }
+
+  @Override
+  public void resetTurtle() {
+
   }
 
 

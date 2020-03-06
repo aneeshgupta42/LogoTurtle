@@ -39,7 +39,7 @@ public class UserInterface extends Application {
   private Scene myScene;
   private Group display;
   private Stage myStage;
-  private frontEnd.Mover myMover;
+  private Mover myMover;
   private Control control;
   private Rectangle rectangle;
   private Line myLine;
@@ -59,7 +59,7 @@ public class UserInterface extends Application {
   VBox userCommandsBox = new VBox();
   private ResourceBundle myComboBoxOptionsResources;
   private Hyperlink linkVariable;
-  private Map<Double, Moveable> turtleMap = new HashMap<>();
+  private Map<Double, Mover> turtleMap = new HashMap<>();
   private static final int FRAMES_PER_SECOND = 60;
   private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
   private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
@@ -104,7 +104,7 @@ public class UserInterface extends Application {
 
   public UserInterface() {
     myStage = new Stage();
-    myMover = new frontEnd.Mover(this, initialMoverID);
+    myMover = new Mover(this, initialMoverID);
     control = new Control(this);
     myLine = new Line();
     display = new Group();
@@ -146,11 +146,11 @@ public class UserInterface extends Application {
     root.setLeft(myPropertyWindow);
     displayWindow = new DisplayWindow(myButtonAction);
     root.setCenter(displayWindow);
-    root.setRight(new TabWindow());
+    root.setRight(new TabWindow(displayWindow.getCommandWindow()));
     xcenter = DISPLAY_WIDTH / 2 - myMover.getImage().getBoundsInLocal().getWidth() / 2 + SIDEPANE_WIDTH;
     ycenter = BUTTON_PANE_HEIGHT + DISPLAY_HEIGHT / 2 - myMover.getImage().getBoundsInLocal().getHeight() / 2;
     for (double i = 1; i <= numOfMovers; i++) {
-      myMover = new frontEnd.Mover(this, i);
+      myMover = new Mover(this, i);
       myMover.setInitialMoverPosition();
       turtleMap.put(i, myMover);
       turtleList.add(i);
@@ -285,7 +285,7 @@ public class UserInterface extends Application {
     ErrorBoxes ep = new ErrorBoxes(e);
   }
 
-  public void addToMap(Double doub, Moveable mover){
+  public void addToMap(Double doub, Mover mover){
     turtleMap.put(doub, mover);
   }
 
