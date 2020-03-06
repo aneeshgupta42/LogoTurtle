@@ -20,7 +20,6 @@ public class Sine extends Command {
     double argOne = Double.parseDouble(varargs.get(0));
     sinResult = Math.sin((Math.toRadians(argOne)));
 
-    System.out.println("Sine is: " + sinResult);
   }
 
   @Override
@@ -28,7 +27,7 @@ public class Sine extends Command {
     return Double.toString(sinResult);
   }
   @Override
-  public int repeatCom() {
+  public double repeatCom() {
     return super.repeatCom();
   }
 }

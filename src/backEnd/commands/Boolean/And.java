@@ -27,8 +27,6 @@ public class And extends Command {
         } else {
             booleanResult = FALSE;
         }
-
-        System.out.println("The And result is: " + booleanResult);
     }
 
     @Override
@@ -37,7 +35,7 @@ public class And extends Command {
     }
 
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }

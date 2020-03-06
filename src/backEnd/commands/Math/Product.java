@@ -21,7 +21,6 @@ public class Product extends Command {
         double argTwo = Double.parseDouble(varargs.get(1));
         product = argTwo * argOne;
 
-        System.out.println("Product is: " + product);
     }
 
     @Override
@@ -29,7 +28,7 @@ public class Product extends Command {
         return Double.toString(product);
     }
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }

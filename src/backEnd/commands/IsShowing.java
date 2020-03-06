@@ -27,7 +27,7 @@ public class IsShowing extends Command {
     }
 
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }

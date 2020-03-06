@@ -20,9 +20,7 @@ public class Random extends Command {
 
         double argOne = Double.parseDouble(varargs.get(0));
         random = Math.random() * argOne;
-        // insert check if max is too big ?
 
-        System.out.println("Random is: " + random);
     }
 
     @Override
@@ -30,7 +28,7 @@ public class Random extends Command {
         return Double.toString(random);
     }
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }

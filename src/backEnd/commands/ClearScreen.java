@@ -24,7 +24,7 @@ public class ClearScreen extends Command {
     return ret;
   }
   @Override
-  public int repeatCom() {
+  public double repeatCom() {
     return super.repeatCom();
   }
 }

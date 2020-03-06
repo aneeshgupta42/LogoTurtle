@@ -41,7 +41,7 @@ public class OurButtons extends Button {
           } catch (InvocationTargetException e) {
             e.printStackTrace();
           }
-          System.out.println(methodName);
+      //    System.out.println(methodName);
         }catch (NoSuchMethodException e) {
           e.printStackTrace();
         }

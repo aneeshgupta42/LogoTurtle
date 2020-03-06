@@ -28,7 +28,6 @@ public class Or extends Command {
             booleanResult = FALSE;
         }
 
-        System.out.println("The Or result is: " + booleanResult);
     }
 
     @Override
@@ -37,7 +36,7 @@ public class Or extends Command {
     }
 
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }

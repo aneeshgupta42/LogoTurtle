@@ -21,7 +21,6 @@ public class Difference extends Command {
         double argTwo = Double.parseDouble(varargs.get(1));
         diff = argOne - argTwo;
 
-        System.out.println("Difference is: " + diff);
     }
 
     @Override
@@ -29,7 +28,7 @@ public class Difference extends Command {
         return Double.toString(diff);
     }
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }

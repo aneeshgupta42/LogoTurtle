@@ -27,7 +27,7 @@ public class OurLabeledColorPicker extends HBox {
 
   // make input prompt, very basic for now but could be much more involved in general
   private Node makePrompt (String text) {
-    System.out.println(text);
+   // System.out.println(text);
     return new Text(text + ": ");
   }
 
@@ -47,7 +47,7 @@ public class OurLabeledColorPicker extends HBox {
           } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
           }
-          System.out.println(methodName);
+       //   System.out.println(methodName);
         }catch (NoSuchMethodException e) {
           e.printStackTrace();
         }

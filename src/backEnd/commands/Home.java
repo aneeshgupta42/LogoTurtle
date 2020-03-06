@@ -24,7 +24,7 @@ public class Home extends Command{
         return ret;
     }
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 

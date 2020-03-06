@@ -28,7 +28,6 @@ public class NotEqual extends Command {
             booleanResult = FALSE;
         }
 
-        System.out.println("The notEquals result is: " + booleanResult);
     }
 
     @Override
@@ -37,7 +36,7 @@ public class NotEqual extends Command {
     }
 
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }

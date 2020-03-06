@@ -15,9 +15,7 @@ public class YCoordinate extends Command {
     public YCoordinate(LinkedList<String> varargs, Control control) {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
-
         returnYCord = control.getTurtleRelativeYPos();
-        System.out.println("YCoordinate: " + returnYCord);
     }
 
     @Override
@@ -26,7 +24,7 @@ public class YCoordinate extends Command {
     }
 
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }

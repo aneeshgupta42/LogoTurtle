@@ -27,8 +27,6 @@ public class GreaterThan extends Command {
         } else {
             booleanResult = FALSE;
         }
-
-        System.out.println("The GreaterThan result is: " + booleanResult);
     }
 
     @Override
@@ -37,7 +35,7 @@ public class GreaterThan extends Command {
     }
 
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }

@@ -31,8 +31,4 @@ public class CommandFactory {
         return commandGiven;
     }
 
-
-    private void NameLogic(){
-
-    }
 }

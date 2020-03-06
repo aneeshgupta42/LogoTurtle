@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class CommandGrouping {
+public class CommandExecution {
 
   private static final String WHITESPACE = " ";
   private static final String NEWLINE = "\n";
@@ -20,11 +20,12 @@ public class CommandGrouping {
   private static final String VARIABLE = "Variable";
   private static final String CLASS_PATH = "backEnd.commands.";
   private static final String REP_COUNT = ":repCount";
-  private static final String MAKE = "make";
+  private static final String MAKE = "backEnd.commands.MakeVariable";
   private static final String LIST_START = "[";
   private static final String LIST_END = "]";
   private static final String COMMENT = "#";
   private static final String SYNTAX = "syntax";
+  private static final int output = -500;
 
   private Parser parser;
   private Control control;
@@ -38,11 +39,9 @@ public class CommandGrouping {
   private String input;
   private Map<String, String> variablesUsed;
   private LinkedList<String> args;
-  private boolean logicStatement;
   private StoreLists lists;
   private boolean hasBeenStored = false;
-  private static final int output = -500;
-  private String section ="";
+  private String section;
   private LinkedList<Integer> starts;
   private LinkedList<Integer> ends;
   private LinkedList<ArrayList<Integer>> sets;
@@ -52,54 +51,51 @@ public class CommandGrouping {
   private int total;
   private int index;
   private String variable;
+  private String commandReturn;
 
-  public CommandGrouping(Control myControl)
+  public CommandExecution(Control myControl)
   {
     lists = new StoreLists();
     control = myControl;
+    variablesUsed = new TreeMap();
     commandFactory = new CommandFactory(control);
   }
 
   public Map setVariables(){return variablesUsed;}
   public Map setFunctions(){return lists.getFunction();}
-
   public void setControl(Control c){control = c;}
+  public void setCommand(String command) { input = command; }
+  public void setLanguage(String lang) { language = lang; }
 
-  public void setCommand(String command) {
-    input = command;
+  private void setCommandReturn(String commandValueReturn) {
+    commandReturn = commandValueReturn;
   }
-  public void setLanguage(String lang) {
-    language = lang;
-  }
+
+  private String getCommandReturn(){return commandReturn;}
 
   /*
  Calls the parser to start parsing the user input
   */
   public void parseCommand() {
     parser = new Parser();
-    variablesUsed = new TreeMap();
     command = new LinkedList<>();
     argument = new LinkedList<>();
     args = new LinkedList<>();
     hasBeenStored = false;
     groupsList = new ArrayList<ListGroups>();
-    setCommand(input);
-    setLanguage(language);
     parser.addPatterns(language);
     parser.addPatterns(SYNTAX);
     parseText();
   }
+
   /*
     Splits text into lines
    */
   private void parseText() {
-    logicStatement = true;
     for (String line : input.split(NEWLINE)) {
       if(!line.contains(COMMENT) && !line.isEmpty()){
         organizeInStacks(line);
       }
-      System.out.println("Command "+command);
-      System.out.println("Argument "+argument);
       coordinateCommands();
     }
   }
@@ -123,7 +119,6 @@ public class CommandGrouping {
   }
 
   private void checkingTypeOfCommand(String word) {
-  //  System.out.println(word);
     Map<String, String> map = lists.getFunction();
     if (map.keySet().contains(word) && input!=map.get(word)) {
       input = map.get(word);
@@ -161,15 +156,12 @@ public class CommandGrouping {
     commandPath = CLASS_PATH + parser.getSymbol(comm);
   }
 
-
   /*
   Coordinating the command to the number of arguments it needs and pushing it to be run
    */
   private void checkIfCommandCanRun(int argNum) {
-    if (argNum == 0) {
-  //    System.out.println(userCom);
-      runCommand();
-    } else {
+    if (argNum == 0) { runCommand(); }
+    else {
       if (argument.size() >= argNum) {
         String arg = argument.pop();
         if(parser.getSymbol(arg).equals(VARIABLE)) {
@@ -182,7 +174,6 @@ public class CommandGrouping {
         else args.push(arg);
       }
       argNum--;
-    //  System.out.println("Num "+args +" "+ userCom);
       checkIfCommandCanRun(argNum);
     }
   }
@@ -193,21 +184,16 @@ public class CommandGrouping {
   public void runCommand() {
     System.out.println("GotHere " + userCom +"  " + args);
       if (!hasBeenStored) {
-        if(!logicStatement) {
-          findLists();
-          input = input.substring(end);
-          parseText();
-        }
         obtainCommand();
-   //     System.out.println("Variable storing " + hasBeenStored);
+      }
+        System.out.println("Variable storing " + hasBeenStored);
     }
-  }
+
 
   /*
   Passes arguments to the command class and grabs a user function if it exists.
    */
   private void obtainCommand() {
-  //  System.out.println(com);
     try {
       Command commandGiven = commandFactory.generateCommand(commandPath, args);
       createCommand(commandGiven);
@@ -222,6 +208,7 @@ public class CommandGrouping {
   public void createCommand(Command comm) {
     if(comm.commandValueReturn()!=null){
       argument.add(comm.commandValueReturn());
+      setCommandReturn(comm.commandValueReturn());
       if(!command.isEmpty()) {
         coordinateCommands();
       }
@@ -238,18 +225,22 @@ public class CommandGrouping {
 
   private void booleanLogic(Command comm) {
     if(comm.runnable()!=output) {
-      logicStatement = comm.runnable()!=0;
-//      System.out.println("Can the logic run " + logicStatement);
-      if (!command.isEmpty()) {
-        coordinateCommands();
+      findLists();
+      if ((comm.runnable()!=0)) {
+        input= groupsList.get(0).getMyList();
       }
+      else{
+        if(groupsList.size()>1) input = groupsList.get(1).getMyList();
+      }
+      parseText();
+      hasBeenStored=true;
     }
   }
 
   private void saveVariables(Command comm) {
     if(comm.getVariablesCreated()!=null) {
       variablesUsed.putAll(comm.getVariablesCreated());
- //     System.out.println("Variables "+ variablesUsed);
+      System.out.println(variablesUsed);
       if(!command.isEmpty()) {
         coordinateCommands();
       }
@@ -260,10 +251,15 @@ public class CommandGrouping {
     if(comm.repeatCom()!=0) {
       total++;
       findLists();
-      int loop = comm.repeatCom();
+      double loop = comm.repeatCom();
+
       if (variable != null) {
         repCount(loop, variable);
-      } else repCount(loop, REP_COUNT);
+      }
+      else {
+        repCount(loop, REP_COUNT);
+      }
+
       for(int j=0;j<groupsList.size();j++){
         if(groupsList.get(j).canBeRun()){
           section = groupsList.get(j).getMyList(); //get the value inside brackets
@@ -273,13 +269,12 @@ public class CommandGrouping {
       }
       recurseLoop(loop);
     }
-    else{
+    else if(!command.isEmpty()){
       coordinateCommands();
     }
   }
 
-
-  private void recurseLoop(int loop) {
+  private void recurseLoop(double loop) {
     if(loop==1){
       groupsList.get(index).cannotBeRun(true);
       for(int x=0;x<groupsList.size();x++) {
@@ -296,15 +291,15 @@ public class CommandGrouping {
       recurseLoop(loop);
     }
   }
+
   /*
   Makes variables for the repetitions of loops
    */
-  private void repCount(int loop, String s) {
+  private void repCount(double loop, String s) {
     args.clear();
-    userCom = MAKE;
+    commandPath = MAKE;
+    args.push(Double.toString(loop));
     args.push(s);
-    args.push(loop+"");
-    makeClassPathToCommand(userCom);
     obtainCommand();
   }
 
@@ -330,11 +325,12 @@ public class CommandGrouping {
   private void organizeListPairs() {
     ArrayList<Integer> set = new ArrayList<Integer>();
     while (sets.size() != 0) {
-      set = sets.pop();
-        first = set.get(0);
-        end = set.get(1);
+       set = sets.pop();
+       first = set.get(0);
+       end = set.get(1);
        groupsList.add(new ListGroups(input.substring(first, end)));
-    }}
+    }
+  }
 
 
   private void matchingLists() {

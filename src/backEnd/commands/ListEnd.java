@@ -12,8 +12,9 @@ public class ListEnd extends Command {
   public ListEnd(LinkedList<String> varargs, Control control){
     super(varargs, control);
   }
+
   @Override
-  public int repeatCom() {
-    return 0;
+  public double repeatCom() {
+    return super.repeatCom();
   }
 }

@@ -11,7 +11,7 @@ public class DoTimes extends Command {
 
   private final int number = 2;
   private Control c;
-  private int repetition;
+  private double repetition;
   private String key;
   private String val;
 
@@ -30,7 +30,6 @@ public class DoTimes extends Command {
       val =varargs.get(0);
       key = varargs.get(1);
     }
-    System.out.println("dotime" + key + val);
   }
 
   public Map getVariablesCreated(){
@@ -40,8 +39,8 @@ public class DoTimes extends Command {
   }
 
   @Override
-  public int repeatCom() {
-    repetition = (int)Double.parseDouble(val);
+  public double repeatCom() {
+    repetition = Double.parseDouble(val);
     return repetition-1;
   }
 

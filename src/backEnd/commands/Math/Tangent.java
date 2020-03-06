@@ -20,7 +20,6 @@ public class Tangent extends Command {
         double argOne = Double.parseDouble(varargs.get(0));
         tanResult = Math.tan((Math.toRadians(argOne)));
 
-        System.out.println("Tan is: " + tanResult);
     }
 
     @Override
@@ -28,7 +27,7 @@ public class Tangent extends Command {
         return Double.toString(tanResult);
     }
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }

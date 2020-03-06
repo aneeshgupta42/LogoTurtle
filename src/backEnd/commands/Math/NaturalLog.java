@@ -20,7 +20,6 @@ public class NaturalLog extends Command {
         double argOne = Double.parseDouble(varargs.get(0));
         log = Math.log(argOne);
 
-        System.out.println("Log is: " + log);
     }
 
     @Override
@@ -28,7 +27,7 @@ public class NaturalLog extends Command {
         return Double.toString(log);
     }
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }
