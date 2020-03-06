@@ -1,5 +1,6 @@
-package frontEnd;
+package frontEnd.Windows;
 
+import frontEnd.ButtonAction;
 import frontEnd.ButtonsBoxesandLabels.OurButtons;
 import frontEnd.ButtonsBoxesandLabels.OurComboBox;
 import frontEnd.ButtonsBoxesandLabels.OurLabeledColorPicker;

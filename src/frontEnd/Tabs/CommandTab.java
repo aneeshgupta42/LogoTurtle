@@ -1,6 +1,8 @@
-package frontEnd;
+package frontEnd.Tabs;
 
-public class CommandTab extends StoredElementsTab{
+import frontEnd.Windows.CommandWindow;
+
+public class CommandTab extends StoredElementsTab {
   private static final String COMMAND_TAB_TITLE = "User Commands";
 
   public CommandTab(CommandWindow commandWindow) {

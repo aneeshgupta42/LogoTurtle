@@ -1,5 +1,6 @@
-package frontEnd;
+package frontEnd.Tabs;
 
+import frontEnd.Windows.CommandWindow;
 import java.util.Map;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,7 +20,7 @@ abstract public class StoredElementsTab extends Tab {
   }
 
 
-  protected ScrollPane resetTabContents(Map map, boolean needValue) {
+  public ScrollPane resetTabContents(Map map, boolean needValue) {
     System.out.println("mapcontents" + map);
     ScrollPane scrollPane = new ScrollPane();
     VBox vbox = new VBox();

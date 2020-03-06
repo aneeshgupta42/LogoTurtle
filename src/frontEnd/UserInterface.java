@@ -2,6 +2,10 @@ package frontEnd;
 
 import Controller.Control;
 import frontEnd.ButtonsBoxesandLabels.PropertyLabel;
+import frontEnd.Windows.DisplayWindow;
+import frontEnd.Windows.MoverPropertiesWindow;
+import frontEnd.Windows.TabWindow;
+import frontEnd.Windows.ToolBar;
 import java.util.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -101,7 +105,7 @@ public class UserInterface extends Application {
     root.setLeft(myPropertyWindow);
     displayWindow = new DisplayWindow(myButtonAction);
     root.setCenter(displayWindow);
-    tabWindow = new TabWindow(displayWindow.getCommandWindow(), new MoverPropertiesWindow(myButtonAction, turtleList,propertyLabelMap));
+    tabWindow = new TabWindow(displayWindow.getCommandWindow(), myButtonAction);
     root.setRight(tabWindow);
     xcenter = DISPLAY_WIDTH / 2 - myMover.getImage().getBoundsInLocal().getWidth() / 2 + SIDEPANE_WIDTH;
     ycenter = BUTTON_PANE_HEIGHT + DISPLAY_HEIGHT / 2 - myMover.getImage().getBoundsInLocal().getHeight() / 2;
