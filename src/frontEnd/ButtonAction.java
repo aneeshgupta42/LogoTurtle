@@ -7,7 +7,11 @@ import frontEnd.Mover;
 import frontEnd.UserInterface;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
+
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
@@ -26,11 +30,14 @@ public class ButtonAction {
   private static final String COMMAND_ONE = "viewboc.png";
   private static final String COMMAND_TWO = "viewbox.png";
   private Mover myMover;
+  private static final String ComboBoxOptionsResources = "resources.UIActions.ComboBoxOptions";
   private Map<Double, Mover> turtleMap;
   private BorderPane myRoot;
   private TextArea myCommander;
   private Control control;
   private Rectangle rectangle;
+  private ResourceBundle myComboBoxOptionsResources;
+  private List<String> imageOptions;
   private double defaultMoveAmount = 50;
   private double defaultTurnAmount = 90;
 
@@ -42,6 +49,9 @@ public class ButtonAction {
     myCommander = myView.getCommander();
     control = myView.getControl();
     rectangle = myView.getRectangle();
+    myComboBoxOptionsResources = ResourceBundle.getBundle(ComboBoxOptionsResources);
+    String optionsString = myComboBoxOptionsResources.getString("setImageOptions");
+    imageOptions = Arrays.asList(optionsString.split(","));
   }
 
   public void displayHelpScreen() {
@@ -106,6 +116,7 @@ public class ButtonAction {
     myView.getMover().getImage().setY(moverYPos);
     myView.getMover().getImage().setRotate(moverAngle);
     myView.addNodeToRoot(myView.getMover().getImage());
+    myView.getMover().setImageIndex(imageOptions.indexOf(image)+1);
   }
 
   public void setBackgroundColor(Color color) {
