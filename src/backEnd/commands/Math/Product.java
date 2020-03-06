@@ -3,6 +3,7 @@ package backEnd.commands.Math;
 import Controller.Control;
 import backEnd.commands.Command;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Product extends Command {
     private static final int NUMARGS = 2;
@@ -13,7 +14,7 @@ public class Product extends Command {
         super.numberOfArgs = NUMARGS;
     }
 
-    public Product(LinkedList<String> varargs, Control control){
+    public Product(List<String> varargs, Control control){
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 

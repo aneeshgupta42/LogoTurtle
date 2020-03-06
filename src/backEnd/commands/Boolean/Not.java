@@ -3,6 +3,7 @@ package backEnd.commands.Boolean;
 import Controller.Control;
 import backEnd.commands.Command;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Not extends Command {
     private static final int NUMARGS = 1;
@@ -15,7 +16,7 @@ public class Not extends Command {
         super.numberOfArgs = NUMARGS;
     }
 
-    public Not(LinkedList<String> varargs, Control control) {
+    public Not(List<String> varargs, Control control) {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 

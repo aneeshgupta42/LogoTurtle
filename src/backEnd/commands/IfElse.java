@@ -2,6 +2,7 @@ package backEnd.commands;
 
 import Controller.Control;
 import java.util.LinkedList;
+import java.util.List;
 
 public class IfElse extends Command{
 
@@ -11,9 +12,9 @@ public class IfElse extends Command{
     super();
     super.numberOfArgs=number;
   }
-  public IfElse(LinkedList<String> varags, Control control){
-    super(varags,control);
-    check = Double.parseDouble(varags.get(0));
+  public IfElse(List<String> varargs, Control control){
+    super(varargs,control);
+    check = Double.parseDouble(varargs.get(0));
   }
 
   @Override

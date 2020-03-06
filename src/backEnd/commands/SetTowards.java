@@ -2,6 +2,7 @@ package backEnd.commands;
 
 import Controller.Control;
 import java.util.LinkedList;
+import java.util.List;
 
 public class SetTowards extends Command {
   private double angle_moved;
@@ -11,7 +12,7 @@ public class SetTowards extends Command {
     super.numberOfArgs=NUMARGS;
   }
 
-  public SetTowards(LinkedList<String> varargs, Control control){
+  public SetTowards(List<String> varargs, Control control){
     super(varargs, control);
     double currAngle = control.getTurtleAngle();
     double X = (Double.parseDouble(varargs.get(0)));

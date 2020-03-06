@@ -2,6 +2,7 @@ package backEnd.commands;
 
 import Controller.Control;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Right extends Command {
   private static final int NUMARGS = 1;
@@ -12,11 +13,11 @@ public class Right extends Command {
     super.numberOfArgs= NUMARGS;
   }
 
-  public Right(LinkedList<String> varargs, Control myControl){
-    super(varargs, myControl);
+  public Right(List<String> varargs, Control control){
+    super(varargs, control);
     super.numberOfArgs= NUMARGS;
     angle = Double.parseDouble(varargs.get(0));
-    myControl.updateTurtle(0,0, angle, 0);
+    control.updateTurtle(0,0, angle, 0);
   }
 
   @Override

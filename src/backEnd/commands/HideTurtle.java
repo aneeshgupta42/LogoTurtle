@@ -3,6 +3,7 @@ package backEnd.commands;
 import Controller.Control;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class HideTurtle extends Command {
     private static final int NUMARGS = 0;
@@ -11,7 +12,7 @@ public class HideTurtle extends Command {
         super();
         super.numberOfArgs= NUMARGS;
     }
-    public HideTurtle(LinkedList<String> varargs, Control myControl)
+    public HideTurtle(List<String> varargs, Control myControl)
     {
         super(varargs, myControl);
         super.numberOfArgs= NUMARGS;

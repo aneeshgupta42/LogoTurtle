@@ -2,6 +2,7 @@ package backEnd.commands;
 
 import Controller.Control;
 import java.util.LinkedList;
+import java.util.List;
 
 public class MakeUserInstruction extends Command {
 
@@ -11,8 +12,8 @@ public class MakeUserInstruction extends Command {
     super.numberOfArgs=number;
   }
 
-  public MakeUserInstruction(LinkedList<String> varags, Control control){
-    super(varags,control);
+  public MakeUserInstruction(List<String> varargs, Control control){
+    super(varargs,control);
 
   }
 

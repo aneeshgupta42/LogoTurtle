@@ -2,6 +2,7 @@ package backEnd.commands;
 
 import Controller.Control;
 import java.util.LinkedList;
+import java.util.List;
 
 public class For extends Command {
 
@@ -13,11 +14,10 @@ public class For extends Command {
     super();
     super.numberOfArgs =number;
   }
-  public For(LinkedList<String> varags, Control control){
-    super(varags,control);
-    start = Double.parseDouble(varags.get(0));
-    stop = Double.parseDouble(varags.get(1));
-    System.out.println(start + " " + stop);
+  public For(List<String> varargs, Control control){
+    super(varargs,control);
+    start = Double.parseDouble(varargs.get(0));
+    stop = Double.parseDouble(varargs.get(1));
   }
 
   @Override

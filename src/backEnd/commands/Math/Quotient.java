@@ -3,6 +3,7 @@ package backEnd.commands.Math;
 import Controller.Control;
 import backEnd.commands.Command;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Quotient extends Command {
   private static final int NUMARGS = 2;
@@ -13,7 +14,7 @@ public class Quotient extends Command {
     super.numberOfArgs = NUMARGS;
   }
 
-  public Quotient(LinkedList<String> varargs, Control control) {
+  public Quotient(List<String> varargs, Control control) {
     super(varargs, control);
     super.numberOfArgs = NUMARGS;
 

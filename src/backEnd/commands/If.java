@@ -2,6 +2,7 @@ package backEnd.commands;
 
 import Controller.Control;
 import java.util.LinkedList;
+import java.util.List;
 
 public class If extends Command {
 
@@ -12,7 +13,7 @@ public class If extends Command {
     super.numberOfArgs=number;
   }
 
-  public If(LinkedList<String> varargs, Control control){
+  public If(List<String> varargs, Control control){
     super(varargs, control);
     check = Double.parseDouble(varargs.get(0));
     System.out.println(check);

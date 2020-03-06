@@ -3,6 +3,7 @@ package backEnd.commands;
 import Controller.Control;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class SetPosition extends Command {
 // GOTO
@@ -15,7 +16,7 @@ private static final int NUMARGS = 2;
         super.numberOfArgs=NUMARGS;
     }
 
-    public SetPosition(LinkedList<String> varargs, Control control){
+    public SetPosition(List<String> varargs, Control control){
         super(varargs, control);
         double X = (Double.parseDouble(varargs.get(0)));
         double Y = (Double.parseDouble(varargs.get(1)));

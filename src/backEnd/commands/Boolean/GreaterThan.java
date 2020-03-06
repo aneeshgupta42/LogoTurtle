@@ -3,6 +3,7 @@ package backEnd.commands.Boolean;
 import Controller.Control;
 import backEnd.commands.Command;
 import java.util.LinkedList;
+import java.util.List;
 
 public class GreaterThan extends Command {
     private static final int NUMARGS = 2;
@@ -15,7 +16,7 @@ public class GreaterThan extends Command {
         super.numberOfArgs = NUMARGS;
     }
 
-    public GreaterThan(LinkedList<String> varargs, Control control) {
+    public GreaterThan(List<String> varargs, Control control) {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 

@@ -3,6 +3,7 @@ package backEnd.commands;
 import Controller.Control;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class SetShape extends Command {
     private static final int NUMARGS = 1;
@@ -13,12 +14,12 @@ public class SetShape extends Command {
         super.numberOfArgs= NUMARGS;
     }
 
-    public SetShape(LinkedList<String> varargs, Control myControl)
+    public SetShape(List<String> varargs, Control control)
     {
-        super(varargs, myControl);
+        super(varargs, control);
         super.numberOfArgs= NUMARGS;
         index = Integer.parseInt(varargs.get(0));
-        myControl.setShape(index);
+        control.setShape(index);
     }
 
     @Override
@@ -28,7 +29,7 @@ public class SetShape extends Command {
     }
 
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }

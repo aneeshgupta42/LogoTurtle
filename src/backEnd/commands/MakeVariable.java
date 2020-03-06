@@ -2,6 +2,7 @@ package backEnd.commands;
 
 import Controller.Control;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -15,7 +16,7 @@ public MakeVariable(){
   super();
   super.numberOfArgs = number;
 }
-  public MakeVariable(LinkedList<String> varargs, Control control){
+  public MakeVariable(List<String> varargs, Control control){
     super(varargs, control);
     if(varargs.get(0).contains(":")){
       key =varargs.get(0);
