@@ -1,18 +1,19 @@
-package Controller;
+package controller;
 
 import java.util.Map;
 import java.util.TreeMap;
 
-public class StoreLists {
+public class StoreFunctions {
   private Map<String,String> function;
 
-  public StoreLists(){
+  public StoreFunctions(){
     function = new TreeMap<>();
   }
 
   public void storeFunction(String command, String line){
     String functionName = command;
-    function.put(functionName,line);
+    String store = line;
+    function.put(functionName,store);
   }
 
   public Map getFunction(){return function;}

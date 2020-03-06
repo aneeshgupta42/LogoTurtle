@@ -1,16 +1,16 @@
 package backEnd.commands;
 
-import Controller.Control;
+import controller.Control;
 import java.util.List;
 import java.util.Map;
 
 public abstract class Command {
 
   private String commandReturn;
-  private Map<String, String> c;
+  private Map<String, String> map;
   protected int numberOfArgs;
   protected Boolean store = false;
-  protected int repeat = -500;
+  protected double repeat = Double.MIN_VALUE ;
   private double repeatNumber=0;
 
   public Command(){
@@ -20,7 +20,7 @@ public abstract class Command {
   public String commandValueReturn(){
     return commandReturn;
   }
-  public Map<String, String> getVariablesCreated(){return c;}
+  public Map<String, String> getVariablesCreated(){return map;}
   public int getNumberOfArgs(){return numberOfArgs;}
   public double repeatCom(){return repeatNumber;}
   public double runnable(){return repeat;}

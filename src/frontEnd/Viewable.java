@@ -1,6 +1,6 @@
 package frontEnd;
 
-import Controller.Control;
+import controller.Control;
 import javafx.application.Application;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;

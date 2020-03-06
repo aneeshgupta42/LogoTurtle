@@ -1,8 +1,7 @@
 package backEnd.commands.Math;
 
-import Controller.Control;
+import controller.Control;
 import backEnd.commands.Command;
-import java.util.LinkedList;
 import java.lang.Math;
 import java.util.List;
 

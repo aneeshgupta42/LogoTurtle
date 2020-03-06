@@ -1,7 +1,6 @@
 package backEnd.commands;
 
-import Controller.Control;
-import java.util.LinkedList;
+import controller.Control;
 import java.util.List;
 
 public class Heading extends Command {
