@@ -77,14 +77,6 @@ public class CommandSetAndExecute {
   public Map getFunctions() {
     return storeFunction.getFunction();
   }
-
-  /*
-  Sets the controller
-   */
-  public void setControl(Control c) {
-    control = c;
-  }
-
   /*
   Sets the command to be parsed
    */
