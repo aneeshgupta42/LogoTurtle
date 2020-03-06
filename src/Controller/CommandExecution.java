@@ -42,6 +42,7 @@ public class CommandExecution {
   private boolean logicStatement;
   private StoreLists lists;
   private boolean hasBeenStored = false;
+  private boolean inbrackets =false;
   private String section;
   private LinkedList<Integer> starts;
   private LinkedList<Integer> ends;
@@ -58,6 +59,7 @@ public class CommandExecution {
   {
     lists = new StoreLists();
     control = myControl;
+    variablesUsed = new TreeMap();
     commandFactory = new CommandFactory(control);
   }
 
@@ -78,7 +80,6 @@ public class CommandExecution {
   */
   public void parseCommand() {
     parser = new Parser();
-    variablesUsed = new TreeMap();
     command = new LinkedList<>();
     argument = new LinkedList<>();
     args = new LinkedList<>();
@@ -93,7 +94,6 @@ public class CommandExecution {
     Splits text into lines
    */
   private void parseText() {
-    logicStatement = true;
     for (String line : input.split(NEWLINE)) {
       if(!line.contains(COMMENT) && !line.isEmpty()){
         organizeInStacks(line);
@@ -186,15 +186,11 @@ public class CommandExecution {
   public void runCommand() {
     System.out.println("GotHere " + userCom +"  " + args);
       if (!hasBeenStored) {
-        if(!logicStatement) {
-          findLists();
-          input = input.substring(end);
-          parseText();
-        }
         obtainCommand();
+      }
         System.out.println("Variable storing " + hasBeenStored);
     }
-  }
+
 
   /*
   Passes arguments to the command class and grabs a user function if it exists.
@@ -232,17 +228,22 @@ public class CommandExecution {
   private void booleanLogic(Command comm) {
     if(comm.runnable()!=output) {
       logicStatement = comm.runnable()!=0;
-//      System.out.println("Can the logic run " + logicStatement);
-      if (!command.isEmpty()) {
-        coordinateCommands();
+      findLists();
+      if ((comm.runnable()!=0)) {
+        input= groupsList.get(0).getMyList();
       }
+      else{
+        if(groupsList.size()>1) input = groupsList.get(1).getMyList();
+        System.out.println(input);
+      }
+      parseText();
+      hasBeenStored=true;
     }
   }
 
   private void saveVariables(Command comm) {
     if(comm.getVariablesCreated()!=null) {
       variablesUsed.putAll(comm.getVariablesCreated());
- //     System.out.println("Variables "+ variablesUsed);
       if(!command.isEmpty()) {
         coordinateCommands();
       }

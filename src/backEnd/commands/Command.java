@@ -13,7 +13,7 @@ public abstract class Command {
   protected int numberOfArgs;
   private Control myControl;
   protected Boolean store = false;
-  protected int repeat = -100;
+  protected int repeat = -500;
   private double repeatNumber;
 
   public Command(){
