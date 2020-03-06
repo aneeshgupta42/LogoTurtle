@@ -234,7 +234,6 @@ public class CommandExecution {
       }
       else{
         if(groupsList.size()>1) input = groupsList.get(1).getMyList();
-        System.out.println(input);
       }
       parseText();
       hasBeenStored=true;
@@ -244,6 +243,7 @@ public class CommandExecution {
   private void saveVariables(Command comm) {
     if(comm.getVariablesCreated()!=null) {
       variablesUsed.putAll(comm.getVariablesCreated());
+      System.out.println(variablesUsed);
       if(!command.isEmpty()) {
         coordinateCommands();
       }
@@ -301,8 +301,8 @@ public class CommandExecution {
   private void repCount(double loop, String s) {
     args.clear();
     commandPath = MAKE;
-    args.push(s);
     args.push(Double.toString(loop));
+    args.push(s);
     obtainCommand();
   }
 

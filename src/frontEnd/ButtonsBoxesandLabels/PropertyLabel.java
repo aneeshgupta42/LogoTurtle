@@ -45,7 +45,7 @@ public class PropertyLabel extends HBox implements Display {
   }
 
   private Node makePrompt (String text) {
-    System.out.println(text);
+  //  System.out.println(text);
     return new Text(text + ": ");
 
   }
@@ -56,11 +56,11 @@ public class PropertyLabel extends HBox implements Display {
       try {
         Object value = m.invoke(target);
         amountDue.set(""+ value);
-        System.out.println("value" + value);
+  //      System.out.println("value" + value);
       } catch (IllegalAccessException | InvocationTargetException e) {
         e.printStackTrace();
       }
-      System.out.println(methodName);
+   //   System.out.println(methodName);
     } catch (NoSuchMethodException e) {
       e.printStackTrace();
     }
@@ -92,7 +92,7 @@ public class PropertyLabel extends HBox implements Display {
           } catch (InvocationTargetException e) {
             e.printStackTrace();
           }
-          System.out.println(methodName);
+        //  System.out.println(methodName);
         }catch (NoSuchMethodException e) {
           e.printStackTrace();
         }

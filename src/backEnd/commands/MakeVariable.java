@@ -1,10 +1,9 @@
 package backEnd.commands;
 
 import Controller.Control;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class MakeVariable extends Command {
 
@@ -30,10 +29,8 @@ public MakeVariable(){
 
   @Override
   public Map getVariablesCreated(){
-    Map<String,String> variables = new HashMap<>();
-    if(!variables.containsKey(key)){
-      variables.put(key,var);
-    }
+    Map<String,String> variables = new TreeMap<>();
+    variables.put(key,var);
     return variables;
   }
 
