@@ -11,7 +11,7 @@ public class Control {
   private double turtleCol;
   private double turtleRow;
   private double turtleAngle;
-  private final CommandSetUp commandSetUp;
+  private final CommandSetAndExecute commandSetAndExecute;
   private final UserInterface view;
   private final Map<String,String> variablesUsed = new TreeMap<>();
   private final Map<String,String> functionsUsed = new TreeMap<>();
@@ -22,10 +22,8 @@ public class Control {
    */
   public Control(UserInterface UI) {
     view = UI;
-    commandSetUp = new CommandSetUp();
+    commandSetAndExecute = new CommandSetAndExecute(this);
   }
-
-  public void getControl(){commandSetUp.setControl(this);}
 
   public Map<String,String> getVariables() {
     return variablesUsed;
@@ -36,18 +34,18 @@ public class Control {
   public String getCommandReturnValue(){return commandReturnValue;}
 
   public void setCommand(String command) {
-    commandSetUp.setCommandInput(command);
+    commandSetAndExecute.setCommandInput(command);
   }
 
   public void setLanguage(String lang) {
-    commandSetUp.setLanguage(lang);
+    commandSetAndExecute.setLanguage(lang);
   }
 
   public void parseCommand(){
-    commandSetUp.parseCommand();
-    if(commandSetUp.getVariables()!=null)variablesUsed.putAll(commandSetUp.getVariables());
-    if(commandSetUp.getFunctions()!=null)functionsUsed.putAll(commandSetUp.getFunctions());
-    commandReturnValue = commandSetUp.getCommandReturn();
+    commandSetAndExecute.parseCommand();
+    if(commandSetAndExecute.getVariables()!=null)variablesUsed.putAll(commandSetAndExecute.getVariables());
+    if(commandSetAndExecute.getFunctions()!=null)functionsUsed.putAll(commandSetAndExecute.getFunctions());
+    commandReturnValue = commandSetAndExecute.getCommandReturn();
   }
 
   public void passTurtle(Moveable mover) {

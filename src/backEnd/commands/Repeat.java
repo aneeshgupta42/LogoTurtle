@@ -23,4 +23,5 @@ public class Repeat extends Command {
   public double repeatCom(){
     return repetition;
   }
+
 }
