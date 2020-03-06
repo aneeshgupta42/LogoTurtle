@@ -178,6 +178,11 @@ public class CommandExecutor {
           argNum = commandFactory.getNumArgs(commandPath);
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
           userCommandAttempt = userCom;
+          if(argument.size()>0) {
+            args.addAll(argument);
+            runCommand();
+          }
+          command.clear();
           coordinateCommands();
         }
         args.clear();
