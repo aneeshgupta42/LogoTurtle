@@ -21,8 +21,6 @@ public class CommandSetAndExecute {
   private static final String CLASS_PATH = "backEnd.commands.";
   private static final String REP_COUNT = ":repCount";
   private static final String MAKE = "backEnd.commands.MakeVariable";
-  private static final String LIST_START = "[";
-  private static final String LIST_END = "]";
   private static final String COMMENT = "#";
   private static final String SYNTAX = "syntax";
   private static final double VALUE = Double.MIN_VALUE;
@@ -31,6 +29,7 @@ public class CommandSetAndExecute {
   private Control control;
   private CommandFactory commandFactory;
   private StoreFunctions storeFunction;
+  private CreatingListObjects creatingListObjects;
 
   private Stack<String> commandList;
   private Stack<String> argumentList;
@@ -60,6 +59,7 @@ public class CommandSetAndExecute {
     control = myControl;
     variablesUsed = new TreeMap();
     commandFactory = new CommandFactory(control);
+    creatingListObjects = new CreatingListObjects();
   }
 
   /*
@@ -142,8 +142,8 @@ public class CommandSetAndExecute {
   Splits lines into words and categorizes them into two lists
    */
   private void organizeInLists(String line) {
-    commandList = new Stack<String>();
-    argumentList = new Stack<String>();
+    commandList = new Stack<>();
+    argumentList = new Stack<>();
     for (String word : line.split(WHITESPACE)) {
       if (word.trim().length() > 0) {
         if (!parser.getSymbol(word).equals(ARGUMENT) && !parser.getSymbol(word).equals(VARIABLE)) {
@@ -260,7 +260,8 @@ public class CommandSetAndExecute {
 
   private void storeUserCommand(Command comm) {
     if (comm.storeCommands()) {
-      findLists();
+     creatingListObjects.findLists(commandInput,currentRepeatNumber);
+      groupsList= creatingListObjects.getLists();
       numberOfFunctions++;
       storeFunction.storeFunction(userCommandAttempt, groupsList.get(numberOfFunctions).getMyList());
       hasBeenStored = true;
@@ -269,7 +270,8 @@ public class CommandSetAndExecute {
 
   private void booleanLogic(Command comm) {
     if (comm.runnable() != VALUE) {
-      findLists();
+      creatingListObjects.findLists(commandInput,currentRepeatNumber);
+      groupsList= creatingListObjects.getLists();
       if ((comm.runnable() != 0)) {
         commandInput = groupsList.get(0).getMyList();
       } else {
@@ -301,7 +303,8 @@ public class CommandSetAndExecute {
       if (currentRepeatNumber == 1) {
         repCount(loop, REP_COUNT);
       }
-      findLists();
+      creatingListObjects.findLists(commandInput,currentRepeatNumber);
+      groupsList = creatingListObjects.getLists();
       for (int j = 0; j < groupsList.size(); j++) {
         if (groupsList.get(j).canBeRun()) {
           newCommandInput = groupsList.get(j).getMyList();
@@ -343,73 +346,4 @@ public class CommandSetAndExecute {
     argToBePassed.push(s);
     runCommand();
   }
-
-  private void findLists() {
-    LinkedList<Integer> starts = new LinkedList<>();
-    LinkedList<Integer> ends = new LinkedList<>();
-    int startIndex = commandInput.indexOf(LIST_START);
-    int numStarts = 0;
-    while (startIndex >= 0) {
-      starts.push(startIndex);
-      numStarts++;
-      startIndex = commandInput.indexOf(LIST_START, startIndex + 1);
-    }
-    int endIndex = commandInput.indexOf(LIST_END);
-    while (endIndex >= 0) {
-      ends.push(endIndex);
-      endIndex = commandInput.indexOf(LIST_END, endIndex + 1);
-    }
-    LinkedList<ArrayList<Integer>> sets = matchingLists(starts, ends, numStarts);
-    createListObjects(sets);
-  }
-
-  private LinkedList matchingLists(LinkedList<Integer> starts, LinkedList<Integer> ends, int numStarts) {
-    LinkedList<ArrayList<Integer>> sets = new LinkedList<>();
-    ArrayList<Integer> two = new ArrayList<>();
-    two = linkListPairs(starts, ends, numStarts, sets, two);
-    resetInput(sets, two);
-    return sets;
-  }
-
-  private ArrayList<Integer> linkListPairs(LinkedList<Integer> starts, LinkedList<Integer> ends,
-      int numStarts, LinkedList<ArrayList<Integer>> sets, ArrayList<Integer> two) {
-    while (numStarts > 0 && starts.size()==ends.size()) {
-      int first = starts.pollLast();
-      int last = ends.pollLast();
-      for (int whichEnd : starts) {
-        if (whichEnd < last) {
-          int store = last;
-          last = ends.pollLast();
-          ends.push(store);
-        }
-      }
-      numStarts--;
-      two.add(first + 1);
-      two.add(last - 1);
-      sets.add(two);
-      two = new ArrayList<>();
-    }
-    return two;
-  }
-
-  private void resetInput(LinkedList<ArrayList<Integer>> sets, ArrayList<Integer> two) {
-    if (currentRepeatNumber == 1) {
-      if (sets.size() != 1) {
-        two.add(0);
-        two.add(commandInput.length());
-        sets.add(two);
-      }
-    }
-  }
-
-  private void createListObjects(LinkedList<ArrayList<Integer>> sets) {
-    ArrayList<Integer> set;
-    while (sets.size() != 0) {
-      set = sets.pop();
-      int first = set.get(0);
-      int end = set.get(1);
-      groupsList.add(new ListObjects(commandInput.substring(first, end)));
-    }
-  }
-
 }
