@@ -14,9 +14,10 @@ public class ListStart extends Command {
     super(varargs, control);
     super.numberOfArgs=number;
   }
+
   @Override
-  public int repeatCom() {
-    return 0;
+  public double repeatCom() {
+    return super.repeatCom();
   }
 
   @Override

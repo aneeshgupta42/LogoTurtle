@@ -6,8 +6,8 @@ import java.util.LinkedList;
 public class Tell extends Command {
 
   private final int number = 3;
-  private int start;
-  private int stop;
+  private double start;
+  private double stop;
 
   public Tell(){
     super();
@@ -15,14 +15,12 @@ public class Tell extends Command {
   }
   public Tell(LinkedList<String> varags, Control control){
     super(varags,control);
-    start = Integer.parseInt(varags.get(0));
-    stop = Integer.parseInt(varags.get(1));
-
-    System.out.println(start + " " + stop);
+    start = Double.parseDouble(varags.get(0));
+    stop = Double.parseDouble(varags.get(1));
   }
 
   @Override
-  public int repeatCom() {
+  public double repeatCom() {
     return (stop-start);
   }
 }

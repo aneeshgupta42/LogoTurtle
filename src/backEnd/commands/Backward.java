@@ -30,7 +30,7 @@ public class Backward extends Command {
     return Integer.toString(distance);
   }
   @Override
-  public int repeatCom() {
+  public double repeatCom() {
     return super.repeatCom();
   }
 

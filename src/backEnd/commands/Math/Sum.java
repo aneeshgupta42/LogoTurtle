@@ -21,7 +21,6 @@ public class Sum extends Command {
     double argTwo = Double.parseDouble(varargs.get(1));
     sum = argTwo + argOne;
 
-    System.out.println("Sum is " + sum);
   }
 
   @Override
@@ -29,7 +28,7 @@ public class Sum extends Command {
     return Double.toString(sum);
   }
   @Override
-  public int repeatCom() {
+  public double repeatCom() {
     return super.repeatCom();
   }
 }

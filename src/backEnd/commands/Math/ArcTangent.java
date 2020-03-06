@@ -20,7 +20,6 @@ public class ArcTangent extends Command {
         double argOne = Double.parseDouble(varargs.get(0));
         arcTanResult = Math.atan(Math.toRadians(argOne));
 
-        System.out.println("Arctangent is: " + arcTanResult);
     }
 
     @Override
@@ -28,7 +27,7 @@ public class ArcTangent extends Command {
         return Double.toString(arcTanResult);
     }
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }

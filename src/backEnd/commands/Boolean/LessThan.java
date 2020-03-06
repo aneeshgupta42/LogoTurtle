@@ -27,8 +27,6 @@ public class LessThan extends Command {
         } else {
             booleanResult = FALSE;
         }
-
-        System.out.println("The LessThan is: " + booleanResult);
     }
 
     @Override
@@ -37,7 +35,7 @@ public class LessThan extends Command {
     }
 
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }

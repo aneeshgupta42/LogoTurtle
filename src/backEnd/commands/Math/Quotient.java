@@ -21,7 +21,6 @@ public class Quotient extends Command {
     double argTwo = Double.parseDouble(varargs.get(1));
     quotient = argOne / argTwo;
 
-    System.out.println("Quotient is " + quotient);
   }
 
   @Override
@@ -29,7 +28,7 @@ public class Quotient extends Command {
     return Double.toString(quotient);
   }
   @Override
-  public int repeatCom() {
+  public double repeatCom() {
     return super.repeatCom();
   }
 }

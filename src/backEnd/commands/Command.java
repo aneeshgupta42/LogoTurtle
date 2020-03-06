@@ -14,7 +14,7 @@ public abstract class Command {
   private Control myControl;
   protected Boolean store = false;
   protected int repeat = -100;
-  private int b;
+  private double repeatNumber;
 
   public Command(){
   }
@@ -30,7 +30,7 @@ public abstract class Command {
   }
   public Map<String, String> getVariablesCreated(){return c;}
   public int getNumberOfArgs(){return numberOfArgs;}
-  public int repeatCom(){return b;}
+  public double repeatCom(){return repeatNumber;}
   public double runnable(){return repeat;}
   public boolean storeCommands(){ return store; }
 

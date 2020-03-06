@@ -25,8 +25,6 @@ public class Not extends Command {
         } else {
             booleanResult = FALSE;
         }
-
-        System.out.println("The Not result is: " + booleanResult);
     }
 
     @Override
@@ -35,7 +33,7 @@ public class Not extends Command {
     }
 
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }

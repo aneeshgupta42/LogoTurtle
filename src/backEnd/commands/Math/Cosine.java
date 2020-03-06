@@ -20,7 +20,6 @@ public class Cosine extends Command {
         double argOne = Double.parseDouble(varargs.get(0));
         cosResult = Math.cos((Math.toRadians(argOne)));
 
-        System.out.println("Cosine is: " + cosResult);
     }
 
     @Override
@@ -28,7 +27,7 @@ public class Cosine extends Command {
         return Double.toString(cosResult);
     }
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }

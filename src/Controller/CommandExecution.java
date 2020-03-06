@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class CommandGrouping {
+public class CommandExecution {
 
   private static final String WHITESPACE = " ";
   private static final String NEWLINE = "\n";
@@ -53,24 +53,20 @@ public class CommandGrouping {
   private int index;
   private String variable;
 
-  public CommandGrouping(Control myControl)
+  public CommandExecution(Control myControl)
   {
     lists = new StoreLists();
     control = myControl;
+    setLanguage(control.getLanguage());
+    setCommand(control.getCommand());
     commandFactory = new CommandFactory(control);
   }
 
   public Map setVariables(){return variablesUsed;}
   public Map setFunctions(){return lists.getFunction();}
-
   public void setControl(Control c){control = c;}
-
-  public void setCommand(String command) {
-    input = command;
-  }
-  public void setLanguage(String lang) {
-    language = lang;
-  }
+  public void setCommand(String command) { input = command; }
+  public void setLanguage(String lang) { language = lang; }
 
   /*
  Calls the parser to start parsing the user input
@@ -85,6 +81,7 @@ public class CommandGrouping {
     groupsList = new ArrayList<ListGroups>();
     setCommand(input);
     setLanguage(language);
+    System.out.println("LANG"+language);
     parser.addPatterns(language);
     parser.addPatterns(SYNTAX);
     parseText();
@@ -123,7 +120,6 @@ public class CommandGrouping {
   }
 
   private void checkingTypeOfCommand(String word) {
-  //  System.out.println(word);
     Map<String, String> map = lists.getFunction();
     if (map.keySet().contains(word) && input!=map.get(word)) {
       input = map.get(word);
@@ -159,15 +155,14 @@ public class CommandGrouping {
    */
   private void makeClassPathToCommand(String comm) {
     commandPath = CLASS_PATH + parser.getSymbol(comm);
+    System.out.println("PATH"+commandPath);
   }
-
 
   /*
   Coordinating the command to the number of arguments it needs and pushing it to be run
    */
   private void checkIfCommandCanRun(int argNum) {
     if (argNum == 0) {
-  //    System.out.println(userCom);
       runCommand();
     } else {
       if (argument.size() >= argNum) {
@@ -182,7 +177,6 @@ public class CommandGrouping {
         else args.push(arg);
       }
       argNum--;
-    //  System.out.println("Num "+args +" "+ userCom);
       checkIfCommandCanRun(argNum);
     }
   }
@@ -222,6 +216,7 @@ public class CommandGrouping {
   public void createCommand(Command comm) {
     if(comm.commandValueReturn()!=null){
       argument.add(comm.commandValueReturn());
+      System.out.println("This is what it returns: "+comm.commandValueReturn());
       if(!command.isEmpty()) {
         coordinateCommands();
       }
@@ -260,7 +255,7 @@ public class CommandGrouping {
     if(comm.repeatCom()!=0) {
       total++;
       findLists();
-      int loop = comm.repeatCom();
+      double loop = comm.repeatCom();
       if (variable != null) {
         repCount(loop, variable);
       } else repCount(loop, REP_COUNT);
@@ -279,7 +274,7 @@ public class CommandGrouping {
   }
 
 
-  private void recurseLoop(int loop) {
+  private void recurseLoop(double loop) {
     if(loop==1){
       groupsList.get(index).cannotBeRun(true);
       for(int x=0;x<groupsList.size();x++) {
@@ -296,14 +291,15 @@ public class CommandGrouping {
       recurseLoop(loop);
     }
   }
+
   /*
   Makes variables for the repetitions of loops
    */
-  private void repCount(int loop, String s) {
+  private void repCount(double loop, String s) {
     args.clear();
     userCom = MAKE;
     args.push(s);
-    args.push(loop+"");
+    args.push(Double.toString(loop));
     makeClassPathToCommand(userCom);
     obtainCommand();
   }

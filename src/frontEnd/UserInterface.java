@@ -466,7 +466,7 @@ public class UserInterface extends Application {
 
   public void setMoverX(double x) {
     moverX = x;
-    System.out.println("x " + x);
+  //  System.out.println("x " + x);
   }
 
   public Map getPropertyLabelMap(){
@@ -597,7 +597,7 @@ public class UserInterface extends Application {
   }
 
   public void addTurtle() {
-    System.out.println("reached");
+  //  System.out.println("reached");
     numOfMovers++;
     Mover mover = new Mover(this);
     //moverImage = mover.displayMover(TURTLE);
@@ -605,7 +605,7 @@ public class UserInterface extends Application {
     turtleMap.put(numOfMovers, mover);
     root.getChildren().add(mover.getImage());
     turtleList.add(numOfMovers);
-    System.out.println(turtleList);
+  //  System.out.println(turtleList);
     //turtleSelection.updateItems(FXCollections.observableArrayList(turtleList));
   }
 
@@ -637,7 +637,7 @@ public class UserInterface extends Application {
     return myMover.getMoverRow()-ycenter;
   }
   public double getMoverID(){
-    System.out.println("ID" + moverID);
+   // System.out.println("ID" + moverID);
     return moverID;
   }
   public double getAngle(){

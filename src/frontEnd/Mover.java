@@ -48,7 +48,7 @@ public class Mover implements Update {
   private static final String ComboBoxOptionsResources = "resources.UIActions.ComboBoxOptions";
 
   public Mover(UserInterface view) {
-    System.out.print(this);
+   // System.out.print(this);
 
     myView = view;
     // do we want this to start as true?
@@ -154,7 +154,7 @@ public class Mover implements Update {
     path.getElements().addAll(new MoveTo(moverStartingXPos + moverImage.getBoundsInLocal().getWidth()/2, moverStartingYPos+ moverImage.getBoundsInLocal().getHeight()/2), new LineTo(moverStartingXPos + moverImage.getBoundsInLocal().getWidth()/2+ x,moverStartingYPos + moverImage.getBoundsInLocal().getHeight()/2+ y));
     // create an animation where the shape follows a path
     PathTransition pt = new PathTransition(Duration.seconds(2), path, agent);
-    System.out.println(pt);
+  //  System.out.println(pt);
     return new SequentialTransition(agent, pt);
   }
 

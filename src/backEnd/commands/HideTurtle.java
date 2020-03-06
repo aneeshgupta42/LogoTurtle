@@ -24,7 +24,7 @@ public class HideTurtle extends Command {
     }
 
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }

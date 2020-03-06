@@ -21,7 +21,6 @@ public class Remainder extends Command {
         double argTwo = Double.parseDouble(varargs.get(1));
         remainder = argOne % argTwo;
 
-        System.out.println("The remainder is: " + remainder);
     }
 
     @Override
@@ -29,7 +28,7 @@ public class Remainder extends Command {
         return Double.toString(remainder);
     }
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }

@@ -22,7 +22,7 @@ public class MakeUserInstruction extends Command {
   }
 
   @Override
-  public int repeatCom() {
-    return 0;
+  public double repeatCom() {
+    return super.repeatCom();
   }
 }

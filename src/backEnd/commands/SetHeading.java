@@ -18,7 +18,6 @@ public class SetHeading extends Command {
         super.numberOfArgs= NUMARGS;
         double current_angle = myControl.getTurtleAngle();
         double angle = Double.parseDouble(varargs.get(0));
-//        angle = 90.00 - angle;
         myControl.updateTurtle(0,0, (-current_angle+ angle), 0);
         angle_moved = angle - current_angle;
     }
@@ -29,7 +28,7 @@ public class SetHeading extends Command {
     }
 
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }

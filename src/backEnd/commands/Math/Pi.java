@@ -16,7 +16,6 @@ public class Pi extends Command {
     super(varargs, control);
     super.numberOfArgs = NUMARGS;
 
-    System.out.println("Pi is: " + Math.PI);
   }
 
   @Override
@@ -25,7 +24,7 @@ public class Pi extends Command {
   }
 
   @Override
-  public int repeatCom() {
+  public double repeatCom() {
     return super.repeatCom();
   }
 }
