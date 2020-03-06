@@ -1,7 +1,7 @@
 package backEnd.commands;
 
-import Controller.Control;
-import java.util.LinkedList;
+import controller.Control;
+import java.util.List;
 
 public class Backward extends Command {
 
@@ -13,15 +13,13 @@ public class Backward extends Command {
     super.numberOfArgs=NUMARGS;
   }
 
-  public Backward(LinkedList<String> varargs, Control control){
+  public Backward(List<String> varargs, Control control){
     super(varargs, control);
     super.numberOfArgs= NUMARGS;
     distance = Integer.parseInt(varargs.get(0));
     double angle = control.getTurtleAngle();
-//    System.out.println("Angle: " + angle);
     double newX = -(distance *(Math.sin(Math.toRadians((angle)))));
     double newY = +(distance *(Math.cos(Math.toRadians((angle)))));
-    System.out.println("d " + distance);
     control.updateTurtle(newX, newY, 0, distance);
   }
 
@@ -30,7 +28,7 @@ public class Backward extends Command {
     return Integer.toString(distance);
   }
   @Override
-  public int repeatCom() {
+  public double repeatCom() {
     return super.repeatCom();
   }
 

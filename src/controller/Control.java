@@ -1,59 +1,51 @@
-package Controller;
+package controller;
 
 import frontEnd.Moveable;
 import frontEnd.UserInterface;
-import frontEnd.Viewable;
-
 import java.util.Map;
 import java.util.TreeMap;
 
 public class Control {
 
-
   private Moveable myMover;
   private double turtleCol;
   private double turtleRow;
   private double turtleAngle;
-  private CommandGrouping commandGrouping;
-  private String language;
-  private String input;
-  private UserInterface view;
-  private Map<String,String> variablesUsed = new TreeMap<>();
-  private Map<String,String> functionsUsed = new TreeMap<>();
-  private StoreLists lists;
-
-
+  private final CommandExecutor commandExecutor;
+  private final UserInterface view;
+  private final Map<String,String> variablesUsed = new TreeMap<>();
+  private final Map<String,String> functionsUsed = new TreeMap<>();
+  private String commandReturnValue;
 
   /*
-  Initializing a control (for reference storeLists is where all the data in lists is being passed)
+  Initializes controller
    */
   public Control(UserInterface UI) {
     view = UI;
-    commandGrouping = new CommandGrouping(this);
+    commandExecutor = new CommandExecutor(this);
   }
 
   public Map<String,String> getVariables() {
     return variablesUsed;
   }
+
   public Map<String,String> getUserCommands() {return functionsUsed;}
-  public String getCommand() {
-    return input;
-  }
+
+  public String getCommandReturnValue(){return commandReturnValue;}
 
   public void setCommand(String command) {
-    input = command;
-    commandGrouping.setCommand(command);
+    commandExecutor.setCommandList(command);
   }
 
   public void setLanguage(String lang) {
-    language = lang;
-    commandGrouping.setLanguage(lang);
+    commandExecutor.setLanguage(lang);
   }
 
   public void parseCommand(){
-    commandGrouping.parseCommand();
-    variablesUsed.putAll(commandGrouping.setVariables());
-    functionsUsed.putAll(commandGrouping.setFunctions());
+    commandExecutor.parseCommand();
+    if(commandExecutor.getVariables()!=null)variablesUsed.putAll(commandExecutor.getVariables());
+    if(commandExecutor.getFunctions()!=null)functionsUsed.putAll(commandExecutor.getFunctions());
+    commandReturnValue = commandExecutor.getCommandReturn();
   }
 
   public void passTurtle(Moveable mover) {
@@ -74,6 +66,7 @@ public class Control {
   public void setPenDown(boolean mode){
     myMover.setPen(mode);
   }
+
   public boolean isPenDown(){
     return myMover.isPenDown();
   }
@@ -96,7 +89,6 @@ public class Control {
     turtleAngle = myMover.getMoverAngle() + angle;
     myMover.updateDistanceSoFar(distance);
     myMover.move(col, row, angle);
- //   System.out.println("update" + col + " " + row + " " + angle);
   }
 
   public int getTurtleDistance() {

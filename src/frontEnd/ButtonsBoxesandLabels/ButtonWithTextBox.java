@@ -1,10 +1,8 @@
 package frontEnd.ButtonsBoxesandLabels;
 
 import frontEnd.ButtonAction;
-import Controller.Control;
 import java.lang.reflect.InvocationTargetException;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -12,8 +10,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import java.lang.reflect.Method;
-import javafx.scene.text.Text;
-import javax.swing.Action;
 import javax.swing.text.View;
 
 /**

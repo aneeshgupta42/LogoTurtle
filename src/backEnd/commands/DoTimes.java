@@ -1,9 +1,7 @@
 package backEnd.commands;
 
-import Controller.Control;
-import backEnd.commands.Command;
-import java.util.HashMap;
-import java.util.LinkedList;
+import controller.Control;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -11,7 +9,7 @@ public class DoTimes extends Command {
 
   private final int number = 2;
   private Control c;
-  private int repetition;
+  private double repetition;
   private String key;
   private String val;
 
@@ -19,30 +17,32 @@ public class DoTimes extends Command {
     super();
     super.numberOfArgs=number;
   }
-  public DoTimes(LinkedList<String> varargs, Control control){
+  public DoTimes(List<String> varargs, Control control){
     super(varargs, control);
     c = control;
     if(varargs.get(0).contains(":")){
-      key =varargs.get(0);
-      val = varargs.get(1);
-    }
-    else{
-      val =varargs.get(0);
-      key = varargs.get(1);
-    }
-    System.out.println("dotime" + key + val);
+    key =varargs.get(0);
+    val = varargs.get(1);
   }
+    else{
+    val =varargs.get(0);
+    key = varargs.get(1);
+  }
+}
 
   public Map getVariablesCreated(){
-    Map map = new TreeMap();
-    map.put(key,val);
+    Map<String,String> map = new TreeMap();
+    if(!key.equals(val)) {
+      if (!map.containsKey(key)) {
+        map.put(key, val);
+      }}
     return map;
   }
 
   @Override
-  public int repeatCom() {
-    repetition = (int)Double.parseDouble(val);
-    return repetition-1;
+  public double repeatCom() {
+    repetition = Double.parseDouble(val);
+    return repetition;
   }
 
 

@@ -1,4 +1,4 @@
-package Controller;
+package controller;
 
 import backEnd.ErrorHandler;
 import frontEnd.ErrorBoxes;
@@ -46,8 +46,6 @@ public class Parser {
       }
     }
     ErrorBoxes box = new ErrorBoxes(new ErrorHandler("InvalidCommand"));
-    //ErrorHandler.handle();
-    // why do we need to return null ?
     return null;
   }
 

@@ -1,7 +1,7 @@
 package backEnd.commands;
 
-import Controller.Control;
-import java.util.LinkedList;
+import controller.Control;
+import java.util.List;
 
 public class IsShowing extends Command {
     private final int NUMARGS = 0;
@@ -12,7 +12,7 @@ public class IsShowing extends Command {
         super.numberOfArgs = NUMARGS;
     }
 
-    public IsShowing(LinkedList<String> varargs, Control control) {
+    public IsShowing(List<String> varargs, Control control) {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 
@@ -27,7 +27,7 @@ public class IsShowing extends Command {
     }
 
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }

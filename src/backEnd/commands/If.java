@@ -1,7 +1,7 @@
 package backEnd.commands;
 
-import Controller.Control;
-import java.util.LinkedList;
+import controller.Control;
+import java.util.List;
 
 public class If extends Command {
 
@@ -12,10 +12,9 @@ public class If extends Command {
     super.numberOfArgs=number;
   }
 
-  public If(LinkedList<String> varargs, Control control){
+  public If(List<String> varargs, Control control){
     super(varargs, control);
     check = Double.parseDouble(varargs.get(0));
-    System.out.println(check);
   }
 
   @Override
@@ -24,7 +23,7 @@ public class If extends Command {
   }
 
   @Override
-  public int repeatCom() {
-    return 0;
+  public double repeatCom() {
+    return super.repeatCom();
   }
 }

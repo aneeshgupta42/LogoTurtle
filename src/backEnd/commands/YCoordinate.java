@@ -1,7 +1,7 @@
 package backEnd.commands;
 
-import Controller.Control;
-import java.util.LinkedList;
+import controller.Control;
+import java.util.List;
 
 public class YCoordinate extends Command {
     private static final int NUMARGS = 0;
@@ -12,12 +12,10 @@ public class YCoordinate extends Command {
         super.numberOfArgs = NUMARGS;
     }
 
-    public YCoordinate(LinkedList<String> varargs, Control control) {
+    public YCoordinate(List<String> varargs, Control control) {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
-
         returnYCord = control.getTurtleRelativeYPos();
-        System.out.println("YCoordinate: " + returnYCord);
     }
 
     @Override
@@ -26,7 +24,7 @@ public class YCoordinate extends Command {
     }
 
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }

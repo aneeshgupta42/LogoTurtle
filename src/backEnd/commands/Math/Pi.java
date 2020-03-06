@@ -1,8 +1,8 @@
 package backEnd.commands.Math;
 
-import Controller.Control;
+import controller.Control;
 import backEnd.commands.Command;
-import java.util.LinkedList;
+import java.util.List;
 
 public class Pi extends Command {
   private static final int NUMARGS = 0;
@@ -12,11 +12,10 @@ public class Pi extends Command {
     super.numberOfArgs = NUMARGS;
   }
 
-  public Pi(LinkedList<String> varargs, Control control) {
+  public Pi(List<String> varargs, Control control) {
     super(varargs, control);
     super.numberOfArgs = NUMARGS;
 
-    System.out.println("Pi is: " + Math.PI);
   }
 
   @Override
@@ -25,7 +24,7 @@ public class Pi extends Command {
   }
 
   @Override
-  public int repeatCom() {
+  public double repeatCom() {
     return super.repeatCom();
   }
 }

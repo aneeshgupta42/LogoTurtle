@@ -1,10 +1,9 @@
 package backEnd.commands;
 
-import Controller.Control;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
+import controller.Control;
+import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class MakeVariable extends Command {
 
@@ -16,7 +15,7 @@ public MakeVariable(){
   super();
   super.numberOfArgs = number;
 }
-  public MakeVariable(LinkedList<String> varargs, Control control){
+  public MakeVariable(List<String> varargs, Control control){
     super(varargs, control);
     if(varargs.get(0).contains(":")){
       key =varargs.get(0);
@@ -30,14 +29,17 @@ public MakeVariable(){
 
   @Override
   public Map getVariablesCreated(){
-    Map<String,String> variables = new HashMap<>();
-    if(!variables.containsKey(key)){
-      variables.put(key,var);
+    Map<String,String> variables = new TreeMap<>();
+    if(!key.equals(var)) {
+      if (!variables.containsKey(key)) {
+        variables.put(key, var);
+      }
     }
     return variables;
   }
+
   @Override
-  public int repeatCom() {
-    return 0;
+  public double repeatCom() {
+    return super.repeatCom();
   }
 }

@@ -1,8 +1,8 @@
 package backEnd.commands;
 
-import Controller.Control;
+import controller.Control;
 
-import java.util.LinkedList;
+import java.util.List;
 
 public class PenUp extends Command {
     private final int NUMARGS = 0;
@@ -11,7 +11,7 @@ public class PenUp extends Command {
         super.numberOfArgs = NUMARGS;
     }
 
-    public PenUp(LinkedList<String> varargs, Control control)
+    public PenUp(List<String> varargs, Control control)
     {
         super(varargs, control);
         control.setPenDown(false);
@@ -23,8 +23,8 @@ public class PenUp extends Command {
     }
 
     @Override
-    public int repeatCom() {
-        return 0;
+    public double repeatCom() {
+        return super.repeatCom();
     }
 
 }

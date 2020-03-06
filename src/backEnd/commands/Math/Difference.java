@@ -1,8 +1,8 @@
 package backEnd.commands.Math;
 
-import Controller.Control;
+import controller.Control;
 import backEnd.commands.Command;
-import java.util.LinkedList;
+import java.util.List;
 
 public class Difference extends Command {
     private static final int NUMARGS = 2;
@@ -13,7 +13,7 @@ public class Difference extends Command {
         super.numberOfArgs = NUMARGS;
     }
 
-    public Difference(LinkedList<String> varargs, Control control){
+    public Difference(List<String> varargs, Control control){
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 
@@ -21,7 +21,6 @@ public class Difference extends Command {
         double argTwo = Double.parseDouble(varargs.get(1));
         diff = argOne - argTwo;
 
-        System.out.println("Difference is: " + diff);
     }
 
     @Override
@@ -29,7 +28,7 @@ public class Difference extends Command {
         return Double.toString(diff);
     }
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }

@@ -1,11 +1,11 @@
 package backEnd.commands;
 
-import Controller.Control;
-import java.util.LinkedList;
+import controller.Control;
+import java.util.List;
 
 public class Repeat extends Command {
 
-  private int repetition;
+  private double repetition;
   private Control c;
   private static final int number =  1;
 
@@ -13,15 +13,14 @@ public class Repeat extends Command {
     super();
     super.numberOfArgs = number;
   }
-  public Repeat(LinkedList<String> varargs, Control control){
+  public Repeat(List<String> varargs, Control control){
     super(varargs, control);
-    super.setControl(control);
     c = control;
-    repetition = Integer.parseInt(varargs.get(0));
+    repetition = Double.parseDouble(varargs.get(0));
   }
 
   @Override
-  public int repeatCom(){
+  public double repeatCom(){
     return repetition;
   }
 }

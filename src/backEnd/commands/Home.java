@@ -1,8 +1,8 @@
 package backEnd.commands;
 
-import Controller.Control;
+import controller.Control;
 
-import java.util.LinkedList;
+import java.util.List;
 
 public class Home extends Command{
     private final int NUMARGS = 0;
@@ -12,7 +12,7 @@ public class Home extends Command{
         super.numberOfArgs = NUMARGS;
     }
 
-    public Home(LinkedList<String> varargs, Control control){
+    public Home(List<String> varargs, Control control){
         super(varargs, control);
         control.turtleHome(false);
         distance = control.getTurtleDistance();
@@ -24,7 +24,7 @@ public class Home extends Command{
         return ret;
     }
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 

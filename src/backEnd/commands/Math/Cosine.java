@@ -1,8 +1,8 @@
 package backEnd.commands.Math;
 
-import Controller.Control;
+import controller.Control;
 import backEnd.commands.Command;
-import java.util.LinkedList;
+import java.util.List;
 
 public class Cosine extends Command {
     private static final int NUMARGS = 1;
@@ -13,14 +13,13 @@ public class Cosine extends Command {
         super.numberOfArgs= NUMARGS;
     }
 
-    public Cosine(LinkedList<String> varargs, Control control) {
+    public Cosine(List<String> varargs, Control control) {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 
         double argOne = Double.parseDouble(varargs.get(0));
         cosResult = Math.cos((Math.toRadians(argOne)));
 
-        System.out.println("Cosine is: " + cosResult);
     }
 
     @Override
@@ -28,7 +27,7 @@ public class Cosine extends Command {
         return Double.toString(cosResult);
     }
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }

@@ -1,8 +1,8 @@
 package backEnd.commands.Math;
 
-import Controller.Control;
+import controller.Control;
 import backEnd.commands.Command;
-import java.util.LinkedList;
+import java.util.List;
 
 public class NaturalLog extends Command {
     private static final int NUMARGS = 1;
@@ -13,14 +13,13 @@ public class NaturalLog extends Command {
         super.numberOfArgs = NUMARGS;
     }
 
-    public NaturalLog(LinkedList<String> varargs, Control control) {
+    public NaturalLog(List<String> varargs, Control control) {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 
         double argOne = Double.parseDouble(varargs.get(0));
         log = Math.log(argOne);
 
-        System.out.println("Log is: " + log);
     }
 
     @Override
@@ -28,7 +27,7 @@ public class NaturalLog extends Command {
         return Double.toString(log);
     }
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }

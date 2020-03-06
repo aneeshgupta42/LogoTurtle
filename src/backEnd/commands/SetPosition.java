@@ -1,8 +1,8 @@
 package backEnd.commands;
 
-import Controller.Control;
+import controller.Control;
 
-import java.util.LinkedList;
+import java.util.List;
 
 public class SetPosition extends Command {
 // GOTO
@@ -15,9 +15,8 @@ private static final int NUMARGS = 2;
         super.numberOfArgs=NUMARGS;
     }
 
-    public SetPosition(LinkedList<String> varargs, Control control){
+    public SetPosition(List<String> varargs, Control control){
         super(varargs, control);
-        System.out.println("Reached");
         double X = (Double.parseDouble(varargs.get(0)));
         double Y = (Double.parseDouble(varargs.get(1)));
         double initX = control.getTurtleRelativeXPos();
@@ -25,9 +24,7 @@ private static final int NUMARGS = 2;
         double newX = X - initX;
         double newY = initY - Y;
         distance = Math.sqrt(newX*newX + newY*newY);
-        System.out.println("d " + distance + newX + newY);
         control.updateTurtle(newX, newY, 0, (int)distance);
-        System.out.println("fd " + newX +" "+ newY +" "+  (int)distance);
     }
 
     @Override
@@ -36,7 +33,7 @@ private static final int NUMARGS = 2;
     }
 
     @Override
-    public int repeatCom() {
-        return 0;
+    public double repeatCom() {
+        return super.repeatCom();
     }
 }

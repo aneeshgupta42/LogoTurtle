@@ -1,8 +1,8 @@
 package backEnd.commands.Math;
 
-import Controller.Control;
+import controller.Control;
 import backEnd.commands.Command;
-import java.util.LinkedList;
+import java.util.List;
 
 public class Product extends Command {
     private static final int NUMARGS = 2;
@@ -13,7 +13,7 @@ public class Product extends Command {
         super.numberOfArgs = NUMARGS;
     }
 
-    public Product(LinkedList<String> varargs, Control control){
+    public Product(List<String> varargs, Control control){
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 
@@ -21,7 +21,6 @@ public class Product extends Command {
         double argTwo = Double.parseDouble(varargs.get(1));
         product = argTwo * argOne;
 
-        System.out.println("Product is: " + product);
     }
 
     @Override
@@ -29,7 +28,7 @@ public class Product extends Command {
         return Double.toString(product);
     }
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }

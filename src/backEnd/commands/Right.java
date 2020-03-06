@@ -1,7 +1,7 @@
 package backEnd.commands;
 
-import Controller.Control;
-import java.util.LinkedList;
+import controller.Control;
+import java.util.List;
 
 public class Right extends Command {
   private static final int NUMARGS = 1;
@@ -12,16 +12,16 @@ public class Right extends Command {
     super.numberOfArgs= NUMARGS;
   }
 
-  public Right(LinkedList<String> varargs, Control myControl){
-    super(varargs, myControl);
+  public Right(List<String> varargs, Control control){
+    super(varargs, control);
     super.numberOfArgs= NUMARGS;
     angle = Double.parseDouble(varargs.get(0));
-    myControl.updateTurtle(0,0, angle, 0);
-    System.out.println("rt done" + angle);
+    control.updateTurtle(0,0, angle, 0);
   }
+
   @Override
-  public int repeatCom() {
-    return 0;
+  public double repeatCom() {
+    return super.repeatCom();
   }
 
   @Override

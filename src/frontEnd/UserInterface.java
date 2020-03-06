@@ -1,6 +1,6 @@
 package frontEnd;
 
-import Controller.Control;
+import controller.Control;
 import frontEnd.ButtonsBoxesandLabels.PropertyLabel;
 import frontEnd.Windows.DisplayWindow;
 import frontEnd.Windows.MoverPropertiesWindow;

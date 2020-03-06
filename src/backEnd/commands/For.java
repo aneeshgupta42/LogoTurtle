@@ -1,27 +1,46 @@
 package backEnd.commands;
 
-import Controller.Control;
-import java.util.LinkedList;
+import controller.Control;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class For extends Command {
 
-  private final int number = 2;
-  private int start;
-  private int stop;
+  private final int number = 4;
+  private double start;
+  private double stop;
+  private String var;
+  private double increment;
+  private String key;
+  private String val;
 
   public For(){
     super();
     super.numberOfArgs =number;
   }
-  public For(LinkedList<String> varags, Control control){
-    super(varags,control);
-    start = Integer.parseInt(varags.get(0));
-    stop = Integer.parseInt(varags.get(1));
-    System.out.println(start + " " + stop);
+  public For(List<String> varargs, Control control){
+    super(varargs,control);
+    var = varargs.get(0);
+    start = Double.parseDouble(varargs.get(1));
+    stop = Double.parseDouble(varargs.get(2));
+    increment = Double.parseDouble(varargs.get(3));
+
+    key = var;
+    val = Double.toString((stop-start));
+}
+
+  public Map getVariablesCreated(){
+    Map<String,String> map = new TreeMap();
+    if(!key.equals(val) && Double.parseDouble(val)>0) {
+      if (!map.containsKey(key)) {
+        map.put(key, val);
+      }}
+    return map;
   }
 
   @Override
-  public int repeatCom() {
-    return (stop-start);
+  public double repeatCom() {
+    return ((stop-start)/increment);
   }
 }

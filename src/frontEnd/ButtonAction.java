@@ -1,6 +1,6 @@
 package frontEnd;
 
-import Controller.Control;
+import controller.Control;
 import backEnd.ErrorHandler;
 import frontEnd.ButtonsBoxesandLabels.OurLabeledColorPicker;
 import frontEnd.Windows.CommandWindow;
@@ -22,6 +22,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
