@@ -1,5 +1,6 @@
 package Controller;
 
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.TreeMap;
@@ -16,7 +17,7 @@ public class StoreLists {
     function = new TreeMap<>();
   }
 
-  public void storeFunction(String line){
+  public void storeFunction(String command, String line){
     String func = INTIALIZER;
     LinkedList<String> words = new LinkedList();
     for(String lines :line.split(NEWLINE)){
@@ -25,7 +26,7 @@ public class StoreLists {
       }
     }
 
-    String functionName = words.get(words.indexOf(TO)+1);
+    String functionName = command;
     for (String word: words){
       if (!word.equals(TO) && !word.equals(functionName)) {
         func = func + SPACE + word;

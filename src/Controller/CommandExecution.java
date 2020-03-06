@@ -51,6 +51,7 @@ public class CommandExecution {
   private int total;
   private int index;
   private String commandReturn;
+  private String userCommandAttempt;
 
   public CommandExecution(Control myControl)
   {
@@ -142,6 +143,8 @@ public class CommandExecution {
         try {
           argNum = commandFactory.getNumArgs(commandPath);
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
+          userCommandAttempt = userCom;
+          System.out.println(userCommandAttempt);
           coordinateCommands();
         }
         args.clear();
@@ -164,7 +167,7 @@ public class CommandExecution {
     if (argNum == 0) { runCommand(); }
     else {
       if (argument.size() >= argNum) {
-        String arg = argument.pollLast();
+        String arg = argument.pop();
         if(parser.getSymbol(arg).equals(VARIABLE)) {
           if (variablesUsed.containsKey(arg)) {
             args.add(variablesUsed.get(arg));
@@ -178,14 +181,11 @@ public class CommandExecution {
     }
   }
 
-  /*
-  Checks if you are not in the parsing of a list, and runs the command
-   */
+
   public void runCommand() {
       if (!hasBeenStored) {
         obtainCommand();
       }
-        System.out.println("Variable storing " + hasBeenStored);
     }
 
 
@@ -213,10 +213,9 @@ public class CommandExecution {
       }
     }
     if(comm.storeCommands()) {
-      lists.storeFunction(input);
-      hasBeenStored = true;
-      parseText();
-      }
+      findLists();
+      lists.storeFunction(userCommandAttempt,groupsList.get(0).getMyList());
+    }
     saveVariables(comm);
     booleanLogic(comm);
     repeatTimes(comm);
@@ -224,7 +223,6 @@ public class CommandExecution {
 
   private void booleanLogic(Command comm) {
     if(comm.runnable()!=output) {
-
       findLists();
       if ((comm.runnable()!=0)) {
         input= groupsList.get(0).getMyList();
@@ -241,7 +239,6 @@ public class CommandExecution {
   private void saveVariables(Command comm) {
     if(comm.getVariablesCreated()!=null) {
       variablesUsed.putAll(comm.getVariablesCreated());
-      System.out.println(variablesUsed);
       if(!command.isEmpty()) {
         coordinateCommands();
       }
