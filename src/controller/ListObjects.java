@@ -1,13 +1,11 @@
-package Controller;
+package controller;
 
-import java.util.List;
-
-public class ListGroups {
+public class ListObjects {
 
   private String myList;
   private Boolean canBeRun;
 
-  public ListGroups(String list){
+  public ListObjects(String list){
     myList = list;
     canBeRun = true;
   }

@@ -1,28 +1,28 @@
-package Controller;
+package controller;
 
 import frontEnd.Moveable;
 import frontEnd.UserInterface;
-
 import java.util.Map;
 import java.util.TreeMap;
 
 public class Control {
 
-
   private Moveable myMover;
   private double turtleCol;
   private double turtleRow;
   private double turtleAngle;
-  private CommandExecution commandExecution;
-  private UserInterface view;
-  private Map<String,String> variablesUsed = new TreeMap<>();
-  private Map<String,String> functionsUsed = new TreeMap<>();
+  private final CommandExecutor commandExecutor;
+  private final UserInterface view;
+  private final Map<String,String> variablesUsed = new TreeMap<>();
+  private final Map<String,String> functionsUsed = new TreeMap<>();
   private String commandReturnValue;
 
-
+  /*
+  Initializes controller
+   */
   public Control(UserInterface UI) {
     view = UI;
-    commandExecution = new CommandExecution(this);
+    commandExecutor = new CommandExecutor(this);
   }
 
   public Map<String,String> getVariables() {
@@ -34,18 +34,18 @@ public class Control {
   public String getCommandReturnValue(){return commandReturnValue;}
 
   public void setCommand(String command) {
-    commandExecution.setCommand(command);
+    commandExecutor.setCommand(command);
   }
 
   public void setLanguage(String lang) {
-    commandExecution.setLanguage(lang);
+    commandExecutor.setLanguage(lang);
   }
 
   public void parseCommand(){
-    commandExecution.parseCommand();
-    variablesUsed.putAll(commandExecution.getVariables());
-    functionsUsed.putAll(commandExecution.getFunctions());
-    commandReturnValue = commandExecution.getCommandReturn();
+    commandExecutor.parseCommand();
+    if(commandExecutor.getVariables()!=null)variablesUsed.putAll(commandExecutor.getVariables());
+    if(commandExecutor.getFunctions()!=null)functionsUsed.putAll(commandExecutor.getFunctions());
+    commandReturnValue = commandExecutor.getCommandReturn();
   }
 
   public void passTurtle(Moveable mover) {

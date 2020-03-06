@@ -1,6 +1,6 @@
 package frontEnd;
 
-import Controller.Control;
+import controller.Control;
 import frontEnd.ButtonsBoxesandLabels.PropertyLabel;
 import java.util.*;
 import javafx.animation.KeyFrame;

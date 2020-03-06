@@ -1,6 +1,6 @@
 package backEnd;
 
-import Controller.Control;
+import controller.Control;
 import backEnd.commands.Command;
 
 import java.lang.reflect.Constructor;

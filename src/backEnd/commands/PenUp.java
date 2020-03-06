@@ -1,8 +1,7 @@
 package backEnd.commands;
 
-import Controller.Control;
+import controller.Control;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public class PenUp extends Command {

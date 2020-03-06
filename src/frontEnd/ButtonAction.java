@@ -1,6 +1,6 @@
 package frontEnd;
 
-import Controller.Control;
+import controller.Control;
 import backEnd.ErrorHandler;
 import frontEnd.ButtonsBoxesandLabels.OurLabeledColorPicker;
 import java.io.File;

@@ -1,0 +1,6 @@
+to pizza [ ] [
+fd 50
+rt 50
+fd 60
+rt 60
+]

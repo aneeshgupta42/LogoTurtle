@@ -1,4 +1,4 @@
-package Controller;
+package controller;
 
 import backEnd.ErrorHandler;
 import frontEnd.ErrorBoxes;

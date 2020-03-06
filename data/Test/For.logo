@@ -1,8 +1,4 @@
-for [ 0 17 ] [
-  forward 50
-  right 150
-  forward 60
-  right 100
-  forward 30
-  right 90
-  ]
+for [ :hi 0 8 4 ] [
+fd 60
+rt 90
+]

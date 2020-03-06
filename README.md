@@ -12,7 +12,7 @@ Finish Date (Basic Implementation): February 26th, 2020
 Hours Spent: 60
 
 ### Primary Roles
-Libba Lou: Implementing the Controller module to interface between the front end and back end components. This includes implementing the Parser class to parse command strings taken from the front end.
+Libba Lou: Implementing the controller module to interface between the front end and back end components. This includes implementing the Parser class to parse command strings taken from the front end.
 
 Cayla Schuval: Responsible for implementing the entire front end package
 

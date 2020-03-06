@@ -1,9 +1,6 @@
 package backEnd.commands;
 
-import Controller.Control;
-import backEnd.commands.Command;
-import java.util.HashMap;
-import java.util.LinkedList;
+import controller.Control;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -45,7 +42,7 @@ public class DoTimes extends Command {
   @Override
   public double repeatCom() {
     repetition = Double.parseDouble(val);
-    return repetition-1;
+    return repetition;
   }
 
 

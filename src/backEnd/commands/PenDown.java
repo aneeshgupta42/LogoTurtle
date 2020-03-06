@@ -1,8 +1,6 @@
 package backEnd.commands;
 
-import Controller.Control;
-import backEnd.commands.Command;
-import java.util.LinkedList;
+import controller.Control;
 import java.util.List;
 
 public class PenDown extends Command {

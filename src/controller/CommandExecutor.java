@@ -1,4 +1,4 @@
-package Controller;
+package controller;
 
 import backEnd.CommandFactory;
 import backEnd.ErrorHandler;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class CommandExecution {
+public class CommandExecutor {
 
   private static final String WHITESPACE = " ";
   private static final String NEWLINE = "\n";
@@ -29,7 +29,7 @@ public class CommandExecution {
 
   private Parser parser;
   private Control control;
-  private List<ListGroups> groupsList;
+  private List<ListObjects> groupsList;
   private String language;
   private CommandFactory commandFactory;
   private Deque<String> command;
@@ -57,7 +57,7 @@ public class CommandExecution {
   /*
   Initializes a commandExecutor that calls the parser on the user Input commands
    */
-  public CommandExecution(Control myControl)
+  public CommandExecutor(Control myControl)
   {
     lists = new StoreLists();
     control = myControl;
@@ -131,6 +131,8 @@ public class CommandExecution {
       if(!line.contains(COMMENT) && !line.isEmpty()){
         organizeInLists(line);
       }
+      System.out.println(command);
+      System.out.println(argument);
       coordinateCommands();
     }
   }
@@ -241,8 +243,8 @@ public class CommandExecution {
 
     if(comm.storeCommands()) {
       findLists();
-      whichUserFunc ++;
       lists.storeFunction(userCommandAttempt,groupsList.get(whichUserFunc).getMyList());
+      whichUserFunc ++;
     }
     saveVariables(comm);
     booleanLogic(comm);
@@ -346,7 +348,7 @@ public class CommandExecution {
        set = sets.pop();
        first = set.get(0);
        end = set.get(1);
-       groupsList.add(new ListGroups(input.substring(first, end)));
+       groupsList.add(new ListObjects(input.substring(first, end)));
     }
   }
 

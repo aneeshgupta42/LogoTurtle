@@ -1,6 +1,6 @@
 package backEnd.commands;
 
-import Controller.Control;
+import controller.Control;
 import java.util.List;
 import java.util.Map;
 

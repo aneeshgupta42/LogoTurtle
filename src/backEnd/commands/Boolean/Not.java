@@ -1,8 +1,7 @@
 package backEnd.commands.Boolean;
 
-import Controller.Control;
+import controller.Control;
 import backEnd.commands.Command;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Not extends Command {
