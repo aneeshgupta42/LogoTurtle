@@ -96,4 +96,8 @@ private static final int SIDEPANE_WIDTH = 300;
     }
     getChildren().addAll(buttons, propertiesBox);
   }
+
+  public List<OurLabeledColorPickers> getPenResources(){
+    return penResources;
+  }
 }

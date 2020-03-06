@@ -7,6 +7,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 public class CommandWindow extends HBox {
   private TextArea inputArea;
@@ -20,7 +21,6 @@ public class CommandWindow extends HBox {
   public CommandWindow(double width, ButtonAction myButtonAction) {
     myTextButtonResources = ResourceBundle.getBundle(TextBoxButtonResources);
     makeCommandWindow(width, myButtonAction);
-    inputArea = new TextArea();
   }
 
   private void makeCommandWindow(double display_width, ButtonAction myButtonAction){
@@ -39,6 +39,18 @@ public class CommandWindow extends HBox {
     }
     vbox.setMinWidth(COMMAND_CONTROLS_WIDTH);
     getChildren().addAll(inputArea, vbox);
+  }
+
+  public void clearText() {
+    inputArea.setText("");
+  }
+
+  public String getText(){
+    return inputArea.getText();
+  }
+
+  public void setText(String text){
+    inputArea.setText(text);
   }
 
 }

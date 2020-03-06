@@ -28,6 +28,7 @@ public class OurButtons extends Button implements Display {
   }
 
   private EventHandler<ActionEvent> Result(String methodName, ButtonAction target) {
+    System.out.println("method" + methodName + " target " + target);
     EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {

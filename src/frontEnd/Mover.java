@@ -64,6 +64,9 @@ public class Mover implements Update {
     });*/
     myLabelPropertyResources = ResourceBundle.getBundle(LabelResources);
     myComboBoxOptionsResources = ResourceBundle.getBundle(ComboBoxOptionsResources);
+    //myView.addNodeToRoot(moverImage);
+    initialX = myView.getXCenter();
+    initialY = myView.getYCenter();
   }
 
   private void handleKeyInput(){
@@ -134,7 +137,6 @@ public class Mover implements Update {
         drawPen(x, y);
       }
       objectMoved = true;
-      myView.setMoverX(moverImage.getX());
       updateLabels();
     }
   }
@@ -266,10 +268,6 @@ public class Mover implements Update {
     return distanceSoFar;
   }
 
-  public void resetTurtle(){
-    moverImage.setRotate(0);
-    setInitialMoverPosition(initialX, initialY);
-  }
 
   public void eraseLines(){
     BorderPane root = myView.getRoot();
@@ -277,7 +275,7 @@ public class Mover implements Update {
   }
 
   public void clearScreen(){
-    resetTurtle();
+    setInitialMoverPosition();
     eraseLines();
   }
 
@@ -298,15 +296,21 @@ public class Mover implements Update {
     return moverVisible;
   }
 
-  public void setInitialMoverPosition(double xcenter, double ycenter) {
-    initialX = xcenter;
-    initialY = ycenter;
-    moverImage.setX(xcenter);
-    moverImage.setY(ycenter);
+  public void setInitialMoverPosition() {
+    moverImage.setX(initialX);
+    moverImage.setY(initialY);
     moverImage.setRotate(0);
     initializeLinePosition(moverImage.getX(), moverImage.getY(), moverImage.getRotate());
     setMoverInitialCords(moverImage.getX(), moverImage.getY());
+    updateLabels();
   }
+
+  public void resetMover(){
+    setInitialMoverPosition();
+    moverVisible(true);
+    updateLabels();
+  }
+
 
   @Override
   public int locationXUpdate(int changeInXPos) {

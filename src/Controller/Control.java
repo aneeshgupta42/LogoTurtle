@@ -114,7 +114,7 @@ public class Control {
     if (clearScreen) {
       myMover.clearScreen();
     } else {
-      myMover.resetTurtle();
+      myMover.resetMover();
     }
   }
 

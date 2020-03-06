@@ -137,4 +137,79 @@ private Node makeSideWindow() {
     myMover.setMoverInitialCords(image.getX(), image.getY());
   }
 
+  public void selectTurtle(String num) {
+    Double number = Double.parseDouble(num);
+    setMyMover(turtleMap.get(number));
+    moverID = number;
+    for(OurLabeledColorPickers label: penResources){
+      label.setInitialColor(myMover.getLineColor());
+    }
+    for(OurComboBox boximage : imageResources){
+      //boximage.setValue(myMover.getImage());
+
+    }
+    myMover.updateLabels();
+  }
+   public void displayHelpScreen() {
+    Stage stage2 = new Stage();
+    stage2.setTitle("Table View Sample");
+    ScrollPane pane = new ScrollPane();
+    stage2.setWidth(1100);
+    stage2.setHeight(500);
+
+    Image command = new Image(getClass().getClassLoader().getResourceAsStream(COMMAND_ONE));
+    ImageView commandOneIm = new ImageView(command);
+    commandOneIm.setPreserveRatio(true);
+    commandOneIm.setFitWidth(800);
+    Image commandTwo = new Image(getClass().getClassLoader().getResourceAsStream(COMMAND_TWO));
+    ImageView commandTwoIm = new ImageView(commandTwo);
+    commandTwoIm.setPreserveRatio(true);
+    commandTwoIm.setFitWidth(1000);
+
+    final VBox vbox = new VBox();
+    vbox.setSpacing(5);
+    vbox.setPadding(new Insets(10, 0, 0, 10));
+    vbox.getChildren().addAll(commandOneIm, commandTwoIm);
+    pane.setContent(vbox);
+    pane.setFitToWidth(true);
+    Scene scene = new Scene(pane);
+    stage2.setScene(scene);
+    stage2.show();
+  }
+ public void setOnRun() {
+    myText = inputArea.getText();
+    String thistext = myText;
+    myButtonAction.sendInfoToControl(myText);
+    inputArea.setText("");
+    if (myMover.objectMoved()) {
+      System.out.println("variables" + control.getVariables().keySet());
+      setHistoryTab(historyBox, thistext);
+      myMover.setObjectMoved(false);
+    }
+    createStoredElementsTabs(variablesBox, variables, control.getVariables(), true);
+    createStoredElementsTabs(userCommandsBox, userCommands, control.getUserCommands(), false);
+    myMover.updateLabels();
+  }
+  public void setImage(String image) {
+    double moverXPos = myMover.getImage().getX();
+    double moverYPos = myMover.getImage().getY();
+    double moverAngle = myMover.getMoverAngle();
+    root.getChildren().remove(myMover.getImage());
+    String path = myComboBoxOptionsResources.getString(image);
+    myMover.changeMoverDisplay(path);
+    //)= (ImageView) myMover.changeMoverDisplay(path);
+    myMover.getImage().setX(moverXPos);
+    myMover.getImage().setY(moverYPos);
+    myMover.getImage().setRotate(moverAngle);
+    root.getChildren().add(myMover.getImage());
+  }
+  public void addTurtle() {
+    System.out.println("reached");
+    numOfMovers++;
+    Mover mover = new Mover(this, numOfMovers);
+    mover.setInitialMoverPosition();
+    turtleMap.put(numOfMovers, mover);
+    root.getChildren().add(mover.getImage());
+    turtleList.add(numOfMovers);
+  }
 }*/
