@@ -1,31 +1,30 @@
-package backEnd.commands.Math;
+package backEnd.commands;
 
 import controller.Control;
 import backEnd.commands.Command;
 import java.util.List;
 
-public class Quotient extends Command {
-  private static final int NUMARGS = 2;
-  private double quotient;
+public class Sine extends Command {
+  private static final int NUMARGS = 1;
+  private double sinResult;
 
-  public Quotient() {
+  public Sine() {
     super();
     super.numberOfArgs = NUMARGS;
   }
 
-  public Quotient(List<String> varargs, Control control) {
+  public Sine(List<String> varargs, Control control) {
     super(varargs, control);
     super.numberOfArgs = NUMARGS;
 
     double argOne = Double.parseDouble(varargs.get(0));
-    double argTwo = Double.parseDouble(varargs.get(1));
-    quotient = argOne / argTwo;
+    sinResult = Math.sin((Math.toRadians(argOne)));
 
   }
 
   @Override
   public String commandValueReturn() {
-    return Double.toString(quotient);
+    return Double.toString(sinResult);
   }
   @Override
   public double repeatCom() {

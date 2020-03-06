@@ -1,32 +1,31 @@
-package backEnd.commands.Math;
+package backEnd.commands;
 
 import controller.Control;
 import backEnd.commands.Command;
-import java.lang.Math;
 import java.util.List;
 
-public class Power extends Command {
+public class Product extends Command {
     private static final int NUMARGS = 2;
-    private double result;
+    private double product;
 
-    public Power() {
+    public Product() {
         super();
         super.numberOfArgs = NUMARGS;
     }
 
-    public Power(List<String> varargs, Control control) {
+    public Product(List<String> varargs, Control control){
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
+
         double argOne = Double.parseDouble(varargs.get(0));
         double argTwo = Double.parseDouble(varargs.get(1));
-
-        result = Math.pow(argOne, argTwo);
+        product = argTwo * argOne;
 
     }
 
     @Override
     public String commandValueReturn() {
-        return Double.toString(result);
+        return Double.toString(product);
     }
     @Override
     public double repeatCom() {

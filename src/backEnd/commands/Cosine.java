@@ -1,31 +1,30 @@
-package backEnd.commands.Math;
+package backEnd.commands;
 
 import controller.Control;
 import backEnd.commands.Command;
-import java.lang.Math;
 import java.util.List;
 
-public class Random extends Command {
+public class Cosine extends Command {
     private static final int NUMARGS = 1;
-    private double random;
+    private double cosResult;
 
-    public Random() {
+    public Cosine() {
         super();
-        super.numberOfArgs = NUMARGS;
+        super.numberOfArgs= NUMARGS;
     }
 
-    public Random(List<String> varargs, Control control) {
+    public Cosine(List<String> varargs, Control control) {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 
         double argOne = Double.parseDouble(varargs.get(0));
-        random = Math.random() * argOne;
+        cosResult = Math.cos((Math.toRadians(argOne)));
 
     }
 
     @Override
     public String commandValueReturn() {
-        return Double.toString(random);
+        return Double.toString(cosResult);
     }
     @Override
     public double repeatCom() {

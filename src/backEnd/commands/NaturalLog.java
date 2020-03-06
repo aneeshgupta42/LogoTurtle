@@ -1,30 +1,30 @@
-package backEnd.commands.Math;
+package backEnd.commands;
 
 import controller.Control;
 import backEnd.commands.Command;
 import java.util.List;
 
-public class Tangent extends Command {
+public class NaturalLog extends Command {
     private static final int NUMARGS = 1;
-    private double tanResult;
+    private double log;
 
-    public Tangent() {
+    public NaturalLog() {
         super();
-        super.numberOfArgs= NUMARGS;
+        super.numberOfArgs = NUMARGS;
     }
 
-    public Tangent(List<String> varargs, Control control){
+    public NaturalLog(List<String> varargs, Control control) {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 
         double argOne = Double.parseDouble(varargs.get(0));
-        tanResult = Math.tan((Math.toRadians(argOne)));
+        log = Math.log(argOne);
 
     }
 
     @Override
     public String commandValueReturn() {
-        return Double.toString(tanResult);
+        return Double.toString(log);
     }
     @Override
     public double repeatCom() {

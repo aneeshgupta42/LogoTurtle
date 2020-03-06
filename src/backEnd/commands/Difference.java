@@ -1,31 +1,31 @@
-package backEnd.commands.Math;
+package backEnd.commands;
 
 import controller.Control;
 import backEnd.commands.Command;
 import java.util.List;
 
-public class Remainder extends Command {
+public class Difference extends Command {
     private static final int NUMARGS = 2;
-    private double remainder;
+    private double diff;
 
-    public Remainder() {
+    public Difference() {
         super();
         super.numberOfArgs = NUMARGS;
     }
 
-    public Remainder(List<String> varargs, Control control) {
+    public Difference(List<String> varargs, Control control){
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 
         double argOne = Double.parseDouble(varargs.get(0));
         double argTwo = Double.parseDouble(varargs.get(1));
-        remainder = argOne % argTwo;
+        diff = argOne - argTwo;
 
     }
 
     @Override
     public String commandValueReturn() {
-        return Double.toString(remainder);
+        return Double.toString(diff);
     }
     @Override
     public double repeatCom() {

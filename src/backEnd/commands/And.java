@@ -1,4 +1,4 @@
-package backEnd.commands.Boolean;
+package backEnd.commands;
 
 import controller.Control;
 import backEnd.commands.Command;

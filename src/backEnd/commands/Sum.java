@@ -1,30 +1,29 @@
-package backEnd.commands.Math;
+package backEnd.commands;
 
 import controller.Control;
 import backEnd.commands.Command;
 import java.util.List;
 
-public class Sine extends Command {
-  private static final int NUMARGS = 1;
-  private double sinResult;
+public class Sum extends Command {
+  private static final int NUMARGS = 2;
+  private double sum;
 
-  public Sine() {
+  public Sum() {
     super();
-    super.numberOfArgs = NUMARGS;
+    super.numberOfArgs= NUMARGS;
   }
 
-  public Sine(List<String> varargs, Control control) {
+  public Sum(List<String> varargs, Control control) {
     super(varargs, control);
     super.numberOfArgs = NUMARGS;
-
     double argOne = Double.parseDouble(varargs.get(0));
-    sinResult = Math.sin((Math.toRadians(argOne)));
-
+    double argTwo = Double.parseDouble(varargs.get(1));
+    sum = argTwo + argOne;
   }
 
   @Override
   public String commandValueReturn() {
-    return Double.toString(sinResult);
+    return Double.toString(sum);
   }
   @Override
   public double repeatCom() {

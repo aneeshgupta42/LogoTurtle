@@ -1,30 +1,30 @@
-package backEnd.commands.Math;
+package backEnd.commands;
 
 import controller.Control;
 import backEnd.commands.Command;
 import java.util.List;
 
-public class Cosine extends Command {
+public class Minus extends Command {
     private static final int NUMARGS = 1;
-    private double cosResult;
+    private double minus;
 
-    public Cosine() {
+    public Minus() {
         super();
-        super.numberOfArgs= NUMARGS;
+        super.numberOfArgs = NUMARGS;
     }
 
-    public Cosine(List<String> varargs, Control control) {
+    public Minus(List<String> varargs, Control control){
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 
         double argOne = Double.parseDouble(varargs.get(0));
-        cosResult = Math.cos((Math.toRadians(argOne)));
+        minus = argOne * -1;
 
     }
 
     @Override
     public String commandValueReturn() {
-        return Double.toString(cosResult);
+        return Double.toString(minus);
     }
     @Override
     public double repeatCom() {

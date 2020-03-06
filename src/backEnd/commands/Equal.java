@@ -1,26 +1,27 @@
-package backEnd.commands.Boolean;
+package backEnd.commands;
 
 import controller.Control;
 import backEnd.commands.Command;
 import java.util.List;
 
-public class Not extends Command {
-    private static final int NUMARGS = 1;
+public class Equal extends Command {
+    private static final int NUMARGS = 2;
     private static final double TRUE = 1.0;
     private static final double FALSE = 0.0;
     private double booleanResult;
 
-    public Not() {
+    public Equal() {
         super();
         super.numberOfArgs = NUMARGS;
     }
 
-    public Not(List<String> varargs, Control control) {
+    public Equal(List<String> varargs, Control control) {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
-
         double argOne = Double.parseDouble(varargs.get(0));
-        if(argOne == 0) {
+        double argTwo = Double.parseDouble(varargs.get(1));
+
+        if(argOne == argTwo) {
             booleanResult = TRUE;
         } else {
             booleanResult = FALSE;
@@ -31,7 +32,6 @@ public class Not extends Command {
     public String commandValueReturn() {
         return Double.toString(booleanResult);
     }
-
     @Override
     public double repeatCom() {
         return super.repeatCom();
