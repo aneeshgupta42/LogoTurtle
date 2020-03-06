@@ -86,4 +86,6 @@ public interface Viewable{
     void setDefaultImage(String image);
 
     void changePenPosition();
+
+    void displayReturnValue();
 }
