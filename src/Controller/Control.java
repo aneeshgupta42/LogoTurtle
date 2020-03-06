@@ -14,19 +14,15 @@ public class Control {
   private double turtleCol;
   private double turtleRow;
   private double turtleAngle;
-  private CommandGrouping commandGrouping;
-  private String language;
-  private String input;
+  private CommandExecution commandExecution;
   private UserInterface view;
   private Map<String,String> variablesUsed = new TreeMap<>();
   private Map<String,String> functionsUsed = new TreeMap<>();
 
-  /*
-  Initializing a control (for reference storeLists is where all the data in lists is being passed)
-   */
+
   public Control(UserInterface UI) {
     view = UI;
-    commandGrouping = new CommandGrouping(this);
+    commandExecution = new CommandExecution(this);
   }
 
   public Map<String,String> getVariables() {
