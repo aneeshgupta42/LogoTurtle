@@ -25,6 +25,7 @@ public class CommandExecution {
   private static final String LIST_END = "]";
   private static final String COMMENT = "#";
   private static final String SYNTAX = "syntax";
+  private static final int output = -500;
 
   private Parser parser;
   private Control control;
@@ -41,7 +42,6 @@ public class CommandExecution {
   private boolean logicStatement;
   private StoreLists lists;
   private boolean hasBeenStored = false;
-  private static final int output = -500;
   private String section;
   private LinkedList<Integer> starts;
   private LinkedList<Integer> ends;
@@ -52,6 +52,7 @@ public class CommandExecution {
   private int total;
   private int index;
   private String variable;
+  private String commandReturn;
 
   public CommandExecution(Control myControl)
   {
@@ -66,6 +67,12 @@ public class CommandExecution {
   public void setCommand(String command) { input = command; }
   public void setLanguage(String lang) { language = lang; }
 
+  private void setCommandReturn(String commandValueReturn) {
+    commandReturn = commandValueReturn;
+  }
+
+  private String getCommandReturn(){return commandReturn;}
+
   /*
  Calls the parser to start parsing the user input
   */
@@ -77,12 +84,11 @@ public class CommandExecution {
     args = new LinkedList<>();
     hasBeenStored = false;
     groupsList = new ArrayList<ListGroups>();
-    setCommand(input);
-    setLanguage(language);
     parser.addPatterns(language);
     parser.addPatterns(SYNTAX);
     parseText();
   }
+
   /*
     Splits text into lines
    */
@@ -92,8 +98,6 @@ public class CommandExecution {
       if(!line.contains(COMMENT) && !line.isEmpty()){
         organizeInStacks(line);
       }
-      System.out.println("Command "+command);
-      System.out.println("Argument "+argument);
       coordinateCommands();
     }
   }
@@ -152,16 +156,14 @@ public class CommandExecution {
    */
   private void makeClassPathToCommand(String comm) {
     commandPath = CLASS_PATH + parser.getSymbol(comm);
-    System.out.println("PATH"+commandPath);
   }
 
   /*
   Coordinating the command to the number of arguments it needs and pushing it to be run
    */
   private void checkIfCommandCanRun(int argNum) {
-    if (argNum == 0) {
-      runCommand();
-    } else {
+    if (argNum == 0) { runCommand(); }
+    else {
       if (argument.size() >= argNum) {
         String arg = argument.pop();
         if(parser.getSymbol(arg).equals(VARIABLE)) {
@@ -190,7 +192,7 @@ public class CommandExecution {
           parseText();
         }
         obtainCommand();
-   //     System.out.println("Variable storing " + hasBeenStored);
+        System.out.println("Variable storing " + hasBeenStored);
     }
   }
 
@@ -198,12 +200,10 @@ public class CommandExecution {
   Passes arguments to the command class and grabs a user function if it exists.
    */
   private void obtainCommand() {
-  //  System.out.println(com);
     try {
       Command commandGiven = commandFactory.generateCommand(commandPath, args);
       createCommand(commandGiven);
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException | ExceptionInInitializerError e) {
-      e.printStackTrace();
       ErrorBoxes box = new ErrorBoxes(new ErrorHandler("InvalidCommand"));
     }
   }
@@ -214,7 +214,7 @@ public class CommandExecution {
   public void createCommand(Command comm) {
     if(comm.commandValueReturn()!=null){
       argument.add(comm.commandValueReturn());
-      System.out.println("This is what it returns: "+comm.commandValueReturn());
+      setCommandReturn(comm.commandValueReturn());
       if(!command.isEmpty()) {
         coordinateCommands();
       }

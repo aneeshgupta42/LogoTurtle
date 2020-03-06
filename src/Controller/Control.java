@@ -10,13 +10,12 @@ public class Control {
   private double turtleCol;
   private double turtleRow;
   private double turtleAngle;
-  private CommandExecution commandGrouping;
+  private CommandExecution commandExecution;
   private Map<String,String> variablesUsed = new TreeMap<>();
   private Map<String,String> functionsUsed = new TreeMap<>();
-  private String language;
-  private String input;
 
   public Control() {
+    commandExecution = new CommandExecution(this);
   }
 
   public Map<String,String> getVariables() {
@@ -26,20 +25,17 @@ public class Control {
   public Map<String,String> getUserCommands() {return functionsUsed;}
 
   public void setCommand(String command) {
-    input = command;
+    commandExecution.setCommand(command);
   }
 
   public void setLanguage(String lang) {
-    language = lang;
+    commandExecution.setLanguage(lang);
   }
 
   public void parseCommand(){
-    commandGrouping = new CommandExecution(this);
-    commandGrouping.setCommand(input);
-    commandGrouping.setLanguage(language);
-    commandGrouping.parseCommand();
-    variablesUsed.putAll(commandGrouping.setVariables());
-    functionsUsed.putAll(commandGrouping.setFunctions());
+    commandExecution.parseCommand();
+    variablesUsed.putAll(commandExecution.setVariables());
+    functionsUsed.putAll(commandExecution.setFunctions());
   }
 
   public void passTurtle(Mover mover) {
