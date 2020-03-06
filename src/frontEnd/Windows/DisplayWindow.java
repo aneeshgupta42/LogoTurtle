@@ -17,9 +17,11 @@ public class DisplayWindow extends VBox {
   private Rectangle rectangle;
   private static CommandWindow commandWindow;
   private static ButtonAction myButtonAction;
+  private static CustomWindow myCustomWindow;
 
-  public DisplayWindow(ButtonAction buttonAction){
+  public DisplayWindow(ButtonAction buttonAction, CustomWindow customWindow){
     myButtonAction = buttonAction;
+    myCustomWindow = customWindow;
     makeDisplayWindow();
   }
 
@@ -27,11 +29,8 @@ public class DisplayWindow extends VBox {
   private void makeDisplayWindow(){
     rectangle = new Rectangle(DISPLAY_WIDTH, DISPLAY_HEIGHT);
     rectangle.getStyleClass().add(RECTANGLE_STYLE);
-    //CommandWindow commandWindow = new HBox(makeCommandWindow());
-    commandWindow = new CommandWindow(DISPLAY_WIDTH, myButtonAction);
+    commandWindow = new CommandWindow(DISPLAY_WIDTH, myCustomWindow);
     getChildren().addAll(rectangle, commandWindow);
-    //display.getChildren().addAll(vbox);
-    //return display;
   }
 
   public void setBackgroundColor(Color color) {
