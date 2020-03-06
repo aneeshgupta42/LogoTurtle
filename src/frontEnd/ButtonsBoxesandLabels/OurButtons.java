@@ -1,7 +1,7 @@
 package frontEnd.ButtonsBoxesandLabels;
 
 import frontEnd.ButtonAction;
-import frontEnd.Display;
+
 import java.lang.reflect.InvocationTargetException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -13,7 +13,7 @@ import java.lang.reflect.Method;
  *
  * @author Robert C. Duvall
  */
-public class OurButtons extends Button implements Display {
+public class OurButtons extends Button {
   /**
    * Create input with given label and method to call on the given Controller.
    */
@@ -28,6 +28,7 @@ public class OurButtons extends Button implements Display {
   }
 
   private EventHandler<ActionEvent> Result(String methodName, ButtonAction target) {
+    System.out.println("method" + methodName + " target " + target);
     EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {

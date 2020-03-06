@@ -1,21 +1,32 @@
 package Controller;
 
-import frontEnd.Mover;
+import frontEnd.Moveable;
+import frontEnd.UserInterface;
+import frontEnd.Viewable;
+
 import java.util.Map;
 import java.util.TreeMap;
 
 public class Control {
 
-  private Mover myMover;
+
+  private Moveable myMover;
   private double turtleCol;
   private double turtleRow;
   private double turtleAngle;
-  private CommandExecution commandExecution;
+  private CommandGrouping commandGrouping;
+  private String language;
+  private String input;
+  private UserInterface view;
   private Map<String,String> variablesUsed = new TreeMap<>();
   private Map<String,String> functionsUsed = new TreeMap<>();
 
-  public Control() {
-    commandExecution = new CommandExecution(this);
+  /*
+  Initializing a control (for reference storeLists is where all the data in lists is being passed)
+   */
+  public Control(UserInterface UI) {
+    view = UI;
+    commandGrouping = new CommandGrouping(this);
   }
 
   public Map<String,String> getVariables() {
@@ -38,7 +49,7 @@ public class Control {
     functionsUsed.putAll(commandExecution.setFunctions());
   }
 
-  public void passTurtle(Mover mover) {
+  public void passTurtle(Moveable mover) {
     myMover = mover;
     turtleRow = myMover.getMoverRow();
     turtleCol = myMover.getMoverCol();
@@ -89,12 +100,8 @@ public class Control {
     if (clearScreen) {
       myMover.clearScreen();
     } else {
-      myMover.resetTurtle();
+      myMover.resetMover();
     }
-  }
-
-  public Mover getTurtle() {
-    return myMover;
   }
 
   public double getTurtleRelativeXPos() {
@@ -103,6 +110,14 @@ public class Control {
 
   public double getTurtleRelativeYPos() {
     return myMover.getMoverCenterYPos() - turtleRow;
+  }
+
+  public void setShape(int choice){
+    myMover.setImageUsingIndex(choice);
+  }
+
+  public int getShape(){
+    return myMover.getCurrentImageIndex();
   }
 }
 

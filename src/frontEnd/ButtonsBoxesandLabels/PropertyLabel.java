@@ -1,7 +1,7 @@
 package frontEnd.ButtonsBoxesandLabels;
 
 import frontEnd.ButtonAction;
-import frontEnd.Display;
+
 import java.lang.reflect.InvocationTargetException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -19,7 +19,7 @@ import javafx.scene.text.Text;
  *
  * @author Robert C. Duvall
  */
-public class PropertyLabel extends HBox implements Display {
+public class PropertyLabel extends HBox {
   //private DoubleProperty amountDue = new SimpleDoubleProperty();
   private StringProperty amountDue = new SimpleStringProperty();
   private Label label;

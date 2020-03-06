@@ -2,54 +2,179 @@ package frontEnd;
 
 import Controller.Control;
 import backEnd.ErrorHandler;
-import frontEnd.ErrorBoxes;
-import frontEnd.Mover;
-import frontEnd.UserInterface;
+import frontEnd.ButtonsBoxesandLabels.OurLabeledColorPicker;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+
+import java.util.ResourceBundle;
+import java.util.Scanner;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 public class ButtonAction {
   private UserInterface myView;
   private static final String COMMAND_ONE = "viewboc.png";
   private static final String COMMAND_TWO = "viewbox.png";
   private Mover myMover;
+  private static final String ComboBoxOptionsResources = "resources.UIActions.ComboBoxOptions";
+  private DisplayWindow displayWindow;
   private Map<Double, Mover> turtleMap;
-  private BorderPane myRoot;
-  private TextArea myCommander;
   private Control control;
   private Rectangle rectangle;
+  private ResourceBundle myComboBoxOptionsResources;
+  private List<String> imageOptions;
   private double defaultMoveAmount = 50;
   private double defaultTurnAmount = 90;
+  private MoverPropertiesWindow propertiesWindow;
 
   public ButtonAction(UserInterface view){
     myView=view;
     myMover = myView.getMover();
     turtleMap = myView.getTurtleMap();
-    myRoot = myView.getRoot();
-    myCommander = myView.getCommander();
     control = myView.getControl();
     rectangle = myView.getRectangle();
+    myComboBoxOptionsResources = ResourceBundle.getBundle(ComboBoxOptionsResources);
+    String optionsString = myComboBoxOptionsResources.getString("setImageOptions");
+    imageOptions = Arrays.asList(optionsString.split(","));
+    displayWindow = myView.getDisplayWindow();
+    propertiesWindow = myView.getPropertyWindow();
   }
 
+  public UserInterface getView(){
+    return myView;
+  }
+
+  public void resetDisplay() {
+    myView.getDisplayWindow().resetDisplay(getMoverMap());
+  }
+
+  public void selectFileScreen() {
+    FileChooser fileChooser = new FileChooser();
+    String dataPath = System.getProperty("user.dir") + "/data/examples";
+    fileChooser.setInitialDirectory(new File(dataPath));
+    File selectedFile = fileChooser.showOpenDialog(myView.getStage());
+    if (selectedFile != null) {
+      try {
+        scanFile(selectedFile);
+      } catch (FileNotFoundException ex) {
+        ErrorBoxes box = new ErrorBoxes(new ErrorHandler("InvalidFile"));
+      }
+    }
+  }
+
+  private void scanFile(File file) throws FileNotFoundException {
+    Scanner scnr = new Scanner(file);
+    //Reading each line of file using Scanner class
+    int lineNumber = 0;
+    while (scnr.hasNextLine()) {
+      String line = scnr.nextLine();
+      getCommandWindow().setText(getCommandWindow().getText() + line + "\n");
+      lineNumber++;
+    }
+  }
+
+  public void setLanguage(String language) {
+    control.setLanguage(language);
+  }
+
+  public void setImage(String image) {
+    //String path =myView.getResource().getString(image);
+    //myMover.changeMoverDisplay(path);
+    double moverXPos = getMover().getImage().getX();
+    double moverYPos = getMover().getImage().getY();
+    double moverAngle =getMover().getMoverAngle();
+    myView.removeNodeFromRoot(getMover().getImage());
+    String path = myView.getResource().getString(image);
+    getMover().changeMoverDisplay(path);
+    getMover().setImageIndex(imageOptions.indexOf(image)+1);
+    getMover().getImage().setX(moverXPos);
+    getMover().getImage().setY(moverYPos);
+    getMover().getImage().setRotate(moverAngle);
+    myView.addNodeToRoot(getMover().getImage());
+  }
+
+  public void setBackgroundColor(Color color) {
+    myView.getDisplayWindow().setBackgroundColor(color);
+  }
+
+  public void setPenColor(Color color) {
+    getMover().setLineColor(color);
+  }
+
+  public void setOnRun() {
+    String myText = getCommandWindow().getText();
+    sendInfoToControl(myText);
+    getCommandWindow().clearText();
+    if (getMover().objectMoved()) {
+      getTabWindow().getHistoryTab().setHistoryTab(getCommandWindow(), myText);
+      getMover().setObjectMoved(false);
+    }
+    getTabWindow().getCommandTab().setContent(getTabWindow().getCommandTab().resetTabContents(control.getUserCommands(), false));
+    System.out.println("commands "+  control.getUserCommands());
+    getTabWindow().getVariableTab().setContent(getTabWindow().getVariableTab().resetTabContents(control.getVariables(), true));
+    getMover().updateLabels();
+  }
+
+  void sendInfoToControl(String myText) {
+    for(Mover mover: turtleMap.values()) {
+      if (mover.getActive()) {
+        control.setCommand(myText);
+        control.passTurtle(mover);
+        control.parseCommand();
+      }
+    }
+  }
+
+  public void addTurtle() {
+    Double numOfMovers = (double) myView.getTurtleMap().size() + 1;
+    Mover mover = new Mover(myView, numOfMovers);
+    mover.setInitialMoverPosition();
+    myView.addToMapAndList(numOfMovers, mover);
+    myView.addNodeToRoot(mover.getImage());
+    //myView.addToList(numOfMovers);
+    //System.out.println(turtleList);
+    //System.out.println("LIST" + myView.getPropertyWindow().getTurtleSelection());
+    //myView.getPropertyWindow().getTurtleSelection().updateItems(FXCollections.observableArrayList(myView.getTurtleList()));
+  }
+
+  public void moveBackward() {
+    sendInfoToControl("fd " + (-defaultMoveAmount));
+  }
+
+  public void moveForward() {
+    sendInfoToControl("fd " + defaultMoveAmount);
+  }
+
+  public void moveLeft() {
+    sendInfoToControl("lt " + defaultTurnAmount);
+  }
+
+  public void moveRight() {
+    sendInfoToControl("rt " + defaultTurnAmount);
+  }
+
+  public void setOnClear() {
+    getCommandWindow().clearText();
+  }
+
+  public void selectTurtle(String num) {
+    //myView.selectTurtle(num);
+    Double number = Double.parseDouble(num);
+    for(OurLabeledColorPicker label: myView.getPropertyWindow().getPenResources()){
+      label.setInitialColor(myMover.getLineColor());
+    }
+    getMover().updateLabels();
+  }
   public void displayHelpScreen() {
     Stage stage2 = new Stage();
     stage2.setTitle("Table View Sample");
     ScrollPane pane = new ScrollPane();
     stage2.setWidth(1100);
     stage2.setHeight(500);
+
     Image command = new Image(getClass().getClassLoader().getResourceAsStream(COMMAND_ONE));
     ImageView commandOneIm = new ImageView(command);
     commandOneIm.setPreserveRatio(true);
@@ -70,162 +195,70 @@ public class ButtonAction {
     stage2.show();
   }
 
-  public void resetDisplay() {
-    myView.resetDisplay();
-  }
-
-  public void selectFileScreen() {
-    FileChooser fileChooser = new FileChooser();
-    String dataPath = System.getProperty("user.dir") + "/data/examples";
-    fileChooser.setInitialDirectory(new File(dataPath));
-    File selectedFile = fileChooser.showOpenDialog(myView.getStage());
-    if (selectedFile != null) {
-      try {
-        myView.scanFile(selectedFile);
-      } catch (FileNotFoundException ex) {
-        ErrorBoxes box = new ErrorBoxes(new ErrorHandler("InvalidFile"));
-      }
-    }
-  }
-
-  public void setLanguage(String language) {
-    control.setLanguage(language);
-  }
-
-  public void setImage(String image) {
-    //String path =myView.getResource().getString(image);
-    //myMover.changeMoverDisplay(path);
-    double moverXPos = myView.getMover().getImage().getX();
-    double moverYPos = myView.getMover().getImage().getY();
-    double moverAngle =myView.getMover().getMoverAngle();
-    myView.removeNodeFromRoot(myView.getMover().getImage());
-    String path = myView.getResource().getString(image);
-    myView.getMover().changeMoverDisplay(path);
-    //)= (ImageView) myMover.changeMoverDisplay(path);
-    myView.getMover().getImage().setX(moverXPos);
-    myView.getMover().getImage().setY(moverYPos);
-    myView.getMover().getImage().setRotate(moverAngle);
-    myView.addNodeToRoot(myView.getMover().getImage());
-  }
-
-  public void setBackgroundColor(Color color) {
-    myView.setBackgroundColor(color);
-    //rectangle.setFill(color);
-  }
-
-  public void setPenColor(Color color) {
-    myMover.setLineColor(color);
-  }
-
-  public void setOnRun() {
-    myView.setOnRun();
-    /*myText = inputArea.getText();
-    String thistext = myText;
-    sendInfoToControl(myText);
-    inputArea.setText("");
-    if (myMover.objectMoved()) {
-      System.out.println("variables" + control.getVariables().keySet());
-      setHistoryTab(historyBox, thistext);
-      myMover.setObjectMoved(false);
-    }
-    createStoredElementsTabs(variablesBox, variables, control.getVariables(), true);
-    createStoredElementsTabs(userCommandsBox, userCommands, control.getUserCommands(), false);
-    myMover.updateLabels();*/
-  }
-
-  private void sendInfoToControl(String myText) {
-    for(Mover mover: turtleMap.values()) {
-      if (mover.getActive()) {
-        myMover= mover;
-        control.setCommand(myText);
-        control.passTurtle(myMover);
-        control.parseCommand();
-      }
-    }
-  }
-
-  public void addTurtle() {
-    myView.addTurtle();
-    /*System.out.println("reached");
-    numOfMovers++;
-    Mover mover = new Mover(this);
-    //moverImage = mover.displayMover(TURTLE);
-    setMoverPosition(mover.getImage());
-    turtleMap.put(numOfMovers, mover);
-    myRoot.getChildren().add(mover.getImage());
-    turtleList.add(numOfMovers);
-    System.out.println(turtleList);
-    //turtleSelection.updateItems(FXCollections.observableArrayList(turtleList));*/
-  }
-
-  public void moveBackward() {
-    sendInfoToControl("fd " + (-defaultMoveAmount));
-  }
-
-  public void moveForward() {
-    sendInfoToControl("fd " + defaultMoveAmount);
-  }
-
-  public void moveLeft() {
-    sendInfoToControl("lt " + defaultTurnAmount);
-  }
-
-  public void moveRight() {
-    sendInfoToControl("rt " + defaultTurnAmount);
-  }
-
-  public void setOnClear() {
-    myView.setOnClear();
-    //inputArea.setText("");
-  }
-
-  public void selectTurtle(String num) {
-    myView.selectTurtle(num);
-    /*Double number = Double.parseDouble(num);
-    myView.setMyMover(turtleMap.get(number));
-    moverID = number;
-    for(OurLabeledColorPickers label: penResources){
-      label.setInitialColor(myMover.getLineColor());
-    }
-    myMover.updateLabels();*/
-  }
-
   public double getLineWidth() {
-    return myView.getLineWidth();
+    return getMover().getThickness();
   }
+
   public double getXPosition(){
-    //return myMover.getMoverCol()-xcenter;
-    return myView.getXPosition();
+    return getMover().getXPosition();
   }
   public double getYPosition(){
-    //return myMover.getMoverRow()-ycenter;
-    return myView.getYPosition();
+    return getMover().getYPosition();
   }
   public double getMoverID(){
-    //System.out.println("ID" + moverID);
-    return myView.getmoverID();
+    return getMover().getMoverID();
   }
+
   public double getAngle(){
-    return myMover.getMoverAngle();
+    return getMover().getMoverAngle();
   }
 
   public double getLineThickness(){
-    return myMover.getThickness();
+    return getMover().getThickness();
   }
 
   public String getPenPosition(){
-    return myMover.getPenPosition();
+    return getMover().getPenPosition();
   }
   public void setDefaultImage(String image) {
-    myMover.setDefaultImage(image);
+    getMover().setDefaultImage(image);
 
   }
   public void changePenPosition(){
-    myMover.setPen(!myMover.getPen());
+    getMover().setPen(!getMover().getPen());
   }
+
   public Color getLineColor() {
-    return myMover.getLineColor();
+    return getMover().getLineColor();
   }
 
+  public void setDefaultMoveAmount(String num){
+    Double number = Double.parseDouble(num);
+    defaultMoveAmount = number;
+  }
 
+  public void setDefaultTurnAmount(String num){
+    Double number = Double.parseDouble(num);
+    defaultTurnAmount = number;
+  }
+
+  public void setPenThickness(String num){
+    Double number = Double.parseDouble(num);
+    getMover().setThickness(number);
+  }
+
+  private Mover getMover(){
+    return myView.getMover();
+  }
+  private Map getMoverMap(){
+    return myView.getTurtleMap();
+  }
+  private CommandWindow getCommandWindow(){
+    return myView.getDisplayWindow().getCommandWindow();
+  }
+  private TabWindow getTabWindow(){
+    return myView.getTabWindow();
+  }
 }
+
+
