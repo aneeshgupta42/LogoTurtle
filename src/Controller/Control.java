@@ -1,27 +1,23 @@
 package Controller;
 
-import backEnd.ErrorHandler;
-import backEnd.commands.Command;
-import frontEnd.ErrorBoxes;
-import frontEnd.Mover;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedList;
+import frontEnd.Moveable;
+import frontEnd.UserInterface;
+import frontEnd.Viewable;
+
 import java.util.Map;
 import java.util.TreeMap;
 
 public class Control {
 
 
-  private Mover myMover;
+  private Moveable myMover;
   private double turtleCol;
   private double turtleRow;
   private double turtleAngle;
   private CommandGrouping commandGrouping;
   private String language;
   private String input;
+  private UserInterface view;
   private Map<String,String> variablesUsed = new TreeMap<>();
   private Map<String,String> functionsUsed = new TreeMap<>();
   private StoreLists lists;
@@ -31,7 +27,8 @@ public class Control {
   /*
   Initializing a control (for reference storeLists is where all the data in lists is being passed)
    */
-  public Control() {
+  public Control(UserInterface UI) {
+    view = UI;
     commandGrouping = new CommandGrouping(this);
   }
 
@@ -47,6 +44,7 @@ public class Control {
     input = command;
     commandGrouping.setCommand(command);
   }
+
   public void setLanguage(String lang) {
     language = lang;
     commandGrouping.setLanguage(lang);
@@ -58,9 +56,7 @@ public class Control {
     functionsUsed.putAll(commandGrouping.setFunctions());
   }
 
-
-
-  public void passTurtle(Mover mover) {
+  public void passTurtle(Moveable mover) {
     myMover = mover;
     turtleRow = myMover.getMoverRow();
     turtleCol = myMover.getMoverCol();
@@ -100,7 +96,7 @@ public class Control {
     turtleAngle = myMover.getMoverAngle() + angle;
     myMover.updateDistanceSoFar(distance);
     myMover.move(col, row, angle);
-    //   System.out.println("update" + col + " " + row + " " + angle);
+ //   System.out.println("update" + col + " " + row + " " + angle);
   }
 
   public int getTurtleDistance() {
@@ -115,16 +111,20 @@ public class Control {
     }
   }
 
-  public Mover getTurtle() {
-    return myMover;
-  }
-
   public double getTurtleRelativeXPos() {
     return turtleCol - myMover.getMoverCenterXPos();
   }
 
   public double getTurtleRelativeYPos() {
     return myMover.getMoverCenterYPos() - turtleRow;
+  }
+
+  public void setShape(int choice){
+    view.setImageIndex(choice);
+  }
+
+  public int getShape(){
+    return myMover.getCurrentImageIndex();
   }
 }
 

@@ -23,7 +23,7 @@ public abstract class Command {
     myControl = control;
   }
   public void setControl(Control control){
-    myControl = control;
+      myControl = control;
   }
   public String commandValueReturn(){
     return commandReturn;

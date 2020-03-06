@@ -123,7 +123,7 @@ public class CommandGrouping {
   }
 
   private void checkingTypeOfCommand(String word) {
-    //  System.out.println(word);
+  //  System.out.println(word);
     Map<String, String> map = lists.getFunction();
     if (map.keySet().contains(word) && input!=map.get(word)) {
       input = map.get(word);
@@ -167,7 +167,7 @@ public class CommandGrouping {
    */
   private void checkIfCommandCanRun(int argNum) {
     if (argNum == 0) {
-      //    System.out.println(userCom);
+  //    System.out.println(userCom);
       runCommand();
     } else {
       if (argument.size() >= argNum) {
@@ -182,7 +182,7 @@ public class CommandGrouping {
         else args.push(arg);
       }
       argNum--;
-      //  System.out.println("Num "+args +" "+ userCom);
+    //  System.out.println("Num "+args +" "+ userCom);
       checkIfCommandCanRun(argNum);
     }
   }
@@ -192,14 +192,14 @@ public class CommandGrouping {
    */
   public void runCommand() {
     System.out.println("GotHere " + userCom +"  " + args);
-    if (!hasBeenStored) {
-      if(!logicStatement) {
-        findLists();
-        input = input.substring(end);
-        parseText();
-      }
-      obtainCommand();
-      //     System.out.println("Variable storing " + hasBeenStored);
+      if (!hasBeenStored) {
+        if(!logicStatement) {
+          findLists();
+          input = input.substring(end);
+          parseText();
+        }
+        obtainCommand();
+   //     System.out.println("Variable storing " + hasBeenStored);
     }
   }
 
@@ -207,7 +207,7 @@ public class CommandGrouping {
   Passes arguments to the command class and grabs a user function if it exists.
    */
   private void obtainCommand() {
-    //  System.out.println(com);
+  //  System.out.println(com);
     try {
       Command commandGiven = commandFactory.generateCommand(commandPath, args);
       createCommand(commandGiven);
@@ -230,7 +230,7 @@ public class CommandGrouping {
       lists.storeFunction(input);
       hasBeenStored = true;
       parseText();
-    }
+      }
     saveVariables(comm);
     booleanLogic(comm);
     repeatTimes(comm);
@@ -249,7 +249,7 @@ public class CommandGrouping {
   private void saveVariables(Command comm) {
     if(comm.getVariablesCreated()!=null) {
       variablesUsed.putAll(comm.getVariablesCreated());
-      //     System.out.println("Variables "+ variablesUsed);
+ //     System.out.println("Variables "+ variablesUsed);
       if(!command.isEmpty()) {
         coordinateCommands();
       }
@@ -331,9 +331,9 @@ public class CommandGrouping {
     ArrayList<Integer> set = new ArrayList<Integer>();
     while (sets.size() != 0) {
       set = sets.pop();
-      first = set.get(0);
-      end = set.get(1);
-      groupsList.add(new ListGroups(input.substring(first, end)));
+        first = set.get(0);
+        end = set.get(1);
+       groupsList.add(new ListGroups(input.substring(first, end)));
     }}
 
 

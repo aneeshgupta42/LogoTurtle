@@ -1,5 +1,6 @@
-package frontEnd;
+package frontEnd.ButtonsBoxesandLabels;
 
+import frontEnd.ButtonAction;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import javafx.event.ActionEvent;
@@ -12,7 +13,7 @@ import javafx.scene.text.Text;
 
 public class OurLabeledColorPickers extends HBox {
   private ColorPicker colors;
-  public OurLabeledColorPickers(String promptText, String methodName, UserInterface target, String initialColor) {
+  public OurLabeledColorPickers(String promptText, String methodName, ButtonAction target, String initialColor) {
     colors = new ColorPicker();
     colors.setValue(Color.valueOf(initialColor));
     getChildren().addAll(makePrompt(promptText), colors);
@@ -28,11 +29,14 @@ public class OurLabeledColorPickers extends HBox {
   private Node makePrompt (String text) {
     System.out.println(text);
     return new Text(text + ": ");
+  }
 
+  public void setInitialColor(Color color){
+    colors.setValue(color);
   }
 
 
-  private EventHandler<ActionEvent> Result(String methodName, UserInterface target) {
+  private EventHandler<ActionEvent> Result(String methodName,ButtonAction target) {
     EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
