@@ -25,6 +25,7 @@ public class CommandExecution {
   private static final String LIST_END = "]";
   private static final String COMMENT = "#";
   private static final String SYNTAX = "syntax";
+  private static final String variable = ":";
   private static final int output = -500;
 
   private Parser parser;
@@ -50,8 +51,9 @@ public class CommandExecution {
   private int end;
   private int total;
   private int index;
-  private String variable;
+  private int whichUserFunc;
   private String commandReturn;
+  private String userCommandAttempt;
 
   public CommandExecution(Control myControl)
   {
@@ -82,6 +84,7 @@ public class CommandExecution {
     argument = new LinkedList<>();
     args = new LinkedList<>();
     hasBeenStored = false;
+    whichUserFunc =0;
     groupsList = new ArrayList<ListGroups>();
     parser.addPatterns(language);
     parser.addPatterns(SYNTAX);
@@ -96,6 +99,8 @@ public class CommandExecution {
       if(!line.contains(COMMENT) && !line.isEmpty()){
         organizeInStacks(line);
       }
+      System.out.println("THIS "+command);
+      System.out.println("THIS "+argument);
       coordinateCommands();
     }
   }
@@ -141,6 +146,7 @@ public class CommandExecution {
         try {
           argNum = commandFactory.getNumArgs(commandPath);
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
+          userCommandAttempt = userCom;
           coordinateCommands();
         }
         args.clear();
@@ -165,7 +171,6 @@ public class CommandExecution {
       if (argument.size() >= argNum) {
         String arg = argument.pop();
         if(parser.getSymbol(arg).equals(VARIABLE)) {
-          variable = arg;
           if (variablesUsed.containsKey(arg)) {
             args.add(variablesUsed.get(arg));
           }
@@ -178,15 +183,11 @@ public class CommandExecution {
     }
   }
 
-  /*
-  Checks if you are not in the parsing of a list, and runs the command
-   */
+
   public void runCommand() {
-    System.out.println("GotHere " + userCom +"  " + args);
       if (!hasBeenStored) {
         obtainCommand();
       }
-        System.out.println("Variable storing " + hasBeenStored);
     }
 
 
@@ -214,10 +215,10 @@ public class CommandExecution {
       }
     }
     if(comm.storeCommands()) {
-      lists.storeFunction(input);
-      hasBeenStored = true;
-      parseText();
-      }
+      findLists();
+      whichUserFunc ++;
+      lists.storeFunction(userCommandAttempt,groupsList.get(whichUserFunc).getMyList());
+    }
     saveVariables(comm);
     booleanLogic(comm);
     repeatTimes(comm);
@@ -231,6 +232,7 @@ public class CommandExecution {
       }
       else{
         if(groupsList.size()>1) input = groupsList.get(1).getMyList();
+        else hasBeenStored=true;
       }
       parseText();
       hasBeenStored=true;
@@ -240,7 +242,6 @@ public class CommandExecution {
   private void saveVariables(Command comm) {
     if(comm.getVariablesCreated()!=null) {
       variablesUsed.putAll(comm.getVariablesCreated());
-      System.out.println(variablesUsed);
       if(!command.isEmpty()) {
         coordinateCommands();
       }
@@ -249,20 +250,13 @@ public class CommandExecution {
 
   private void repeatTimes(Command comm) {
     if(comm.repeatCom()!=0) {
-      total++;
-      findLists();
       double loop = comm.repeatCom();
-
-      if (variable != null) {
-        repCount(loop, variable);
-      }
-      else {
-        repCount(loop, REP_COUNT);
-      }
-
+      total++;
+      if(total==1)repCount(loop, REP_COUNT);
+      findLists();
       for(int j=0;j<groupsList.size();j++){
         if(groupsList.get(j).canBeRun()){
-          section = groupsList.get(j).getMyList(); //get the value inside brackets
+          section = groupsList.get(j).getMyList();
           setCommand(section);
           index =j;
         }
