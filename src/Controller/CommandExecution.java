@@ -50,7 +50,6 @@ public class CommandExecution {
   private int end;
   private int total;
   private int index;
-  private String variable;
   private String commandReturn;
 
   public CommandExecution(Control myControl)
@@ -96,6 +95,8 @@ public class CommandExecution {
       if(!line.contains(COMMENT) && !line.isEmpty()){
         organizeInStacks(line);
       }
+      System.out.println("THIS "+command);
+      System.out.println("THIS "+argument);
       coordinateCommands();
     }
   }
@@ -163,9 +164,8 @@ public class CommandExecution {
     if (argNum == 0) { runCommand(); }
     else {
       if (argument.size() >= argNum) {
-        String arg = argument.pop();
+        String arg = argument.pollLast();
         if(parser.getSymbol(arg).equals(VARIABLE)) {
-          variable = arg;
           if (variablesUsed.containsKey(arg)) {
             args.add(variablesUsed.get(arg));
           }
@@ -182,7 +182,6 @@ public class CommandExecution {
   Checks if you are not in the parsing of a list, and runs the command
    */
   public void runCommand() {
-    System.out.println("GotHere " + userCom +"  " + args);
       if (!hasBeenStored) {
         obtainCommand();
       }
@@ -225,12 +224,14 @@ public class CommandExecution {
 
   private void booleanLogic(Command comm) {
     if(comm.runnable()!=output) {
+
       findLists();
       if ((comm.runnable()!=0)) {
         input= groupsList.get(0).getMyList();
       }
       else{
         if(groupsList.size()>1) input = groupsList.get(1).getMyList();
+        else hasBeenStored=true;
       }
       parseText();
       hasBeenStored=true;
@@ -252,14 +253,7 @@ public class CommandExecution {
       total++;
       findLists();
       double loop = comm.repeatCom();
-
-      if (variable != null) {
-        repCount(loop, variable);
-      }
-      else {
-        repCount(loop, REP_COUNT);
-      }
-
+      repCount(loop, REP_COUNT);
       for(int j=0;j<groupsList.size();j++){
         if(groupsList.get(j).canBeRun()){
           section = groupsList.get(j).getMyList(); //get the value inside brackets

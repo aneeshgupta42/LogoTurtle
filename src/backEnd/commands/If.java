@@ -1,7 +1,6 @@
 package backEnd.commands;
 
 import Controller.Control;
-import java.util.LinkedList;
 import java.util.List;
 
 public class If extends Command {
@@ -16,7 +15,6 @@ public class If extends Command {
   public If(List<String> varargs, Control control){
     super(varargs, control);
     check = Double.parseDouble(varargs.get(0));
-    System.out.println(check);
   }
 
   @Override

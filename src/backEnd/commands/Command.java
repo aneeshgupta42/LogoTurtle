@@ -6,25 +6,17 @@ import java.util.Map;
 
 public abstract class Command {
 
-  private String language;
-  private String myCommand;
   private String commandReturn;
   private Map<String, String> c;
   protected int numberOfArgs;
-  private Control myControl;
   protected Boolean store = false;
   protected int repeat = -500;
-  private double repeatNumber;
+  private double repeatNumber=0;
 
   public Command(){
   }
 
-  public Command(List<String> varargs, Control control) {
-    myControl = control;
-  }
-  public void setControl(Control control){
-      myControl = control;
-  }
+  public Command(List<String> varargs, Control control) {}
   public String commandValueReturn(){
     return commandReturn;
   }
@@ -33,6 +25,5 @@ public abstract class Command {
   public double repeatCom(){return repeatNumber;}
   public double runnable(){return repeat;}
   public boolean storeCommands(){ return store; }
-
 
 }

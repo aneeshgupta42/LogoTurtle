@@ -16,7 +16,6 @@ public class Repeat extends Command {
   }
   public Repeat(List<String> varargs, Control control){
     super(varargs, control);
-    super.setControl(control);
     c = control;
     repetition = Double.parseDouble(varargs.get(0));
   }

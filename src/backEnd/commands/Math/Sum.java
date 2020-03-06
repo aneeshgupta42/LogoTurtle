@@ -17,11 +17,9 @@ public class Sum extends Command {
   public Sum(List<String> varargs, Control control) {
     super(varargs, control);
     super.numberOfArgs = NUMARGS;
-
     double argOne = Double.parseDouble(varargs.get(0));
     double argTwo = Double.parseDouble(varargs.get(1));
     sum = argTwo + argOne;
-
   }
 
   @Override
