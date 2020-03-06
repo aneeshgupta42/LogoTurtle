@@ -39,10 +39,8 @@ public class CommandExecution {
   private String input;
   private Map<String, String> variablesUsed;
   private LinkedList<String> args;
-  private boolean logicStatement;
   private StoreLists lists;
   private boolean hasBeenStored = false;
-  private boolean inbrackets =false;
   private String section;
   private LinkedList<Integer> starts;
   private LinkedList<Integer> ends;
@@ -227,7 +225,6 @@ public class CommandExecution {
 
   private void booleanLogic(Command comm) {
     if(comm.runnable()!=output) {
-      logicStatement = comm.runnable()!=0;
       findLists();
       if ((comm.runnable()!=0)) {
         input= groupsList.get(0).getMyList();
