@@ -1,7 +1,10 @@
 package frontEnd;
 
 import frontEnd.ButtonsBoxesandLabels.PropertyLabel;
+
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
@@ -50,6 +53,7 @@ public class Mover implements Moveable{
   private static double initialX;
   private static double initialY;
   private int currentImageIndex;
+  private List<String> imageOptions;
 
   public Mover(UserInterface view, double ID) {
     System.out.print(this);
@@ -60,11 +64,14 @@ public class Mover implements Moveable{
     distanceSoFar = 0;
     moverID = ID;
     moverImage = changeMoverDisplay(defaultImage);
+    currentImageIndex = 1;
     /*moverImage.setOnMouseClicked(e -> {
       handleKeyInput();
     });*/
     myLabelPropertyResources = ResourceBundle.getBundle(LabelResources);
     myComboBoxOptionsResources = ResourceBundle.getBundle(ComboBoxOptionsResources);
+    String optionsString = myComboBoxOptionsResources.getString("setImageOptions");
+    imageOptions = Arrays.asList(optionsString.split(","));
     //myView.addNodeToRoot(moverImage);
     initialX = myView.getXCenter();
     initialY = myView.getYCenter();
@@ -223,7 +230,7 @@ public class Mover implements Moveable{
 
   @Override
   public int getCurrentImageIndex() {
-    return 0;
+    return currentImageIndex;
   }
 
   public void setThickness(double thickness){
@@ -251,6 +258,32 @@ public class Mover implements Moveable{
   public void setPen(boolean bool){
     penDown=bool;
     updateLabels();
+  }
+
+  @Override
+  public void setImageIndex(int index) {
+    currentImageIndex = index;
+  }
+
+  public void setImage(String image) {
+    double moverXPos = moverImage.getX();
+    double moverYPos = moverImage.getY();
+    double moverAngle = getMoverAngle();
+    myView.removeNodeFromRoot(moverImage);
+    String path = myView.getResource().getString(image);
+    changeMoverDisplay(path);
+    setImageIndex(imageOptions.indexOf(image)+1);
+    moverImage.setX(moverXPos);
+    moverImage.setY(moverYPos);
+    moverImage.setRotate(moverAngle);
+    myView.addNodeToRoot(moverImage);
+  }
+
+  public void setImageUsingIndex(int indexChoice){
+    String image = imageOptions.get(indexChoice-1);
+    currentImageIndex = indexChoice;
+    setImageIndex(currentImageIndex);
+    setImage(image);
   }
 
   public boolean getPen(){

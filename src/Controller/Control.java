@@ -120,7 +120,7 @@ public class Control {
   }
 
   public void setShape(int choice){
-    //view.setImageIndex(choice);
+    myMover.setImageUsingIndex(choice);
   }
 
   public int getShape(){
