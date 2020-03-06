@@ -10,6 +10,7 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 import java.util.TreeMap;
 
 public class CommandExecutor {
@@ -24,7 +25,6 @@ public class CommandExecutor {
   private static final String LIST_START = "[";
   private static final String LIST_END = "]";
   private static final String COMMENT = "#";
-  private static final String MAKE_SYNTAX = ":";
   private static final String SYNTAX = "syntax";
   private static final double VALUE = Double.MIN_VALUE;
 
@@ -33,8 +33,8 @@ public class CommandExecutor {
   private CommandFactory commandFactory;
   private StoreFunctions storeFunction;
 
-  private Deque<String> commandList;
-  private Deque<String> argumentList;
+  private Stack<String> commandList;
+  private Stack<String> argumentList;
   private Map<String, String> variablesUsed;
   private LinkedList<String> argToBePassed;
   private List<ListObjects> groupsList;
@@ -151,8 +151,8 @@ public class CommandExecutor {
   Splits lines into words and categorizes them into two lists
    */
   private void organizeInLists(String line) {
-    commandList = new LinkedList<>();
-    argumentList = new LinkedList<>();
+    commandList = new Stack<String>();
+    argumentList = new Stack<String>();
     for (String word : line.split(WHITESPACE)) {
       if (word.trim().length() > 0) {
         if (!parser.getSymbol(word).equals(ARGUMENT) && !parser.getSymbol(word).equals(VARIABLE)) {
@@ -372,8 +372,7 @@ public class CommandExecutor {
     createListObjects(sets);
   }
 
-  private LinkedList matchingLists(LinkedList<Integer> starts, LinkedList<Integer> ends,
-      int numStarts) {
+  private LinkedList matchingLists(LinkedList<Integer> starts, LinkedList<Integer> ends, int numStarts) {
     LinkedList<ArrayList<Integer>> sets = new LinkedList<>();
     ArrayList<Integer> two = new ArrayList<>();
     two = linkListPairs(starts, ends, numStarts, sets, two);
@@ -394,7 +393,7 @@ public class CommandExecutor {
         }
       }
       numStarts--;
-      two.add(first+ 1);
+      two.add(first + 1);
       two.add(last - 1);
       sets.add(two);
       two = new ArrayList<>();
