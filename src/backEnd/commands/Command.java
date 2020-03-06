@@ -6,12 +6,12 @@ import java.util.Map;
 
 public abstract class Command {
 
-  private String commandReturn;
-  private Map<String, String> map;
+  protected String commandReturn;
+  protected Map<String, String> map;
   protected int numberOfArgs;
   protected Boolean store = false;
   protected double repeat = Double.MIN_VALUE ;
-  private double repeatNumber=0;
+  protected double repeatNumber=0;
 
   public Command(){
   }

@@ -24,6 +24,7 @@ public class CommandExecutor {
   private static final String LIST_START = "[";
   private static final String LIST_END = "]";
   private static final String COMMENT = "#";
+  private static final String MAKE_SYNTAX = ":";
   private static final String SYNTAX = "syntax";
   private static final double VALUE = Double.MIN_VALUE;
 
@@ -45,7 +46,6 @@ public class CommandExecutor {
   private String newCommandInput;
   private String currentCommand;
   private String commandPath;
-
 
   private int currentRepeatNumber;
   private int currentListObject;
@@ -166,8 +166,9 @@ public class CommandExecutor {
 
   private void checkingTypeOfCommand(String word) {
     Map<String, String> map = storeFunction.getFunction();
-    if (map.keySet().contains(word) && commandInput != map.get(word)) {
+    if (map.keySet().contains(word)) {
       setCommandList(map.get(word));
+      hasBeenStored = false;
       parseText();
     } else {
       commandList.push(word);
@@ -187,11 +188,11 @@ public class CommandExecutor {
           numberOfArguments = commandFactory.getNumArgs(commandPath);
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
           userCommandAttempt = currentCommand;
-          if (argumentList.size() > 0) {
+          coordinateCommands();
+          if (argumentList.size() > 0 && commandList.size()==1) {
             argToBePassed.addAll(argumentList);
             runCommand();
           }
-          coordinateCommands();
         }
         argToBePassed.clear();
         coordinateArgumentsForEachCommand(numberOfArguments);
@@ -236,7 +237,6 @@ public class CommandExecutor {
     }
   }
 
-
   /*
   Passes arguments to the command class and grabs a user function if it exists.
    */
@@ -245,12 +245,19 @@ public class CommandExecutor {
       Command commandGiven = commandFactory.generateCommand(commandPath, argToBePassed);
       createCommand(commandGiven);
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException | ExceptionInInitializerError e) {
-      ErrorBoxes box = new ErrorBoxes(new ErrorHandler("InvalidCommand"));
+        ErrorBoxes box = new ErrorBoxes(new ErrorHandler("InvalidCommand"));
     }
   }
 
-
   private void createCommand(Command comm) {
+    commandReturnValue(comm);
+    saveVariables(comm);
+    storeUserCommand(comm);
+    booleanLogic(comm);
+    repeatTimes(comm);
+  }
+
+  private void commandReturnValue(Command comm) {
     if (comm.commandValueReturn() != null) {
       argumentList.add(comm.commandValueReturn());
       setCommandReturn(comm.commandValueReturn());
@@ -258,15 +265,15 @@ public class CommandExecutor {
         coordinateCommands();
       }
     }
+  }
 
+  private void storeUserCommand(Command comm) {
     if (comm.storeCommands()) {
       findLists();
-      storeFunction.storeFunction(userCommandAttempt, groupsList.get(numberOfFunctions).getMyList());
       numberOfFunctions++;
+      storeFunction.storeFunction(userCommandAttempt, groupsList.get(numberOfFunctions).getMyList());
+      hasBeenStored = true;
     }
-    saveVariables(comm);
-    booleanLogic(comm);
-    repeatTimes(comm);
   }
 
   private void booleanLogic(Command comm) {
@@ -277,7 +284,8 @@ public class CommandExecutor {
       } else {
         if (groupsList.size() > 1) {
           commandInput = groupsList.get(1).getMyList();
-        } else {
+        }
+        else {
           hasBeenStored = true;
         }
       }
@@ -348,17 +356,17 @@ public class CommandExecutor {
   private void findLists() {
     LinkedList<Integer> starts = new LinkedList<>();
     LinkedList<Integer> ends = new LinkedList<>();
-    int index = commandInput.indexOf(LIST_START);
+    int startIndex = commandInput.indexOf(LIST_START);
     int numStarts = 0;
-    while (index >= 0) {
-      starts.push(index);
+    while (startIndex >= 0) {
+      starts.push(startIndex);
       numStarts++;
-      index = commandInput.indexOf(LIST_START, index + 1);
+      startIndex = commandInput.indexOf(LIST_START, startIndex + 1);
     }
-    int indextwo = commandInput.indexOf(LIST_END);
-    while (indextwo >= 0) {
-      ends.push(indextwo);
-      indextwo = commandInput.indexOf(LIST_END, indextwo + 1);
+    int endIndex = commandInput.indexOf(LIST_END);
+    while (endIndex >= 0) {
+      ends.push(endIndex);
+      endIndex = commandInput.indexOf(LIST_END, endIndex + 1);
     }
     LinkedList<ArrayList<Integer>> sets = matchingLists(starts, ends, numStarts);
     createListObjects(sets);
@@ -375,7 +383,7 @@ public class CommandExecutor {
 
   private ArrayList<Integer> linkListPairs(LinkedList<Integer> starts, LinkedList<Integer> ends,
       int numStarts, LinkedList<ArrayList<Integer>> sets, ArrayList<Integer> two) {
-    while (numStarts > 0) {
+      while (numStarts > 0) {
       int first = starts.pollLast();
       int last = ends.pollLast();
       for (int whichEnd : starts) {
@@ -386,7 +394,7 @@ public class CommandExecutor {
         }
       }
       numStarts--;
-      two.add(first + 1);
+      two.add(first+ 1);
       two.add(last - 1);
       sets.add(two);
       two = new ArrayList<>();

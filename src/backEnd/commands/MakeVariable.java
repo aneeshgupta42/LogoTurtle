@@ -7,9 +7,9 @@ import java.util.TreeMap;
 
 public class MakeVariable extends Command {
 
+  private static int number = 2;
   private String key;
   private String var;
-  private static int number = 2;
 
 public MakeVariable(){
   super();
