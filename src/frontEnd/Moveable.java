@@ -40,6 +40,10 @@ public interface Moveable {
 
     void setPen(boolean bool);
 
+    void setImageIndex(int index);
+
+    void setImageUsingIndex(int indexChoice);
+
     boolean getPen();
 
     boolean getActive();
@@ -68,4 +72,6 @@ public interface Moveable {
     double getMoverCenterXPos();
 
     double getMoverCenterYPos();
+
+    void resetMover();
 }
