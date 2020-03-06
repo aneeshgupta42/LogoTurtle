@@ -31,7 +31,11 @@ public MakeVariable(){
   @Override
   public Map getVariablesCreated(){
     Map<String,String> variables = new TreeMap<>();
-    variables.put(key,var);
+    if(!key.equals(var)) {
+      if (!variables.containsKey(key)) {
+        variables.put(key, var);
+      }
+    }
     return variables;
   }
 

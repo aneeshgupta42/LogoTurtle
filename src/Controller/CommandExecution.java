@@ -25,6 +25,7 @@ public class CommandExecution {
   private static final String LIST_END = "]";
   private static final String COMMENT = "#";
   private static final String SYNTAX = "syntax";
+  private static final String variable = ":";
   private static final int output = -500;
 
   private Parser parser;
@@ -50,6 +51,7 @@ public class CommandExecution {
   private int end;
   private int total;
   private int index;
+  private int whichUserFunc;
   private String commandReturn;
   private String userCommandAttempt;
 
@@ -82,6 +84,7 @@ public class CommandExecution {
     argument = new LinkedList<>();
     args = new LinkedList<>();
     hasBeenStored = false;
+    whichUserFunc =0;
     groupsList = new ArrayList<ListGroups>();
     parser.addPatterns(language);
     parser.addPatterns(SYNTAX);
@@ -144,7 +147,6 @@ public class CommandExecution {
           argNum = commandFactory.getNumArgs(commandPath);
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
           userCommandAttempt = userCom;
-          System.out.println(userCommandAttempt);
           coordinateCommands();
         }
         args.clear();
@@ -214,7 +216,8 @@ public class CommandExecution {
     }
     if(comm.storeCommands()) {
       findLists();
-      lists.storeFunction(userCommandAttempt,groupsList.get(0).getMyList());
+      whichUserFunc ++;
+      lists.storeFunction(userCommandAttempt,groupsList.get(whichUserFunc).getMyList());
     }
     saveVariables(comm);
     booleanLogic(comm);
@@ -247,13 +250,13 @@ public class CommandExecution {
 
   private void repeatTimes(Command comm) {
     if(comm.repeatCom()!=0) {
-      total++;
-      findLists();
       double loop = comm.repeatCom();
-      repCount(loop, REP_COUNT);
+      total++;
+      if(total==1)repCount(loop, REP_COUNT);
+      findLists();
       for(int j=0;j<groupsList.size();j++){
         if(groupsList.get(j).canBeRun()){
-          section = groupsList.get(j).getMyList(); //get the value inside brackets
+          section = groupsList.get(j).getMyList();
           setCommand(section);
           index =j;
         }

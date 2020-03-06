@@ -24,18 +24,21 @@ public class DoTimes extends Command {
     super(varargs, control);
     c = control;
     if(varargs.get(0).contains(":")){
-      key =varargs.get(0);
-      val = varargs.get(1);
-    }
-    else{
-      val =varargs.get(0);
-      key = varargs.get(1);
-    }
+    key =varargs.get(0);
+    val = varargs.get(1);
   }
+    else{
+    val =varargs.get(0);
+    key = varargs.get(1);
+  }
+}
 
   public Map getVariablesCreated(){
-    Map map = new TreeMap();
-    map.put(key,val);
+    Map<String,String> map = new TreeMap();
+    if(!key.equals(val)) {
+      if (!map.containsKey(key)) {
+        map.put(key, val);
+      }}
     return map;
   }
 
