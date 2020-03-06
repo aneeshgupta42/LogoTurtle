@@ -34,7 +34,7 @@ public class Control {
   public String getCommandReturnValue(){return commandReturnValue;}
 
   public void setCommand(String command) {
-    commandExecutor.setCommand(command);
+    commandExecutor.setCommandList(command);
   }
 
   public void setLanguage(String lang) {

@@ -3,10 +3,10 @@ package controller;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class StoreLists {
+public class StoreFunctions {
   private Map<String,String> function;
 
-  public StoreLists(){
+  public StoreFunctions(){
     function = new TreeMap<>();
   }
 
