@@ -1,7 +1,7 @@
 package frontEnd.ButtonsBoxesandLabels;
 
 import frontEnd.ButtonAction;
-import frontEnd.Display;
+
 import java.lang.reflect.InvocationTargetException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -19,7 +19,7 @@ import javafx.scene.text.Text;
  *
  * @author Robert C. Duvall
  */
-public class PropertyLabel extends HBox implements Display {
+public class PropertyLabel extends HBox {
   //private DoubleProperty amountDue = new SimpleDoubleProperty();
   private StringProperty amountDue = new SimpleStringProperty();
   private Label label;
@@ -45,7 +45,7 @@ public class PropertyLabel extends HBox implements Display {
   }
 
   private Node makePrompt (String text) {
-    System.out.println(text);
+  //  System.out.println(text);
     return new Text(text + ": ");
 
   }
@@ -56,11 +56,11 @@ public class PropertyLabel extends HBox implements Display {
       try {
         Object value = m.invoke(target);
         amountDue.set(""+ value);
-        System.out.println("value" + value);
+  //      System.out.println("value" + value);
       } catch (IllegalAccessException | InvocationTargetException e) {
         e.printStackTrace();
       }
-      System.out.println(methodName);
+   //   System.out.println(methodName);
     } catch (NoSuchMethodException e) {
       e.printStackTrace();
     }
@@ -92,7 +92,7 @@ public class PropertyLabel extends HBox implements Display {
           } catch (InvocationTargetException e) {
             e.printStackTrace();
           }
-          System.out.println(methodName);
+        //  System.out.println(methodName);
         }catch (NoSuchMethodException e) {
           e.printStackTrace();
         }

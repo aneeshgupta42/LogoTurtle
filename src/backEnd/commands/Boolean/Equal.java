@@ -1,8 +1,8 @@
 package backEnd.commands.Boolean;
 
-import Controller.Control;
+import controller.Control;
 import backEnd.commands.Command;
-import java.util.LinkedList;
+import java.util.List;
 
 public class Equal extends Command {
     private static final int NUMARGS = 2;
@@ -15,10 +15,9 @@ public class Equal extends Command {
         super.numberOfArgs = NUMARGS;
     }
 
-    public Equal(LinkedList<String> varargs, Control control) {
+    public Equal(List<String> varargs, Control control) {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
-        System.out.println("Args" + varargs.get(0) + varargs.get(1));
         double argOne = Double.parseDouble(varargs.get(0));
         double argTwo = Double.parseDouble(varargs.get(1));
 
@@ -27,19 +26,14 @@ public class Equal extends Command {
         } else {
             booleanResult = FALSE;
         }
-//        booleanResult = argOne == argTwo ? TRUE:FALSE;
-
-        System.out.println("The Equals result is: " + booleanResult);
     }
 
     @Override
     public String commandValueReturn() {
-        System.out.println("EQual" + Double.toString(booleanResult));
         return Double.toString(booleanResult);
     }
-
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }

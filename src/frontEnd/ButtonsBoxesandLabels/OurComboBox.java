@@ -36,7 +36,7 @@ public class OurComboBox extends HBox {
   }
 
   private Node makePrompt (String text) {
-    System.out.println(text);
+  //  System.out.println(text);
     return new Text(text + ": ");
   }
 
@@ -76,7 +76,7 @@ public class OurComboBox extends HBox {
           } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
           }
-          System.out.println(methodName);
+        //  System.out.println(methodName);
         }catch (NoSuchMethodException e) {
           e.printStackTrace();
         }

@@ -1,8 +1,8 @@
 package backEnd.commands.Math;
 
-import Controller.Control;
+import controller.Control;
 import backEnd.commands.Command;
-import java.util.LinkedList;
+import java.util.List;
 
 public class Sine extends Command {
   private static final int NUMARGS = 1;
@@ -13,14 +13,13 @@ public class Sine extends Command {
     super.numberOfArgs = NUMARGS;
   }
 
-  public Sine(LinkedList<String> varargs, Control control) {
+  public Sine(List<String> varargs, Control control) {
     super(varargs, control);
     super.numberOfArgs = NUMARGS;
 
     double argOne = Double.parseDouble(varargs.get(0));
     sinResult = Math.sin((Math.toRadians(argOne)));
 
-    System.out.println("Sine is: " + sinResult);
   }
 
   @Override
@@ -28,7 +27,7 @@ public class Sine extends Command {
     return Double.toString(sinResult);
   }
   @Override
-  public int repeatCom() {
+  public double repeatCom() {
     return super.repeatCom();
   }
 }

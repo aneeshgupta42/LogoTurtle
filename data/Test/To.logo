@@ -1,0 +1,7 @@
+to pizza [ :bake 50 ]
+ [
+fd :bake
+rt 60
+]
+
+pizza

@@ -1,0 +1,8 @@
+make :thisIsInteresting 33
+
+ifelse 4 [
+  fd 50 rt :thisIsInteresting
+]
+[
+pu
+]

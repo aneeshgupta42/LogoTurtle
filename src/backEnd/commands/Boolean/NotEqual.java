@@ -1,8 +1,8 @@
 package backEnd.commands.Boolean;
 
-import Controller.Control;
+import controller.Control;
 import backEnd.commands.Command;
-import java.util.LinkedList;
+import java.util.List;
 
 public class NotEqual extends Command {
     private static final int NUMARGS = 2;
@@ -15,7 +15,7 @@ public class NotEqual extends Command {
         super.numberOfArgs = NUMARGS;
     }
 
-    public NotEqual(LinkedList<String> varargs, Control control) {
+    public NotEqual(List<String> varargs, Control control) {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 
@@ -28,7 +28,6 @@ public class NotEqual extends Command {
             booleanResult = FALSE;
         }
 
-        System.out.println("The notEquals result is: " + booleanResult);
     }
 
     @Override
@@ -37,7 +36,7 @@ public class NotEqual extends Command {
     }
 
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }

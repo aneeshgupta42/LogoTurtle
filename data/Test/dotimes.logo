@@ -1,0 +1,2 @@
+dotimes [ :t 4 ] [
+fd 40 rt 90 ]

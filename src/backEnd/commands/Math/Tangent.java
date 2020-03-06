@@ -1,8 +1,8 @@
 package backEnd.commands.Math;
 
-import Controller.Control;
+import controller.Control;
 import backEnd.commands.Command;
-import java.util.LinkedList;
+import java.util.List;
 
 public class Tangent extends Command {
     private static final int NUMARGS = 1;
@@ -13,14 +13,13 @@ public class Tangent extends Command {
         super.numberOfArgs= NUMARGS;
     }
 
-    public Tangent(LinkedList<String> varargs, Control control){
+    public Tangent(List<String> varargs, Control control){
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 
         double argOne = Double.parseDouble(varargs.get(0));
         tanResult = Math.tan((Math.toRadians(argOne)));
 
-        System.out.println("Tan is: " + tanResult);
     }
 
     @Override
@@ -28,7 +27,7 @@ public class Tangent extends Command {
         return Double.toString(tanResult);
     }
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }

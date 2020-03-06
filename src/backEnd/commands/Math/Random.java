@@ -1,9 +1,9 @@
 package backEnd.commands.Math;
 
-import Controller.Control;
+import controller.Control;
 import backEnd.commands.Command;
-import java.util.LinkedList;
 import java.lang.Math;
+import java.util.List;
 
 public class Random extends Command {
     private static final int NUMARGS = 1;
@@ -14,15 +14,13 @@ public class Random extends Command {
         super.numberOfArgs = NUMARGS;
     }
 
-    public Random(LinkedList<String> varargs, Control control) {
+    public Random(List<String> varargs, Control control) {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 
         double argOne = Double.parseDouble(varargs.get(0));
         random = Math.random() * argOne;
-        // insert check if max is too big ?
 
-        System.out.println("Random is: " + random);
     }
 
     @Override
@@ -30,7 +28,7 @@ public class Random extends Command {
         return Double.toString(random);
     }
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }
