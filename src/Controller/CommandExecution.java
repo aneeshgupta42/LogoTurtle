@@ -20,7 +20,7 @@ public class CommandExecution {
   private static final String VARIABLE = "Variable";
   private static final String CLASS_PATH = "backEnd.commands.";
   private static final String REP_COUNT = ":repCount";
-  private static final String MAKE = "make";
+  private static final String MAKE = "backEnd.commands.MakeVariable";
   private static final String LIST_START = "[";
   private static final String LIST_END = "]";
   private static final String COMMENT = "#";
@@ -42,7 +42,7 @@ public class CommandExecution {
   private StoreLists lists;
   private boolean hasBeenStored = false;
   private static final int output = -500;
-  private String section ="";
+  private String section;
   private LinkedList<Integer> starts;
   private LinkedList<Integer> ends;
   private LinkedList<ArrayList<Integer>> sets;
@@ -57,8 +57,6 @@ public class CommandExecution {
   {
     lists = new StoreLists();
     control = myControl;
-    setLanguage(control.getLanguage());
-    setCommand(control.getCommand());
     commandFactory = new CommandFactory(control);
   }
 
@@ -81,7 +79,6 @@ public class CommandExecution {
     groupsList = new ArrayList<ListGroups>();
     setCommand(input);
     setLanguage(language);
-    System.out.println("LANG"+language);
     parser.addPatterns(language);
     parser.addPatterns(SYNTAX);
     parseText();
@@ -206,6 +203,7 @@ public class CommandExecution {
       Command commandGiven = commandFactory.generateCommand(commandPath, args);
       createCommand(commandGiven);
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException | ExceptionInInitializerError e) {
+      e.printStackTrace();
       ErrorBoxes box = new ErrorBoxes(new ErrorHandler("InvalidCommand"));
     }
   }
@@ -256,9 +254,14 @@ public class CommandExecution {
       total++;
       findLists();
       double loop = comm.repeatCom();
+
       if (variable != null) {
         repCount(loop, variable);
-      } else repCount(loop, REP_COUNT);
+      }
+      else {
+        repCount(loop, REP_COUNT);
+      }
+
       for(int j=0;j<groupsList.size();j++){
         if(groupsList.get(j).canBeRun()){
           section = groupsList.get(j).getMyList(); //get the value inside brackets
@@ -268,11 +271,10 @@ public class CommandExecution {
       }
       recurseLoop(loop);
     }
-    else{
+    else if(!command.isEmpty()){
       coordinateCommands();
     }
   }
-
 
   private void recurseLoop(double loop) {
     if(loop==1){
@@ -297,10 +299,9 @@ public class CommandExecution {
    */
   private void repCount(double loop, String s) {
     args.clear();
-    userCom = MAKE;
+    commandPath = MAKE;
     args.push(s);
     args.push(Double.toString(loop));
-    makeClassPathToCommand(userCom);
     obtainCommand();
   }
 
@@ -326,11 +327,12 @@ public class CommandExecution {
   private void organizeListPairs() {
     ArrayList<Integer> set = new ArrayList<Integer>();
     while (sets.size() != 0) {
-      set = sets.pop();
-        first = set.get(0);
-        end = set.get(1);
+       set = sets.pop();
+       first = set.get(0);
+       end = set.get(1);
        groupsList.add(new ListGroups(input.substring(first, end)));
-    }}
+    }
+  }
 
 
   private void matchingLists() {
