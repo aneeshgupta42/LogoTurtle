@@ -2,8 +2,7 @@ package frontEnd;
 
 import frontEnd.ButtonsBoxesandLabels.OurButtons;
 import frontEnd.ButtonsBoxesandLabels.OurComboBox;
-import frontEnd.ButtonsBoxesandLabels.OurLabeledColorPickers;
-import java.awt.Button;
+import frontEnd.ButtonsBoxesandLabels.OurLabeledColorPicker;
 import java.util.Collections;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -57,7 +56,7 @@ public class ToolBar extends HBox {
     for (String key : Collections.list(myColorPickerResources.getKeys())) {
       if (key.startsWith("setBackground")) {
         getChildren().add(
-            new OurLabeledColorPickers(myColorPickerResources.getString(key), key, myButtonAction,
+            new OurLabeledColorPicker(myColorPickerResources.getString(key), key, myButtonAction,
                 myInitialColorResources.getString(key + COLOR_INITIAL)));
       }
     }

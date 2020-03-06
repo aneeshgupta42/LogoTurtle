@@ -2,7 +2,7 @@ package frontEnd;
 
 import Controller.Control;
 import backEnd.ErrorHandler;
-import frontEnd.ButtonsBoxesandLabels.OurLabeledColorPickers;
+import frontEnd.ButtonsBoxesandLabels.OurLabeledColorPicker;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Map;
@@ -14,7 +14,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -26,17 +25,17 @@ public class ButtonAction {
   private DisplayWindow displayWindow;
   private Map<Double, Mover> turtleMap;
   private Control control;
-  private Rectangle rectangle;
   private double defaultMoveAmount = 50;
   private double defaultTurnAmount = 90;
+  private MoverPropertiesWindow propertiesWindow;
 
   public ButtonAction(UserInterface view){
     myView=view;
     myMover = myView.getMover();
     turtleMap = myView.getTurtleMap();
     control = myView.getControl();
-    rectangle = myView.getRectangle();
     displayWindow = myView.getDisplayWindow();
+    propertiesWindow = myView.getPropertyWindow();
   }
 
   public UserInterface getView(){
@@ -105,12 +104,12 @@ public class ButtonAction {
     sendInfoToControl(myText);
     getCommandWindow().clearText();
     if (getMover().objectMoved()) {
-      System.out.println("variables" + control.getVariables().keySet());
-      //setHistoryTab(historyBox, thistext);
+      getTabWindow().getHistoryTab().setHistoryTab(getCommandWindow(), myText);
       getMover().setObjectMoved(false);
     }
-    //createStoredElementsTabs(variablesBox, variables, control.getVariables(), true);
-    //createStoredElementsTabs(userCommandsBox, userCommands, control.getUserCommands(), false);
+    getTabWindow().getCommandTab().setContent(getTabWindow().getCommandTab().resetTabContents(control.getUserCommands(), false));
+    System.out.println("commands "+  control.getUserCommands());
+    getTabWindow().getVariableTab().setContent(getTabWindow().getVariableTab().resetTabContents(control.getVariables(), true));
     getMover().updateLabels();
   }
 
@@ -128,11 +127,12 @@ public class ButtonAction {
     Double numOfMovers = (double) myView.getTurtleMap().size() + 1;
     Mover mover = new Mover(myView, numOfMovers);
     mover.setInitialMoverPosition();
-    myView.addToMap(numOfMovers, mover);
+    myView.addToMapAndList(numOfMovers, mover);
     myView.addNodeToRoot(mover.getImage());
-    //turtleList.add(numOfMovers);
+    //myView.addToList(numOfMovers);
     //System.out.println(turtleList);
-    //turtleSelection.updateItems(FXCollections.observableArrayList(turtleList));
+    //System.out.println("LIST" + myView.getPropertyWindow().getTurtleSelection());
+    //myView.getPropertyWindow().getTurtleSelection().updateItems(FXCollections.observableArrayList(myView.getTurtleList()));
   }
 
   public void moveBackward() {
@@ -158,11 +158,36 @@ public class ButtonAction {
   public void selectTurtle(String num) {
     //myView.selectTurtle(num);
     Double number = Double.parseDouble(num);
-    myView.setMyMover(getMoverMap().get(number));
-    for(OurLabeledColorPickers label: myView.getPropertyWindow().getPenResources()){
+    for(OurLabeledColorPicker label: myView.getPropertyWindow().getPenResources()){
       label.setInitialColor(myMover.getLineColor());
     }
     getMover().updateLabels();
+  }
+  public void displayHelpScreen() {
+    Stage stage2 = new Stage();
+    stage2.setTitle("Table View Sample");
+    ScrollPane pane = new ScrollPane();
+    stage2.setWidth(1100);
+    stage2.setHeight(500);
+
+    Image command = new Image(getClass().getClassLoader().getResourceAsStream(COMMAND_ONE));
+    ImageView commandOneIm = new ImageView(command);
+    commandOneIm.setPreserveRatio(true);
+    commandOneIm.setFitWidth(800);
+    Image commandTwo = new Image(getClass().getClassLoader().getResourceAsStream(COMMAND_TWO));
+    ImageView commandTwoIm = new ImageView(commandTwo);
+    commandTwoIm.setPreserveRatio(true);
+    commandTwoIm.setFitWidth(1000);
+
+    final VBox vbox = new VBox();
+    vbox.setSpacing(5);
+    vbox.setPadding(new Insets(10, 0, 0, 10));
+    vbox.getChildren().addAll(commandOneIm, commandTwoIm);
+    pane.setContent(vbox);
+    pane.setFitToWidth(true);
+    Scene scene = new Scene(pane);
+    stage2.setScene(scene);
+    stage2.show();
   }
 
   public double getLineWidth() {
@@ -202,6 +227,21 @@ public class ButtonAction {
     return getMover().getLineColor();
   }
 
+  public void setDefaultMoveAmount(String num){
+    Double number = Double.parseDouble(num);
+    defaultMoveAmount = number;
+  }
+
+  public void setDefaultTurnAmount(String num){
+    Double number = Double.parseDouble(num);
+    defaultTurnAmount = number;
+  }
+
+  public void setPenThickness(String num){
+    Double number = Double.parseDouble(num);
+    getMover().setThickness(number);
+  }
+
   private Mover getMover(){
     return myView.getMover();
   }
@@ -210,6 +250,9 @@ public class ButtonAction {
   }
   private CommandWindow getCommandWindow(){
     return myView.getDisplayWindow().getCommandWindow();
+  }
+  private TabWindow getTabWindow(){
+    return myView.getTabWindow();
   }
 }
 

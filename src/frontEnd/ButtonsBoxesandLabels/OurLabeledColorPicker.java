@@ -11,9 +11,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
-public class OurLabeledColorPickers extends HBox {
+public class OurLabeledColorPicker extends HBox {
   private ColorPicker colors;
-  public OurLabeledColorPickers(String promptText, String methodName, ButtonAction target, String initialColor) {
+  public OurLabeledColorPicker(String promptText, String methodName, ButtonAction target, String initialColor) {
     colors = new ColorPicker();
     colors.setValue(Color.valueOf(initialColor));
     getChildren().addAll(makePrompt(promptText), colors);

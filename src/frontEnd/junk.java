@@ -212,4 +212,44 @@ private Node makeSideWindow() {
     root.getChildren().add(mover.getImage());
     turtleList.add(numOfMovers);
   }
+
+  public void setMyMover(Object mover) {
+    myMover = (frontEnd.Mover) mover;
+  }
+  private void setHistoryTab(VBox historyBox, String thistext) {
+    Hyperlink link = new Hyperlink();
+    link.getStyleClass().add(HYPERLINK_STYLE);
+    link.setText(myText);
+    link.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent e) {
+        inputArea.setText(thistext);
+      }
+    });
+    historyBox.getChildren().add(0, link);
+    history.setContent(historyBox);
+  }
+
+  private void createStoredElementsTabs(VBox vbox, ScrollPane tab, Map map, boolean needValue) {
+    vbox.getChildren().clear();
+    for (Object variable : map.keySet()) {
+      if (needValue) {
+        linkVariable = new Hyperlink(variable.toString() + "=" + map.get(variable));
+      } else {
+        linkVariable = new Hyperlink(variable.toString());
+      }
+      linkVariable.getStyleClass().add(HYPERLINK_STYLE);
+      vbox.getChildren().add(linkVariable);
+      linkVariable.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent e) {
+          inputArea.setText(variable.toString());
+        }
+      });
+    }
+    tab.setContent(vbox);
+  }
+   public double getAngle(){
+    return myMover.getMoverAngle();
+  }
 }*/
