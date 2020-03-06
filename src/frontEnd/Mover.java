@@ -20,7 +20,7 @@ import javafx.scene.shape.Path;
 import javafx.util.Duration;
 
 
-public class Mover implements Update {
+public class Mover implements Moveable {
 
   private static double moverID;
   ImageView moverImage;
@@ -47,8 +47,7 @@ public class Mover implements Update {
   private double degreesInCircle = 360;
   private ResourceBundle myComboBoxOptionsResources;
   private static final String ComboBoxOptionsResources = "resources.UIActions.ComboBoxOptions";
-  private static double initialX;
-  private static double initialY;
+  private int currentImageIndex;
 
   public Mover(UserInterface view, double ID) {
     System.out.print(this);
@@ -59,6 +58,7 @@ public class Mover implements Update {
     distanceSoFar = 0;
     moverID = ID;
     moverImage = changeMoverDisplay(defaultImage);
+    currentImageIndex = 1;
     /*moverImage.setOnMouseClicked(e -> {
       handleKeyInput();
     });*/
@@ -96,8 +96,12 @@ public class Mover implements Update {
     return moverImage;
   }
 
+  public void setImageIndex(int currIndex){
+    currentImageIndex = currIndex;
+  }
   public void setDefaultImage(String image){
     defaultImage = myComboBoxOptionsResources.getString(image);
+    currentImageIndex = 1;
   }
 
   public ImageView getImage(){
@@ -217,6 +221,10 @@ public class Mover implements Update {
 
   public double getThickness(){
     return lineThickness;
+  }
+
+  public int getCurrentImageIndex() {
+    return currentImageIndex;
   }
 
   public void setThickness(double thickness){

@@ -7,12 +7,8 @@ import frontEnd.ButtonsBoxesandLabels.OurLabeledColorPickers;
 import frontEnd.ButtonsBoxesandLabels.PropertyLabel;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.Scanner;
+import java.util.*;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -40,7 +36,7 @@ import javafx.stage.Stage;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
-public class UserInterface extends Application {
+public class UserInterface extends Application implements Viewable {
   private Scene myScene;
   private Group display;
   private Stage myStage;
@@ -116,14 +112,15 @@ public class UserInterface extends Application {
   private List<OurLabeledColorPickers> penResources = new ArrayList<>();
   private List<OurComboBox> imageResources = new ArrayList<>();
   private ButtonAction myButtonAction;
-  private static final double initialMoverID = 1;
-  private static DisplayWindow displayWindow;
-  private static MoverPropertiesWindow myPropertyWindow;
+  List<String> imageOptions;
+  private int currImageIndex;
+
+
 
   public UserInterface() {
     myStage = new Stage();
-    myMover = new Mover(this, initialMoverID);
-    control = new Control();
+    myMover = new Mover(this);
+    control = new Control(this);
     myLine = new Line();
     display = new Group();
     myButtonAction = new ButtonAction(this);
@@ -136,7 +133,9 @@ public class UserInterface extends Application {
     myTurtlePropertyResources = ResourceBundle.getBundle(TurtlePropertyResources);
     myLabelPropertyResources = ResourceBundle.getBundle(LabelResources);
     myMoverPropertiesDropDownResources = ResourceBundle.getBundle(MoverPropertiesDropDownResources);
-    myButtonAction.setLanguage(DEFAULT_LANGUAGE);
+    control.setLanguage(DEFAULT_LANGUAGE);
+    String optionsString = myComboBoxOptionsResources.getString("setImageOptions");
+    imageOptions = Arrays.asList(optionsString.split(","));
   }
 
   @Override
@@ -205,6 +204,7 @@ public class UserInterface extends Application {
     root.getChildren().add(line);
   }
 
+  @Override
   public void setMyMover(Object mover) {
     myMover = (Mover) mover;
   }
@@ -213,6 +213,7 @@ public class UserInterface extends Application {
     return turtleList;
   }
 
+  @Override
   public ButtonAction getButtonAction(){
     return myButtonAction;
   }
@@ -221,6 +222,7 @@ public class UserInterface extends Application {
     return myMover;
   }
 
+  @Override
   public Map getTurtleMap(){
     return turtleMap;
   }
@@ -276,10 +278,12 @@ public class UserInterface extends Application {
     return myCommander;
   }
 
+  @Override
   public Control getControl(){
     return control;
   }
 
+  @Override
   public Rectangle getRectangle(){
     return rectangle;
   }
