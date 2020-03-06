@@ -1,8 +1,9 @@
 package frontEnd;
 
+import frontEnd.ButtonsBoxesandLabels.ButtonWithTextBox;
 import frontEnd.ButtonsBoxesandLabels.OurButtons;
 import frontEnd.ButtonsBoxesandLabels.OurComboBox;
-import frontEnd.ButtonsBoxesandLabels.OurLabeledColorPickers;
+import frontEnd.ButtonsBoxesandLabels.OurLabeledColorPicker;
 import frontEnd.ButtonsBoxesandLabels.PropertyLabel;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,43 +13,38 @@ import java.util.ResourceBundle;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class MoverPropertiesWindow  extends VBox {
 private VBox turtlebox;
+
 private static final int SIDEPANE_WIDTH = 300;
-  private ResourceBundle myButtonResources;
-  private ResourceBundle myComboBoxResources;
   private ResourceBundle myColorPickerResources;
   private ResourceBundle myInitialColorResources;
   private ResourceBundle myComboBoxOptionsResources;
-  private ResourceBundle myTextButtonResources;
+  private ResourceBundle myTextFieldResources;
   private ResourceBundle myTurtlePropertyResources;
   private ResourceBundle myLabelPropertyResources;
   private ResourceBundle myMoverPropertiesDropDownResources;
-  private static final String ButtonResources = "resources.UIActions.ButtonActions";
-  private static final String ComboBoxResources = "resources.UIActions.ComboBoxActions";
   private static final String ColorPickerResources = "resources.UIActions.ColorPickerActions";
   private static final String InitialColorResources = "resources.UIActions.InitialColors";
   private static final String ComboBoxOptionsResources = "resources.UIActions.ComboBoxOptions";
-  private static final String TextBoxButtonResources = "resources.UIActions.TextButtonActions";
+  private static final String TextFieldResources = "resources.UIActions.TextFieldActions";
   private static final String TurtlePropertyResources = "resources.UIActions.TurtlePropertyActions";
   private static final String LabelResources = "resources.UIActions.LabelActions";
   private static final String MoverPropertiesDropDownResources = "resources.UIActions.MoverPropertiesDropDown";
   private static final String COMBO_OPTIONS = "Options";
   private static final String COLOR_INITIAL = "Initial";
   private List<OurComboBox> imageResources = new ArrayList<>();
-  private List<OurLabeledColorPickers> penResources = new ArrayList<>();
+  private List<OurLabeledColorPicker> penResources = new ArrayList<>();
+  private OurComboBox turtleSelection;
 
   public MoverPropertiesWindow(ButtonAction myButtonAction, ObservableList<Double> turtleList, Map propertyLabelMap){
-    myButtonResources = ResourceBundle.getBundle(ButtonResources);
-    myComboBoxResources = ResourceBundle.getBundle(ComboBoxResources);
     myColorPickerResources = ResourceBundle.getBundle(ColorPickerResources);
     myInitialColorResources = ResourceBundle.getBundle(InitialColorResources);
     myComboBoxOptionsResources = ResourceBundle.getBundle(ComboBoxOptionsResources);
-    myTextButtonResources = ResourceBundle.getBundle(TextBoxButtonResources);
+    myTextFieldResources = ResourceBundle.getBundle(TextFieldResources);
     myTurtlePropertyResources = ResourceBundle.getBundle(TurtlePropertyResources);
     myLabelPropertyResources = ResourceBundle.getBundle(LabelResources);
     myMoverPropertiesDropDownResources = ResourceBundle.getBundle(MoverPropertiesDropDownResources);
@@ -71,7 +67,7 @@ private static final int SIDEPANE_WIDTH = 300;
     }
     for (String key : Collections.list(myColorPickerResources.getKeys())) {
       if (key.startsWith("setPen")) {
-        OurLabeledColorPickers colorPicker = new OurLabeledColorPickers(
+        OurLabeledColorPicker colorPicker = new OurLabeledColorPicker(
             myColorPickerResources.getString(key), key, myButtonAction,
             myInitialColorResources.getString(key + COLOR_INITIAL));
         buttons.getChildren().add(colorPicker);
@@ -82,8 +78,12 @@ private static final int SIDEPANE_WIDTH = 300;
       buttons.getChildren()
           .add(new OurButtons(myTurtlePropertyResources.getString(key), key, myButtonAction));
     }
+    for (String key : Collections.list(myTextFieldResources.getKeys())) {
+      buttons.getChildren()
+          .add(new ButtonWithTextBox(myTextFieldResources.getString(key), key, myButtonAction));
+    }
     VBox propertiesBox = new VBox();
-    OurComboBox turtleSelection = new OurComboBox("Select Mover", "selectTurtle", myButtonAction,
+    turtleSelection = new OurComboBox("Select Mover", "selectTurtle", myButtonAction,
         FXCollections.observableList(turtleList));
     turtleSelection.getBox().itemsProperty().bind(new SimpleObjectProperty<>(turtleList));
     Text moverProperties = new Text("Properties of Mover: ");
@@ -97,7 +97,11 @@ private static final int SIDEPANE_WIDTH = 300;
     getChildren().addAll(buttons, propertiesBox);
   }
 
-  public List<OurLabeledColorPickers> getPenResources(){
+  public OurComboBox getTurtleSelection(){
+    return turtleSelection;
+  }
+
+  public List<OurLabeledColorPicker> getPenResources(){
     return penResources;
   }
 }

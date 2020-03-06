@@ -20,6 +20,7 @@ abstract public class StoredElementsTab extends Tab {
 
 
   protected ScrollPane resetTabContents(Map map, boolean needValue) {
+    System.out.println("mapcontents" + map);
     ScrollPane scrollPane = new ScrollPane();
     VBox vbox = new VBox();
     for (Object variable : map.keySet()) {

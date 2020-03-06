@@ -157,6 +157,7 @@ public class Mover implements Moveable{
       propertyLabel.setAmount(key, myView.getButtonAction());
     }
   }
+
   public boolean objectMoved() {
     return objectMoved;
   }
@@ -346,7 +347,7 @@ public class Mover implements Moveable{
     moverImage.setRotate(0);
     initializeLinePosition(moverImage.getX(), moverImage.getY(), moverImage.getRotate());
     setMoverInitialCords(moverImage.getX(), moverImage.getY());
-    updateLabels();
+    //updateLabels();
   }
 
   public void resetMover(){

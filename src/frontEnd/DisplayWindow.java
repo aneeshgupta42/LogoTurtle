@@ -50,8 +50,10 @@ public class DisplayWindow extends VBox {
 
   public void resetDisplay(Map<Double, Mover> turtleMap) {
     UserInterface view = myButtonAction.getView();
-    for(int i=0; i<view.viewChildren().length; i++){
-      Node child = view.viewChildren()[i];
+    int length = view.viewChildren().length;
+    Node[] children = view.viewChildren();
+    for(int i=0; i<length; i++){
+      Node child = children[i];
       if(child instanceof Line){
         view.removeNodeFromRoot(child);
       }
