@@ -21,7 +21,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class UserInterface extends Application {
+public class UserInterface extends Application{
   private Scene myScene;
   private Group display;
   private Stage myStage;

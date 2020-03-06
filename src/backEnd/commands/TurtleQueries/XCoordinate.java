@@ -1,26 +1,27 @@
-package backEnd.commands;
+package backEnd.commands.TurtleQueries;
 
+import backEnd.commands.Command;
 import controller.Control;
 import java.util.List;
 
-public class YCoordinate extends Command {
+public class XCoordinate extends Command {
     private static final int NUMARGS = 0;
-    private double returnYCord;
+    private double returnXCord;
 
-    public YCoordinate() {
+    public XCoordinate() {
         super();
         super.numberOfArgs = NUMARGS;
     }
 
-    public YCoordinate(List<String> varargs, Control control) {
+    public XCoordinate(List<String> varargs, Control control) {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
-        returnYCord = control.getTurtleRelativeYPos();
+        returnXCord = control.getTurtleRelativeXPos();
     }
 
     @Override
     public String commandValueReturn() {
-        return Double.toString(returnYCord);
+        return Double.toString(returnXCord);
     }
 
     @Override

@@ -1,23 +1,25 @@
-package backEnd.commands;
+package backEnd.commands.Display;
 
+import backEnd.commands.Command;
 import controller.Control;
 
 import java.util.List;
 
-public class GetShape extends Command{
-    private static final int NUMARGS = 0;
+public class SetShape extends Command {
+    private static final int NUMARGS = 1;
     private int index;
 
-    public GetShape(){
+    public SetShape(){
         super();
         super.numberOfArgs= NUMARGS;
     }
 
-    public GetShape(List<String> varargs, Control myControl)
+    public SetShape(List<String> varargs, Control control)
     {
-        super(varargs, myControl);
+        super(varargs, control);
         super.numberOfArgs= NUMARGS;
-        index = myControl.getShape();
+        index = Integer.parseInt(varargs.get(0));
+        control.setShape(index);
     }
 
     @Override

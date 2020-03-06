@@ -1,5 +1,6 @@
-package backEnd.commands;
+package backEnd.commands.MultiTurtles;
 
+import backEnd.commands.Command;
 import controller.Control;
 import java.util.LinkedList;
 import java.util.List;

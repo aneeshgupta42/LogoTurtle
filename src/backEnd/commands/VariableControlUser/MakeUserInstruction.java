@@ -1,5 +1,6 @@
-package backEnd.commands;
+package backEnd.commands.VariableControlUser;
 
+import backEnd.commands.Command;
 import controller.Control;
 import java.util.List;
 import java.util.Map;

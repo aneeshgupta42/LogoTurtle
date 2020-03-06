@@ -1,7 +1,8 @@
 package backEnd.commands.Math;
 
-import controller.Control;
 import backEnd.commands.Command;
+import controller.Control;
+
 import java.util.List;
 
 public class Sum extends Command {
