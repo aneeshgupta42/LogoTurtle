@@ -12,7 +12,8 @@ public class StoreLists {
 
   public void storeFunction(String command, String line){
     String functionName = command;
-    function.put(functionName,line);
+    String store = line;
+    function.put(functionName,store);
   }
 
   public Map getFunction(){return function;}

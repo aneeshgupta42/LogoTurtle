@@ -25,7 +25,6 @@ public class CommandExecution {
   private static final String LIST_END = "]";
   private static final String COMMENT = "#";
   private static final String SYNTAX = "syntax";
-  private static final String variable = ":";
   private static final int output = -500;
 
   private Parser parser;
@@ -55,6 +54,9 @@ public class CommandExecution {
   private String commandReturn;
   private String userCommandAttempt;
 
+  /*
+  Initializes a commandExecutor that calls the parser on the user Input commands
+   */
   public CommandExecution(Control myControl)
   {
     lists = new StoreLists();
@@ -63,52 +65,80 @@ public class CommandExecution {
     commandFactory = new CommandFactory(control);
   }
 
-  public Map setVariables(){return variablesUsed;}
-  public Map setFunctions(){return lists.getFunction();}
+  /*
+  Returns the user-defined variables to the Controller
+  @return variablesUsed
+   */
+  public Map getVariables(){return variablesUsed;}
+
+  /*
+  Returns the user-defined functions to the Controller
+  @return lists.getFunction()
+   */
+  public Map getFunctions(){return lists.getFunction();}
+
+  /*
+  Sets the controller
+   */
   public void setControl(Control c){control = c;}
+
+  /*
+  Sets the command to be parsed
+   */
   public void setCommand(String command) { input = command; }
+
+  /*
+  Sets the language the command is in
+   */
   public void setLanguage(String lang) { language = lang; }
 
   private void setCommandReturn(String commandValueReturn) {
     commandReturn = commandValueReturn;
   }
 
-  private String getCommandReturn(){return commandReturn;}
+  /*
+  Returns the command output value
+  @return commandReturn
+   */
+  public String getCommandReturn(){return commandReturn;}
 
   /*
- Calls the parser to start parsing the user input
+  Calls the parser to start parsing the user input and initializes variables
   */
   public void parseCommand() {
-    parser = new Parser();
-    command = new LinkedList<>();
-    argument = new LinkedList<>();
-    args = new LinkedList<>();
-    hasBeenStored = false;
-    whichUserFunc =0;
-    groupsList = new ArrayList<ListGroups>();
+    initializeNeededVariables();
     parser.addPatterns(language);
     parser.addPatterns(SYNTAX);
     parseText();
   }
 
   /*
-    Splits text into lines
+  Initializes instance variables
+   */
+  private void initializeNeededVariables() {
+    hasBeenStored = false;
+    whichUserFunc =0;
+    parser = new Parser();
+    args = new LinkedList<>();
+    groupsList = new ArrayList<>();
+  }
+
+  /*
+  Splits up the command input
    */
   private void parseText() {
     for (String line : input.split(NEWLINE)) {
       if(!line.contains(COMMENT) && !line.isEmpty()){
-        organizeInStacks(line);
+        organizeInLists(line);
       }
-      System.out.println("THIS "+command);
-      System.out.println("THIS "+argument);
       coordinateCommands();
     }
   }
 
   /*
-  Splits lines into words and categorizes them into two stacks
+  Splits lines into words and categorizes them into two lists
    */
-  private void organizeInStacks(String line) {
+  private void organizeInLists(String line) {
     command = new LinkedList<>();
     argument = new LinkedList<>();
     for (String word : line.split(WHITESPACE)) {
@@ -126,18 +156,17 @@ public class CommandExecution {
   private void checkingTypeOfCommand(String word) {
     Map<String, String> map = lists.getFunction();
     if (map.keySet().contains(word) && input!=map.get(word)) {
-      input = map.get(word);
+      setCommand(map.get(word));
       parseText();
     }
     else
       command.push(word);
   }
 
-
   /*
   Getting the number of arguments for each command
    */
-  public void coordinateCommands() {
+  private void coordinateCommands() {
     int argNum = 0;
     if(!command.isEmpty()) {
       for (int i=0;i<command.size();i++) {
@@ -150,7 +179,7 @@ public class CommandExecution {
           coordinateCommands();
         }
         args.clear();
-        checkIfCommandCanRun(argNum);
+        coordinateArgumentsForEachCommand(argNum);
       }
     }
   }
@@ -165,8 +194,8 @@ public class CommandExecution {
   /*
   Coordinating the command to the number of arguments it needs and pushing it to be run
    */
-  private void checkIfCommandCanRun(int argNum) {
-    if (argNum == 0) { runCommand(); }
+  private void coordinateArgumentsForEachCommand(int argNum) {
+    if (argNum == 0) { checkCommand(); }
     else {
       if (argument.size() >= argNum) {
         String arg = argument.pop();
@@ -179,22 +208,19 @@ public class CommandExecution {
         else args.push(arg);
       }
       argNum--;
-      checkIfCommandCanRun(argNum);
+      coordinateArgumentsForEachCommand(argNum);
     }
   }
 
-
-  public void runCommand() {
-      if (!hasBeenStored) {
-        obtainCommand();
-      }
+  private void checkCommand() {
+      if (!hasBeenStored) runCommand();
     }
 
 
   /*
   Passes arguments to the command class and grabs a user function if it exists.
    */
-  private void obtainCommand() {
+  private void runCommand() {
     try {
       Command commandGiven = commandFactory.generateCommand(commandPath, args);
       createCommand(commandGiven);
@@ -203,10 +229,8 @@ public class CommandExecution {
     }
   }
 
-  /*
-  Calls the methods of a command to continue parsing logic
-   */
-  public void createCommand(Command comm) {
+
+  private void createCommand(Command comm) {
     if(comm.commandValueReturn()!=null){
       argument.add(comm.commandValueReturn());
       setCommandReturn(comm.commandValueReturn());
@@ -214,6 +238,7 @@ public class CommandExecution {
         coordinateCommands();
       }
     }
+
     if(comm.storeCommands()) {
       findLists();
       whichUserFunc ++;
@@ -294,9 +319,8 @@ public class CommandExecution {
     commandPath = MAKE;
     args.push(Double.toString(loop));
     args.push(s);
-    obtainCommand();
+    runCommand();
   }
-
 
   private void findLists() {
     starts = new LinkedList<>();
@@ -317,7 +341,7 @@ public class CommandExecution {
   }
 
   private void organizeListPairs() {
-    ArrayList<Integer> set = new ArrayList<Integer>();
+    ArrayList<Integer> set;
     while (sets.size() != 0) {
        set = sets.pop();
        first = set.get(0);
@@ -326,9 +350,8 @@ public class CommandExecution {
     }
   }
 
-
   private void matchingLists() {
-    sets = new LinkedList<ArrayList<Integer>>();
+    sets = new LinkedList<>();
     ArrayList<Integer> two = new ArrayList<>();
     while(numstarts>0) {
       int first = starts.pollLast();
@@ -354,5 +377,4 @@ public class CommandExecution {
       }
     }
   }
-
 }

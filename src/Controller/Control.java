@@ -2,7 +2,6 @@ package Controller;
 
 import frontEnd.Moveable;
 import frontEnd.UserInterface;
-import frontEnd.Viewable;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -18,6 +17,7 @@ public class Control {
   private UserInterface view;
   private Map<String,String> variablesUsed = new TreeMap<>();
   private Map<String,String> functionsUsed = new TreeMap<>();
+  private String commandReturnValue;
 
 
   public Control(UserInterface UI) {
@@ -31,6 +31,8 @@ public class Control {
 
   public Map<String,String> getUserCommands() {return functionsUsed;}
 
+  public String getCommandReturnValue(){return commandReturnValue;}
+
   public void setCommand(String command) {
     commandExecution.setCommand(command);
   }
@@ -41,8 +43,9 @@ public class Control {
 
   public void parseCommand(){
     commandExecution.parseCommand();
-    variablesUsed.putAll(commandExecution.setVariables());
-    functionsUsed.putAll(commandExecution.setFunctions());
+    variablesUsed.putAll(commandExecution.getVariables());
+    functionsUsed.putAll(commandExecution.getFunctions());
+    commandReturnValue = commandExecution.getCommandReturn();
   }
 
   public void passTurtle(Moveable mover) {
