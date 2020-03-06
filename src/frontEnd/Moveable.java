@@ -40,6 +40,10 @@ public interface Moveable {
 
     void setPen(boolean bool);
 
+    void setImageIndex(int index);
+
+    void setImageUsingIndex(int indexChoice);
+
     boolean getPen();
 
     boolean getActive();

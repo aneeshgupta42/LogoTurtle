@@ -5,28 +5,28 @@ import backEnd.ErrorHandler;
 import frontEnd.ButtonsBoxesandLabels.OurLabeledColorPickers;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+
+import java.util.ResourceBundle;
 import java.util.Scanner;
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 public class ButtonAction {
   private UserInterface myView;
   private static final String COMMAND_ONE = "viewboc.png";
   private static final String COMMAND_TWO = "viewbox.png";
   private Mover myMover;
+  private static final String ComboBoxOptionsResources = "resources.UIActions.ComboBoxOptions";
   private DisplayWindow displayWindow;
   private Map<Double, Mover> turtleMap;
   private Control control;
   private Rectangle rectangle;
+  private ResourceBundle myComboBoxOptionsResources;
+  private List<String> imageOptions;
   private double defaultMoveAmount = 50;
   private double defaultTurnAmount = 90;
 
@@ -36,6 +36,9 @@ public class ButtonAction {
     turtleMap = myView.getTurtleMap();
     control = myView.getControl();
     rectangle = myView.getRectangle();
+    myComboBoxOptionsResources = ResourceBundle.getBundle(ComboBoxOptionsResources);
+    String optionsString = myComboBoxOptionsResources.getString("setImageOptions");
+    imageOptions = Arrays.asList(optionsString.split(","));
     displayWindow = myView.getDisplayWindow();
   }
 
@@ -85,7 +88,7 @@ public class ButtonAction {
     myView.removeNodeFromRoot(getMover().getImage());
     String path = myView.getResource().getString(image);
     getMover().changeMoverDisplay(path);
-    //)= (ImageView) myMover.changeMoverDisplay(path);
+    getMover().setImageIndex(imageOptions.indexOf(image)+1);
     getMover().getImage().setX(moverXPos);
     getMover().getImage().setY(moverYPos);
     getMover().getImage().setRotate(moverAngle);
