@@ -168,8 +168,9 @@ public class CommandExecutor {
 
   private void checkingTypeOfCommand(String word) {
     Map<String, String> map = storeFunction.getFunction();
-    if (map.keySet().contains(word) && commandInput != map.get(word)) {
+    if (map.keySet().contains(word)) {
       setCommandList(map.get(word));
+      hasBeenStored = false;
       parseText();
     } else {
       commandList.push(word);
@@ -189,11 +190,11 @@ public class CommandExecutor {
           numberOfArguments = commandFactory.getNumArgs(commandPath);
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
           userCommandAttempt = currentCommand;
+          coordinateCommands();
           if (argumentList.size() > 0 && commandList.size()==1) {
             argToBePassed.addAll(argumentList);
             runCommand();
           }
-          coordinateCommands();
         }
         argToBePassed.clear();
         coordinateArgumentsForEachCommand(numberOfArguments);
@@ -273,6 +274,7 @@ public class CommandExecutor {
       findLists();
       numberOfFunctions++;
       storeFunction.storeFunction(userCommandAttempt, groupsList.get(numberOfFunctions).getMyList());
+      hasBeenStored = true;
     }
   }
 
