@@ -22,7 +22,7 @@ public class ButtonAction {
   private UserInterface myView;
   private static final String COMMAND_ONE = "viewboc.png";
   private static final String COMMAND_TWO = "viewbox.png";
-  private Moveable myMover;
+  private Mover myMover;
   private DisplayWindow displayWindow;
   private Map<Double, Mover> turtleMap;
   private Control control;
@@ -115,7 +115,7 @@ public class ButtonAction {
   }
 
   void sendInfoToControl(String myText) {
-    for(Moveable mover: turtleMap.values()) {
+    for(Mover mover: turtleMap.values()) {
       if (mover.getActive()) {
         control.setCommand(myText);
         control.passTurtle(mover);
