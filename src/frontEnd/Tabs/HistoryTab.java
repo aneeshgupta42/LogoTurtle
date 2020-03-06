@@ -1,9 +1,9 @@
-package frontEnd;
+package frontEnd.Tabs;
 
+import frontEnd.Windows.CommandWindow;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Hyperlink;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.VBox;
 

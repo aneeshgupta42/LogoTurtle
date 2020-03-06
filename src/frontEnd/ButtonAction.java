@@ -3,6 +3,10 @@ package frontEnd;
 import controller.Control;
 import backEnd.ErrorHandler;
 import frontEnd.ButtonsBoxesandLabels.OurLabeledColorPicker;
+import frontEnd.Windows.CommandWindow;
+import frontEnd.Windows.DisplayWindow;
+import frontEnd.Windows.MoverPropertiesWindow;
+import frontEnd.Windows.TabWindow;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
@@ -31,7 +35,6 @@ public class ButtonAction {
   private DisplayWindow displayWindow;
   private Map<Double, Mover> turtleMap;
   private Control control;
-  private Rectangle rectangle;
   private ResourceBundle myComboBoxOptionsResources;
   private List<String> imageOptions;
   private double defaultMoveAmount = 50;
@@ -43,7 +46,6 @@ public class ButtonAction {
     myMover = myView.getMover();
     turtleMap = myView.getTurtleMap();
     control = myView.getControl();
-  //  rectangle = myView.getRectangle();
     myComboBoxOptionsResources = ResourceBundle.getBundle(ComboBoxOptionsResources);
     String optionsString = myComboBoxOptionsResources.getString("setImageOptions");
     imageOptions = Arrays.asList(optionsString.split(","));
@@ -253,6 +255,10 @@ public class ButtonAction {
   public void setPenThickness(String num){
     Double number = Double.parseDouble(num);
     getMover().setThickness(number);
+  }
+
+  public void openTab(String tabName){
+    getTabWindow().openTabFromPane(tabName);
   }
 
   private Mover getMover(){
