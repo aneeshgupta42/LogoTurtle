@@ -4,6 +4,7 @@ import Controller.Control;
 import backEnd.commands.Command;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -19,7 +20,7 @@ public class DoTimes extends Command {
     super();
     super.numberOfArgs=number;
   }
-  public DoTimes(LinkedList<String> varargs, Control control){
+  public DoTimes(List<String> varargs, Control control){
     super(varargs, control);
     c = control;
     if(varargs.get(0).contains(":")){

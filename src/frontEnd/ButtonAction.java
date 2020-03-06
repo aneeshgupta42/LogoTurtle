@@ -11,8 +11,16 @@ import java.util.Map;
 
 import java.util.ResourceBundle;
 import java.util.Scanner;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 public class ButtonAction {
   private UserInterface myView;
@@ -35,7 +43,7 @@ public class ButtonAction {
     myMover = myView.getMover();
     turtleMap = myView.getTurtleMap();
     control = myView.getControl();
-    rectangle = myView.getRectangle();
+  //  rectangle = myView.getRectangle();
     myComboBoxOptionsResources = ResourceBundle.getBundle(ComboBoxOptionsResources);
     String optionsString = myComboBoxOptionsResources.getString("setImageOptions");
     imageOptions = Arrays.asList(optionsString.split(","));

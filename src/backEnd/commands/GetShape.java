@@ -3,6 +3,7 @@ package backEnd.commands;
 import Controller.Control;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class GetShape extends Command{
     private static final int NUMARGS = 0;
@@ -13,12 +14,11 @@ public class GetShape extends Command{
         super.numberOfArgs= NUMARGS;
     }
 
-    public GetShape(LinkedList<String> varargs, Control myControl)
+    public GetShape(List<String> varargs, Control myControl)
     {
         super(varargs, myControl);
         super.numberOfArgs= NUMARGS;
         index = myControl.getShape();
-        System.out.println("Shape index = " + index);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class GetShape extends Command{
     }
 
     @Override
-    public int repeatCom() {
+    public double repeatCom() {
         return super.repeatCom();
     }
 }

@@ -2,6 +2,7 @@ package backEnd.commands;
 
 import Controller.Control;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Heading extends Command {
   private final int NUMARGS = 0;
@@ -13,7 +14,7 @@ public class Heading extends Command {
     super.numberOfArgs = NUMARGS;
   }
 
-  public Heading(LinkedList<String> varargs, Control control) {
+  public Heading(List<String> varargs, Control control) {
     super(varargs, control);
     super.numberOfArgs = NUMARGS;
 

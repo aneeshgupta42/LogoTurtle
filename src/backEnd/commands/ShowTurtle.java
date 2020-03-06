@@ -2,6 +2,7 @@ package backEnd.commands;
 
 import Controller.Control;
 import java.util.LinkedList;
+import java.util.List;
 
 public class ShowTurtle extends Command{
     private static final int NUMARGS = 0;
@@ -10,11 +11,11 @@ public class ShowTurtle extends Command{
       super();
       super.numberOfArgs= NUMARGS;
     }
-    public ShowTurtle(LinkedList<String> varargs, Control myControl)
+    public ShowTurtle(List<String> varargs, Control control)
     {
-      super(varargs, myControl);
+      super(varargs, control);
       super.numberOfArgs= NUMARGS;
-      myControl.setTurtleVisible(true);
+      control.setTurtleVisible(true);
     }
 
   @Override

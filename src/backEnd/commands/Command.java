@@ -1,7 +1,7 @@
 package backEnd.commands;
 
 import Controller.Control;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public abstract class Command {
@@ -19,7 +19,7 @@ public abstract class Command {
   public Command(){
   }
 
-  public Command(LinkedList<String> varargs, Control control) {
+  public Command(List<String> varargs, Control control) {
     myControl = control;
   }
   public void setControl(Control control){

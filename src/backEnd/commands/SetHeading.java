@@ -3,6 +3,7 @@ package backEnd.commands;
 import Controller.Control;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class SetHeading extends Command {
 
@@ -12,13 +13,13 @@ public class SetHeading extends Command {
         super();
         super.numberOfArgs= NUMARGS;
     }
-    public SetHeading(LinkedList<String> varargs, Control myControl)
+    public SetHeading(List<String> varargs, Control control)
     {
-        super(varargs, myControl);
+        super(varargs, control);
         super.numberOfArgs= NUMARGS;
-        double current_angle = myControl.getTurtleAngle();
+        double current_angle = control.getTurtleAngle();
         double angle = Double.parseDouble(varargs.get(0));
-        myControl.updateTurtle(0,0, (-current_angle+ angle), 0);
+        control.updateTurtle(0,0, (-current_angle+ angle), 0);
         angle_moved = angle - current_angle;
     }
 

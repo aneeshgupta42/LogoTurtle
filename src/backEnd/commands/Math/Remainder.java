@@ -3,6 +3,7 @@ package backEnd.commands.Math;
 import Controller.Control;
 import backEnd.commands.Command;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Remainder extends Command {
     private static final int NUMARGS = 2;
@@ -13,7 +14,7 @@ public class Remainder extends Command {
         super.numberOfArgs = NUMARGS;
     }
 
-    public Remainder(LinkedList<String> varargs, Control control) {
+    public Remainder(List<String> varargs, Control control) {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 

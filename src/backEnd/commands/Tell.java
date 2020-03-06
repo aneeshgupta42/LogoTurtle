@@ -2,6 +2,7 @@ package backEnd.commands;
 
 import Controller.Control;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Tell extends Command {
 
@@ -13,10 +14,10 @@ public class Tell extends Command {
     super();
     super.numberOfArgs =number;
   }
-  public Tell(LinkedList<String> varags, Control control){
-    super(varags,control);
-    start = Double.parseDouble(varags.get(0));
-    stop = Double.parseDouble(varags.get(1));
+  public Tell(List<String> varargs, Control control){
+    super(varargs,control);
+    start = Double.parseDouble(varargs.get(0));
+    stop = Double.parseDouble(varargs.get(1));
   }
 
   @Override

@@ -2,6 +2,7 @@ package backEnd.commands;
 
 import Controller.Control;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Left extends Command {
   private static final int NUMARGS = 1;
@@ -10,7 +11,7 @@ public class Left extends Command {
     super();
     super.numberOfArgs= NUMARGS;
   }
-  public Left(LinkedList<String> varargs, Control myControl)
+  public Left(List<String> varargs, Control myControl)
   {
     super(varargs, myControl);
     super.numberOfArgs= NUMARGS;

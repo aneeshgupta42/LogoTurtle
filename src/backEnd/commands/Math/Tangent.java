@@ -3,6 +3,7 @@ package backEnd.commands.Math;
 import Controller.Control;
 import backEnd.commands.Command;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Tangent extends Command {
     private static final int NUMARGS = 1;
@@ -13,7 +14,7 @@ public class Tangent extends Command {
         super.numberOfArgs= NUMARGS;
     }
 
-    public Tangent(LinkedList<String> varargs, Control control){
+    public Tangent(List<String> varargs, Control control){
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 

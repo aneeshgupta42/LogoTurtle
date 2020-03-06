@@ -3,6 +3,7 @@ package backEnd.commands.Math;
 import Controller.Control;
 import backEnd.commands.Command;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Pi extends Command {
   private static final int NUMARGS = 0;
@@ -12,7 +13,7 @@ public class Pi extends Command {
     super.numberOfArgs = NUMARGS;
   }
 
-  public Pi(LinkedList<String> varargs, Control control) {
+  public Pi(List<String> varargs, Control control) {
     super(varargs, control);
     super.numberOfArgs = NUMARGS;
 

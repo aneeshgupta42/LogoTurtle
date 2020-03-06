@@ -2,6 +2,7 @@ package backEnd.commands;
 
 import Controller.Control;
 import java.util.LinkedList;
+import java.util.List;
 
 public class ClearScreen extends Command {
   private final int NUMARGS = 0;
@@ -12,7 +13,7 @@ public class ClearScreen extends Command {
     super.numberOfArgs = NUMARGS;
   }
 
-  public ClearScreen(LinkedList<String> varargs, Control control){
+  public ClearScreen(List<String> varargs, Control control){
     super(varargs, control);
     control.turtleHome(true);
     distance = control.getTurtleDistance();
