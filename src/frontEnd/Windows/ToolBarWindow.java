@@ -57,6 +57,6 @@ public class ToolBarWindow extends HBox {
     myCustomWindow.createColorPicker(this,
         myColorPickerResources, BACKGROUND_RESOURCE);
     getChildren().add(
-        new ButtonWithTextBox(HISTORY_BUTTON_NAME, HISTORY_BUTTON_NAME, myCustomWindow.getButtonAction()));
+        new ButtonWithTextBox(HISTORY_BUTTON_NAME, HISTORY_BUTTON_METHOD, myCustomWindow.getButtonAction()));
   }
 }

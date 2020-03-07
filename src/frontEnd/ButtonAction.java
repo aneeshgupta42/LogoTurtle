@@ -140,7 +140,6 @@ public class ButtonAction {
     //getTabWindow().getVariableTab().setContent(getTabWindow().getVariableTab().resetTabContents(control.getVariables(), true));
     getTabWindow().getVariableTab().resetTabContents(control.getVariables(), true);
     getMover().updateLabels();
-    saveHistory("test.logo");
   }
 
   void sendInfoToControl(String myText) {
