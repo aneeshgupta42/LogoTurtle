@@ -137,5 +137,16 @@ public class Control {
     return myMover.getCurrentPenColorIndex();
   }
 
+  public void setPenWidth(double penWidth) {
+    myMover.setThickness(penWidth);
+  }
+
+  public void switchPaletteColor(int index, int red, int blue, int green) {
+    // add call to cayla's method
+  }
+
+  public void setBackgroundColor(int index) {
+    // add call to cayla's method
+  }
 }
 
