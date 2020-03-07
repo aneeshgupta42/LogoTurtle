@@ -88,18 +88,6 @@ public class CommandSet {
     language = lang;
   }
 
-  private void setCommandReturn(String commandValueReturn) {
-    commandReturn = commandValueReturn;
-  }
-
-  /*
-  Returns the command output value
-  @return commandReturn
-   */
-  public String getCommandReturn() {
-    return commandReturn;
-  }
-
   public String getFinalReturnValue() {
     return finalReturnValue;
   }
@@ -113,6 +101,7 @@ public class CommandSet {
   */
   public void parseCommand() {
     initializeNeededVariables();
+    setCommandInput(commandInput);
     parser.addPatterns(language);
     parser.addPatterns(SYNTAX);
     parseText();
@@ -123,6 +112,7 @@ public class CommandSet {
    */
   private void initializeNeededVariables() {
     parser = new Parser();
+    hasBeenStored = false;
     argToBePassed = new LinkedList<>();
   }
 
@@ -130,7 +120,9 @@ public class CommandSet {
   Splits up the command input
    */
   public void parseText() {
-    hasBeenStored = false;
+    commandExecute.setListObj(new CreatingListObjects());
+    commandList = new LinkedList<>();
+    argumentList = new LinkedList<>();
     for (String line : commandInput.split(NEWLINE)) {
       if (!line.contains(COMMENT) && !line.isEmpty()) {
         organizeInLists(line);
@@ -179,6 +171,7 @@ public class CommandSet {
       for (int i = 0; i < commandList.size(); i++) {
         currentCommand = commandList.pop();
         makeClassPathToCommand(currentCommand);
+        System.out.println(currentCommand);
         try {
           numberOfArguments = commandFactory.getNumArgs(commandPath);
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
@@ -212,6 +205,7 @@ public class CommandSet {
       runCommand();
     }
     else if (argNum == 0) {
+      System.out.println(argToBePassed);
       checkCommand();
     } else {
       if (argumentList.size() >= argNum) {
@@ -260,6 +254,7 @@ public class CommandSet {
   private void update() {
     hasBeenStored = commandExecute.getHasBeenStored();
     variablesUsed = commandExecute.getVariablesUsed();
+    argumentList = commandExecute.getArgumentList();
     setFinalReturnValue(commandExecute.getCommandValueReturn());
   }
   /*
