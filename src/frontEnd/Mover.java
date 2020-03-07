@@ -44,6 +44,11 @@ public class Mover implements Moveable {
   Line myLine;
   UserInterface myView;
   private static final String TURTLE = "turtle.png";
+  private static final String DOG= "doggy.png";
+  private static final String CAT = "cat.png";
+  private static final String COW = "cow.png";
+  private static final String PIG = "pig.png";
+  private static final String PACMAN = "pacman.jpeg";
   private static String defaultImage = TURTLE;
   private boolean moverActive = true;
   private static final String LabelResources = "resources.UIActions.LabelActions";
@@ -64,6 +69,23 @@ public class Mover implements Moveable {
   private static final String MOVER_IS_NOT_ACTIVE = "inactive";
 
   public Mover(UserInterface view, double ID) {
+    myView = view;
+    penDown = true;
+    distanceSoFar = 0;
+    moverID = ID;
+    moverImage = changeMoverDisplay(defaultImage);
+    currentImageIndex = 1;
+    currentPenColorIndex = -1;
+    myLabelPropertyResources = ResourceBundle.getBundle(LabelResources);
+    myComboBoxOptionsResources = ResourceBundle.getBundle(ComboBoxOptionsResources);
+    String optionsString = myComboBoxOptionsResources.getString("setImageOptions");
+    imageOptions = Arrays.asList(optionsString.split(","));
+    initialX = myView.getXCenter();
+    initialY = myView.getYCenter();
+  }
+  public Mover(UserInterface view, double ID, String penColor, String image) {
+    lineColor = Color.valueOf(penColor);
+    defaultImage = image;
     myView = view;
     penDown = true;
     distanceSoFar = 0;

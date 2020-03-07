@@ -281,10 +281,10 @@ public class ButtonAction {
       myInterface.start(new Stage());
   }
 
-
   private Mover getMover(){
     return myView.getMover();
   }
+
   private Map getMoverMap(){
     return myView.getTurtleMap();
   }
