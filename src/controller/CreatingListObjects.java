@@ -8,12 +8,11 @@ public class CreatingListObjects {
 
   private static final String LIST_START = "[";
   private static final String LIST_END = "]";
-  private List<ListObjects> groupList;
+  private List<ListObjects> groupList = new ArrayList<>();;
   private int currentRepeatNumber;
   private String commandInput;
 
   public CreatingListObjects(){
-    groupList = new ArrayList<>();
   }
 
   public List<ListObjects> getLists(){return groupList;}
@@ -61,7 +60,7 @@ public class CreatingListObjects {
       }
       numStarts--;
       two.add(first + 1);
-      two.add(last);
+      two.add(last -1 );
       sets.add(two);
       two = new ArrayList<>();
     }
