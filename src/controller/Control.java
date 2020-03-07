@@ -132,7 +132,7 @@ public class Control {
   }
 
   public void setPenColor(int index) {
-    //myMover.setCurrentPenColorIndex(index);
+    myMover.setCurrentPenColorByIndex(index);
   }
 
   public int getPenColor() {
@@ -143,12 +143,12 @@ public class Control {
     myMover.setThickness(penWidth);
   }
 
-  public void switchPaletteColor(int index, int red, int blue, int green) {
-    // add call to cayla's method
+  public void switchPaletteColor(int index, int red, int green, int blue) {
+    view.changeColorGrid(index, red, green, blue);
   }
 
   public void setBackgroundColor(int index) {
-    // add call to cayla's method
+    view.getDisplayWindow().setCurrentBackgroundColorByIndex(index);
   }
 }
 

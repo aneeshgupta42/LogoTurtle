@@ -7,7 +7,7 @@ import java.util.List;
 
 public class SetBackground extends Command{
     private static final int NUMARGS = 1;
-    private int index;
+    private int userIndex, index;
 
     public SetBackground() {
         super();
@@ -18,13 +18,14 @@ public class SetBackground extends Command{
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 
-        index = Integer.parseInt(varargs.get(0));
+        userIndex = Integer.parseInt(varargs.get(0));
+        index = userIndex - 1;
         control.setBackgroundColor(index);
     }
 
     @Override
     public String commandValueReturn() {
-        String ret = Integer.toString(index);
+        String ret = Integer.toString(userIndex);
         return ret;
     }
 
