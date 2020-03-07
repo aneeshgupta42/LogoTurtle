@@ -289,6 +289,7 @@ public class ButtonAction {
   private Mover getMover(){
     return myView.getMover();
   }
+
   private Map getMoverMap(){
     return myView.getTurtleMap();
   }
