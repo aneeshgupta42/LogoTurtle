@@ -11,6 +11,7 @@ public class ID extends Command {
     private double stop;
     private LinkedList<String> turtleID;
     private static final int NUMARGS = 0;
+    private double id;
 
     public ID(){
         super();
@@ -19,6 +20,7 @@ public class ID extends Command {
     public ID(List<String> varargs, Control control){
         super(varargs,control);
         super.numberOfArgs = NUMARGS;
+        id = control.getRecentID();
     }
 
     @Override
@@ -28,7 +30,7 @@ public class ID extends Command {
 
     @Override
     public String commandValueReturn() {
-        return " ";
+        return Double.toString(id);
     }
 
 }
