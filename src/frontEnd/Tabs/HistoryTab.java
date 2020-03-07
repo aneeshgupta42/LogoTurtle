@@ -1,8 +1,10 @@
 package frontEnd.Tabs;
 
 import frontEnd.Windows.CommandWindow;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.VBox;
@@ -30,5 +32,10 @@ public class HistoryTab extends Tab {
     });
     historyBox.getChildren().add(0, link);
     setContent(historyBox);
+  }
+
+  public String getHistoryTextContent() {
+    String commandText = "test";
+    return commandText;
   }
 }

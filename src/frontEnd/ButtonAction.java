@@ -269,6 +269,11 @@ public class ButtonAction {
     return myMover.getMoverState();
   }
 
+  public void saveHistory() {
+    String something = getTabWindow().getHistoryTab().getHistoryTextContent();
+    System.out.println(something);
+  }
+
   private Mover getMover(){
     return myView.getMover();
   }
