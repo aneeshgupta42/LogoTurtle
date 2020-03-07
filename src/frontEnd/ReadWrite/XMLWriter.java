@@ -99,7 +99,6 @@ public class XMLWriter {
 
     private void writeFile(){
         try {
-            System.out.println("This is reached");
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource domSource = new DOMSource(document);
@@ -107,7 +106,6 @@ public class XMLWriter {
             transformer.transform(domSource, streamResult);
         }
         catch (TransformerException tfe) {
-            System.out.println("Error function");
             throw new XMLException("Transformation fault");
         }
     }

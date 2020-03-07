@@ -22,7 +22,6 @@ public class Tell extends Command {
       ids.add(i, Double.parseDouble(varargs.get(i)));
     }
     control.updateTurtleActive(ids);
-    System.out.println("TTHTHT");
   }
 
   @Override

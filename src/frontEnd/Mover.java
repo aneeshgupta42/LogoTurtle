@@ -341,7 +341,7 @@ public class Mover implements Moveable {
     moverActive = status;
     moverID = id;
     ColorAdjust colorAdjustGrayscale = new ColorAdjust();
-    System.out.println("Setting ID: " + moverID + status);
+//    System.out.println("Setting ID: " + moerID + status);
     if(status) {
       colorAdjustGrayscale.setSaturation(0);;
     }
