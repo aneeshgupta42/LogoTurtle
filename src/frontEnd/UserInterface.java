@@ -134,8 +134,7 @@ public class UserInterface extends Application{
   private void step() {
     checkIfTurtleMovesOutOfBounds();
   }
-
-  ///move into a new class
+  
  private void checkIfTurtleMovesOutOfBounds() {
     if (myMover.getImage().getBoundsInParent().intersects(myToolBarWindow.getBoundsInParent())) {
       hideMoverAndLine(myMover.getLine().getStartX(), myToolBarWindow.getBoundsInParent().getMaxY());
@@ -149,7 +148,7 @@ public class UserInterface extends Application{
   }
 
   private void hideMoverAndLine(double endX, double endY) {
-    myMover.changeVisible();
+    myMover.moverVisible(false);
     root.getChildren().remove(myMover.getLine());
     Line line = new Line(myMover.getLine().getStartX(), myMover.getLine().getStartY(), endX, endY);
     root.getChildren().add(line);

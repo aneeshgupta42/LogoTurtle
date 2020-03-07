@@ -366,6 +366,10 @@ public class Mover implements Moveable {
     moverVisible = !moverVisible;
   }
 
+  public boolean getVisible(){
+    return moverVisible;
+  }
+
   public boolean isPenDown() {
     return penDown;
   }
