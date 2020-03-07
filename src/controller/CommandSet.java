@@ -171,7 +171,6 @@ public class CommandSet {
       for (int i = 0; i < commandList.size(); i++) {
         currentCommand = commandList.pop();
         makeClassPathToCommand(currentCommand);
-        System.out.println(currentCommand);
         try {
           numberOfArguments = commandFactory.getNumArgs(commandPath);
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
@@ -205,7 +204,6 @@ public class CommandSet {
       runCommand();
     }
     else if (argNum == 0) {
-      System.out.println(argToBePassed);
       checkCommand();
     } else {
       if (argumentList.size() >= argNum) {
