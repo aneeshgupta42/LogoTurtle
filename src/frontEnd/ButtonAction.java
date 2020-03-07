@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Scanner;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
@@ -27,6 +28,7 @@ public class ButtonAction {
   private UserInterface myView;
   private static final String COMMAND_ONE = "viewboc.png";
   private static final String COMMAND_TWO = "viewbox.png";
+  private static final String COMMAND_THREE = "viewboq.png";
   private Mover myMover;
   private static final String ComboBoxOptionsResources = "resources.UIActions.ComboBoxOptions";
   private DisplayWindow displayWindow;
@@ -202,10 +204,15 @@ public class ButtonAction {
     commandTwoIm.setPreserveRatio(true);
     commandTwoIm.setFitWidth(1000);
 
+    Image commandThree = new Image(getClass().getClassLoader().getResourceAsStream(COMMAND_THREE));
+    ImageView commandThreeIm = new ImageView(commandTwo);
+    commandTwoIm.setPreserveRatio(true);
+    commandTwoIm.setFitWidth(1000);
+
     final VBox vbox = new VBox();
     vbox.setSpacing(5);
     vbox.setPadding(new Insets(10, 0, 0, 10));
-    vbox.getChildren().addAll(commandOneIm, commandTwoIm);
+    vbox.getChildren().addAll(commandOneIm, commandTwoIm, commandThreeIm);
     pane.setContent(vbox);
     pane.setFitToWidth(true);
     Scene scene = new Scene(pane);
@@ -267,6 +274,11 @@ public class ButtonAction {
 
   public String getMoverState(){
     return myMover.getMoverState();
+  }
+
+  public void createNewWindow(){
+      UserInterface myInterface = new UserInterface();
+      myInterface.start(new Stage());
   }
 
   public void saveHistory() {
