@@ -204,7 +204,7 @@ public class UserInterface extends Application{
     System.out.println("New Map: " + turtleMap.toString());
     System.out.println("New list: " + turtleList.toString());
   }
-  
+
   public void changeColorGrid(int index, int red, int green, int blue){
     myPropertyWindow.getColorGrid().setColorFromIndexAndRGB(index, red, green, blue);
   }
