@@ -8,7 +8,7 @@ public abstract class Command {
 
   protected String commandReturn;
   protected Map<String, String> map;
-  protected int numberOfArgs;
+  protected int numberOfArgs = 0;
   protected Boolean store = false;
   protected double repeat = Double.MIN_VALUE ;
   protected double repeatNumber=0;
