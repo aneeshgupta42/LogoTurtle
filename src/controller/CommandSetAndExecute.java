@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 import java.util.TreeMap;
 
 public class CommandSetAndExecute {
@@ -221,6 +220,7 @@ public class CommandSetAndExecute {
     } else {
       if (argumentList.size() >= argNum) {
         String arg = argumentList.pop();
+        System.out.println("this "+arg);
         if (parser.getSymbol(arg).equals(VARIABLE)) {
           if (variablesUsed.containsKey(arg)) {
             argToBePassed.add(variablesUsed.get(arg));
