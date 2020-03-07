@@ -1,13 +1,12 @@
 package frontEnd;
 
-import frontEnd.ButtonsBoxesandLabels.PropertyLabel;
+import frontEnd.UIElements.PropertyLabel;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.Animation;
-import javafx.animation.Animation.Status;
 import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;

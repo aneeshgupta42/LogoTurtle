@@ -14,6 +14,7 @@ public abstract class Command {
   protected double repeatNumber=0;
 
   public Command(){
+
   }
 
   public Command(List<String> varargs, Control control) {}

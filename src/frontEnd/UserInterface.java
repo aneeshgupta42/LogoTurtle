@@ -18,6 +18,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -104,6 +105,7 @@ public class UserInterface extends Application{
     root.setTop(myToolBarWindow);
     myPropertyWindow = new MoverPropertiesWindow(myButtonAction, myCustomWindow, turtleList, propertyLabelMap);
     root.setLeft(myPropertyWindow);
+    //root.setLeft(new GridPane());
     displayWindow = new DisplayWindow(myButtonAction, myCustomWindow);
     root.setCenter(displayWindow);
     tabWindow = new TabWindow(displayWindow.getCommandWindow(), myButtonAction);

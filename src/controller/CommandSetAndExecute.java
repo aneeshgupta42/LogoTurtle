@@ -138,8 +138,6 @@ public class CommandSetAndExecute {
   Splits up the command input
    */
   private void parseText() {
-    commandList = new LinkedList<>();
-    argumentList = new LinkedList<>();
     for (String line : commandInput.split(NEWLINE)) {
       if (!line.contains(COMMENT) && !line.isEmpty()) {
         organizeInLists(line);
@@ -156,6 +154,8 @@ public class CommandSetAndExecute {
   Splits lines into words and categorizes them into two lists
    */
   private void organizeInLists(String line) {
+    commandList = new LinkedList<>();
+    argumentList = new LinkedList<>();
     for (String word : line.split(WHITESPACE)) {
       if (word.trim().length() > 0) {
         if (!parser.getSymbol(word).equals(ARGUMENT) && !parser.getSymbol(word).equals(VARIABLE)) {
@@ -193,7 +193,7 @@ public class CommandSetAndExecute {
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
           userCommandAttempt = currentCommand;
           if(commandPath.equals(CLASS_PATH+COMMAND)) coordinateCommands();
-          if (argumentList.size() > 0 && commandList.size()==1) {
+          if (argumentList.size() > 0) {
             argToBePassed.addAll(argumentList);
             runCommand();
           }

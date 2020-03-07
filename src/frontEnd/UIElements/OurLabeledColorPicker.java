@@ -1,4 +1,4 @@
-package frontEnd.ButtonsBoxesandLabels;
+package frontEnd.UIElements;
 
 import frontEnd.ButtonAction;
 import java.lang.reflect.InvocationTargetException;
@@ -19,15 +19,10 @@ public class OurLabeledColorPicker extends HBox {
     getChildren().addAll(makePrompt(promptText), colors);
     EventHandler<ActionEvent> whathappened = Result(methodName, target);
     colors.setOnAction(whathappened);
-    //ActionEvent event = new ActionEvent(target.getClass().getDeclaredMethod(methodName));
-    //setOnAction(target.getClass().getDeclaredMethod(methodName));
-    //getChildren().addAll(
-    //makeInputAction(target, methodName);
   }
 
   // make input prompt, very basic for now but could be much more involved in general
   private Node makePrompt (String text) {
-   // System.out.println(text);
     return new Text(text + ": ");
   }
 
@@ -47,7 +42,6 @@ public class OurLabeledColorPicker extends HBox {
           } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
           }
-       //   System.out.println(methodName);
         }catch (NoSuchMethodException e) {
           e.printStackTrace();
         }
