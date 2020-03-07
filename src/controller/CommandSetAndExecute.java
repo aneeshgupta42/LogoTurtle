@@ -193,7 +193,7 @@ public class CommandSetAndExecute {
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
           userCommandAttempt = currentCommand;
           if(commandPath.equals(CLASS_PATH+COMMAND)) coordinateCommands();
-          if (argumentList.size() > 0 && commandList.size()==1) {
+          if (argumentList.size() > 0) {
             argToBePassed.addAll(argumentList);
             runCommand();
           }
