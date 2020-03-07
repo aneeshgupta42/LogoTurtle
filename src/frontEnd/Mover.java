@@ -4,7 +4,9 @@ import frontEnd.UIElements.PropertyLabel;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
@@ -214,6 +216,13 @@ public class Mover implements Moveable{
   public void setLineColor(Color color){
     lineColor = color;
     updateLabels();
+    List colorList = myView.getPropertyWindow().getColorGrid().getColorList();
+    if(colorList.contains(color)){
+      currentPenColorIndex = colorList.indexOf(color);
+    }
+    else{
+      currentPenColorIndex = -1;
+    }
   }
 
   public double getXPosition(){
@@ -362,7 +371,8 @@ public class Mover implements Moveable{
     return this.currentPenColorIndex;
   }
 
-  public void setCurrentPenColorIndex(int index) {
-    this.currentPenColorIndex = index; 
+  public void setCurrentPenColorByIndex(int index) {
+    Color color =myView.getPropertyWindow().getColorGrid().getColorFromIndex(index);
+    setLineColor(color);
   }
  }
