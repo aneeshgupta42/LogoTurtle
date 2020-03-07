@@ -209,7 +209,6 @@ public class CommandSet {
   private void coordinateArgumentsForEachCommand(int argNum) {
     if(argNum == -1){
       argToBePassed.addAll(argumentList);
-      System.out.println(argToBePassed);
       runCommand();
     }
     else if (argNum == 0) {
@@ -252,10 +251,10 @@ public class CommandSet {
     try {
       Command commandGiven = commandFactory.generateCommand(commandPath, argToBePassed);
       commandExecute.createCommand(commandGiven);
+      update();
     } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException | ExceptionInInitializerError e) {
       ErrorBoxes box = new ErrorBoxes(new ErrorHandler("InvalidCommand"));
     }
-    update();
   }
 
   private void update() {

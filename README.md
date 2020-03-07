@@ -12,7 +12,7 @@ Finish Date: March 6th, 2020
 Hours Spent: 180
 
 ### Primary Roles
-Libba Lou: Implementing the controller module to interface between the front end and back end components. This includes implementing the Parser class to parse command strings taken from the front end.
+Libba Lawrence: Implementing the controller module to interface between the front end and back end components. This includes implementing the Parser class to parse command strings taken from the front end.
 
 Cayla Schuval: Responsible for implementing the entire front end package
 
@@ -31,12 +31,18 @@ Data files needed: English.properties (and all other language property files), m
 Features implemented: Features described in the basic implementation (including commands in the command specification document)
 
 ### Notes/Assumptions
-Assumptions or Simplifications: Currently, the FOR user input command does not work. We plan to refactor our current code to have command objects taking in and handling the logic for these types of commands, rather than having that done in the control class (where it currently resides). This will allow us to better implement all user commands, and fix problems with the FOR user command that exist. The plan for refactoring is described in the image below.
-![refactoring_plan](doc/refactoring-plan.jpg)
+Assumptions or Simplifications:  
+
+We assumed that the commands would each have a definite number of inputs.
+We assumed a a definite style for the properties files.
+We assumed that the pen follows the data points and the turtle also does, but they have separate coded paths. 
 
 Interesting data files: NA
 
-Known Bugs: NA
+Known Bugs: 
+
+* Lists within lists do not function properly with respect to parsing data
+* Sometimes the turtle decides to stop drawing and you have to pendown to get it to work
 
 Extra credit: NA
 
