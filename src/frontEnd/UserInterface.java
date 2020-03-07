@@ -70,11 +70,27 @@ public class UserInterface extends Application{
     control = new Control(this);
     myButtonAction = new ButtonAction(this);
     myCustomWindow = new CustomWindow(myButtonAction);
+    myScene = makeScene();
     myComboBoxOptionsResources = ResourceBundle.getBundle(ComboBoxOptionsResources);
     myButtonAction.setLanguage(DEFAULT_LANGUAGE);
     String optionsString = myComboBoxOptionsResources.getString("setImageOptions");
     imageOptions = Arrays.asList(optionsString.split(","));
   }
+
+  public UserInterface(String backgroundColor, String numberOfTurtles, String penColor, String image) {
+    myStage = new Stage();
+    myMover = new Mover(this, initialMoverID);
+    control = new Control(this);
+    myButtonAction = new ButtonAction(this);
+    myCustomWindow = new CustomWindow(myButtonAction);
+    myScene = makeScene(backgroundColor, numberOfTurtles, penColor, image);
+    myComboBoxOptionsResources = ResourceBundle.getBundle(ComboBoxOptionsResources);
+    myButtonAction.setLanguage(DEFAULT_LANGUAGE);
+    String optionsString = myComboBoxOptionsResources.getString("setImageOptions");
+    imageOptions = Arrays.asList(optionsString.split(","));
+  }
+
+
 
   @Override
   public void start(Stage primaryStage) {
@@ -100,28 +116,22 @@ public class UserInterface extends Application{
    * Returns scene for the browser so it can be added to stage.
    */
 
-  private Scene makeScene() {
+  private Scene makeScene(String backgroundColor, String numberOfTurtles, String penColor, String image) {
     //root = new BorderPane();
+    numOfMovers = Integer.valueOf(numberOfTurtles);
     myToolBarWindow = new ToolBarWindow(myCustomWindow);
     root.setTop(myToolBarWindow);
     myPropertyWindow = new MoverPropertiesWindow(myButtonAction, myCustomWindow, turtleList, propertyLabelMap);
     root.setLeft(myPropertyWindow);
     //root.setLeft(new GridPane());
-    displayWindow = new DisplayWindow(myButtonAction, myCustomWindow, myPropertyWindow.getColorGrid());
+    displayWindow = new DisplayWindow(myButtonAction, myCustomWindow, myPropertyWindow.getColorGrid(), backgroundColor);
     root.setCenter(displayWindow);
     tabWindow = new TabWindow(displayWindow.getCommandWindow(), myButtonAction);
     root.setRight(tabWindow);
     xcenter = DISPLAY_WIDTH / 2 - myMover.getImage().getBoundsInLocal().getWidth() / 2 + SIDEPANE_WIDTH;
     ycenter = BUTTON_PANE_HEIGHT + DISPLAY_HEIGHT / 2 - myMover.getImage().getBoundsInLocal().getHeight() / 2;
-    /*List<ImageView> images = moverMap.createTurtles(root);
-    root.getChildren().addAll(images);
-    for(ImageView image: images){
-      image.setX(xcenter);
-      image.setY(ycenter);
-    }*/
-    //moverMap.createTurtles();
     for (double i = 1; i <= numOfMovers; i++) {
-      myMover = new Mover(this, i);
+      myMover = new Mover(this, i, penColor, image);
       myMover.setInitialMoverPosition();
       turtleMap.put(i, myMover);
       turtleList.add(i);
@@ -131,11 +141,30 @@ public class UserInterface extends Application{
     return new Scene(root);
   }
 
+  private Scene makeScene() {
+    myToolBarWindow = new ToolBarWindow(myCustomWindow);
+    root.setTop(myToolBarWindow);
+    myPropertyWindow = new MoverPropertiesWindow(myButtonAction, myCustomWindow, turtleList, propertyLabelMap);
+    root.setLeft(myPropertyWindow);
+    displayWindow = new DisplayWindow(myButtonAction, myCustomWindow, myPropertyWindow.getColorGrid());
+    root.setCenter(displayWindow);
+    tabWindow = new TabWindow(displayWindow.getCommandWindow(), myButtonAction);
+    root.setRight(tabWindow);
+    xcenter = DISPLAY_WIDTH / 2 - myMover.getImage().getBoundsInLocal().getWidth() / 2 + SIDEPANE_WIDTH;
+    ycenter = BUTTON_PANE_HEIGHT + DISPLAY_HEIGHT / 2 - myMover.getImage().getBoundsInLocal().getHeight() / 2;
+    for (double i = 1; i <= numOfMovers; i++) {
+      myMover = new Mover(this, i);
+      myMover.setInitialMoverPosition();
+      turtleMap.put(i, myMover);
+      turtleList.add(i);
+      root.getChildren().add(myMover.getImage());
+    }
+    return new Scene(root);
+  }
   private void step() {
     checkIfTurtleMovesOutOfBounds();
   }
 
-  ///move into a new class
  private void checkIfTurtleMovesOutOfBounds() {
     if (myMover.getImage().getBoundsInParent().intersects(myToolBarWindow.getBoundsInParent())) {
       hideMoverAndLine(myMover.getLine().getStartX(), myToolBarWindow.getBoundsInParent().getMaxY());
