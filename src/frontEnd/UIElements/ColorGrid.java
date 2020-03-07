@@ -64,10 +64,17 @@ public class ColorGrid extends VBox {
   }
 
   public void setColorFromIndexAndRGB(int index, int red, int green, int blue){
-    colorList.get(index).rgb(red, green, blue);
-    gridPane.getChildren().remove(index%NUM_OF_COLUMNS, index%NUM_OF_ROWS);
+    Color newColor = Color.rgb(red, green, blue);
+    colorList.set(index - 1, newColor);
+    System.out.println(colorList.get(index - 1));
     Rectangle rect = new Rectangle(100, 30);
-    gridPane.add(rect, index%NUM_OF_COLUMNS, index%NUM_OF_ROWS);
-    rect.setFill(colorList.get(index));
+    gridPane.add(rect, index/NUM_OF_COLUMNS, index%NUM_OF_ROWS);
+    rect.setFill(colorList.get(index - 1));
+
+    TextField text = new TextField("" + index);
+    text.setDisable(true);
+    text.setAlignment(Pos.CENTER);
+    text.setPrefHeight(30);
+    gridPane.add(text, index/NUM_OF_COLUMNS, index%NUM_OF_ROWS);
   }
 }
