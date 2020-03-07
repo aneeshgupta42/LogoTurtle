@@ -1,7 +1,7 @@
 package frontEnd;
 
 import controller.Control;
-import frontEnd.ButtonsBoxesandLabels.PropertyLabel;
+import frontEnd.UIElements.PropertyLabel;
 import frontEnd.Windows.*;
 
 import frontEnd.Windows.CustomWindow;
@@ -22,6 +22,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import frontEnd.UIElements.ColorGrid;
+import frontEnd.UIElements.PropertyLabel;
+
 
 public class UserInterface extends Application{
   private Scene myScene;
