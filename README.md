@@ -7,9 +7,9 @@ Names: Libba Lou, Cayla Schuval, Aneesh Gupta, Turner Jordan
 ### Timeline
 Start Date: February 20th, 2020
 
-Finish Date (Basic Implementation): February 26th, 2020
+Finish Date: March 6th, 2020
 
-Hours Spent: 60
+Hours Spent: 180
 
 ### Primary Roles
 Libba Lou: Implementing the controller module to interface between the front end and back end components. This includes implementing the Parser class to parse command strings taken from the front end.

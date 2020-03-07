@@ -4,9 +4,7 @@ import frontEnd.UIElements.PropertyLabel;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
@@ -25,7 +23,8 @@ import javafx.scene.shape.Path;
 import javafx.util.Duration;
 
 
-public class Mover implements Moveable{
+//public class Mover implements Moveable, Cloneable {
+public class Mover implements Moveable {
 
   private static double moverID;
   ImageView moverImage;
@@ -59,8 +58,10 @@ public class Mover implements Moveable{
   private List<String> imageOptions;
   private Animation animation;
   private Animation rotate;
-  private String penUpDisplayText = "up";
-  private String penDownDisplayText = "down";
+  private static final String PEN_UP_DISPLAY_TEXT = "up";
+  private static final String PEN_DOWN_DISPLAY_TEXT = "down";
+  private static final String MOVER_IS_ACTIVE = "active";
+  private static final String MOVER_IS_NOT_ACTIVE = "inactive";
 
   public Mover(UserInterface view, double ID) {
     myView = view;
@@ -303,10 +304,15 @@ public class Mover implements Moveable{
     return moverActive;
   }
 
+  public void setActive(boolean status){
+    moverActive = status;
+    handleKeyInput();
+  }
+
   public String getPenPosition(){
-    String ret = penUpDisplayText;
+    String ret = PEN_UP_DISPLAY_TEXT;
     if(penDown){
-      ret = penDownDisplayText;
+      ret = PEN_DOWN_DISPLAY_TEXT;
     }
     return ret;
   }
@@ -357,6 +363,13 @@ public class Mover implements Moveable{
     setInitialMoverPosition();
     moverVisible(true);
     updateLabels();
+  }
+
+  public String getMoverState() {
+    if(moverActive){
+      return MOVER_IS_ACTIVE;
+    }
+    return MOVER_IS_NOT_ACTIVE;
   }
 
   public double getMoverCenterXPos() {

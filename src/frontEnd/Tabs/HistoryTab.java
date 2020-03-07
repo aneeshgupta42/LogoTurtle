@@ -15,6 +15,7 @@ public class HistoryTab extends Tab {
   public HistoryTab(){
     setText(HISTORY_TAB_TITLE);
     historyBox = new VBox();
+    setContent(historyBox);
   }
 
   public void setHistoryTab(CommandWindow commandWindow, String commands) {

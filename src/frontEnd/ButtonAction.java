@@ -131,9 +131,11 @@ public class ButtonAction {
       getTabWindow().getHistoryTab().setHistoryTab(getCommandWindow(), myText);
       getMover().setObjectMoved(false);
     }
-    getTabWindow().getCommandTab().setContent(getTabWindow().getCommandTab().resetTabContents(control.getUserCommands(), false));
+    //getTabWindow().getCommandTab().setContent(getTabWindow().getCommandTab().resetTabContents(control.getUserCommands(), false));
+    getTabWindow().getCommandTab().resetTabContents(control.getUserCommands(), false);
     System.out.println("commands "+  control.getUserCommands());
-    getTabWindow().getVariableTab().setContent(getTabWindow().getVariableTab().resetTabContents(control.getVariables(), true));
+    //getTabWindow().getVariableTab().setContent(getTabWindow().getVariableTab().resetTabContents(control.getVariables(), true));
+    getTabWindow().getVariableTab().resetTabContents(control.getVariables(), true);
     getMover().updateLabels();
   }
 
@@ -261,6 +263,10 @@ public class ButtonAction {
 
   public void openTab(String tabName){
     getTabWindow().openTabFromPane(tabName);
+  }
+
+  public String getMoverState(){
+    return myMover.getMoverState();
   }
 
   private Mover getMover(){
