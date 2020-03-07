@@ -186,7 +186,9 @@ public class CommandSet {
           if (commandPath.equals(CLASS_PATH + COMMAND))
             coordinateCommands();
           if (argumentList.size() > 0) {
+            System.out.println(" ****HERE****" + argumentList);
             argToBePassed.addAll(argumentList);
+            System.out.println(argToBePassed);
             runCommand();
           }
         }
@@ -207,7 +209,13 @@ public class CommandSet {
   Coordinating the command to the number of arguments it needs and pushing it to be run
    */
   private void coordinateArgumentsForEachCommand(int argNum) {
-    if (argNum == 0) {
+    if(argNum == -1){
+      System.out.println(" ****HERE****" + argumentList);
+      argToBePassed.addAll(argumentList);
+      System.out.println(argToBePassed);
+      runCommand();
+    }
+    else if (argNum == 0) {
       checkCommand();
     } else {
       if (argumentList.size() >= argNum) {
@@ -255,10 +263,9 @@ public class CommandSet {
 
   private void update() {
     hasBeenStored = commandExecute.getHasBeenStored();
-    variablesUsed=commandExecute.getVariablesUsed();
+    variablesUsed = commandExecute.getVariablesUsed();
     setFinalReturnValue(commandExecute.getCommandValueReturn());
   }
-
   /*
 Makes variables for the repetitions of loops
  */

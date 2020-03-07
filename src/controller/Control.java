@@ -2,6 +2,8 @@ package controller;
 
 import frontEnd.Moveable;
 import frontEnd.UserInterface;
+
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -15,7 +17,6 @@ public class Control {
   private final UserInterface view;
   private final Map<String,String> variablesUsed = new TreeMap<>();
   private final Map<String,String> functionsUsed = new TreeMap<>();
-  private String commandReturnValue;
   private String finalReturnValue;
 
   /*
@@ -32,8 +33,6 @@ public class Control {
 
   public Map<String,String> getUserCommands() {return functionsUsed;}
 
-  public String getCommandReturnValue(){return commandReturnValue;}
-
   public String getFinalReturnValue(){return finalReturnValue;}
 
   public void setCommand(String command) {
@@ -49,7 +48,6 @@ public class Control {
     commandSet.parseCommand();
     if(commandSet.getVariables()!=null)variablesUsed.putAll(commandSet.getVariables());
     if(commandSet.getFunctions()!=null)functionsUsed.putAll(commandSet.getFunctions());
-    commandReturnValue = commandSet.getCommandReturn();
     finalReturnValue = commandSet.getFinalReturnValue();
     System.out.println("FINAL RETURN VALUE ------>" + finalReturnValue);
   }
@@ -113,6 +111,10 @@ public class Control {
     }
   }
 
+  public void updateTurtleActive(ArrayList<Double> now_active){
+    view.setActiveTurtles(now_active);
+  }
+
   public double getTurtleRelativeXPos() {
     return turtleCol - myMover.getMoverCenterXPos();
   }
@@ -127,6 +129,26 @@ public class Control {
 
   public int getShape(){
     return myMover.getCurrentImageIndex();
+  }
+
+  public void setPenColor(int index) {
+    //myMover.setCurrentPenColorIndex(index);
+  }
+
+  public int getPenColor() {
+    return myMover.getCurrentPenColorIndex();
+  }
+
+  public void setPenWidth(double penWidth) {
+    myMover.setThickness(penWidth);
+  }
+
+  public void switchPaletteColor(int index, int red, int blue, int green) {
+    // add call to cayla's method
+  }
+
+  public void setBackgroundColor(int index) {
+    // add call to cayla's method
   }
 }
 
