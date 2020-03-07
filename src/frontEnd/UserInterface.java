@@ -2,10 +2,8 @@ package frontEnd;
 
 import controller.Control;
 import frontEnd.ButtonsBoxesandLabels.PropertyLabel;
-import frontEnd.Windows.DisplayWindow;
-import frontEnd.Windows.MoverPropertiesWindow;
-import frontEnd.Windows.TabWindow;
-import frontEnd.Windows.ToolBar;
+import frontEnd.Windows.*;
+
 import java.util.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -27,7 +25,7 @@ public class UserInterface extends Application{
   private Stage myStage;
   private Mover myMover;
   private Control control;
-  private HBox commandWindow;
+  private CommandWindow commandWindow;
   private TabPane tabPane;
   private BorderPane root = new BorderPane();
   private ResourceBundle myComboBoxOptionsResources;
@@ -220,6 +218,9 @@ public class UserInterface extends Application{
     turtleList.add(doub);
   }
 
+  public void displayReturnValue(String returnValue){
+    displayWindow.getCommandWindow().setText(returnValue);
+  }
 
   public DisplayWindow getDisplayWindow(){
     return displayWindow;

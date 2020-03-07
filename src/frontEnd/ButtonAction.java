@@ -118,7 +118,10 @@ public class ButtonAction {
     String myText = getCommandWindow().getText();
     sendInfoToControl(myText);
     getCommandWindow().clearText();
-    if (getMover().objectMoved()) {
+    String finalReturnvalue = control.getFinalReturnValue();
+//    System.out.println("This goes in front end----->" + finalReturnvalue);
+    myView.displayReturnValue("Output = " + finalReturnvalue);
+    if (finalReturnvalue!=null) {
       getTabWindow().getHistoryTab().setHistoryTab(getCommandWindow(), myText);
       getMover().setObjectMoved(false);
     }
@@ -129,6 +132,7 @@ public class ButtonAction {
   }
 
   void sendInfoToControl(String myText) {
+
     for(Mover mover: turtleMap.values()) {
       if (mover.getActive()) {
         control.setCommand(myText);
