@@ -9,6 +9,8 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.VBox;
 
+import java.util.List;
+
 public class HistoryTab extends Tab {
   private VBox historyBox;
   private static final String HYPERLINK_STYLE = "hyper-link";
@@ -35,7 +37,12 @@ public class HistoryTab extends Tab {
   }
 
   public String getHistoryTextContent() {
-    String commandText = "test";
+    String commandText = "";
+    List<Node> currentObjects = historyBox.getChildren();
+    for(Node currNode: currentObjects) {
+      Hyperlink link = (Hyperlink) currNode;
+      commandText = link.getText() + "\n" + commandText;
+    }
     return commandText;
   }
 }
