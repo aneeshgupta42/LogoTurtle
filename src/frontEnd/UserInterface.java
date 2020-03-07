@@ -21,6 +21,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import frontEnd.UIElements.ColorGrid;
+import frontEnd.UIElements.PropertyLabel;
+
 
 public class UserInterface extends Application{
   private Scene myScene;
@@ -104,7 +107,7 @@ public class UserInterface extends Application{
     myPropertyWindow = new MoverPropertiesWindow(myButtonAction, myCustomWindow, turtleList, propertyLabelMap);
     root.setLeft(myPropertyWindow);
     //root.setLeft(new GridPane());
-    displayWindow = new DisplayWindow(myButtonAction, myCustomWindow);
+    displayWindow = new DisplayWindow(myButtonAction, myCustomWindow, myPropertyWindow.getColorGrid());
     root.setCenter(displayWindow);
     tabWindow = new TabWindow(displayWindow.getCommandWindow(), myButtonAction);
     root.setRight(tabWindow);
@@ -188,6 +191,9 @@ public class UserInterface extends Application{
             myButtonAction.addTurtle();
         }
     }
+
+  public void changeColorGrid(int index, int red, int green, int blue){
+    myPropertyWindow.getColorGrid().setColorFromIndexAndRGB(index, red, green, blue);
   }
 
   public MoverPropertiesWindow getPropertyWindow(){

@@ -3,6 +3,7 @@ package controller;
 import backEnd.CommandFactory;
 import backEnd.ErrorHandler;
 import backEnd.commands.Command;
+import backEnd.commands.VariableControlUser.MakeVariable;
 import frontEnd.ErrorBoxes;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -228,11 +229,11 @@ public class CommandSetAndExecute {
     } else {
       if (argumentList.size() >= argNum) {
         String arg = argumentList.pop();
-        System.out.println("this "+arg);
         if (parser.getSymbol(arg).equals(VARIABLE)) {
-          if (variablesUsed.containsKey(arg)) {
+          if (variablesUsed.containsKey(arg) && !commandPath.equals(MAKE)) {
             argToBePassed.add(variablesUsed.get(arg));
-          } else {
+          }
+          else {
             argToBePassed.add(arg);
           }
         } else {
