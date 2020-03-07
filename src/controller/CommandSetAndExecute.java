@@ -18,6 +18,7 @@ public class CommandSetAndExecute {
   private static final String NEWLINE = "\n";
   private static final String ARGUMENT = "Constant";
   private static final String VARIABLE = "Variable";
+  private static final String COMMAND = "Command";
   private static final String CLASS_PATH = "backEnd.commands.";
   private static final String REP_COUNT = ":repCount";
   private static final String MAKE = "backEnd.commands.MakeVariable";
@@ -31,8 +32,8 @@ public class CommandSetAndExecute {
   private StoreFunctions storeFunction;
   private CreatingListObjects creatingListObjects;
 
-  private Stack<String> commandList;
-  private Stack<String> argumentList;
+  private LinkedList<String> commandList;
+  private LinkedList<String> argumentList;
   private Map<String, String> variablesUsed;
   private LinkedList<String> argToBePassed;
   private List<ListObjects> groupsList;
@@ -50,6 +51,7 @@ public class CommandSetAndExecute {
   private int numberOfFunctions;
   private String commandReturn;
   private String userCommandAttempt;
+  private String finalReturnValue;
 
   /*
   Initializes a commandExecutor that calls the parser on the user Input commands
@@ -59,7 +61,6 @@ public class CommandSetAndExecute {
     control = myControl;
     variablesUsed = new TreeMap();
     commandFactory = new CommandFactory(control);
-    creatingListObjects = new CreatingListObjects();
   }
 
   /*
@@ -82,6 +83,7 @@ public class CommandSetAndExecute {
    */
   public void setCommandInput(String commandList) {
     commandInput = commandList;
+    finalReturnValue = null;
   }
 
   /*
@@ -103,11 +105,20 @@ public class CommandSetAndExecute {
     return commandReturn;
   }
 
+  public String getFinalReturnValue(){
+    return finalReturnValue;
+  }
+
+  public void setFinalReturnValue(String x){
+    finalReturnValue = x;
+  }
+
   /*
   Calls the parser to start parsing the user input and initializes variables
   */
   public void parseCommand() {
     initializeNeededVariables();
+    creatingListObjects = new CreatingListObjects();
     parser.addPatterns(language);
     parser.addPatterns(SYNTAX);
     parseText();
@@ -133,6 +144,8 @@ public class CommandSetAndExecute {
         organizeInLists(line);
       }
       if (!commandList.isEmpty()) {
+        System.out.println(commandList);
+        System.out.println(argumentList);
         coordinateCommands();
       }
     }
@@ -142,8 +155,8 @@ public class CommandSetAndExecute {
   Splits lines into words and categorizes them into two lists
    */
   private void organizeInLists(String line) {
-    commandList = new Stack<>();
-    argumentList = new Stack<>();
+    commandList = new LinkedList<>();
+    argumentList = new LinkedList<>();
     for (String word : line.split(WHITESPACE)) {
       if (word.trim().length() > 0) {
         if (!parser.getSymbol(word).equals(ARGUMENT) && !parser.getSymbol(word).equals(VARIABLE)) {
@@ -175,11 +188,12 @@ public class CommandSetAndExecute {
       for (int i = 0; i < commandList.size(); i++) {
         currentCommand = commandList.pop();
         makeClassPathToCommand(currentCommand);
+        System.out.println("this is thte command "+commandPath);
         try {
           numberOfArguments = commandFactory.getNumArgs(commandPath);
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
           userCommandAttempt = currentCommand;
-          coordinateCommands();
+          if(commandPath.equals(CLASS_PATH+COMMAND)) coordinateCommands();
           if (argumentList.size() > 0 && commandList.size()==1) {
             argToBePassed.addAll(argumentList);
             runCommand();
@@ -211,10 +225,10 @@ public class CommandSetAndExecute {
           if (variablesUsed.containsKey(arg)) {
             argToBePassed.add(variablesUsed.get(arg));
           } else {
-            argToBePassed.push(arg);
+            argToBePassed.add(arg);
           }
         } else {
-          argToBePassed.push(arg);
+          argToBePassed.add(arg);
         }
       }
       argNum--;
@@ -223,6 +237,7 @@ public class CommandSetAndExecute {
   }
 
   private void checkCommand() {
+
     if (!hasBeenStored) {
       runCommand();
     }
@@ -251,6 +266,7 @@ public class CommandSetAndExecute {
   private void commandReturnValue(Command comm) {
     if (comm.commandValueReturn() != null) {
       argumentList.add(comm.commandValueReturn());
+      finalReturnValue = comm.commandValueReturn();
       setCommandReturn(comm.commandValueReturn());
       if (!commandList.isEmpty()) {
         coordinateCommands();
@@ -260,10 +276,11 @@ public class CommandSetAndExecute {
 
   private void storeUserCommand(Command comm) {
     if (comm.storeCommands()) {
-     creatingListObjects.findLists(commandInput,currentRepeatNumber);
+      creatingListObjects.findLists(commandInput,currentRepeatNumber);
       groupsList= creatingListObjects.getLists();
       numberOfFunctions++;
       storeFunction.storeFunction(userCommandAttempt, groupsList.get(numberOfFunctions).getMyList());
+      System.out.println("Store function "+storeFunction);
       hasBeenStored = true;
     }
   }
@@ -282,6 +299,7 @@ public class CommandSetAndExecute {
           hasBeenStored = true;
         }
       }
+      System.out.println(commandInput);
       parseText();
       hasBeenStored = true;
     }
@@ -290,6 +308,7 @@ public class CommandSetAndExecute {
   private void saveVariables(Command comm) {
     if (comm.getVariablesCreated() != null) {
       variablesUsed.putAll(comm.getVariablesCreated());
+      System.out.println(variablesUsed);
       if (!commandList.isEmpty()) {
         coordinateCommands();
       }

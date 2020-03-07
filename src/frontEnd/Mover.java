@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.Animation;
+import javafx.animation.Animation.Status;
 import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;
@@ -54,44 +55,35 @@ public class Mover implements Moveable{
   private static double initialY;
   private int currentImageIndex;
   private List<String> imageOptions;
+  private Animation animation;
+  private Animation rotate;
+  private String penUpDisplayText = "up";
+  private String penDownDisplayText = "down";
 
   public Mover(UserInterface view, double ID) {
-    System.out.print(this);
     myView = view;
-    // do we want this to start as true?
     penDown = true;
-    moverVisible = true;
     distanceSoFar = 0;
     moverID = ID;
     moverImage = changeMoverDisplay(defaultImage);
     currentImageIndex = 1;
-    /*moverImage.setOnMouseClicked(e -> {
-      handleKeyInput();
-    });*/
     myLabelPropertyResources = ResourceBundle.getBundle(LabelResources);
     myComboBoxOptionsResources = ResourceBundle.getBundle(ComboBoxOptionsResources);
     String optionsString = myComboBoxOptionsResources.getString("setImageOptions");
     imageOptions = Arrays.asList(optionsString.split(","));
-    //myView.addNodeToRoot(moverImage);
     initialX = myView.getXCenter();
     initialY = myView.getYCenter();
   }
 
   private void handleKeyInput(){
-    //System.out.println("yo");
-    //moverVisible=!moverVisible;
-    //moverImage.setVisible(moverVisible);
-    //System.out.println(moverVisible);
+    ColorAdjust colorAdjustGrayscale = new ColorAdjust();
     if(moverActive) {
-      ColorAdjust colorAdjustGrayscale = new ColorAdjust();
-      colorAdjustGrayscale.setSaturation(-1);
-      moverImage.setEffect(colorAdjustGrayscale);
+      colorAdjustGrayscale.setSaturation(-1);;
     }
     else{
-      ColorAdjust colorAdjustGrayscale = new ColorAdjust();
       colorAdjustGrayscale.setSaturation(0);
-      moverImage.setEffect(colorAdjustGrayscale);
     }
+    moverImage.setEffect(colorAdjustGrayscale);
     moverActive = !moverActive;
   }
 
@@ -123,24 +115,12 @@ public class Mover implements Moveable{
   }
 
   public void move(double x, double y, double angle) {
+    //&& animation.getStatus()== Status.STOPPED && rotate.getStatus()== Status.STOPPED
     if (moverActive) {
-      moverStartingXPos = moverImage.getX();
-      moverStartingYPos = moverImage.getY();
-      Animation animation = makeAnimation(moverImage, x, y);
-      Animation rotate = makeRotate(moverImage, angle);
-      //myView.addAnimation(animation);
-      if (x != 0 | y != 0) {
-        animation.play();
-      }
-      if (angle != 0) {
-        rotate.play();
-      }
-      //animation.play();
-      moverImage.setX(moverImage.getX() + x);
-      moverImage.setY(moverImage.getY() + y);
-      //  System.out.println("hey" + turtleStartingYPos + " " + myTurtle.getY());
-      //myTurtle.setRotate(turtleAngle + angle);
-      moverAngle = moverAngle + angle;
+      setInitialPosition();
+      createAndRunMoveAnimation(x, y);
+      createAndRunRotateAnimation(angle);
+      updateMoverPositionAndAngle(x, y, angle);
       if (penDown) {
         drawPen(x, y);
       }
@@ -149,10 +129,33 @@ public class Mover implements Moveable{
     }
   }
 
+  private void setInitialPosition() {
+    moverStartingXPos = moverImage.getX();
+    moverStartingYPos = moverImage.getY();
+  }
+
+  private void createAndRunMoveAnimation(double x, double y) {
+    animation = makeAnimation(moverImage, x, y);
+    if (x != 0 | y != 0) {
+      animation.play();
+    }
+  }
+
+  private void createAndRunRotateAnimation(double angle) {
+    rotate = makeRotate(moverImage, angle);
+    if (angle != 0) {
+      rotate.play();
+    }
+  }
+
+  private void updateMoverPositionAndAngle(double x, double y, double angle) {
+    moverImage.setX(moverImage.getX() + x);
+    moverImage.setY(moverImage.getY() + y);
+    moverAngle = moverAngle + angle;
+  }
+
   public void updateLabels() {
     for (String key : Collections.list(myLabelPropertyResources.getKeys())) {
-      PropertyLabel plabel = new PropertyLabel(myLabelPropertyResources.getString(key), key,
-          myView.getButtonAction());
       PropertyLabel propertyLabel = (PropertyLabel) myView.getPropertyLabelMap().get(key);
       propertyLabel.setAmount(key, myView.getButtonAction());
     }
@@ -185,27 +188,26 @@ public class Mover implements Moveable{
   }
 
   private void drawPen(double x, double y) {
-    Line line = new Line();
-    myLine=line;
-    myLine.setStroke(lineColor);
-    ///myLine.setStrokeWidth(myView.getLineWidth());
-    myLine.setStrokeWidth(lineThickness);
-    //myView.setLine(line);
-    line.setStartX(moverStartingXPos+ moverImage.getBoundsInLocal().getWidth()/2);
-    line.setStartY(moverStartingYPos + moverImage.getBoundsInLocal().getHeight());
-    //   System.out.println("yo" + turtleStartingYPos + " " + myTurtle.getY());
-    line.setEndX(moverStartingXPos + x+ moverImage.getBoundsInLocal().getWidth()/2);
-    line.setEndY(moverStartingYPos + y+ moverImage.getBoundsInLocal().getHeight());
+    initializeNewLine();
+    setLineCoordinates(x, y);
     myView.addNodeToRoot(myLine);
+  }
+
+  private void initializeNewLine() {
+    myLine =new Line();
+    myLine.setStroke(lineColor);
+    myLine.setStrokeWidth(lineThickness);
+  }
+
+  private void setLineCoordinates(double x, double y) {
+    myLine.setStartX(moverStartingXPos+ moverImage.getBoundsInLocal().getWidth()/2);
+    myLine.setStartY(moverStartingYPos + moverImage.getBoundsInLocal().getHeight());
+    myLine.setEndX(moverStartingXPos + x+ moverImage.getBoundsInLocal().getWidth()/2);
+    myLine.setEndY(moverStartingYPos + y+ moverImage.getBoundsInLocal().getHeight());
   }
 
   public Line getLine(){
     return myLine;
-  }
-
-  public void changeThickness(double thickness){
-    myLine.setStrokeWidth(thickness);
-    lineThickness = thickness;
   }
 
   public void setLineColor(Color color){
@@ -228,16 +230,15 @@ public class Mover implements Moveable{
     return lineThickness;
   }
 
-  @Override
   public int getCurrentImageIndex() {
     return currentImageIndex;
   }
 
   public void setThickness(double thickness){
     lineThickness = thickness;
+    updateLabels();
   }
 
-  //get turtle position
   public double getMoverCol(){
     return moverImage.getX();
   }
@@ -260,7 +261,6 @@ public class Mover implements Moveable{
     updateLabels();
   }
 
-  @Override
   public void setImageIndex(int index) {
     currentImageIndex = index;
   }
@@ -294,9 +294,9 @@ public class Mover implements Moveable{
   }
 
   public String getPenPosition(){
-    String ret = "up";
+    String ret = penUpDisplayText;
     if(penDown){
-      ret = "down";
+      ret = penDownDisplayText;
     }
     return ret;
   }
@@ -304,15 +304,10 @@ public class Mover implements Moveable{
   public void updateDistanceSoFar(int d){
     distanceSoFar += d;
   }
+
   public int getDistanceSoFar(){
     return distanceSoFar;
   }
-
-  @Override
-  public void resetTurtle() {
-
-  }
-
 
   public void eraseLines(){
     BorderPane root = myView.getRoot();
@@ -346,20 +341,12 @@ public class Mover implements Moveable{
     moverImage.setY(initialY);
     moverImage.setRotate(0);
     initializeLinePosition(moverImage.getX(), moverImage.getY(), moverImage.getRotate());
-    setMoverInitialCords(moverImage.getX(), moverImage.getY());
-    //updateLabels();
   }
 
   public void resetMover(){
     setInitialMoverPosition();
     moverVisible(true);
     updateLabels();
-  }
-
-
-  public void setMoverInitialCords(double initialX, double initialY) {
-    this.moverCenterXPos = initialX;
-    this.moverCenterYPos = initialY;
   }
 
   public double getMoverCenterXPos() {

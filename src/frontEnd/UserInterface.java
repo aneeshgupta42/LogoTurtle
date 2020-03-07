@@ -2,33 +2,32 @@ package frontEnd;
 
 import controller.Control;
 import frontEnd.ButtonsBoxesandLabels.PropertyLabel;
+import frontEnd.Windows.*;
+
+import frontEnd.Windows.CustomWindow;
 import frontEnd.Windows.DisplayWindow;
 import frontEnd.Windows.MoverPropertiesWindow;
 import frontEnd.Windows.TabWindow;
-import frontEnd.Windows.ToolBar;
+import frontEnd.Windows.ToolBarWindow;
 import java.util.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class UserInterface extends Application{
   private Scene myScene;
-  private Group display;
   private Stage myStage;
   private Mover myMover;
   private Control control;
-  private HBox commandWindow;
-  private TabPane tabPane;
+  private CommandWindow commandWindow;
   private BorderPane root = new BorderPane();
   private ResourceBundle myComboBoxOptionsResources;
   private Map<Double, Mover> turtleMap = new HashMap<>();
@@ -60,14 +59,15 @@ public class UserInterface extends Application{
   private static MoverPropertiesWindow myPropertyWindow;
   private static TabWindow tabWindow;
   List<String> imageOptions;
-  private int currImageIndex;
+  private ToolBarWindow myToolBarWindow;
+  private CustomWindow myCustomWindow;
 
   public UserInterface() {
     myStage = new Stage();
     myMover = new Mover(this, initialMoverID);
     control = new Control(this);
-    display = new Group();
     myButtonAction = new ButtonAction(this);
+    myCustomWindow = new CustomWindow(myButtonAction);
     myComboBoxOptionsResources = ResourceBundle.getBundle(ComboBoxOptionsResources);
     myButtonAction.setLanguage(DEFAULT_LANGUAGE);
     String optionsString = myComboBoxOptionsResources.getString("setImageOptions");
@@ -100,10 +100,11 @@ public class UserInterface extends Application{
 
   private Scene makeScene() {
     //root = new BorderPane();
-    root.setTop(new ToolBar(myButtonAction));
-    myPropertyWindow = new MoverPropertiesWindow(myButtonAction, turtleList,propertyLabelMap);
+    myToolBarWindow = new ToolBarWindow(myCustomWindow);
+    root.setTop(myToolBarWindow);
+    myPropertyWindow = new MoverPropertiesWindow(myButtonAction, myCustomWindow, turtleList, propertyLabelMap);
     root.setLeft(myPropertyWindow);
-    displayWindow = new DisplayWindow(myButtonAction);
+    displayWindow = new DisplayWindow(myButtonAction, myCustomWindow);
     root.setCenter(displayWindow);
     tabWindow = new TabWindow(displayWindow.getCommandWindow(), myButtonAction);
     root.setRight(tabWindow);
@@ -128,18 +129,19 @@ public class UserInterface extends Application{
   }
 
   private void step() {
-    //checkIfTurtleMovesOutOfBounds();
+    checkIfTurtleMovesOutOfBounds();
   }
 
- /*private void checkIfTurtleMovesOutOfBounds() {
-    if (myMover.getImage().getBoundsInParent().intersects(hbox.getBoundsInParent())) {
-      hideMoverAndLine(myMover.getLine().getStartX(), hbox.getBoundsInParent().getMaxY());
+  ///move into a new class
+ private void checkIfTurtleMovesOutOfBounds() {
+    if (myMover.getImage().getBoundsInParent().intersects(myToolBarWindow.getBoundsInParent())) {
+      hideMoverAndLine(myMover.getLine().getStartX(), myToolBarWindow.getBoundsInParent().getMaxY());
     }
-    if (myMover.getImage().getBoundsInParent().intersects(commandWindow.getBoundsInParent())) {
-      hideMoverAndLine(myMover.getLine().getStartX(), commandWindow.getBoundsInParent().getMinY());
+    if (myMover.getImage().getBoundsInParent().intersects(displayWindow.getCommandWindow().getBoundsInParent())) {
+      hideMoverAndLine(myMover.getLine().getStartX(), displayWindow.getCommandWindow().getBoundsInParent().getMinY());
     }
-    if (myMover.getImage().getBoundsInParent().intersects(tabPane.getBoundsInParent())) {
-      hideMoverAndLine(tabPane.getBoundsInParent().getMinX(), myMover.getLine().getStartY());
+    if (myMover.getImage().getBoundsInParent().intersects(tabWindow.getBoundsInParent())) {
+      hideMoverAndLine(tabWindow.getBoundsInParent().getMinX(), myMover.getLine().getStartY());
     }
   }
 
@@ -148,7 +150,7 @@ public class UserInterface extends Application{
     root.getChildren().remove(myMover.getLine());
     Line line = new Line(myMover.getLine().getStartX(), myMover.getLine().getStartY(), endX, endY);
     root.getChildren().add(line);
-  }*/
+  }
 
   public ObservableList<Double> getTurtleList(){
     return turtleList;
@@ -220,6 +222,19 @@ public class UserInterface extends Application{
     turtleList.add(doub);
   }
 
+
+  public void displayReturnValue(String returnValue){
+    displayWindow.getCommandWindow().setText(returnValue);
+  }
+
+  public void selectTurtle(String num) {
+    Double number = Double.parseDouble(num);
+    setMyMover(turtleMap.get(number));
+  }
+
+  private void setMyMover(Mover mover) {
+    myMover = mover;
+  }
 
   public DisplayWindow getDisplayWindow(){
     return displayWindow;

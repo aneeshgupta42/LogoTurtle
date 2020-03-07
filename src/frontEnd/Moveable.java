@@ -51,9 +51,8 @@ public interface Moveable {
     String getPenPosition();
 
     void updateDistanceSoFar(int d);
-    int getDistanceSoFar();
 
-    void resetTurtle();
+    int getDistanceSoFar();
 
     void eraseLines();
 
@@ -67,7 +66,6 @@ public interface Moveable {
 
     boolean isMoverVisible();
 
-    void setMoverInitialCords(double initialX, double initialY);
 
     double getMoverCenterXPos();
 

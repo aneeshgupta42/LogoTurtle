@@ -8,11 +8,12 @@ public class CreatingListObjects {
 
   private static final String LIST_START = "[";
   private static final String LIST_END = "]";
-  private List<ListObjects> groupList = new ArrayList<>();
+  private List<ListObjects> groupList;
   private int currentRepeatNumber;
   private String commandInput;
 
   public CreatingListObjects(){
+    groupList = new ArrayList<>();
   }
 
   public List<ListObjects> getLists(){return groupList;}

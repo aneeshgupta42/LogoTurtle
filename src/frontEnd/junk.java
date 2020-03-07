@@ -252,4 +252,13 @@ private Node makeSideWindow() {
    public double getAngle(){
     return myMover.getMoverAngle();
   }
+  public void changeThickness(double thickness){
+    myLine.setStrokeWidth(thickness);
+    lineThickness = thickness;
+    updateLabels();
+  }
+  public void setMoverInitialCords(double initialX, double initialY) {
+    this.moverCenterXPos = initialX;
+    this.moverCenterYPos = initialY;
+  }
 }*/
