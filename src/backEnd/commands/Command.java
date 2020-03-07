@@ -8,12 +8,13 @@ public abstract class Command {
 
   protected String commandReturn;
   protected Map<String, String> map;
-  protected int numberOfArgs = 0;
+  protected int numberOfArgs;
   protected Boolean store = false;
   protected double repeat = Double.MIN_VALUE ;
   protected double repeatNumber=0;
 
   public Command(){
+
   }
 
   public Command(List<String> varargs, Control control) {}
