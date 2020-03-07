@@ -12,7 +12,6 @@ import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import javafx.geometry.Insets;
@@ -22,7 +21,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -40,6 +38,10 @@ public class ButtonAction {
   private double defaultMoveAmount = 50;
   private double defaultTurnAmount = 90;
   private MoverPropertiesWindow propertiesWindow;
+  private String keyOfImageOptions = "setImageOptions";
+  private String getCurrentDirectory = "user.dir";
+  private String getExampleFiles =  "/data/examples";
+  private String fileIsInvalid = "InvalidFile";
 
   public ButtonAction(UserInterface view){
     myView=view;
@@ -47,10 +49,14 @@ public class ButtonAction {
     turtleMap = myView.getTurtleMap();
     control = myView.getControl();
     myComboBoxOptionsResources = ResourceBundle.getBundle(ComboBoxOptionsResources);
-    String optionsString = myComboBoxOptionsResources.getString("setImageOptions");
-    imageOptions = Arrays.asList(optionsString.split(","));
+    setUpImageOptions();
     displayWindow = myView.getDisplayWindow();
     propertiesWindow = myView.getPropertyWindow();
+  }
+
+  private void setUpImageOptions() {
+    String optionsString = myComboBoxOptionsResources.getString(keyOfImageOptions);
+    imageOptions = Arrays.asList(optionsString.split(","));
   }
 
   public UserInterface getView(){
@@ -62,22 +68,25 @@ public class ButtonAction {
   }
 
   public void selectFileScreen() {
-    FileChooser fileChooser = new FileChooser();
-    String dataPath = System.getProperty("user.dir") + "/data/examples";
-    fileChooser.setInitialDirectory(new File(dataPath));
-    File selectedFile = fileChooser.showOpenDialog(myView.getStage());
+    File selectedFile = getFile();
     if (selectedFile != null) {
       try {
         scanFile(selectedFile);
       } catch (FileNotFoundException ex) {
-        ErrorBoxes box = new ErrorBoxes(new ErrorHandler("InvalidFile"));
+        ErrorBoxes box = new ErrorBoxes(new ErrorHandler(fileIsInvalid));
       }
     }
   }
 
+  private File getFile() {
+    FileChooser fileChooser = new FileChooser();
+    String dataPath = System.getProperty(getCurrentDirectory) + getExampleFiles;
+    fileChooser.setInitialDirectory(new File(dataPath));
+    return fileChooser.showOpenDialog(myView.getStage());
+  }
+
   private void scanFile(File file) throws FileNotFoundException {
     Scanner scnr = new Scanner(file);
-    //Reading each line of file using Scanner class
     int lineNumber = 0;
     while (scnr.hasNextLine()) {
       String line = scnr.nextLine();
@@ -91,8 +100,6 @@ public class ButtonAction {
   }
 
   public void setImage(String image) {
-    //String path =myView.getResource().getString(image);
-    //myMover.changeMoverDisplay(path);
     double moverXPos = getMover().getImage().getX();
     double moverYPos = getMover().getImage().getY();
     double moverAngle =getMover().getMoverAngle();
@@ -148,10 +155,6 @@ public class ButtonAction {
     mover.setInitialMoverPosition();
     myView.addToMapAndList(numOfMovers, mover);
     myView.addNodeToRoot(mover.getImage());
-    //myView.addToList(numOfMovers);
-    //System.out.println(turtleList);
-    //System.out.println("LIST" + myView.getPropertyWindow().getTurtleSelection());
-    //myView.getPropertyWindow().getTurtleSelection().updateItems(FXCollections.observableArrayList(myView.getTurtleList()));
   }
 
   public void moveBackward() {
@@ -175,11 +178,11 @@ public class ButtonAction {
   }
 
   public void selectTurtle(String num) {
-    //myView.selectTurtle(num);
+    myView.selectTurtle(num);
     Double number = Double.parseDouble(num);
-    for(OurLabeledColorPicker label: myView.getPropertyWindow().getPenResources()){
+    /*for(OurLabeledColorPicker label: myView.getPropertyWindow().getPenResources()){
       label.setInitialColor(myMover.getLineColor());
-    }
+    }*/
     getMover().updateLabels();
   }
   public void displayHelpScreen() {
@@ -207,10 +210,6 @@ public class ButtonAction {
     Scene scene = new Scene(pane);
     stage2.setScene(scene);
     stage2.show();
-  }
-
-  public double getLineWidth() {
-    return getMover().getThickness();
   }
 
   public double getXPosition(){

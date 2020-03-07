@@ -1,14 +1,10 @@
 package frontEnd.Windows;
 
-import frontEnd.ButtonAction;
-import frontEnd.ButtonsBoxesandLabels.OurButtons;
-import java.util.Collections;
 import java.util.ResourceBundle;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 public class CommandWindow extends HBox {
   private TextArea inputArea;
@@ -18,16 +14,17 @@ public class CommandWindow extends HBox {
   private static final double COMMAND_CONTROLS_WIDTH = 75;
   private ResourceBundle myTextButtonResources;
   private static final String TextBoxButtonResources = "resources.UIActions.TextButtonActions";
+  private static CustomWindow myCustomWindow;
 
-  public CommandWindow(double width, ButtonAction myButtonAction) {
+  public CommandWindow(double width, CustomWindow customWindow) {
+    myCustomWindow = customWindow;
     myTextButtonResources = ResourceBundle.getBundle(TextBoxButtonResources);
-    makeCommandWindow(width, myButtonAction);
+    makeCommandWindow(width);
   }
 
-  private void makeCommandWindow(double display_width, ButtonAction myButtonAction){
+  private void makeCommandWindow(double display_width){
     setPrefWidth(display_width);
     inputArea = new TextArea();
-    //myCommander = inputArea;
     inputArea.setPromptText(TEXT_INPUT_PROMPT);
     inputArea.setPrefColumnCount(NUM_TEXT_COLUMNS);
     inputArea.getText();
@@ -35,9 +32,7 @@ public class CommandWindow extends HBox {
     inputArea.setPrefWidth(display_width);
     inputArea.setMaxHeight(TEXTBOX_HEIGHT);
     VBox vbox = new VBox();
-    for (String key : Collections.list(myTextButtonResources.getKeys())) {
-      vbox.getChildren().add(new OurButtons(myTextButtonResources.getString(key), key, myButtonAction));
-    }
+    myCustomWindow.createButtons(vbox, myTextButtonResources);
     vbox.setMinWidth(COMMAND_CONTROLS_WIDTH);
     getChildren().addAll(inputArea, vbox);
   }
