@@ -55,7 +55,6 @@ public class PropertyLabel extends HBox {
 
   private void bindLabel(StringProperty dp){
     label.textProperty().bind(dp);
-
   }
 
   private EventHandler<ActionEvent> Result(String methodName, ButtonAction target) {

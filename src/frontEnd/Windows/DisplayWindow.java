@@ -2,6 +2,7 @@ package frontEnd.Windows;
 
 import frontEnd.ButtonAction;
 import frontEnd.Mover;
+import frontEnd.UIElements.ColorGrid;
 import frontEnd.UserInterface;
 import java.util.Map;
 import javafx.scene.Node;
@@ -18,13 +19,14 @@ public class DisplayWindow extends VBox {
   private static CommandWindow commandWindow;
   private static ButtonAction myButtonAction;
   private static CustomWindow myCustomWindow;
+  private static ColorGrid myColorGrid;
 
-  public DisplayWindow(ButtonAction buttonAction, CustomWindow customWindow){
+  public DisplayWindow(ButtonAction buttonAction, CustomWindow customWindow, ColorGrid colorGrid) {
     myButtonAction = buttonAction;
     myCustomWindow = customWindow;
+    myColorGrid = colorGrid;
     makeDisplayWindow();
   }
-
 
   private void makeDisplayWindow(){
     rectangle = new Rectangle(DISPLAY_WIDTH, DISPLAY_HEIGHT);
@@ -58,6 +60,11 @@ public class DisplayWindow extends VBox {
     for(Mover mover : turtleMap.values()) {
       mover.resetMover();
     }
+  }
+
+  public void setCurrentBackgroundColorByIndex(int index) {
+    Color color = myColorGrid.getColorFromIndex(index);
+    setBackgroundColor(color);
   }
 
 }

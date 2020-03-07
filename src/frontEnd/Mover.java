@@ -4,7 +4,9 @@ import frontEnd.UIElements.PropertyLabel;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
@@ -54,6 +56,7 @@ public class Mover implements Moveable {
   private static double initialX;
   private static double initialY;
   private int currentImageIndex;
+  private int currentPenColorIndex;
   private List<String> imageOptions;
   private Animation animation;
   private Animation rotate;
@@ -67,6 +70,7 @@ public class Mover implements Moveable {
     moverID = ID;
     moverImage = changeMoverDisplay(defaultImage);
     currentImageIndex = 1;
+    currentPenColorIndex = -1;
     myLabelPropertyResources = ResourceBundle.getBundle(LabelResources);
     myComboBoxOptionsResources = ResourceBundle.getBundle(ComboBoxOptionsResources);
     String optionsString = myComboBoxOptionsResources.getString("setImageOptions");
@@ -217,6 +221,13 @@ public class Mover implements Moveable {
   public void setLineColor(Color color){
     lineColor = color;
     updateLabels();
+    List colorList = myView.getPropertyWindow().getColorGrid().getColorList();
+    if(colorList.contains(color)){
+      currentPenColorIndex = colorList.indexOf(color);
+    }
+    else{
+      currentPenColorIndex = -1;
+    }
   }
 
   public double getXPosition(){
@@ -374,4 +385,13 @@ public class Mover implements Moveable {
   public double getMoverCenterYPos() {
     return this.moverCenterYPos;
   }
-}
+
+  public int getCurrentPenColorIndex() {
+    return this.currentPenColorIndex;
+  }
+
+  public void setCurrentPenColorByIndex(int index) {
+    Color color =myView.getPropertyWindow().getColorGrid().getColorFromIndex(index);
+    setLineColor(color);
+  }
+ }

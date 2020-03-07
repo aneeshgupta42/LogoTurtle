@@ -21,6 +21,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import frontEnd.UIElements.ColorGrid;
+import frontEnd.UIElements.PropertyLabel;
+
 
 public class UserInterface extends Application{
   private Scene myScene;
@@ -104,7 +107,7 @@ public class UserInterface extends Application{
     myPropertyWindow = new MoverPropertiesWindow(myButtonAction, myCustomWindow, turtleList, propertyLabelMap);
     root.setLeft(myPropertyWindow);
     //root.setLeft(new GridPane());
-    displayWindow = new DisplayWindow(myButtonAction, myCustomWindow);
+    displayWindow = new DisplayWindow(myButtonAction, myCustomWindow, myPropertyWindow.getColorGrid());
     root.setCenter(displayWindow);
     tabWindow = new TabWindow(displayWindow.getCommandWindow(), myButtonAction);
     root.setRight(tabWindow);
@@ -179,33 +182,31 @@ public class UserInterface extends Application{
       return count;
   }
 
-  public void setActiveTurtles(ArrayList<Double> ids){
-      System.out.println("Hitting this amazing line");
-      System.out.println(turtleMap.toString());
-//
-//    for(Mover m: turtleMap.values()){
-//        System.out.println(m);
-//        System.out.println("IDDD" + m.getMoverID());
-//        m.setActive(ids.contains(m.getMoverID()));
-//    }
+  public void setActiveTurtles(ArrayList<Double> ids) {
+    System.out.println("Hitting this amazing line");
+    System.out.println(turtleMap.toString());
 
     //Creation\
-    for (Double d: turtleList){
-        turtleMap.get(d).setMoverID(d);
-        turtleMap.get(d).setActive(d,false);
+    for (Double d : turtleList) {
+      turtleMap.get(d).setMoverID(d);
+      turtleMap.get(d).setActive(d, false);
     }
 
-    for(Double d: ids){
-        if(!turtleList.contains(d)){
-            myButtonAction.createTurtle(d);
-            System.out.println("Creating ID" + d);
-        }
-        System.out.println(turtleMap.get(d));
-        turtleMap.get(d).setActive(d,true);
+    for (Double d : ids) {
+      if (!turtleList.contains(d)) {
+        myButtonAction.createTurtle(d);
+        System.out.println("Creating ID" + d);
+      }
+      System.out.println(turtleMap.get(d));
+      turtleMap.get(d).setActive(d, true);
     }
 
     System.out.println("New Map: " + turtleMap.toString());
     System.out.println("New list: " + turtleList.toString());
+  }
+  
+  public void changeColorGrid(int index, int red, int green, int blue){
+    myPropertyWindow.getColorGrid().setColorFromIndexAndRGB(index, red, green, blue);
   }
 
   public MoverPropertiesWindow getPropertyWindow(){
