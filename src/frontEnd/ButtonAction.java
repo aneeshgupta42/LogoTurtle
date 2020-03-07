@@ -6,8 +6,8 @@ import frontEnd.Windows.CommandWindow;
 import frontEnd.Windows.DisplayWindow;
 import frontEnd.Windows.MoverPropertiesWindow;
 import frontEnd.Windows.TabWindow;
-import java.io.File;
-import java.io.FileNotFoundException;
+
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +41,7 @@ public class ButtonAction {
   private String getCurrentDirectory = "user.dir";
   private String getExampleFiles =  "/data/examples";
   private String fileIsInvalid = "InvalidFile";
+  private String historySavedDirectory = "/data/user_history/";
 
   public ButtonAction(UserInterface view){
     myView=view;
@@ -137,6 +138,7 @@ public class ButtonAction {
     //getTabWindow().getVariableTab().setContent(getTabWindow().getVariableTab().resetTabContents(control.getVariables(), true));
     getTabWindow().getVariableTab().resetTabContents(control.getVariables(), true);
     getMover().updateLabels();
+    saveHistory("test.logo");
   }
 
   void sendInfoToControl(String myText) {
@@ -269,9 +271,16 @@ public class ButtonAction {
     return myMover.getMoverState();
   }
 
-  public void saveHistory() {
-    String something = getTabWindow().getHistoryTab().getHistoryTextContent();
-    System.out.println(something);
+  public void saveHistory(String filename) {
+    try {
+      String commandOutput = getTabWindow().getHistoryTab().getHistoryTextContent();
+      String dataPath = System.getProperty(getCurrentDirectory) + historySavedDirectory + filename;
+      FileWriter writer = new FileWriter(dataPath);
+      writer.write(commandOutput);
+      writer.close();
+    } catch (IOException e) {
+      ErrorBoxes box = new ErrorBoxes(new ErrorHandler("Exception"));
+    }
   }
 
   private Mover getMover(){
