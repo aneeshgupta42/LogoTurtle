@@ -49,7 +49,6 @@ public class Control {
     if(commandSet.getVariables()!=null)variablesUsed.putAll(commandSet.getVariables());
     if(commandSet.getFunctions()!=null)functionsUsed.putAll(commandSet.getFunctions());
     finalReturnValue = commandSet.getFinalReturnValue();
-    System.out.println("FINAL RETURN VALUE ------>" + finalReturnValue);
   }
 
   public int getNumTurtles(){
