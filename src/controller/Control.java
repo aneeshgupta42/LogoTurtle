@@ -137,5 +137,8 @@ public class Control {
     return myMover.getCurrentPenColorIndex();
   }
 
+  public void setPenWidth(double penWidth) {
+    myMover.setThickness(penWidth);
+  }
 }
 

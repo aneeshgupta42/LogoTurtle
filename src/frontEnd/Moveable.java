@@ -76,4 +76,6 @@ public interface Moveable {
     int getCurrentPenColorIndex();
 
     void setCurrentPenColorIndex(int index);
+
+    void setThickness(double penWidth);
 }
