@@ -60,7 +60,7 @@ public class CreatingListObjects {
       }
       numStarts--;
       two.add(first + 1);
-      two.add(last -1 );
+      two.add(last -1);
       sets.add(two);
       two = new ArrayList<>();
     }

@@ -242,8 +242,6 @@ public class CommandSet {
   Passes arguments to the command class and grabs a user function if it exists.
    */
   private void runCommand() {
-    System.out.println(argToBePassed);
-    System.out.println(commandPath);
     commandExecute.setArgumentList(argumentList);
     commandExecute.setCommandInput(commandInput);
     commandExecute.setCommandList(commandList);
