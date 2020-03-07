@@ -21,7 +21,12 @@ public class SetTowards extends Command {
     double initY = control.getTurtleRelativeYPos();
     double delX = X - initX; double delY = Y - initY;
     double theta = 90 - Math.toDegrees(Math.atan(delY/delX));
-    control.updateTurtle(0, 0, -currAngle + theta, 0);
+    if(delY == 0.0 && delX < 0){
+      control.updateTurtle(0, 0, -currAngle - currAngle, 0);
+    }
+    else{
+      control.updateTurtle(0, 0, -currAngle + theta, 0);
+    }
     angle_moved = theta -currAngle;
   }
 

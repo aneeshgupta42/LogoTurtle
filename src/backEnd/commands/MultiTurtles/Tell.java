@@ -17,7 +17,8 @@ public class Tell extends Command {
 
   public Tell(List<String> varargs, Control control){
     super(varargs,control);
-    System.out.print(varargs);
+    System.out.println(varargs);
+    System.out.println("TTHTHT");
   }
 
   @Override
