@@ -130,7 +130,7 @@ public class Control {
   }
 
   public void setPenColor(int index) {
-    myMover.setCurrentPenColorIndex(index);
+    //myMover.setCurrentPenColorIndex(index);
   }
 
   public int getPenColor() {

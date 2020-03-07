@@ -109,7 +109,7 @@ public class UserInterface extends Application{
     myPropertyWindow = new MoverPropertiesWindow(myButtonAction, myCustomWindow, turtleList, propertyLabelMap);
     root.setLeft(myPropertyWindow);
     //root.setLeft(new GridPane());
-    displayWindow = new DisplayWindow(myButtonAction, myCustomWindow);
+    displayWindow = new DisplayWindow(myButtonAction, myCustomWindow, myPropertyWindow.getColorGrid());
     root.setCenter(displayWindow);
     tabWindow = new TabWindow(displayWindow.getCommandWindow(), myButtonAction);
     root.setRight(tabWindow);
@@ -182,6 +182,10 @@ public class UserInterface extends Application{
             count++;
       }
       return count;
+  }
+
+  public void changeColorGrid(int index, int red, int green, int blue){
+    myPropertyWindow.getColorGrid().setColorFromIndexAndRGB(index, red, green, blue);
   }
 
   public MoverPropertiesWindow getPropertyWindow(){

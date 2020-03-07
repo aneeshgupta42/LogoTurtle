@@ -27,6 +27,7 @@ private static final int SIDEPANE_WIDTH = 300;
   private static final String PEN_RESOUCE = "setPen";
   private OurComboBox turtleSelection;
   private CustomWindow myCustomWindow;
+  private ColorGrid myColorGrid;
   private static final String  MOVER_SELECTION = "Select Mover";
   private static final String MOVER_SELECTION_METHOD_NAME = "selectTurtle";
   private static final String TITLE_OF_PROPERTIES = "Properties of Mover: ";
@@ -53,8 +54,8 @@ private static final int SIDEPANE_WIDTH = 300;
     VBox propertiesBox = new VBox();
     createTurtleSelectionBoxandTitle(myButtonAction, turtleList, propertiesBox);
     myCustomWindow.createLabel(propertiesBox, myLabelPropertyResources, propertyLabelMap);
-    ColorGrid colorGrid = new ColorGrid();
-    getChildren().addAll(buttons, propertiesBox, colorGrid);
+    myColorGrid = new ColorGrid();
+    getChildren().addAll(buttons, propertiesBox, myColorGrid);
   }
 
   private void createTurtleSelectionBoxandTitle(ButtonAction myButtonAction,
@@ -64,5 +65,9 @@ private static final int SIDEPANE_WIDTH = 300;
     turtleSelection.getBox().itemsProperty().bind(new SimpleObjectProperty<>(turtleList));
     Text moverProperties = new Text(TITLE_OF_PROPERTIES);
     propertiesBox.getChildren().addAll(turtleSelection, moverProperties);
+  }
+
+  public ColorGrid getColorGrid(){
+    return myColorGrid;
   }
 }
