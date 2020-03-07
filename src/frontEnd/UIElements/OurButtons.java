@@ -1,7 +1,9 @@
 package frontEnd.UIElements;
 
+import backEnd.ErrorHandler;
 import frontEnd.ButtonAction;
 
+import frontEnd.ErrorBoxes;
 import java.lang.reflect.InvocationTargetException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -24,7 +26,6 @@ public class OurButtons extends Button {
   }
 
   private EventHandler<ActionEvent> Result(String methodName, ButtonAction target) {
-    System.out.println("method" + methodName + " target " + target);
     EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
@@ -33,12 +34,12 @@ public class OurButtons extends Button {
           try {
             m.invoke(target);
           } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            ErrorBoxes box = new ErrorBoxes(new ErrorHandler("IllegalAccess"));
           } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            ErrorBoxes box = new ErrorBoxes(new ErrorHandler("IllegalAccess"));
           }
         }catch (NoSuchMethodException e) {
-          e.printStackTrace();
+          ErrorBoxes box = new ErrorBoxes(new ErrorHandler("NoMethod"));
         }
       }
     };
