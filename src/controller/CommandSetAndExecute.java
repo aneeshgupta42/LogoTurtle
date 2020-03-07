@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 import java.util.TreeMap;
 
 public class CommandSetAndExecute {
@@ -139,6 +138,8 @@ public class CommandSetAndExecute {
   Splits up the command input
    */
   private void parseText() {
+    commandList = new LinkedList<>();
+    argumentList = new LinkedList<>();
     for (String line : commandInput.split(NEWLINE)) {
       if (!line.contains(COMMENT) && !line.isEmpty()) {
         organizeInLists(line);
@@ -155,8 +156,6 @@ public class CommandSetAndExecute {
   Splits lines into words and categorizes them into two lists
    */
   private void organizeInLists(String line) {
-    commandList = new LinkedList<>();
-    argumentList = new LinkedList<>();
     for (String word : line.split(WHITESPACE)) {
       if (word.trim().length() > 0) {
         if (!parser.getSymbol(word).equals(ARGUMENT) && !parser.getSymbol(word).equals(VARIABLE)) {
@@ -221,6 +220,7 @@ public class CommandSetAndExecute {
     } else {
       if (argumentList.size() >= argNum) {
         String arg = argumentList.pop();
+        System.out.println("this "+arg);
         if (parser.getSymbol(arg).equals(VARIABLE)) {
           if (variablesUsed.containsKey(arg)) {
             argToBePassed.add(variablesUsed.get(arg));

@@ -22,10 +22,10 @@ public class For extends Command {
   }
   public For(List<String> varargs, Control control){
     super(varargs,control);
-    var = varargs.get(0);
-    start = Double.parseDouble(varargs.get(1));
-    stop = Double.parseDouble(varargs.get(2));
-    increment = Double.parseDouble(varargs.get(3));
+    increment = Double.parseDouble(varargs.get(0));
+    stop = Double.parseDouble(varargs.get(1));
+    start = Double.parseDouble(varargs.get(2));
+    var = (varargs.get(3));
 
     key = var;
     val = Double.toString((stop-start));
