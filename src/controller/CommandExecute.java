@@ -42,6 +42,7 @@ public class CommandExecute {
   public void setUserCommandAttempt(String userCommandAttempt){this.userCommandAttempt=userCommandAttempt;}
   public void setHasBeenStored(Boolean hasBeenStored){this.hasBeenStored=hasBeenStored;}
   public void setVariablesUsed(Map variablesUsed){this.variablesUsed=variablesUsed;}
+  public void setListObj(CreatingListObjects creatingListObjects) { this.creatingListObjects = creatingListObjects; }
 
   public Boolean getHasBeenStored(){return hasBeenStored;}
   public Map getVariablesUsed(){return variablesUsed;}
@@ -142,9 +143,5 @@ public class CommandExecute {
       loop--;
       recurseLoop(loop);
     }
-  }
-
-  public void setListObj(CreatingListObjects creatingListObjects) {
-    this.creatingListObjects = creatingListObjects;
   }
 }
