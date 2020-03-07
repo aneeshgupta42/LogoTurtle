@@ -1,4 +1,4 @@
-package frontEnd.ButtonsBoxesandLabels;
+package frontEnd.UIElements;
 
 import frontEnd.ButtonAction;
 
@@ -20,11 +20,8 @@ import javafx.scene.text.Text;
  * @author Robert C. Duvall
  */
 public class PropertyLabel extends HBox {
-  //private DoubleProperty amountDue = new SimpleDoubleProperty();
   private StringProperty amountDue = new SimpleStringProperty();
   private Label label;
-
-
 
   // Define a getter for the property's value
   /**
@@ -35,17 +32,9 @@ public class PropertyLabel extends HBox {
     setAmount(methodName, target);
     bindLabel(amountDue);
     getChildren().addAll(makePrompt(promptText), label);
-
-    //EventHandler<ActionEvent> whathappened = Result(methodName, target);
-    //setOnAction(whathappened);
-    //ActionEvent event = new ActionEvent(target.getClass().getDeclaredMethod(methodName));
-    //setOnAction(target.getClass().getDeclaredMethod(methodName));
-    //getChildren().addAll(
-    //makeInputAction(target, methodName);
   }
 
   private Node makePrompt (String text) {
-  //  System.out.println(text);
     return new Text(text + ": ");
 
   }
@@ -56,28 +45,18 @@ public class PropertyLabel extends HBox {
       try {
         Object value = m.invoke(target);
         amountDue.set(""+ value);
-  //      System.out.println("value" + value);
       } catch (IllegalAccessException | InvocationTargetException e) {
         e.printStackTrace();
       }
-   //   System.out.println(methodName);
     } catch (NoSuchMethodException e) {
       e.printStackTrace();
     }
   }
 
   private void bindLabel(StringProperty dp){
-    //Label label = new Label();
     label.textProperty().bind(dp);
 
   }
-  public final String getAmountDue(){return amountDue.get();}
-
-  // Define a setter for the property's value
-  public final void setAmountDue(String value){amountDue.set((value));}
-
-  // Define a getter for the property itself
-  public StringProperty amountDueProperty() {return amountDue;}
 
   private EventHandler<ActionEvent> Result(String methodName, ButtonAction target) {
     EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
@@ -92,7 +71,6 @@ public class PropertyLabel extends HBox {
           } catch (InvocationTargetException e) {
             e.printStackTrace();
           }
-        //  System.out.println(methodName);
         }catch (NoSuchMethodException e) {
           e.printStackTrace();
         }

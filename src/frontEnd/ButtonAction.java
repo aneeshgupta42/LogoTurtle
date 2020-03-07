@@ -2,7 +2,6 @@ package frontEnd;
 
 import controller.Control;
 import backEnd.ErrorHandler;
-import frontEnd.ButtonsBoxesandLabels.OurLabeledColorPicker;
 import frontEnd.Windows.CommandWindow;
 import frontEnd.Windows.DisplayWindow;
 import frontEnd.Windows.MoverPropertiesWindow;

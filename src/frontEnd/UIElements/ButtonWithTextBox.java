@@ -1,4 +1,4 @@
-package frontEnd.ButtonsBoxesandLabels;
+package frontEnd.UIElements;
 
 import frontEnd.ButtonAction;
 import java.lang.reflect.InvocationTargetException;
@@ -31,10 +31,6 @@ public class ButtonWithTextBox extends HBox {
     getChildren().addAll(myButton, myTextField);
     EventHandler<ActionEvent> whathappened = Result(methodName, buttonAction);
     myButton.setOnAction(whathappened);
-    //EventHandler<ActionEvent> whathappened = Result(methodName, target);
-    //setOnAction(whathappened);
-    //ActionEvent event = new ActionEvent(target.getClass().getDeclaredMethod(methodName));
-    //setOnAction(target.getClass().getDeclaredMethod(methodName));
   }
 
   // make input prompt, very basic for now but could be much more involved in general
