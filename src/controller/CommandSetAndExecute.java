@@ -144,8 +144,6 @@ public class CommandSetAndExecute {
         organizeInLists(line);
       }
       if (!commandList.isEmpty()) {
-        System.out.println(commandList);
-        System.out.println(argumentList);
         coordinateCommands();
       }
     }
@@ -188,7 +186,6 @@ public class CommandSetAndExecute {
       for (int i = 0; i < commandList.size(); i++) {
         currentCommand = commandList.pop();
         makeClassPathToCommand(currentCommand);
-        System.out.println("this is thte command "+commandPath);
         try {
           numberOfArguments = commandFactory.getNumArgs(commandPath);
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
@@ -266,7 +263,7 @@ public class CommandSetAndExecute {
 
   private void commandReturnValue(Command comm) {
     if (comm.commandValueReturn() != null) {
-      argumentList.add(comm.commandValueReturn());
+      argumentList.push(comm.commandValueReturn());
       finalReturnValue = comm.commandValueReturn();
       setCommandReturn(comm.commandValueReturn());
       if (!commandList.isEmpty()) {
@@ -281,7 +278,6 @@ public class CommandSetAndExecute {
       groupsList= creatingListObjects.getLists();
       numberOfFunctions++;
       storeFunction.storeFunction(userCommandAttempt, groupsList.get(numberOfFunctions).getMyList());
-      System.out.println("Store function "+storeFunction);
       hasBeenStored = true;
     }
   }
@@ -300,7 +296,6 @@ public class CommandSetAndExecute {
           hasBeenStored = true;
         }
       }
-      System.out.println(commandInput);
       parseText();
       hasBeenStored = true;
     }
@@ -309,7 +304,6 @@ public class CommandSetAndExecute {
   private void saveVariables(Command comm) {
     if (comm.getVariablesCreated() != null) {
       variablesUsed.putAll(comm.getVariablesCreated());
-      System.out.println(variablesUsed);
       if (!commandList.isEmpty()) {
         coordinateCommands();
       }
