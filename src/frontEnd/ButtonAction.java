@@ -138,7 +138,6 @@ public class ButtonAction {
   }
 
   void sendInfoToControl(String myText) {
-
     for(Mover mover: turtleMap.values()) {
       if (mover.getActive()) {
         control.setCommand(myText);
@@ -153,6 +152,14 @@ public class ButtonAction {
     Mover mover = new Mover(myView, numOfMovers);
     mover.setInitialMoverPosition();
     myView.addToMapAndList(numOfMovers, mover);
+    myView.addNodeToRoot(mover.getImage());
+  }
+
+  public void createTurtle(double id){
+    Mover mover = new Mover(myView, id);
+    mover.setInitialMoverPosition();
+    mover.setMoverID(id);
+    myView.addToMapAndList(id, mover);
     myView.addNodeToRoot(mover.getImage());
   }
 

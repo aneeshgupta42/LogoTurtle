@@ -19,10 +19,8 @@ public class Tell extends Command {
     lastID = varargs.get(0);
     ArrayList<Double> ids = new ArrayList<>();
     for (int i = 0; i<varargs.size(); i++){
-      System.out.println(varargs.get(i));
       ids.add(i, Double.parseDouble(varargs.get(i)));
     }
-    System.out.println("SIZES" + varargs.size()+ids.size());
     control.updateTurtleActive(ids);
     System.out.println("TTHTHT");
   }

@@ -108,6 +108,10 @@ public class Mover implements Moveable {
     return moverID;
   }
 
+  public void setMoverID(double x){
+    moverID = x;
+  }
+
   public void initializeLinePosition(double x, double y, double angle) {
     lineStartXPosition = x;
     lineStartYPosition = y;
@@ -293,9 +297,18 @@ public class Mover implements Moveable {
     return moverActive;
   }
 
-  public void setActive(boolean status){
+  public void setActive(double id, boolean status){
     moverActive = status;
-    handleKeyInput();
+    moverID = id;
+    ColorAdjust colorAdjustGrayscale = new ColorAdjust();
+    System.out.println("Setting ID: " + moverID + status);
+    if(status) {
+      colorAdjustGrayscale.setSaturation(0);;
+    }
+    else{
+      colorAdjustGrayscale.setSaturation(1);
+    }
+    moverImage.setEffect(colorAdjustGrayscale);
   }
 
   public String getPenPosition(){

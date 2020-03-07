@@ -180,14 +180,32 @@ public class UserInterface extends Application{
   }
 
   public void setActiveTurtles(ArrayList<Double> ids){
-    for(Mover m: turtleMap.values()){
-        m.setActive(ids.contains(m.getMoverID()));
+      System.out.println("Hitting this amazing line");
+      System.out.println(turtleMap.toString());
+//
+//    for(Mover m: turtleMap.values()){
+//        System.out.println(m);
+//        System.out.println("IDDD" + m.getMoverID());
+//        m.setActive(ids.contains(m.getMoverID()));
+//    }
+
+    //Creation\
+    for (Double d: turtleList){
+        turtleMap.get(d).setMoverID(d);
+        turtleMap.get(d).setActive(d,false);
     }
+
     for(Double d: ids){
-        if(!turtleMap.containsKey(d)){
-            myButtonAction.addTurtle();
+        if(!turtleList.contains(d)){
+            myButtonAction.createTurtle(d);
+            System.out.println("Creating ID" + d);
         }
+        System.out.println(turtleMap.get(d));
+        turtleMap.get(d).setActive(d,true);
     }
+
+    System.out.println("New Map: " + turtleMap.toString());
+    System.out.println("New list: " + turtleList.toString());
   }
 
   public MoverPropertiesWindow getPropertyWindow(){
