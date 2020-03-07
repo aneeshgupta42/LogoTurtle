@@ -50,6 +50,7 @@ public class CommandSetAndExecute {
   private int numberOfFunctions;
   private String commandReturn;
   private String userCommandAttempt;
+  private String finalReturnValue;
 
   /*
   Initializes a commandExecutor that calls the parser on the user Input commands
@@ -82,6 +83,7 @@ public class CommandSetAndExecute {
    */
   public void setCommandInput(String commandList) {
     commandInput = commandList;
+    finalReturnValue = null;
   }
 
   /*
@@ -101,6 +103,14 @@ public class CommandSetAndExecute {
    */
   public String getCommandReturn() {
     return commandReturn;
+  }
+
+  public String getFinalReturnValue(){
+    return finalReturnValue;
+  }
+
+  public void setFinalReturnValue(String x){
+    finalReturnValue = x;
   }
 
   /*
@@ -251,6 +261,7 @@ public class CommandSetAndExecute {
   private void commandReturnValue(Command comm) {
     if (comm.commandValueReturn() != null) {
       argumentList.add(comm.commandValueReturn());
+      finalReturnValue = comm.commandValueReturn();
       setCommandReturn(comm.commandValueReturn());
       if (!commandList.isEmpty()) {
         coordinateCommands();

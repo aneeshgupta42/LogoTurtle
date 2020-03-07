@@ -2,6 +2,8 @@ package frontEnd;
 
 import controller.Control;
 import frontEnd.ButtonsBoxesandLabels.PropertyLabel;
+import frontEnd.Windows.*;
+
 import frontEnd.Windows.CustomWindow;
 import frontEnd.Windows.DisplayWindow;
 import frontEnd.Windows.MoverPropertiesWindow;
@@ -25,6 +27,7 @@ public class UserInterface extends Application{
   private Stage myStage;
   private Mover myMover;
   private Control control;
+  private CommandWindow commandWindow;
   private BorderPane root = new BorderPane();
   private ResourceBundle myComboBoxOptionsResources;
   private Map<Double, Mover> turtleMap = new HashMap<>();
@@ -219,6 +222,11 @@ public class UserInterface extends Application{
     turtleList.add(doub);
   }
 
+
+  public void displayReturnValue(String returnValue){
+    displayWindow.getCommandWindow().setText(returnValue);
+  }
+
   public void selectTurtle(String num) {
     Double number = Double.parseDouble(num);
     setMyMover(turtleMap.get(number));
@@ -227,7 +235,6 @@ public class UserInterface extends Application{
   private void setMyMover(Mover mover) {
     myMover = mover;
   }
-
 
   public DisplayWindow getDisplayWindow(){
     return displayWindow;
