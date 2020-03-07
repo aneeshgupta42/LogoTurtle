@@ -97,7 +97,8 @@ public class UserInterface extends Application{
     myStage.setTitle(TITLE);
     UserInterface view = new UserInterface();
     myStage.setX(0);
-    System.out.println("Children" + root.getChildren());
+    myScene = makeScene();
+   // System.out.println("Children" + root.getChildren());
     myScene.getStylesheets().add(STYLESHEET);
     myStage.setScene(myScene);
     myStage.show();
@@ -250,8 +251,8 @@ public class UserInterface extends Application{
   }
 
   public void addNodeToRoot(Node object) {
-    System.out.println("ROOTOBJ" + object);
-    System.out.println(root);
+  //  System.out.println("ROOTOBJ" + object);
+  //  System.out.println(root);
     root.getChildren().add(object);
   }
 
