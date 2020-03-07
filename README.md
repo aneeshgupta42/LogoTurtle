@@ -24,11 +24,26 @@ Aneesh Gupta: Back-end package
 The CS308 Piazza board and lectures, Java and JavaFX documentation, and stack overflow for small fixes. 
 
 ### Running the Program
-Main class: View
+Main class: UserInterface
+           Logo/Main
 
 Data files needed: English.properties (and all other language property files), mover.png
+turtle images and XML file to save settings into
 
-Features implemented: Features described in the basic implementation (including commands in the command specification document)
+Features implemented: 
+*  multiple turtles
+*  runs commands
+*  multiple windows
+*  can call turtles with commands
+*  XML file to save setting
+ *  muliple pen and background colors
+ *  activating/deactivating turtles
+ *  indexes for turtles
+ *  default images and languages and colors
+ *  preset buttons that move turtles foward and backward
+ *  command input bar 
+    
+    
 
 ### Notes/Assumptions
 Assumptions or Simplifications:  
@@ -51,4 +66,4 @@ Known Bugs:
 Extra credit: NA
 
 ### Impressions
-Coming for complete implementation
+This project is much more extensive than the previous two, and was presented as much more open ended. Initially, our group was hesitant about implementing the design patterns discussed in class, specifically the Command Factory and the four APIs. However, throughout the project we were exposed to the benefits of using inheritance and a hierarchical structure, especially for Parsing. We also gained an understanding of the importance of properly defined APIs. We were able to effectively separate the tasks of the project into three main componenets following the MVC design pattern, and with the help of the APIs we were able to work on these parts seperately without conflict.  
