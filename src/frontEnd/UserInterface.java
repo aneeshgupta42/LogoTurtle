@@ -171,6 +171,14 @@ public class UserInterface extends Application{
     return turtleMap;
   }
 
+  public int getNumTurtles(){
+      int count = 0;
+      for(Mover mover: turtleMap.values()) {
+            count++;
+      }
+      return count;
+  }
+
   public MoverPropertiesWindow getPropertyWindow(){
     return myPropertyWindow;
   }

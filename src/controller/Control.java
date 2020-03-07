@@ -54,6 +54,10 @@ public class Control {
     System.out.println("FINAL RETURN VALUE ------>" + finalReturnValue);
   }
 
+  public int getNumTurtles(){
+    return view.getNumTurtles();
+  }
+
   public void passTurtle(Moveable mover) {
     myMover = mover;
     turtleRow = myMover.getMoverRow();
