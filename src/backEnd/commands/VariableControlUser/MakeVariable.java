@@ -22,7 +22,7 @@ public MakeVariable(){
       key =varargs.get(0);
       var = varargs.get(1);
     }
-    else{
+    else if(varargs.get(1).contains(":")){
       var =varargs.get(0);
       key = varargs.get(1);
     }
