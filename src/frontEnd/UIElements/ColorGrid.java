@@ -68,13 +68,13 @@ public class ColorGrid extends VBox {
     colorList.set(index - 1, newColor);
     System.out.println(colorList.get(index - 1));
     Rectangle rect = new Rectangle(100, 30);
-    gridPane.add(rect, index/NUM_OF_COLUMNS, index%NUM_OF_ROWS);
+    gridPane.add(rect, (index/NUM_OF_COLUMNS)-1, (index%NUM_OF_ROWS)-1);
     rect.setFill(colorList.get(index - 1));
 
     TextField text = new TextField("" + index);
     text.setDisable(true);
     text.setAlignment(Pos.CENTER);
     text.setPrefHeight(30);
-    gridPane.add(text, index/NUM_OF_COLUMNS, index%NUM_OF_ROWS);
+    gridPane.add(text, (index/NUM_OF_COLUMNS)-1, (index%NUM_OF_ROWS)-1);
   }
 }
