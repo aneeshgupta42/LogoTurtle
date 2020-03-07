@@ -19,8 +19,8 @@ public class LessThan extends Command {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 
-        double argOne = Double.parseDouble(varargs.get(0));
-        double argTwo = Double.parseDouble(varargs.get(1));
+        double argOne = Double.parseDouble(varargs.get(1));
+        double argTwo = Double.parseDouble(varargs.get(0));
 
         if(argOne < argTwo) {
             booleanResult = TRUE;
