@@ -1,6 +1,8 @@
 package frontEnd.UIElements;
 
+import backEnd.ErrorHandler;
 import frontEnd.ButtonAction;
+import frontEnd.ErrorBoxes;
 import java.lang.reflect.InvocationTargetException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -49,8 +51,7 @@ public class ButtonWithTextBox extends HBox {
         result.clear();
       }
       catch (Exception e) {
-        // FIXME: typically make your own custom exception to throw
-        throw new RuntimeException("Improper configuration", e);
+        ErrorBoxes box = new ErrorBoxes(new ErrorHandler("Exception"));
       }
     });
     return result;
@@ -66,11 +67,11 @@ public class ButtonWithTextBox extends HBox {
           try {
             m.invoke(target, myTextField.getCharacters().toString());
           } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
+            ErrorBoxes box = new ErrorBoxes(new ErrorHandler("IllegalAccess"));
           }
           System.out.println(methodName);
         }catch (NoSuchMethodException e) {
-          e.printStackTrace();
+          ErrorBoxes box = new ErrorBoxes(new ErrorHandler("NoMethod"));
         }
       }
     };

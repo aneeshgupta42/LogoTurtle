@@ -1,6 +1,8 @@
 package frontEnd.UIElements;
 
+import backEnd.ErrorHandler;
 import frontEnd.ButtonAction;
+import frontEnd.ErrorBoxes;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import javafx.event.ActionEvent;
@@ -40,10 +42,10 @@ public class OurLabeledColorPicker extends HBox {
           try {
             m.invoke(target, colors.getValue());
           } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
+            ErrorBoxes box = new ErrorBoxes(new ErrorHandler("IllegalAccess"));
           }
         }catch (NoSuchMethodException e) {
-          e.printStackTrace();
+          ErrorBoxes box = new ErrorBoxes(new ErrorHandler("NoMethod"));
         }
       }
     };

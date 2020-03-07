@@ -266,7 +266,7 @@ public class CommandSet {
   /*
 Makes variables for the repetitions of loops
  */
-  void repCount(double loop, String s) {
+  public void repCount(double loop, String s) {
     argToBePassed.clear();
     commandPath = MAKE;
     argToBePassed.push(Double.toString(loop));

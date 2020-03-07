@@ -1,6 +1,8 @@
 package frontEnd.UIElements;
 
+import backEnd.ErrorHandler;
 import frontEnd.ButtonAction;
+import frontEnd.ErrorBoxes;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import javafx.collections.ObservableList;
@@ -30,11 +32,10 @@ public class OurMenu extends Menu {
           try {
             m.invoke(target, ((MenuItem) event.getSource()).getText());
           } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
+            ErrorBoxes box = new ErrorBoxes(new ErrorHandler("IllegalAccess"));
           }
-          System.out.println(methodName);
         }catch (NoSuchMethodException e) {
-          e.printStackTrace();
+          ErrorBoxes box = new ErrorBoxes(new ErrorHandler("NoMethod"));
         }
       }
     };

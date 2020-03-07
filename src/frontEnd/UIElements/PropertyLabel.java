@@ -1,7 +1,9 @@
 package frontEnd.UIElements;
 
+import backEnd.ErrorHandler;
 import frontEnd.ButtonAction;
 
+import frontEnd.ErrorBoxes;
 import java.lang.reflect.InvocationTargetException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -46,10 +48,10 @@ public class PropertyLabel extends HBox {
         Object value = m.invoke(target);
         amountDue.set(""+ value);
       } catch (IllegalAccessException | InvocationTargetException e) {
-        e.printStackTrace();
+        ErrorBoxes box = new ErrorBoxes(new ErrorHandler("IllegalAccess"));
       }
     } catch (NoSuchMethodException e) {
-      e.printStackTrace();
+      ErrorBoxes box = new ErrorBoxes(new ErrorHandler("NoMethod"));
     }
   }
 
@@ -66,12 +68,12 @@ public class PropertyLabel extends HBox {
           try {
             m.invoke(target);
           } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            ErrorBoxes box = new ErrorBoxes(new ErrorHandler("IllegalAccess"));
           } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            ErrorBoxes box = new ErrorBoxes(new ErrorHandler("IllegalAccess"));
           }
         }catch (NoSuchMethodException e) {
-          e.printStackTrace();
+          ErrorBoxes box = new ErrorBoxes(new ErrorHandler("NoMethod"));
         }
       }
     };
