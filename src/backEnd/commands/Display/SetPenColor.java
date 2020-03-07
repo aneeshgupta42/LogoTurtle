@@ -18,6 +18,6 @@ public class SetPenColor extends Command{
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
         index = Integer.parseInt(varargs.get(0));
-        control.setPenColor();
+        //control.setPenColor();
     }
 }
