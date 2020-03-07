@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Scanner;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
@@ -268,6 +269,12 @@ public class ButtonAction {
   public String getMoverState(){
     return myMover.getMoverState();
   }
+
+  public void createNewWindow(){
+      UserInterface myInterface = new UserInterface();
+      myInterface.start(new Stage());
+  }
+
 
   private Mover getMover(){
     return myView.getMover();
