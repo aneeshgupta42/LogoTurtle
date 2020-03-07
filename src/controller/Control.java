@@ -43,6 +43,10 @@ public class Control {
     commandSet.setLanguage(lang);
   }
 
+  public double getRecentID(){
+    return view.getMover().getMoverID();
+  }
+
   public void parseCommand(){
     commandSet.setFinalReturnValue(null);
     commandSet.parseCommand();

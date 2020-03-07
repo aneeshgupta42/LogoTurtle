@@ -59,6 +59,7 @@ public class Mover implements Moveable {
   private static double initialX;
   private static double initialY;
   private int currentImageIndex;
+  private String currImagePath;
   private int currentPenColorIndex;
   private List<String> imageOptions;
   private Animation animation;
@@ -74,6 +75,7 @@ public class Mover implements Moveable {
     distanceSoFar = 0;
     moverID = ID;
     moverImage = changeMoverDisplay(defaultImage);
+    currImagePath = defaultImage;
     currentImageIndex = 1;
     currentPenColorIndex = -1;
     myLabelPropertyResources = ResourceBundle.getBundle(LabelResources);
@@ -114,6 +116,7 @@ public class Mover implements Moveable {
   }
 
   public ImageView changeMoverDisplay(String imagePath) {
+    currImagePath = imagePath;
     Image turtle = new Image(getClass().getClassLoader().getResourceAsStream(imagePath));
     moverImage = new ImageView(turtle);
     moverImage.setOnMouseClicked(e -> {
@@ -130,8 +133,16 @@ public class Mover implements Moveable {
     return moverImage;
   }
 
+  public String getImageString(){
+    return currImagePath;
+  }
+
   public Double getMoverID(){
     return moverID;
+  }
+
+  public void setMoverID(double x){
+    moverID = x;
   }
 
   public void initializeLinePosition(double x, double y, double angle) {
@@ -326,9 +337,18 @@ public class Mover implements Moveable {
     return moverActive;
   }
 
-  public void setActive(boolean status){
+  public void setActive(double id, boolean status){
     moverActive = status;
-    handleKeyInput();
+    moverID = id;
+    ColorAdjust colorAdjustGrayscale = new ColorAdjust();
+//    System.out.println("Setting ID: " + moerID + status);
+    if(status) {
+      colorAdjustGrayscale.setSaturation(0);;
+    }
+    else{
+      colorAdjustGrayscale.setSaturation(1);
+    }
+    moverImage.setEffect(colorAdjustGrayscale);
   }
 
   public String getPenPosition(){

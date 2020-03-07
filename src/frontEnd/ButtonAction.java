@@ -2,8 +2,10 @@ package frontEnd;
 
 import controller.Control;
 import backEnd.ErrorHandler;
+import frontEnd.ReadWrite.XMLException;
 import frontEnd.Windows.CommandWindow;
 import frontEnd.Windows.DisplayWindow;
+import frontEnd.ReadWrite.XMLWriter;
 import frontEnd.Windows.MoverPropertiesWindow;
 import frontEnd.Windows.TabWindow;
 
@@ -23,6 +25,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 public class ButtonAction {
   private UserInterface myView;
@@ -78,6 +82,17 @@ public class ButtonAction {
         ErrorBoxes box = new ErrorBoxes(new ErrorHandler(fileIsInvalid));
       }
     }
+  }
+
+  public void saveSettings() throws ParserConfigurationException {
+    System.out.println("Geting here");
+    XMLWriter writer = new XMLWriter(myView);
+    writer.outputFile();
+  }
+
+  public void loadSettings() throws Exception {
+
+
   }
 
   private File getFile() {
@@ -143,7 +158,6 @@ public class ButtonAction {
   }
 
   void sendInfoToControl(String myText) {
-
     for(Mover mover: turtleMap.values()) {
       if (mover.getActive()) {
         control.setCommand(myText);
@@ -158,6 +172,14 @@ public class ButtonAction {
     Mover mover = new Mover(myView, numOfMovers);
     mover.setInitialMoverPosition();
     myView.addToMapAndList(numOfMovers, mover);
+    myView.addNodeToRoot(mover.getImage());
+  }
+
+  public void createTurtle(double id){
+    Mover mover = new Mover(myView, id);
+    mover.setInitialMoverPosition();
+    mover.setMoverID(id);
+    myView.addToMapAndList(id, mover);
     myView.addNodeToRoot(mover.getImage());
   }
 
