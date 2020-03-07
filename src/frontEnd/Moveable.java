@@ -72,4 +72,8 @@ public interface Moveable {
     double getMoverCenterYPos();
 
     void resetMover();
+
+    int getCurrentPenColorIndex();
+
+    void setCurrentPenColorIndex(int index);
 }

@@ -124,5 +124,14 @@ public class Control {
   public int getShape(){
     return myMover.getCurrentImageIndex();
   }
+
+  public void setPenColor(int index) {
+    myMover.setCurrentPenColorIndex(index);
+  }
+
+  public int getPenColor() {
+    return myMover.getCurrentPenColorIndex();
+  }
+
 }
 
