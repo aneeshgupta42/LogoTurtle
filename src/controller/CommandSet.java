@@ -100,6 +100,7 @@ public class CommandSet {
   Calls the parser to start parsing the user input and initializes variables
   */
   public void parseCommand() {
+    commandExecute.setListObj(new CreatingListObjects());
     initializeNeededVariables();
     setCommandInput(commandInput);
     parser.addPatterns(language);
@@ -120,7 +121,6 @@ public class CommandSet {
   Splits up the command input
    */
   public void parseText() {
-    commandExecute.setListObj(new CreatingListObjects());
     commandList = new LinkedList<>();
     argumentList = new LinkedList<>();
     for (String line : commandInput.split(NEWLINE)) {
