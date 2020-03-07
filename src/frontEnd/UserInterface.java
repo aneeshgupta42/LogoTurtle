@@ -1,7 +1,7 @@
 package frontEnd;
 
 import controller.Control;
-import frontEnd.ButtonsBoxesandLabels.PropertyLabel;
+import frontEnd.UIElements.PropertyLabel;
 import frontEnd.Windows.*;
 
 import frontEnd.Windows.CustomWindow;
