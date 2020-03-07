@@ -19,7 +19,6 @@ public class CommandFactory {
     }
 
     private String subPackageCommand(String commandName){
-        System.out.println("INCOMING" + commandName);
         ResourceBundle CommandSubPackage = ResourceBundle.getBundle(CommandSubPackageResource);
         return CommandSubPackage.getString(commandName);
     }
