@@ -1,4 +1,4 @@
-package frontEnd.ButtonsBoxesandLabels;
+package frontEnd.UIElements;
 
 import frontEnd.ButtonAction;
 
@@ -21,10 +21,6 @@ public class OurButtons extends Button {
     setText(promptText);
     EventHandler<ActionEvent> whathappened = Result(methodName, target);
     setOnAction(whathappened);
-    //ActionEvent event = new ActionEvent(target.getClass().getDeclaredMethod(methodName));
-    //setOnAction(target.getClass().getDeclaredMethod(methodName));
-    //getChildren().addAll(
-        //makeInputAction(target, methodName);
   }
 
   private EventHandler<ActionEvent> Result(String methodName, ButtonAction target) {
@@ -41,7 +37,6 @@ public class OurButtons extends Button {
           } catch (InvocationTargetException e) {
             e.printStackTrace();
           }
-      //    System.out.println(methodName);
         }catch (NoSuchMethodException e) {
           e.printStackTrace();
         }

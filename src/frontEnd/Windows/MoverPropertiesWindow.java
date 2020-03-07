@@ -1,7 +1,8 @@
 package frontEnd.Windows;
 
 import frontEnd.ButtonAction;
-import frontEnd.ButtonsBoxesandLabels.OurComboBox;
+import frontEnd.UIElements.ColorGrid;
+import frontEnd.UIElements.OurComboBox;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleObjectProperty;
@@ -52,7 +53,8 @@ private static final int SIDEPANE_WIDTH = 300;
     VBox propertiesBox = new VBox();
     createTurtleSelectionBoxandTitle(myButtonAction, turtleList, propertiesBox);
     myCustomWindow.createLabel(propertiesBox, myLabelPropertyResources, propertyLabelMap);
-    getChildren().addAll(buttons, propertiesBox);
+    ColorGrid colorGrid = new ColorGrid();
+    getChildren().addAll(buttons, propertiesBox, colorGrid);
   }
 
   private void createTurtleSelectionBoxandTitle(ButtonAction myButtonAction,

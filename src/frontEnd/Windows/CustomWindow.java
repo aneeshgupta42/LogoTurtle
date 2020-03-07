@@ -1,11 +1,11 @@
 package frontEnd.Windows;
 
 import frontEnd.ButtonAction;
-import frontEnd.ButtonsBoxesandLabels.ButtonWithTextBox;
-import frontEnd.ButtonsBoxesandLabels.OurButtons;
-import frontEnd.ButtonsBoxesandLabels.OurComboBox;
-import frontEnd.ButtonsBoxesandLabels.OurLabeledColorPicker;
-import frontEnd.ButtonsBoxesandLabels.PropertyLabel;
+import frontEnd.UIElements.ButtonWithTextBox;
+import frontEnd.UIElements.OurButtons;
+import frontEnd.UIElements.OurComboBox;
+import frontEnd.UIElements.OurLabeledColorPicker;
+import frontEnd.UIElements.PropertyLabel;
 import java.util.Collections;
 import java.util.Map;
 import java.util.ResourceBundle;
