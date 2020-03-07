@@ -56,7 +56,7 @@ public class XMLWriter {
         int temp = UI.getNumTurtles();
         numTurtles = Integer.toString(temp);
         penColor = UI.getMover().getLineColor().toString();
-        turtleImage = UI.getMover().getImage().getImage().getUrl();
+        turtleImage = UI.getMover().getImageString();
     }
 
     private void createRoot(){

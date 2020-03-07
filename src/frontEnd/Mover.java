@@ -54,6 +54,7 @@ public class Mover implements Moveable {
   private static double initialX;
   private static double initialY;
   private int currentImageIndex;
+  private String currImagePath;
   private int currentPenColorIndex;
   private List<String> imageOptions;
   private Animation animation;
@@ -69,6 +70,7 @@ public class Mover implements Moveable {
     distanceSoFar = 0;
     moverID = ID;
     moverImage = changeMoverDisplay(defaultImage);
+    currImagePath = defaultImage;
     currentImageIndex = 1;
     currentPenColorIndex = -1;
     myLabelPropertyResources = ResourceBundle.getBundle(LabelResources);
@@ -92,6 +94,7 @@ public class Mover implements Moveable {
   }
 
   public ImageView changeMoverDisplay(String imagePath) {
+    currImagePath = imagePath;
     Image turtle = new Image(getClass().getClassLoader().getResourceAsStream(imagePath));
     moverImage = new ImageView(turtle);
     moverImage.setOnMouseClicked(e -> {
@@ -106,6 +109,10 @@ public class Mover implements Moveable {
 
   public ImageView getImage(){
     return moverImage;
+  }
+
+  public String getImageString(){
+    return currImagePath;
   }
 
   public Double getMoverID(){
