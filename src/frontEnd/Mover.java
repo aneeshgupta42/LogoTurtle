@@ -53,6 +53,7 @@ public class Mover implements Moveable{
   private static double initialX;
   private static double initialY;
   private int currentImageIndex;
+  private int currentPenColorIndex;
   private List<String> imageOptions;
   private Animation animation;
   private Animation rotate;
@@ -66,6 +67,7 @@ public class Mover implements Moveable{
     moverID = ID;
     moverImage = changeMoverDisplay(defaultImage);
     currentImageIndex = 1;
+    currentPenColorIndex = -1;
     myLabelPropertyResources = ResourceBundle.getBundle(LabelResources);
     myComboBoxOptionsResources = ResourceBundle.getBundle(ComboBoxOptionsResources);
     String optionsString = myComboBoxOptionsResources.getString("setImageOptions");
@@ -355,4 +357,12 @@ public class Mover implements Moveable{
   public double getMoverCenterYPos() {
     return this.moverCenterYPos;
   }
-}
+
+  public int getCurrentPenColorIndex() {
+    return this.currentPenColorIndex;
+  }
+
+  public void setCurrentPenColorIndex(int index) {
+    this.currentPenColorIndex = index; 
+  }
+ }
