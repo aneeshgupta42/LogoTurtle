@@ -88,18 +88,6 @@ public class CommandSet {
     language = lang;
   }
 
-  private void setCommandReturn(String commandValueReturn) {
-    commandReturn = commandValueReturn;
-  }
-
-  /*
-  Returns the command output value
-  @return commandReturn
-   */
-  public String getCommandReturn() {
-    return commandReturn;
-  }
-
   public String getFinalReturnValue() {
     return finalReturnValue;
   }
@@ -112,7 +100,9 @@ public class CommandSet {
   Calls the parser to start parsing the user input and initializes variables
   */
   public void parseCommand() {
+    commandExecute.setListObj(new CreatingListObjects());
     initializeNeededVariables();
+    setCommandInput(commandInput);
     parser.addPatterns(language);
     parser.addPatterns(SYNTAX);
     parseText();
@@ -123,6 +113,7 @@ public class CommandSet {
    */
   private void initializeNeededVariables() {
     parser = new Parser();
+    hasBeenStored = false;
     argToBePassed = new LinkedList<>();
   }
 
@@ -130,7 +121,8 @@ public class CommandSet {
   Splits up the command input
    */
   public void parseText() {
-    hasBeenStored = false;
+    commandList = new LinkedList<>();
+    argumentList = new LinkedList<>();
     for (String line : commandInput.split(NEWLINE)) {
       if (!line.contains(COMMENT) && !line.isEmpty()) {
         organizeInLists(line);
@@ -260,6 +252,7 @@ public class CommandSet {
   private void update() {
     hasBeenStored = commandExecute.getHasBeenStored();
     variablesUsed = commandExecute.getVariablesUsed();
+    argumentList = commandExecute.getArgumentList();
     setFinalReturnValue(commandExecute.getCommandValueReturn());
   }
   /*

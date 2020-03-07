@@ -1,18 +1,14 @@
 package frontEnd.UIElements;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 
 public class ColorGrid extends VBox {
   private ResourceBundle myColorGridResources;
@@ -66,7 +62,6 @@ public class ColorGrid extends VBox {
   public void setColorFromIndexAndRGB(int index, int red, int green, int blue){
     Color newColor = Color.rgb(red, green, blue);
     colorList.set(index - 1, newColor);
-    System.out.println(colorList.get(index - 1));
     Rectangle rect = new Rectangle(100, 30);
     gridPane.add(rect, (index/NUM_OF_COLUMNS)-1, (index%NUM_OF_ROWS)-1);
     rect.setFill(colorList.get(index - 1));
