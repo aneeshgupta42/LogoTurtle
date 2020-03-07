@@ -138,6 +138,7 @@ public class CommandSetAndExecute {
   Splits up the command input
    */
   private void parseText() {
+    currentRepeatNumber =0;
     commandList = new LinkedList<>();
     argumentList = new LinkedList<>();
     for (String line : commandInput.split(NEWLINE)) {
@@ -156,6 +157,8 @@ public class CommandSetAndExecute {
   Splits lines into words and categorizes them into two lists
    */
   private void organizeInLists(String line) {
+    commandList = new LinkedList<>();
+    argumentList = new LinkedList<>();
     for (String word : line.split(WHITESPACE)) {
       if (word.trim().length() > 0) {
         if (!parser.getSymbol(word).equals(ARGUMENT) && !parser.getSymbol(word).equals(VARIABLE)) {
@@ -193,7 +196,7 @@ public class CommandSetAndExecute {
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
           userCommandAttempt = currentCommand;
           if(commandPath.equals(CLASS_PATH+COMMAND)) coordinateCommands();
-          if (argumentList.size() > 0 && commandList.size()==1) {
+          else if (argumentList.size() > 0 && commandList.size()==1) {
             argToBePassed.addAll(argumentList);
             runCommand();
           }
@@ -220,7 +223,7 @@ public class CommandSetAndExecute {
     } else {
       if (argumentList.size() >= argNum) {
         String arg = argumentList.pop();
-        System.out.println("this "+arg);
+        System.out.println(arg);
         if (parser.getSymbol(arg).equals(VARIABLE)) {
           if (variablesUsed.containsKey(arg)) {
             argToBePassed.add(variablesUsed.get(arg));
@@ -277,10 +280,9 @@ public class CommandSetAndExecute {
   private void storeUserCommand(Command comm) {
     if (comm.storeCommands()) {
       creatingListObjects.findLists(commandInput,currentRepeatNumber);
-      groupsList= creatingListObjects.getLists();
+      groupsList = creatingListObjects.getLists();
       numberOfFunctions++;
       storeFunction.storeFunction(userCommandAttempt, groupsList.get(numberOfFunctions).getMyList());
-      System.out.println("Store function "+storeFunction);
       hasBeenStored = true;
     }
   }
@@ -308,7 +310,6 @@ public class CommandSetAndExecute {
   private void saveVariables(Command comm) {
     if (comm.getVariablesCreated() != null) {
       variablesUsed.putAll(comm.getVariablesCreated());
-      System.out.println(variablesUsed);
       if (!commandList.isEmpty()) {
         coordinateCommands();
       }

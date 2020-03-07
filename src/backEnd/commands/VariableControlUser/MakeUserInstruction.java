@@ -20,8 +20,14 @@ public class MakeUserInstruction extends Command {
 
   public MakeUserInstruction(List<String> varargs, Control control){
     super(varargs,control);
-    key = varargs.get(0);
-    var = varargs.get(1);
+    if(varargs.get(0).contains(":")){
+      key =varargs.get(0);
+      var = varargs.get(1);
+    }
+    else if(varargs.get(1).contains(":")){
+      var =varargs.get(0);
+      key = varargs.get(1);
+    }
   }
 
   @Override
