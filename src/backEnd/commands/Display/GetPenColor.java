@@ -7,7 +7,7 @@ import java.util.List;
 
 public class GetPenColor extends Command {
     private static final int NUMARGS = 0;
-    private int index;
+    private int index, userIndex;
 
     public GetPenColor() {
         super();
@@ -18,11 +18,12 @@ public class GetPenColor extends Command {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
         index = control.getPenColor();
+        userIndex = index + 1;
     }
 
     @Override
     public String commandValueReturn() {
-        String ret = Integer.toString(index);
+        String ret = Integer.toString(userIndex);
         return ret;
     }
 

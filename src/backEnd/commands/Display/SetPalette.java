@@ -7,7 +7,7 @@ import java.util.List;
 
 public class SetPalette extends Command {
     private static final int NUMARGS = 4;
-    private int index, red, green, blue;
+    private int userIndex, red, green, blue;
 
     public SetPalette() {
         super();
@@ -18,17 +18,17 @@ public class SetPalette extends Command {
         super(varargs, control);
         super.numberOfArgs = NUMARGS;
 
-        index = Integer.parseInt(varargs.get(0));
-        red = Integer.parseInt(varargs.get(1));
-        blue = Integer.parseInt(varargs.get(2));
-        green = Integer.parseInt(varargs.get(3));
+        userIndex = Integer.parseInt(varargs.get(3));
+        red = Integer.parseInt(varargs.get(2));
+        green = Integer.parseInt(varargs.get(1));
+        blue = Integer.parseInt(varargs.get(0));
 
-        control.switchPaletteColor(index, red, green, blue);
+        control.switchPaletteColor(userIndex, red, green, blue);
     }
 
     @Override
     public String commandValueReturn() {
-        String ret = Integer.toString(index);
+        String ret = Integer.toString(userIndex);
         return ret;
     }
 

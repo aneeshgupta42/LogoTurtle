@@ -185,13 +185,11 @@ public class UserInterface extends Application{
   public void setActiveTurtles(ArrayList<Double> ids) {
     System.out.println("Hitting this amazing line");
     System.out.println(turtleMap.toString());
-
     //Creation\
     for (Double d : turtleList) {
       turtleMap.get(d).setMoverID(d);
       turtleMap.get(d).setActive(d, false);
     }
-
     for (Double d : ids) {
       if (!turtleList.contains(d)) {
         myButtonAction.createTurtle(d);
@@ -200,7 +198,6 @@ public class UserInterface extends Application{
       System.out.println(turtleMap.get(d));
       turtleMap.get(d).setActive(d, true);
     }
-
     System.out.println("New Map: " + turtleMap.toString());
     System.out.println("New list: " + turtleList.toString());
   }
