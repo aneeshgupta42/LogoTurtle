@@ -1,9 +1,13 @@
 package frontEnd.Windows;
 
 
+import frontEnd.ButtonAction;
+import frontEnd.UIElements.ButtonWithTextBox;
+import java.util.Collections;
 import java.util.ResourceBundle;
 import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 
 public class ToolBarWindow extends HBox {
 
@@ -23,6 +27,9 @@ public class ToolBarWindow extends HBox {
   private static final String COLOR_INITIAL = "Initial";
   private CustomWindow myCustomWindow;
   private static final String BACKGROUND_RESOURCE = "setBackground";
+  private static final String HISTORY_BUTTON_NAME = "Save History";
+  private static final String HISTORY_BUTTON_METHOD = "saveHistory";
+
 
 
   public ToolBarWindow(CustomWindow customWindow) {
@@ -49,5 +56,7 @@ public class ToolBarWindow extends HBox {
         myComboBoxResources);
     myCustomWindow.createColorPicker(this,
         myColorPickerResources, BACKGROUND_RESOURCE);
+    getChildren().add(
+        new ButtonWithTextBox(HISTORY_BUTTON_NAME, HISTORY_BUTTON_NAME, myCustomWindow.getButtonAction()));
   }
 }

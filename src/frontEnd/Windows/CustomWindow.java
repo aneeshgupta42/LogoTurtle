@@ -83,4 +83,8 @@ public class CustomWindow {
       labelMap.put(key, plabel);
     }
   }
+
+  public ButtonAction getButtonAction(){
+    return myButtonAction;
+  }
 }
