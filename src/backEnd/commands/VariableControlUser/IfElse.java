@@ -24,6 +24,6 @@ public class IfElse extends Command {
 
   @Override
   public double repeatCom() {
-    return super.repeatCom();
+    return 0;
   }
 }

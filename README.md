@@ -33,11 +33,15 @@ Features implemented: Features described in the basic implementation (including 
 ### Notes/Assumptions
 Assumptions or Simplifications:  
 
-We assumed that the commands would each have a definite number of inputs.
-We assumed a a definite style for the properties files.
-We assumed that the pen follows the data points and the turtle also does, but they have separate coded paths. 
+* We assumed that the commands would each have a definite number of inputs.
+* We assumed a a definite style for the properties files.
+* We assumed that the pen follows the data points and the turtle also does, but they have separate coded paths. 
 
-Interesting data files: NA
+Interesting data files: 
+
+* Logo 
+* TurtleSavedRecent.XML
+
 
 Known Bugs: 
 

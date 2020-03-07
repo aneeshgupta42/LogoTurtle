@@ -136,7 +136,7 @@ public class ButtonAction {
     }
     //getTabWindow().getCommandTab().setContent(getTabWindow().getCommandTab().resetTabContents(control.getUserCommands(), false));
     getTabWindow().getCommandTab().resetTabContents(control.getUserCommands(), false);
-    System.out.println("commands "+  control.getUserCommands());
+ //   System.out.println("commands "+  control.getUserCommands());
     //getTabWindow().getVariableTab().setContent(getTabWindow().getVariableTab().resetTabContents(control.getVariables(), true));
     getTabWindow().getVariableTab().resetTabContents(control.getVariables(), true);
     getMover().updateLabels();
@@ -298,6 +298,7 @@ public class ButtonAction {
   private Mover getMover(){
     return myView.getMover();
   }
+
   private Map getMoverMap(){
     return myView.getTurtleMap();
   }
