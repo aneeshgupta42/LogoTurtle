@@ -52,6 +52,8 @@ public class CommandSet {
     variablesUsed = new TreeMap();
     commandFactory = new CommandFactory(control);
     storeFunction = new StoreFunctions();
+    commandExecute = new CommandExecute(this);
+    storeFunction = commandExecute.getStoreFunction();
   }
 
 
@@ -113,8 +115,6 @@ public class CommandSet {
     initializeNeededVariables();
     parser.addPatterns(language);
     parser.addPatterns(SYNTAX);
-    commandExecute = new CommandExecute(this);
-    storeFunction = commandExecute.getStoreFunction();
     parseText();
   }
 
@@ -122,7 +122,6 @@ public class CommandSet {
   Initializes instance variables
    */
   private void initializeNeededVariables() {
-    hasBeenStored = false;
     parser = new Parser();
     argToBePassed = new LinkedList<>();
   }
@@ -131,6 +130,7 @@ public class CommandSet {
   Splits up the command input
    */
   public void parseText() {
+    hasBeenStored = false;
     for (String line : commandInput.split(NEWLINE)) {
       if (!line.contains(COMMENT) && !line.isEmpty()) {
         organizeInLists(line);
@@ -186,9 +186,7 @@ public class CommandSet {
           if (commandPath.equals(CLASS_PATH + COMMAND))
             coordinateCommands();
           if (argumentList.size() > 0) {
-            System.out.println(" ****HERE****" + argumentList);
             argToBePassed.addAll(argumentList);
-            System.out.println(argToBePassed);
             runCommand();
           }
         }
@@ -210,7 +208,6 @@ public class CommandSet {
    */
   private void coordinateArgumentsForEachCommand(int argNum) {
     if(argNum == -1){
-      System.out.println(" ****HERE****" + argumentList);
       argToBePassed.addAll(argumentList);
       System.out.println(argToBePassed);
       runCommand();

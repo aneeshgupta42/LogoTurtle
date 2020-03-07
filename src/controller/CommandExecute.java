@@ -65,7 +65,7 @@ public class CommandExecute {
   private void storeUserCommand(Command comm) {
     if (comm.storeCommands()) {
       creatingListObjects.findLists(commandInput,currentRepeatNumber);
-      groupsList= creatingListObjects.getLists();
+      groupsList = creatingListObjects.getLists();
       numberOfFunctions++;
       storeFunction.storeFunction(userCommandAttempt, groupsList.get(numberOfFunctions).getMyList());
       hasBeenStored = true;
@@ -75,7 +75,7 @@ public class CommandExecute {
   private void booleanLogic(Command comm) {
     if (comm.runnable() != VALUE) {
       creatingListObjects.findLists(commandInput,currentRepeatNumber);
-      groupsList= creatingListObjects.getLists();
+      groupsList = creatingListObjects.getLists();
       if ((comm.runnable() != 0)) {
         commandSet.setCommandInput(groupsList.get(0).getMyList());
       } else {
