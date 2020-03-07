@@ -13,7 +13,7 @@ public class Control {
   private double turtleCol;
   private double turtleRow;
   private double turtleAngle;
-  private final CommandSetAndExecute commandSetAndExecute;
+  private final CommandSet commandSet;
   private final UserInterface view;
   private final Map<String,String> variablesUsed = new TreeMap<>();
   private final Map<String,String> functionsUsed = new TreeMap<>();
@@ -24,7 +24,7 @@ public class Control {
    */
   public Control(UserInterface UI) {
     view = UI;
-    commandSetAndExecute = new CommandSetAndExecute(this);
+    commandSet = new CommandSet(this);
   }
 
   public Map<String,String> getVariables() {
@@ -36,19 +36,20 @@ public class Control {
   public String getFinalReturnValue(){return finalReturnValue;}
 
   public void setCommand(String command) {
-    commandSetAndExecute.setCommandInput(command);
+    commandSet.setCommandInput(command);
   }
 
   public void setLanguage(String lang) {
-    commandSetAndExecute.setLanguage(lang);
+    commandSet.setLanguage(lang);
   }
 
   public void parseCommand(){
-    commandSetAndExecute.setFinalReturnValue(null);
-    commandSetAndExecute.parseCommand();
-    if(commandSetAndExecute.getVariables()!=null) variablesUsed.putAll(commandSetAndExecute.getVariables());
-    if(commandSetAndExecute.getFunctions()!=null) functionsUsed.putAll(commandSetAndExecute.getFunctions());
-    finalReturnValue = commandSetAndExecute.getFinalReturnValue();
+    commandSet.setFinalReturnValue(null);
+    commandSet.parseCommand();
+    if(commandSet.getVariables()!=null)variablesUsed.putAll(commandSet.getVariables());
+    if(commandSet.getFunctions()!=null)functionsUsed.putAll(commandSet.getFunctions());
+    finalReturnValue = commandSet.getFinalReturnValue();
+    System.out.println("FINAL RETURN VALUE ------>" + finalReturnValue);
   }
 
   public int getNumTurtles(){

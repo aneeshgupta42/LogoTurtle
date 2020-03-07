@@ -182,15 +182,16 @@ public class UserInterface extends Application{
       return count;
   }
 
-  public void setActiveTurtles(ArrayList<Double> ids){
-    for(Mover m: turtleMap.values()){
-        m.setActive(ids.contains(m.getMoverID()));
+  public void setActiveTurtles(ArrayList<Double> ids) {
+    for (Mover m : turtleMap.values()) {
+      m.setActive(ids.contains(m.getMoverID()));
     }
-    for(Double d: ids){
-        if(!turtleMap.containsKey(d)){
-            myButtonAction.addTurtle();
-        }
+    for (Double d : ids) {
+      if (!turtleMap.containsKey(d)) {
+        myButtonAction.addTurtle();
+      }
     }
+  }
 
   public void changeColorGrid(int index, int red, int green, int blue){
     myPropertyWindow.getColorGrid().setColorFromIndexAndRGB(index, red, green, blue);
