@@ -11,12 +11,12 @@ public class CommandExecute {
   private static final String REP_COUNT = ":repCount";
   private static final double VALUE = Double.MIN_VALUE;
   private CommandSet commandSet;
-  private StoreFunctions storeFunction = new StoreFunctions();
-  private CreatingListObjects creatingListObjects = new CreatingListObjects();
-  private List<ListObjects> groupsList = new ArrayList<>();
+  private StoreFunctions storeFunction;
+  private CreatingListObjects creatingListObjects;
+  private List<ListObjects> groupsList;
   private int currentRepeatNumber;
-  private LinkedList<String> argumentList = new LinkedList<>();
-  private LinkedList<String> commandList = new LinkedList<>();
+  private LinkedList<String> argumentList;
+  private LinkedList<String> commandList;
   private String commandInput;
   private String commandValueReturn;
   private int currentListObject;
@@ -26,8 +26,13 @@ public class CommandExecute {
   private Map<String,String> variablesUsed;
 
   public CommandExecute(CommandSet commandSet){
+    commandList = new LinkedList<>();
+    argumentList = new LinkedList<>();
+    creatingListObjects = new CreatingListObjects();
+    groupsList = new ArrayList<>();
     numberOfFunctions =0;
     hasBeenStored = false;
+    storeFunction = new StoreFunctions();
     this.commandSet = commandSet;
   }
 
@@ -42,6 +47,7 @@ public class CommandExecute {
   public Map getVariablesUsed(){return variablesUsed;}
   public String getCommandValueReturn(){return commandValueReturn;}
   public StoreFunctions getStoreFunction(){return storeFunction;}
+  public LinkedList getArgumentList(){return argumentList;}
 
 
   public void createCommand(Command comm) {
@@ -138,4 +144,7 @@ public class CommandExecute {
     }
   }
 
+  public void setListObj(CreatingListObjects creatingListObjects) {
+    this.creatingListObjects = creatingListObjects;
+  }
 }
