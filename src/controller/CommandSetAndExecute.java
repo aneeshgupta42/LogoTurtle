@@ -146,8 +146,6 @@ public class CommandSetAndExecute {
         organizeInLists(line);
       }
       if (!commandList.isEmpty()) {
-        System.out.println(commandList);
-        System.out.println(argumentList);
         coordinateCommands();
       }
     }
@@ -190,13 +188,12 @@ public class CommandSetAndExecute {
       for (int i = 0; i < commandList.size(); i++) {
         currentCommand = commandList.pop();
         makeClassPathToCommand(currentCommand);
-        System.out.println("this is thte command "+commandPath);
         try {
           numberOfArguments = commandFactory.getNumArgs(commandPath);
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
           userCommandAttempt = currentCommand;
           if(commandPath.equals(CLASS_PATH+COMMAND)) coordinateCommands();
-          else if (argumentList.size() > 0 && commandList.size()==1) {
+          else if (argumentList.size() > 0) {
             argToBePassed.addAll(argumentList);
             runCommand();
           }
@@ -223,7 +220,6 @@ public class CommandSetAndExecute {
     } else {
       if (argumentList.size() >= argNum) {
         String arg = argumentList.pop();
-        System.out.println(arg);
         if (parser.getSymbol(arg).equals(VARIABLE)) {
           if (variablesUsed.containsKey(arg)) {
             argToBePassed.add(variablesUsed.get(arg));
@@ -301,7 +297,6 @@ public class CommandSetAndExecute {
           hasBeenStored = true;
         }
       }
-      System.out.println(commandInput);
       parseText();
       hasBeenStored = true;
     }

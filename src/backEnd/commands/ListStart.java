@@ -12,7 +12,6 @@ public class ListStart extends Command {
 
   public ListStart(List<String> varargs, Control control){
     super(varargs, control);
-    super.numberOfArgs=number;
   }
 
   @Override
@@ -20,8 +19,4 @@ public class ListStart extends Command {
     return super.repeatCom();
   }
 
-  @Override
-  public boolean storeCommands() {
-    return super.storeCommands();
-  }
 }
