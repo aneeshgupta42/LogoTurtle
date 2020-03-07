@@ -261,7 +261,6 @@ public class CommandSet {
 
   private void update() {
     hasBeenStored = commandExecute.getHasBeenStored();
-    System.out.println(hasBeenStored);
     variablesUsed = commandExecute.getVariablesUsed();
     setFinalReturnValue(commandExecute.getCommandValueReturn());
   }
