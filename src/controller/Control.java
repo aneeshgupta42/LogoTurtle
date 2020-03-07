@@ -47,11 +47,10 @@ public class Control {
   public void parseCommand(){
     commandSetAndExecute.setFinalReturnValue(null);
     commandSetAndExecute.parseCommand();
-    if(commandSetAndExecute.getVariables()!=null)variablesUsed.putAll(commandSetAndExecute.getVariables());
-    if(commandSetAndExecute.getFunctions()!=null)functionsUsed.putAll(commandSetAndExecute.getFunctions());
+    if(commandSetAndExecute.getVariables()!=null) variablesUsed.putAll(commandSetAndExecute.getVariables());
+    if(commandSetAndExecute.getFunctions()!=null) functionsUsed.putAll(commandSetAndExecute.getFunctions());
     commandReturnValue = commandSetAndExecute.getCommandReturn();
     finalReturnValue = commandSetAndExecute.getFinalReturnValue();
-    System.out.println("FINAL RETURN VALUE ------>" + finalReturnValue);
   }
 
   public int getNumTurtles(){

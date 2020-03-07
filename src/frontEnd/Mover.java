@@ -24,7 +24,8 @@ import javafx.scene.shape.Path;
 import javafx.util.Duration;
 
 
-public class Mover implements Moveable{
+//public class Mover implements Moveable, Cloneable {
+public class Mover implements Moveable {
 
   private static double moverID;
   ImageView moverImage;
