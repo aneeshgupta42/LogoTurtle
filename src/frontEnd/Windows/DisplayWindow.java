@@ -20,6 +20,7 @@ public class DisplayWindow extends VBox {
   private static ButtonAction myButtonAction;
   private static CustomWindow myCustomWindow;
   private static ColorGrid myColorGrid;
+  private String myColorString;
 
   public DisplayWindow(ButtonAction buttonAction, CustomWindow customWindow, ColorGrid colorGrid) {
     myButtonAction = buttonAction;
@@ -36,8 +37,14 @@ public class DisplayWindow extends VBox {
   }
 
   public void setBackgroundColor(Color color) {
+    myColorString = color.toString();
     rectangle.setFill(color);
   }
+
+  public String getBackgroundColor() {
+    return rectangle.getFill().toString();
+  }
+
 
   public CommandWindow getCommandWindow(){
     return commandWindow;
