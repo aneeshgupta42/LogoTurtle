@@ -20,4 +20,15 @@ public class SetPenColor extends Command{
         index = Integer.parseInt(varargs.get(0));
         control.setPenColor(index);
     }
+
+    @Override
+    public String commandValueReturn() {
+        String ret = Integer.toString(index);
+        return ret;
+    }
+
+    @Override
+    public double repeatCom() {
+        return super.repeatCom();
+    }
 }
