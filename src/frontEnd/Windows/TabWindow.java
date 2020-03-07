@@ -17,7 +17,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
 
 public class TabWindow extends VBox {
-  private static final int TAB_PANE_WIDTH = 300;
+  private static final int TAB_PANE_WIDTH = 420;
   private TabPane tabPane;
   private CommandWindow myCommandWindow;
   private HistoryTab historyTab;
