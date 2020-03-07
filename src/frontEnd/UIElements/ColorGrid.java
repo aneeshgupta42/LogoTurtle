@@ -66,7 +66,6 @@ public class ColorGrid extends VBox {
   public void setColorFromIndexAndRGB(int index, int red, int green, int blue){
     Color newColor = Color.rgb(red, green, blue);
     colorList.set(index - 1, newColor);
-    System.out.println(colorList.get(index - 1));
     Rectangle rect = new Rectangle(100, 30);
     gridPane.add(rect, (index/NUM_OF_COLUMNS)-1, (index%NUM_OF_ROWS)-1);
     rect.setFill(colorList.get(index - 1));

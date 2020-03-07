@@ -281,6 +281,10 @@ public class ButtonAction {
       myInterface.start(new Stage());
   }
 
+  public void saveHistory() {
+    String something = getTabWindow().getHistoryTab().getHistoryTextContent();
+    System.out.println(something);
+  }
 
   private Mover getMover(){
     return myView.getMover();
