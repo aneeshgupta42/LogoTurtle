@@ -1,7 +1,7 @@
 package frontEnd;
 
 import controller.Control;
-import frontEnd.ButtonsBoxesandLabels.PropertyLabel;
+import frontEnd.UIElements.PropertyLabel;
 import frontEnd.Windows.*;
 
 import frontEnd.Windows.CustomWindow;
@@ -18,7 +18,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -28,7 +27,6 @@ public class UserInterface extends Application{
   private Stage myStage;
   private Mover myMover;
   private Control control;
-  private CommandWindow commandWindow;
   private BorderPane root = new BorderPane();
   private ResourceBundle myComboBoxOptionsResources;
   private Map<Double, Mover> turtleMap = new HashMap<>();
@@ -179,6 +177,17 @@ public class UserInterface extends Application{
             count++;
       }
       return count;
+  }
+
+  public void setActiveTurtles(ArrayList<Double> ids){
+    for(Mover m: turtleMap.values()){
+        m.setActive(ids.contains(m.getMoverID()));
+    }
+    for(Double d: ids){
+        if(!turtleMap.containsKey(d)){
+            myButtonAction.addTurtle();
+        }
+    }
   }
 
   public MoverPropertiesWindow getPropertyWindow(){

@@ -293,6 +293,11 @@ public class Mover implements Moveable {
     return moverActive;
   }
 
+  public void setActive(boolean status){
+    moverActive = status;
+    handleKeyInput();
+  }
+
   public String getPenPosition(){
     String ret = penUpDisplayText;
     if(penDown){

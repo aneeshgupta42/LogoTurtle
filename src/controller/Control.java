@@ -2,6 +2,8 @@ package controller;
 
 import frontEnd.Moveable;
 import frontEnd.UserInterface;
+
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -15,7 +17,6 @@ public class Control {
   private final UserInterface view;
   private final Map<String,String> variablesUsed = new TreeMap<>();
   private final Map<String,String> functionsUsed = new TreeMap<>();
-  private String commandReturnValue;
   private String finalReturnValue;
 
   /*
@@ -32,8 +33,6 @@ public class Control {
 
   public Map<String,String> getUserCommands() {return functionsUsed;}
 
-  public String getCommandReturnValue(){return commandReturnValue;}
-
   public String getFinalReturnValue(){return finalReturnValue;}
 
   public void setCommand(String command) {
@@ -49,7 +48,6 @@ public class Control {
     commandSetAndExecute.parseCommand();
     if(commandSetAndExecute.getVariables()!=null) variablesUsed.putAll(commandSetAndExecute.getVariables());
     if(commandSetAndExecute.getFunctions()!=null) functionsUsed.putAll(commandSetAndExecute.getFunctions());
-    commandReturnValue = commandSetAndExecute.getCommandReturn();
     finalReturnValue = commandSetAndExecute.getFinalReturnValue();
   }
 
@@ -110,6 +108,10 @@ public class Control {
     } else {
       myMover.resetMover();
     }
+  }
+
+  public void updateTurtleActive(ArrayList<Double> now_active){
+    view.setActiveTurtles(now_active);
   }
 
   public double getTurtleRelativeXPos() {

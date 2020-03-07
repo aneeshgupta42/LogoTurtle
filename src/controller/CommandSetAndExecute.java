@@ -194,7 +194,9 @@ public class CommandSetAndExecute {
           userCommandAttempt = currentCommand;
           if(commandPath.equals(CLASS_PATH+COMMAND)) coordinateCommands();
           if (argumentList.size() > 0) {
+            System.out.println(" ****HERE****" + argumentList);
             argToBePassed.addAll(argumentList);
+            System.out.println(argToBePassed);
             runCommand();
           }
         }
@@ -215,7 +217,13 @@ public class CommandSetAndExecute {
   Coordinating the command to the number of arguments it needs and pushing it to be run
    */
   private void coordinateArgumentsForEachCommand(int argNum) {
-    if (argNum == 0) {
+    if(argNum == -1){
+      System.out.println(" ****HERE****" + argumentList);
+      argToBePassed.addAll(argumentList);
+      System.out.println(argToBePassed);
+      runCommand();
+    }
+    else if (argNum == 0) {
       checkCommand();
     } else {
       if (argumentList.size() >= argNum) {
@@ -265,7 +273,7 @@ public class CommandSetAndExecute {
 
   private void commandReturnValue(Command comm) {
     if (comm.commandValueReturn() != null) {
-      argumentList.add(comm.commandValueReturn());
+      argumentList.push(comm.commandValueReturn());
       finalReturnValue = comm.commandValueReturn();
       setCommandReturn(comm.commandValueReturn());
       if (!commandList.isEmpty()) {
