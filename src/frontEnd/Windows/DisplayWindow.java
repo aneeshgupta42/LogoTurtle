@@ -28,6 +28,13 @@ public class DisplayWindow extends VBox {
     myColorGrid = colorGrid;
     makeDisplayWindow();
   }
+  public DisplayWindow(ButtonAction buttonAction, CustomWindow customWindow, ColorGrid colorGrid, String backgroundColor) {
+    myButtonAction = buttonAction;
+    myCustomWindow = customWindow;
+    myColorGrid = colorGrid;
+    makeDisplayWindow();
+    rectangle.setFill(Color.valueOf(backgroundColor));
+  }
 
   private void makeDisplayWindow(){
     rectangle = new Rectangle(DISPLAY_WIDTH, DISPLAY_HEIGHT);

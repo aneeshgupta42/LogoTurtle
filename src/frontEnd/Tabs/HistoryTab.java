@@ -1,11 +1,15 @@
 package frontEnd.Tabs;
 
 import frontEnd.Windows.CommandWindow;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.VBox;
+
+import java.util.List;
 
 public class HistoryTab extends Tab {
   private VBox historyBox;
@@ -30,5 +34,15 @@ public class HistoryTab extends Tab {
     });
     historyBox.getChildren().add(0, link);
     setContent(historyBox);
+  }
+
+  public String getHistoryTextContent() {
+    String commandText = "";
+    List<Node> currentObjects = historyBox.getChildren();
+    for(Node currNode: currentObjects) {
+      Hyperlink link = (Hyperlink) currNode;
+      commandText = link.getText() + "\n" + commandText;
+    }
+    return commandText;
   }
 }

@@ -69,7 +69,7 @@ public class ButtonWithTextBox extends HBox {
           } catch (IllegalAccessException | InvocationTargetException e) {
             ErrorBoxes box = new ErrorBoxes(new ErrorHandler("IllegalAccess"));
           }
-          System.out.println(methodName);
+         // System.out.println(methodName);
         }catch (NoSuchMethodException e) {
           ErrorBoxes box = new ErrorBoxes(new ErrorHandler("NoMethod"));
         }

@@ -8,13 +8,14 @@ import frontEnd.Windows.DisplayWindow;
 import frontEnd.ReadWrite.XMLWriter;
 import frontEnd.Windows.MoverPropertiesWindow;
 import frontEnd.Windows.TabWindow;
-import java.io.File;
-import java.io.FileNotFoundException;
+
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Scanner;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
@@ -31,6 +32,7 @@ public class ButtonAction {
   private UserInterface myView;
   private static final String COMMAND_ONE = "viewboc.png";
   private static final String COMMAND_TWO = "viewbox.png";
+  private static final String COMMAND_THREE = "viewboq.png";
   private Mover myMover;
   private static final String ComboBoxOptionsResources = "resources.UIActions.ComboBoxOptions";
   private DisplayWindow displayWindow;
@@ -45,6 +47,7 @@ public class ButtonAction {
   private String getCurrentDirectory = "user.dir";
   private String getExampleFiles =  "/data/examples";
   private String fileIsInvalid = "InvalidFile";
+  private String historySavedDirectory = "/data/user_history/";
 
   public ButtonAction(UserInterface view){
     myView=view;
@@ -148,7 +151,7 @@ public class ButtonAction {
     }
     //getTabWindow().getCommandTab().setContent(getTabWindow().getCommandTab().resetTabContents(control.getUserCommands(), false));
     getTabWindow().getCommandTab().resetTabContents(control.getUserCommands(), false);
-    System.out.println("commands "+  control.getUserCommands());
+ //   System.out.println("commands "+  control.getUserCommands());
     //getTabWindow().getVariableTab().setContent(getTabWindow().getVariableTab().resetTabContents(control.getVariables(), true));
     getTabWindow().getVariableTab().resetTabContents(control.getVariables(), true);
     getMover().updateLabels();
@@ -224,10 +227,15 @@ public class ButtonAction {
     commandTwoIm.setPreserveRatio(true);
     commandTwoIm.setFitWidth(1000);
 
+    Image commandThree = new Image(getClass().getClassLoader().getResourceAsStream(COMMAND_THREE));
+    ImageView commandThreeIm = new ImageView(commandTwo);
+    commandTwoIm.setPreserveRatio(true);
+    commandTwoIm.setFitWidth(1000);
+
     final VBox vbox = new VBox();
     vbox.setSpacing(5);
     vbox.setPadding(new Insets(10, 0, 0, 10));
-    vbox.getChildren().addAll(commandOneIm, commandTwoIm);
+    vbox.getChildren().addAll(commandOneIm, commandTwoIm, commandThreeIm);
     pane.setContent(vbox);
     pane.setFitToWidth(true);
     Scene scene = new Scene(pane);
@@ -291,9 +299,27 @@ public class ButtonAction {
     return myMover.getMoverState();
   }
 
+  public void saveHistory(String filename) {
+    try {
+      String commandOutput = getTabWindow().getHistoryTab().getHistoryTextContent();
+      String dataPath = System.getProperty(getCurrentDirectory) + historySavedDirectory + filename;
+      FileWriter writer = new FileWriter(dataPath);
+      writer.write(commandOutput);
+      writer.close();
+    } catch (IOException e) {
+      ErrorBoxes box = new ErrorBoxes(new ErrorHandler("Exception"));
+    }
+  }
+
+  public void createNewWindow(){
+      UserInterface myInterface = new UserInterface();
+      myInterface.start(new Stage());
+  }
+  
   private Mover getMover(){
     return myView.getMover();
   }
+
   private Map getMoverMap(){
     return myView.getTurtleMap();
   }
