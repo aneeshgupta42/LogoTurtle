@@ -4,7 +4,6 @@ package frontEnd.ReadWrite.test;
 /**
  * Testing out the XML writer, by reading in a file.
  * And then writing it out.
- * @author Aneesh Gupta, Shruthi Kumar, Chris Warren
  */
 public class TestXMLWriter {
     /**

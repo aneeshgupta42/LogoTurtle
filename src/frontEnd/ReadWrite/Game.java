@@ -1,10 +1,9 @@
 package frontEnd.ReadWrite;
 
 /**
- * Simple immutable value object representing simulation data.
- * Holds the data for simulation to help create the Grid.
+ * Simple immutable value object representing SLOGO VIew data.
+ * Holds the data for simulation to help create the View.
  * @author Robert C. Duvall
- * extended by Aneesh Gupta, Shruthi Kumar, Chris Warren
  */
 public class Game {
     // name in data file that will indicate it represents data for this type of object

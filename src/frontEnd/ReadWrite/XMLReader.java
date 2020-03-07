@@ -17,7 +17,7 @@ import java.io.IOException;
  *
  * @author Rhondu Smithwick
  * @author Robert C. Duvall
- * extended by Aneesh Gupta, Shruthi Kumar, Chris Warren
+ * extended by Aneesh Gupta
  */
 
 public class XMLReader {

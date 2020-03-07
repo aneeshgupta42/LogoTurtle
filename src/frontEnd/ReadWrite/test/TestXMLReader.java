@@ -5,7 +5,6 @@ package frontEnd.ReadWrite.test;
  * GOod code because:
  * Provides a testing mechanism for previously written code
  * Fairly straightforward, has constant variable hard coded values
- * @author Aneesh Gupta, Shruthi Kumar, Chris Warren
  */
 public class TestXMLReader {
     /**
