@@ -9,6 +9,11 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.TreeMap;
 
+/*
+@author Libba Lawrence
+
+CommandSet takes in the userInput from the view and parses it. Then it organizes the commands to the arguments.
+ */
 public class CommandSet {
 
   private static final String WHITESPACE = " ";
@@ -45,7 +50,8 @@ public class CommandSet {
   private String finalReturnValue;
 
   /*
-  Initializes a commandExecutor that calls the parser on the user Input commands
+  Initializes variables
+  @param myControl
    */
   public CommandSet(Control myControl) {
     control = myControl;
@@ -74,7 +80,8 @@ public class CommandSet {
   }
 
   /*
-  Sets the command to be parsed
+  Sets the commandInput to be parsed
+  @param commandList
    */
   public void setCommandInput(String commandList) {
     commandInput = commandList;
@@ -83,15 +90,23 @@ public class CommandSet {
 
   /*
   Sets the language the command is in
+  @param lang
    */
   public void setLanguage(String lang) {
     language = lang;
   }
 
+  /*
+  Returns the final string return value of the command
+  @return finalReturnValue
+   */
   public String getFinalReturnValue() {
     return finalReturnValue;
   }
-
+/*
+Sets the final return value of the command
+@param x
+ */
   public void setFinalReturnValue(String x) {
     finalReturnValue = x;
   }
@@ -108,9 +123,6 @@ public class CommandSet {
     parseText();
   }
 
-  /*
-  Initializes instance variables
-   */
   private void initializeNeededVariables() {
     parser = new Parser();
     hasBeenStored = false;
@@ -118,7 +130,7 @@ public class CommandSet {
   }
 
   /*
-  Splits up the command input
+  Splits up the command input into commands and arguments
    */
   public void parseText() {
     commandList = new LinkedList<>();
@@ -163,7 +175,7 @@ public class CommandSet {
   }
 
   /*
-  Getting the number of arguments for each command
+  Gets the number of arguments for each command and if the command doesn't exist it tries to avoid throwing errors by saving that command
    */
   public void coordinateCommands() {
     int numberOfArguments = 0;
@@ -257,6 +269,7 @@ public class CommandSet {
   }
   /*
 Makes variables for the repetitions of loops
+@param loop, s
  */
   public void repCount(double loop, String s) {
     argToBePassed.clear();

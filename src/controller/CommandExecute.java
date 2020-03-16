@@ -6,6 +6,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/*
+@author Libba Lawrence
+
+CommandExecute executes the command after the CommandSet has been run. It takes in a command and checks the return values for its methods.
+CommandExecute can be called multiple times (for each command) in the command input.
+ */
 public class CommandExecute {
 
   private static final String REP_COUNT = ":repCount";
@@ -25,6 +31,11 @@ public class CommandExecute {
   private boolean hasBeenStored;
   private Map<String,String> variablesUsed;
 
+
+  /*
+  CommandExecute method initializes the need variables.
+  @param CommandSet
+   */
   public CommandExecute(CommandSet commandSet){
     commandList = new LinkedList<>();
     argumentList = new LinkedList<>();
@@ -36,21 +47,71 @@ public class CommandExecute {
     this.commandSet = commandSet;
   }
 
+  /*
+  Sets the arguments for each command
+  @param LinkedList
+   */
   public void setArgumentList(LinkedList argumentList){this.argumentList=argumentList;}
+  /*
+  Sets the commands for each command input string
+  @param LinkedList
+   */
   public void setCommandList(LinkedList commandList){this.commandList=commandList;}
+  /*
+  Sets the command input the user passes in
+  @param String
+   */
   public void setCommandInput(String commandInput){this.commandInput = commandInput;}
+  /*
+  Sets the last command the user tried to input, that wasn't recognized
+  @param String
+   */
   public void setUserCommandAttempt(String userCommandAttempt){this.userCommandAttempt=userCommandAttempt;}
+  /*
+  Sets the boolean to check if the commands have been stored
+  @param Boolean
+   */
   public void setHasBeenStored(Boolean hasBeenStored){this.hasBeenStored=hasBeenStored;}
+  /*
+  Sets the map of variables used from previous commands in the input
+  @param Map
+   */
   public void setVariablesUsed(Map variablesUsed){this.variablesUsed=variablesUsed;}
+  /*
+  Sets the list objects (strings between the [ ] )
+  @param creatingListObjects
+   */
   public void setListObj(CreatingListObjects creatingListObjects) { this.creatingListObjects = creatingListObjects; }
-
+/*
+Returns the boolean that tells if the command has been stored
+@return hasBeenStored
+ */
   public Boolean getHasBeenStored(){return hasBeenStored;}
+  /*
+  Returns the map of variables created
+  @return variablesUsed
+   */
   public Map getVariablesUsed(){return variablesUsed;}
+  /*
+  Returns the return value of the command
+  @return commandValueReturn
+   */
   public String getCommandValueReturn(){return commandValueReturn;}
+  /*
+  Returns the storeFunction ~ the functions that might have been stored by this command
+  @return storeFunction
+   */
   public StoreFunctions getStoreFunction(){return storeFunction;}
+  /*
+  Returns the linkedList of arguments, because commands can add to those arguments of previous commands.
+  @return argumentList
+   */
   public LinkedList getArgumentList(){return argumentList;}
 
-
+/*
+Gets the commands, and runs the methods on that command to determine its output
+@param comm
+ */
   public void createCommand(Command comm) {
     commandReturnValue(comm);
     saveVariables(comm);

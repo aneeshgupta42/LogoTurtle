@@ -7,6 +7,11 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
+/*
+@author Libba Lawrence, Aneesh Gupta
+
+The control is the interface between the front end and the back end
+ */
 public class Control {
 
   private Moveable myMover;
@@ -27,26 +32,51 @@ public class Control {
     commandSet = new CommandSet(this);
   }
 
+  /*
+  Returns the variables created by running the command to the view
+  @return variablesUsed
+   */
   public Map<String,String> getVariables() {
     return variablesUsed;
   }
 
+  /*
+  Returns the user defined functions to the view
+  @return functionsUsed
+   */
   public Map<String,String> getUserCommands() {return functionsUsed;}
 
+  /*
+  Returns the final return value of the command inputs run
+  @return finalReturnValue
+   */
   public String getFinalReturnValue(){return finalReturnValue;}
 
+  /*
+  Sets the commandInput the user gives
+  @param command
+   */
   public void setCommand(String command) {
     commandSet.setCommandInput(command);
   }
-
+/*
+Sets the language the user chooses
+@param lang
+ */
   public void setLanguage(String lang) {
     commandSet.setLanguage(lang);
   }
-
+  /*
+  Returns the ID of the turtle
+  @return view.getMover().getMoverID()
+   */
   public double getRecentID(){
     return view.getMover().getMoverID();
   }
 
+  /*
+  Parses the command and updates the functions and variables accordingly
+   */
   public void parseCommand(){
     commandSet.setFinalReturnValue(null);
     commandSet.parseCommand();

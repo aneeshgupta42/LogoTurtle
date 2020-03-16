@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+/*
+@author Libba Lawrence
+
+Creates list objects for each commandInput
+ */
 public class CreatingListObjects {
 
   private static final String LIST_START = "[";
@@ -12,11 +17,19 @@ public class CreatingListObjects {
   private int currentRepeatNumber;
   private String commandInput;
 
-  public CreatingListObjects(){
-  }
 
+  public CreatingListObjects(){ }
+
+  /*
+  Returns the list of the list objects
+  @return groupList
+   */
   public List<ListObjects> getLists(){return groupList;}
 
+  /*
+  Organizes all the lists in the commandInput
+  @param commandInput, currentRepeatNumber
+   */
   public void findLists(String commandInput,int currentRepeatNumber) {
     this.currentRepeatNumber = currentRepeatNumber;
     this.commandInput = commandInput;
