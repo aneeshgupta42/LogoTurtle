@@ -9,6 +9,10 @@ import java.util.Map.Entry;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
+
+/*
+@author Libba Lawrence
+ */
 public class Parser {
 
   private static final String RESOURCES_PACKAGE = "resources.languages.";
