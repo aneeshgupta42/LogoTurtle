@@ -5,6 +5,11 @@ import controller.Control;
 
 import java.util.List;
 
+/**
+ * @author: Turner Jordan
+ *
+ * The SetPenColor class implements the SetPenColor command functionality, following the Command superclass conventions.
+ */
 public class SetPenColor extends Command{
     private static final int NUMARGS = 1;
     private int index, userIndex;

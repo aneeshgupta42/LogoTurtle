@@ -4,6 +4,12 @@ import backEnd.commands.Command;
 import controller.Control;
 import java.util.List;
 
+/**
+ * @author: Turner Jordan
+ *
+ * The isPenDown class implements the isPenDown command functionality, following the Command superclass conventions.
+ * Note: The result is returned as an integer, representing a true or false evaluation (1 or 0).
+ */
 public class IsPenDown extends Command {
     private final int NUMARGS = 0;
     private int return_value;

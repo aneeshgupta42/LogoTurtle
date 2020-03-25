@@ -4,6 +4,12 @@ import controller.Control;
 import backEnd.commands.Command;
 import java.util.List;
 
+/**
+ * @author: Turner Jordan
+ *
+ * The Remainder class implements the Remainder command functionality, following the Command superclass conventions.
+ */
+
 public class Remainder extends Command {
     private static final int NUMARGS = 2;
     private double remainder;

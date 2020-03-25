@@ -5,6 +5,11 @@ import controller.Control;
 
 import java.util.List;
 
+/**
+ * @author: Aneesh Gupta, Turner Jordan
+ *
+ * The SetPenShape class implements the SetPenShape command functionality, following the Command superclass conventions.
+ */
 public class SetShape extends Command {
     private static final int NUMARGS = 1;
     private int index;

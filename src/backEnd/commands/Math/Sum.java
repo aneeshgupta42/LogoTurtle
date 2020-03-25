@@ -5,6 +5,12 @@ import controller.Control;
 
 import java.util.List;
 
+/**
+ * @author: Aneesh Gupta, Turner Jordan
+ *
+ * The Sum class implements the SUM command functionality, following the Command superclass conventions.
+ */
+
 public class Sum extends Command {
   private static final int NUMARGS = 2;
   private double sum;

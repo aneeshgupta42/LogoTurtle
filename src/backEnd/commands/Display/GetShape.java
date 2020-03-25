@@ -5,6 +5,11 @@ import controller.Control;
 
 import java.util.List;
 
+/**
+ * @author: Aneesh Gupta, Turner Jordan
+ *
+ * The GetShape class implements the GetShape command functionality, following the Command superclass conventions.
+ */
 public class GetShape extends Command {
     private static final int NUMARGS = 0;
     private int index;

@@ -4,6 +4,13 @@ import controller.Control;
 import backEnd.commands.Command;
 import java.util.List;
 
+/**
+ * @author: Turner Jordan
+ *
+ * The Quotient class implements the Division command functionality, following the Command superclass conventions.
+ * Note: it uses double division, not Integer
+ */
+
 public class Quotient extends Command {
   private static final int NUMARGS = 2;
   private double quotient;

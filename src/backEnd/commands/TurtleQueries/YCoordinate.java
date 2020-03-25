@@ -4,6 +4,11 @@ import backEnd.commands.Command;
 import controller.Control;
 import java.util.List;
 
+/**
+ * @author: Turner Jordan
+ *
+ * The YCoordinate class implements the YCoordinate command functionality, following the Command superclass conventions.
+ */
 public class YCoordinate extends Command {
     private static final int NUMARGS = 0;
     private double returnYCord;

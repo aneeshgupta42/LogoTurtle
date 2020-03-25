@@ -5,6 +5,11 @@ import controller.Control;
 
 import java.util.List;
 
+/**
+ * @author: Turner Jordan
+ *
+ * The setPalette class implements the setPalette command functionality, following the Command superclass conventions.
+ */
 public class SetPalette extends Command {
     private static final int NUMARGS = 4;
     private int userIndex, red, green, blue;

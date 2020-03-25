@@ -5,6 +5,11 @@ import controller.Control;
 
 import java.util.List;
 
+/**
+ * @author: Turner Jordan
+ *
+ * The SetPenSize class implements the SetPenSize command functionality, following the Command superclass conventions.
+ */
 public class SetPenSize extends Command{
     private static final int NUMARGS = 1;
     private double penWidth;

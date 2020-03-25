@@ -5,6 +5,12 @@ import controller.Control;
 
 import java.util.List;
 
+/**
+ * @author: Turner Jordan
+ *
+ * The SetBackground class implements the SetBackground command functionality, following the Command superclass
+ * conventions.
+ */
 public class SetBackground extends Command{
     private static final int NUMARGS = 1;
     private int userIndex, index;

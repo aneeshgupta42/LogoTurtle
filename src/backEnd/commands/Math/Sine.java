@@ -4,6 +4,13 @@ import controller.Control;
 import backEnd.commands.Command;
 import java.util.List;
 
+/**
+ * @author: Turner Jordan
+ *
+ * The Sine class implements the SIN command functionality, following the Command superclass conventions.
+ * It uses the java Math package to compute the value.
+ */
+
 public class Sine extends Command {
   private static final int NUMARGS = 1;
   private double sinResult;

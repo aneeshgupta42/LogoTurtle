@@ -4,6 +4,12 @@ import controller.Control;
 import backEnd.commands.Command;
 import java.util.List;
 
+/**
+ * @author: Turner Jordan
+ *
+ * The Minus class implements the Minus command functionality, following the Command superclass conventions.
+ */
+
 public class Minus extends Command {
     private static final int NUMARGS = 1;
     private double minus;

@@ -4,6 +4,12 @@ import backEnd.commands.Command;
 import controller.Control;
 import java.util.List;
 
+/**
+ * @author: Turner Jordan
+ *
+ * The isShowing class implements the isShowing command functionality, following the Command superclass conventions.
+ * Note: The result is returned as an integer, representing a true or false evaluation (1 or 0).
+ */
 public class IsShowing extends Command {
     private final int NUMARGS = 0;
     private int returnBoolean;
@@ -18,8 +24,6 @@ public class IsShowing extends Command {
         super.numberOfArgs = NUMARGS;
 
         returnBoolean = control.findTurtleVisibility() ? 1:0;
-
-        System.out.println("Is the turtle visible: " + returnBoolean);
     }
 
     @Override

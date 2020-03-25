@@ -4,6 +4,12 @@ import controller.Control;
 import backEnd.commands.Command;
 import java.util.List;
 
+/**
+ * @author: Turner Jordan
+ *
+ * The Difference class implements the Subtraction command functionality, following the Command superclass conventions.
+ */
+
 public class Difference extends Command {
     private static final int NUMARGS = 2;
     private double diff;

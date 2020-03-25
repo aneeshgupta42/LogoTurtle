@@ -4,6 +4,12 @@ import controller.Control;
 import backEnd.commands.Command;
 import java.util.List;
 
+/**
+ * @author: Turner Jordan
+ *
+ * The Not class implements the NOT command functionality, following the Command superclass conventions.
+ * Note: All booleans return double values, rather than booleans.
+ */
 public class Not extends Command {
     private static final int NUMARGS = 1;
     private static final double TRUE = 1.0;

@@ -5,6 +5,14 @@ import backEnd.commands.Command;
 import java.lang.Math;
 import java.util.List;
 
+/**
+ * @author: Turner Jordan
+ *
+ * The Random class implements the Rand command functionality, following the Command superclass conventions.
+ * It uses the java Math package to compute the value. The Random package was not used due to the naming
+ * similarities.
+ */
+
 public class Random extends Command {
     private static final int NUMARGS = 1;
     private double random;
